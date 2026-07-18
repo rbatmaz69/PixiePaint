@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/stamp.dart';
 import '../models/tool.dart';
 import 'canvas_controller.dart';
 import 'stroke_renderer.dart';
@@ -23,6 +24,12 @@ class CanvasPainter extends CustomPainter {
     }
     if (stroke != null) StrokeRenderer.draw(canvas, stroke);
     if (erasing) canvas.restore();
+
+    final pendingStamp = controller.pendingStampPos;
+    if (pendingStamp != null) {
+      StrokeRenderer.drawStamp(canvas, controller.stampEmoji, pendingStamp,
+          kStampSizes[controller.sizeIndex]);
+    }
 
     final lineArt = controller.lineArt;
     if (lineArt != null) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../models/tool.dart';
+import 'stamp_picker.dart';
 
 class ToolBarRail extends StatelessWidget {
   const ToolBarRail({super.key, required this.controller, this.showFill = true});
@@ -53,6 +54,12 @@ class ToolBarRail extends StatelessWidget {
                 label: 'Neon',
                 selected: controller.tool == ToolKind.neon,
                 onTap: () => controller.selectTool(ToolKind.neon),
+              ),
+              _ToolButton(
+                label: 'Sticker',
+                emoji: controller.stampEmoji,
+                selected: controller.tool == ToolKind.stamp,
+                onTap: () => showStampPicker(context, controller),
               ),
               if (showFill)
                 _ToolButton(
@@ -121,13 +128,15 @@ class ToolBarRail extends StatelessWidget {
 
 class _ToolButton extends StatelessWidget {
   const _ToolButton({
-    required this.icon,
+    this.icon,
+    this.emoji,
     required this.label,
     required this.selected,
     required this.onTap,
-  });
+  }) : assert(icon != null || emoji != null);
 
-  final IconData icon;
+  final IconData? icon;
+  final String? emoji;
   final String label;
   final bool selected;
   final VoidCallback onTap;
@@ -148,11 +157,18 @@ class _ToolButton extends StatelessWidget {
             child: SizedBox(
               width: 54,
               height: 54,
-              child: Icon(
-                icon,
-                size: selected ? 34 : 28,
-                color: selected ? scheme.primary : scheme.onSurfaceVariant,
-              ),
+              child: emoji != null
+                  ? Center(
+                      child: Text(emoji!,
+                          style:
+                              TextStyle(fontSize: selected ? 30 : 24)),
+                    )
+                  : Icon(
+                      icon,
+                      size: selected ? 34 : 28,
+                      color:
+                          selected ? scheme.primary : scheme.onSurfaceVariant,
+                    ),
             ),
           ),
         ),

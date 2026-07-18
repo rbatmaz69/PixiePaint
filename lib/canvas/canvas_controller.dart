@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../models/stamp.dart';
 import '../models/tool.dart';
 import '../util/image_io.dart';
 import '../util/settings.dart';
@@ -36,6 +37,10 @@ class CanvasController extends ChangeNotifier {
   ToolKind tool = ToolKind.brush;
   int sizeIndex = 1;
   Color color = const Color(0xFFE53935);
+  String stampEmoji = '⭐';
+
+  /// Live position of a stamp being placed (finger still down).
+  Offset? pendingStampPos;
 
   final UndoStack _undoStack = UndoStack();
   bool get canUndo => _undoStack.canUndo;
@@ -48,7 +53,27 @@ class CanvasController extends ChangeNotifier {
   int? _activePointer;
   bool _activeIsStylus = false;
   bool _stylusDown = false;
+  bool _viewGestureActive = false;
   final Random _rng = Random();
+
+  /// True while a stylus is touching the screen (viewport uses this to
+  /// ignore pinches from a resting hand).
+  bool get stylusDown => _stylusDown;
+
+  /// Called by the viewport when a two-finger pinch starts. A half-drawn
+  /// first-finger stroke is discarded (like palm rejection), never
+  /// committed.
+  void beginViewGesture() {
+    if ((activeStroke != null || pendingStampPos != null) &&
+        !_activeIsStylus) {
+      _cancelActiveStroke();
+    }
+    _viewGestureActive = true;
+  }
+
+  void endViewGesture() {
+    _viewGestureActive = false;
+  }
 
   ui.Rect get _bounds =>
       ui.Rect.fromLTWH(0, 0, canvasWidth.toDouble(), canvasHeight.toDouble());
@@ -82,6 +107,12 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void selectStamp(String emoji) {
+    stampEmoji = emoji;
+    tool = ToolKind.stamp;
+    notifyListeners();
+  }
+
   double get _baseWidth => kBrushSizes[sizeIndex];
 
   // ---------------------------------------------------------------- pointer
@@ -100,8 +131,11 @@ class CanvasController extends ChangeNotifier {
     final isTouch = e.kind == PointerDeviceKind.touch;
 
     // Palm rejection: while a stylus is on the screen (or in stylus-only
-    // mode), finger touches never draw.
-    if (isTouch && (_stylusDown || Settings.instance.stylusOnly)) return;
+    // mode) and during pinch gestures, finger touches never draw.
+    if (isTouch &&
+        (_stylusDown || _viewGestureActive || Settings.instance.stylusOnly)) {
+      return;
+    }
     if (isStylus) _stylusDown = true;
 
     if (activeStroke != null) {
@@ -116,6 +150,13 @@ class CanvasController extends ChangeNotifier {
     final pos = _clamp(e.localPosition);
     if (tool == ToolKind.fill) {
       tapFill(pos);
+      return;
+    }
+    if (tool == ToolKind.stamp) {
+      _activePointer = e.pointer;
+      _activeIsStylus = isStylus;
+      pendingStampPos = pos;
+      _tick();
       return;
     }
 
@@ -136,6 +177,11 @@ class CanvasController extends ChangeNotifier {
   }
 
   void pointerMove(PointerMoveEvent e) {
+    if (pendingStampPos != null && e.pointer == _activePointer) {
+      pendingStampPos = _clamp(e.localPosition);
+      _tick();
+      return;
+    }
     final stroke = activeStroke;
     if (stroke == null || e.pointer != _activePointer) return;
     final pos = _clamp(e.localPosition);
@@ -157,6 +203,10 @@ class CanvasController extends ChangeNotifier {
       _cancelActiveStroke();
       return;
     }
+    if (pendingStampPos != null) {
+      _commitStamp();
+      return;
+    }
     _commitActiveStroke();
   }
 
@@ -173,9 +223,29 @@ class CanvasController extends ChangeNotifier {
 
   void _cancelActiveStroke() {
     activeStroke = null;
+    pendingStampPos = null;
     _activePointer = null;
     _activeIsStylus = false;
     _tick();
+  }
+
+  void _commitStamp() {
+    final pos = pendingStampPos;
+    if (pos == null) return;
+    pendingStampPos = null;
+    _activePointer = null;
+    _activeIsStylus = false;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, _bounds);
+    if (paintLayer != null) {
+      canvas.drawImage(paintLayer!, Offset.zero, Paint());
+    }
+    StrokeRenderer.drawStamp(canvas, stampEmoji, pos, kStampSizes[sizeIndex]);
+    final picture = recorder.endRecording();
+    final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
+    picture.dispose();
+    _pushUndoAndReplace(newLayer);
   }
 
   void _commitActiveStroke() {

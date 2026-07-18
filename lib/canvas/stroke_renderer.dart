@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'dart:ui';
+import 'dart:ui' hide TextStyle;
 
-import 'package:flutter/painting.dart' show HSVColor;
+import 'package:flutter/painting.dart'
+    show HSVColor, TextPainter, TextSpan, TextStyle;
 
 import '../models/tool.dart';
 import 'stroke.dart';
@@ -44,8 +45,21 @@ class StrokeRenderer {
       case ToolKind.neon:
         _drawNeon(canvas, stroke);
       case ToolKind.fill:
-        break; // fills are not strokes
+      case ToolKind.stamp:
+        break; // not stroke-based
     }
+  }
+
+  /// Renders an emoji stamp centered at [center]. Used for both the live
+  /// preview (CanvasPainter) and the commit (CanvasController).
+  static void drawStamp(
+      Canvas canvas, String emoji, Offset center, double size) {
+    final tp = TextPainter(
+      text: TextSpan(text: emoji, style: TextStyle(fontSize: size)),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
+    tp.dispose();
   }
 
   static Paint _paintFor(Stroke stroke) => Paint()
