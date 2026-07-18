@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <ellipse cx="500" cy="480" rx="240" ry="150"/>
+    <!-- neck and head -->
+    <path d="M 690 400 C 750 340 770 260 770 190 C 770 130 830 130 850 170 C 870 210 850 280 800 350 C 770 400 740 440 710 460"/>
+    <circle cx="810" cy="165" r="48"/>
+    <circle cx="826" cy="150" r="10"/>
+    <!-- back plates -->
+    <path d="M 350 350 L 380 290 L 415 345"/>
+    <path d="M 440 330 L 470 265 L 505 328"/>
+    <path d="M 530 330 L 560 268 L 592 335"/>
+    <!-- tail -->
+    <path d="M 265 510 C 180 520 120 560 90 620 C 150 630 230 615 285 575"/>
+    <!-- legs -->
+    <ellipse cx="400" cy="640" rx="55" ry="35"/>
+    <ellipse cx="610" cy="640" rx="55" ry="35"/>
+    <!-- belly line -->
+    <path d="M 330 540 C 420 590 580 590 670 540"/>
+    <!-- grass -->
+    <path d="M 120 700 C 130 670 135 670 145 700"/>
+    <path d="M 880 700 C 890 670 895 670 905 700"/>
+    <path d="M 60 700 L 964 700"/>
+  </g>
+</svg>

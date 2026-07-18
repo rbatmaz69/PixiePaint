@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- hull -->
+    <ellipse cx="500" cy="430" rx="300" ry="130"/>
+    <!-- tower -->
+    <path d="M 420 310 L 420 220 L 580 220 L 580 310"/>
+    <!-- periscope -->
+    <path d="M 500 220 L 500 140 L 570 140"/>
+    <!-- portholes -->
+    <circle cx="380" cy="430" r="35"/>
+    <circle cx="500" cy="430" r="35"/>
+    <circle cx="620" cy="430" r="35"/>
+    <!-- propeller -->
+    <path d="M 800 400 C 850 370 870 380 860 420 L 860 440 C 870 480 850 490 800 460"/>
+    <!-- fins -->
+    <path d="M 240 380 C 180 360 150 370 160 400 L 160 460 C 150 490 180 500 240 480"/>
+    <!-- bubbles -->
+    <circle cx="640" cy="120" r="22"/>
+    <circle cx="690" cy="80" r="15"/>
+    <circle cx="600" cy="70" r="11"/>
+    <!-- fish -->
+    <path d="M 150 620 C 180 600 220 600 245 620 C 220 640 180 640 150 620 Z"/>
+    <path d="M 150 620 L 115 595 L 122 620 L 115 645 Z"/>
+    <circle cx="222" cy="614" r="5"/>
+    <path d="M 820 620 C 850 600 890 600 915 620 C 890 640 850 640 820 620 Z"/>
+    <path d="M 820 620 L 785 595 L 792 620 L 785 645 Z"/>
+    <circle cx="892" cy="614" r="5"/>
+    <!-- seaweed -->
+    <path d="M 100 700 C 110 660 90 640 100 600"/>
+    <path d="M 940 700 C 950 660 930 640 940 600"/>
+    <path d="M 60 700 L 964 700"/>
+  </g>
+</svg>

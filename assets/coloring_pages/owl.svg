@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <ellipse cx="512" cy="420" rx="190" ry="240"/>
+    <!-- ear tufts -->
+    <path d="M 390 230 L 350 130 L 450 190"/>
+    <path d="M 634 230 L 674 130 L 574 190"/>
+    <!-- eyes -->
+    <circle cx="440" cy="330" r="70"/>
+    <circle cx="584" cy="330" r="70"/>
+    <circle cx="440" cy="330" r="28"/>
+    <circle cx="584" cy="330" r="28"/>
+    <!-- beak -->
+    <path d="M 482 400 L 542 400 L 512 455 Z"/>
+    <!-- belly feathers -->
+    <path d="M 430 520 C 450 545 475 545 495 520"/>
+    <path d="M 530 520 C 550 545 575 545 595 520"/>
+    <path d="M 480 580 C 500 605 525 605 545 580"/>
+    <!-- wings -->
+    <path d="M 325 400 C 280 460 280 540 330 590"/>
+    <path d="M 699 400 C 744 460 744 540 694 590"/>
+    <!-- branch -->
+    <path d="M 100 700 L 924 700"/>
+    <path d="M 200 700 C 230 680 260 680 290 700"/>
+    <!-- feet -->
+    <path d="M 450 660 L 450 700 M 435 700 L 465 700"/>
+    <path d="M 574 660 L 574 700 M 559 700 L 589 700"/>
+    <!-- moon -->
+    <path d="M 880 120 C 840 130 820 170 835 205 C 805 195 790 160 802 130 C 814 102 855 90 880 120 Z"/>
+    <!-- stars -->
+    <circle cx="150" cy="150" r="12"/>
+    <circle cx="230" cy="90" r="9"/>
+  </g>
+</svg>

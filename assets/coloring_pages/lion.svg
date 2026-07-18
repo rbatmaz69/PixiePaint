@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- mane -->
+    <circle cx="512" cy="330" r="230"/>
+    <!-- face -->
+    <circle cx="512" cy="330" r="140"/>
+    <!-- mane spikes drawn as scallops inside -->
+    <path d="M 512 100 C 540 130 560 150 585 160"/>
+    <path d="M 700 200 C 670 215 650 235 640 260"/>
+    <path d="M 740 330 C 705 335 680 350 665 372"/>
+    <path d="M 700 460 C 672 445 650 425 640 400"/>
+    <path d="M 512 560 C 540 530 560 510 585 500"/>
+    <path d="M 324 460 C 352 445 374 425 384 400"/>
+    <path d="M 284 330 C 319 335 344 350 359 372"/>
+    <path d="M 324 200 C 354 215 374 235 384 260"/>
+    <!-- ears -->
+    <circle cx="410" cy="215" r="38"/>
+    <circle cx="614" cy="215" r="38"/>
+    <!-- eyes -->
+    <circle cx="460" cy="300" r="22"/>
+    <circle cx="564" cy="300" r="22"/>
+    <!-- nose -->
+    <path d="M 482 360 L 542 360 L 512 400 Z"/>
+    <!-- mouth -->
+    <path d="M 512 400 C 512 430 485 440 462 430"/>
+    <path d="M 512 400 C 512 430 539 440 562 430"/>
+    <!-- body -->
+    <path d="M 400 550 C 380 620 400 680 440 700 L 584 700 C 624 680 644 620 624 550"/>
+    <!-- paws -->
+    <ellipse cx="450" cy="700" rx="45" ry="24"/>
+    <ellipse cx="574" cy="700" rx="45" ry="24"/>
+  </g>
+</svg>

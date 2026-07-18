@@ -4,10 +4,21 @@
   {"id": "fish", "title": "Fisch", "file": "fish.svg", "category": "Tiere"},
   {"id": "turtle", "title": "Schildkröte", "file": "turtle.svg", "category": "Tiere"},
   {"id": "butterfly", "title": "Schmetterling", "file": "butterfly.svg", "category": "Tiere"},
+  {"id": "dino", "title": "Dino", "file": "dino.svg", "category": "Tiere"},
+  {"id": "elephant", "title": "Elefant", "file": "elephant.svg", "category": "Tiere"},
+  {"id": "lion", "title": "Löwe", "file": "lion.svg", "category": "Tiere"},
+  {"id": "owl", "title": "Eule", "file": "owl.svg", "category": "Tiere"},
   {"id": "flower", "title": "Blume", "file": "flower.svg", "category": "Natur"},
   {"id": "house", "title": "Haus", "file": "house.svg", "category": "Natur"},
   {"id": "car", "title": "Auto", "file": "car.svg", "category": "Fahrzeuge"},
   {"id": "rocket", "title": "Rakete", "file": "rocket.svg", "category": "Fahrzeuge"},
   {"id": "sailboat", "title": "Segelboot", "file": "sailboat.svg", "category": "Fahrzeuge"},
-  {"id": "balloon", "title": "Heißluftballon", "file": "balloon.svg", "category": "Fahrzeuge"}
+  {"id": "balloon", "title": "Heißluftballon", "file": "balloon.svg", "category": "Fahrzeuge"},
+  {"id": "tractor", "title": "Traktor", "file": "tractor.svg", "category": "Fahrzeuge"},
+  {"id": "submarine", "title": "U-Boot", "file": "submarine.svg", "category": "Fahrzeuge"},
+  {"id": "unicorn", "title": "Einhorn", "file": "unicorn.svg", "category": "Fantasie"},
+  {"id": "castle", "title": "Burg", "file": "castle.svg", "category": "Fantasie"},
+  {"id": "mushroom_house", "title": "Pilzhaus", "file": "mushroom_house.svg", "category": "Fantasie"},
+  {"id": "icecream", "title": "Eis", "file": "icecream.svg", "category": "Leckereien"},
+  {"id": "cupcake", "title": "Törtchen", "file": "cupcake.svg", "category": "Leckereien"}
 ]

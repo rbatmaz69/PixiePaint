@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- cap -->
+    <path d="M 250 360 C 250 180 774 180 774 360 C 700 380 324 380 250 360 Z"/>
+    <!-- cap dots -->
+    <circle cx="400" cy="270" r="35"/>
+    <circle cx="560" cy="240" r="28"/>
+    <circle cx="650" cy="310" r="24"/>
+    <!-- stem/house -->
+    <path d="M 330 375 C 320 520 330 620 350 680 L 674 680 C 694 620 704 520 694 375"/>
+    <!-- door -->
+    <path d="M 450 680 L 450 540 C 450 495 574 495 574 540 L 574 680"/>
+    <circle cx="552" cy="600" r="9"/>
+    <!-- window -->
+    <circle cx="620" cy="460" r="40"/>
+    <path d="M 620 420 L 620 500 M 580 460 L 660 460"/>
+    <!-- chimney -->
+    <path d="M 620 205 L 620 140 L 670 140 L 670 230"/>
+    <path d="M 645 120 C 640 105 650 95 645 80"/>
+    <!-- grass and flowers -->
+    <path d="M 60 680 L 964 680"/>
+    <path d="M 150 680 C 160 645 165 645 175 680"/>
+    <path d="M 850 680 C 860 645 865 645 875 680"/>
+    <circle cx="200" cy="620" r="22"/>
+    <path d="M 200 642 L 200 680"/>
+    <circle cx="820" cy="600" r="22"/>
+    <path d="M 820 622 L 820 680"/>
+  </g>
+</svg>

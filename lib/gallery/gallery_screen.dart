@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_screen.dart';
 import '../models/artwork.dart';
 import '../util/settings.dart';
+import '../util/sfx.dart';
+import '../util/share.dart' as share_util;
 import '../widgets/parental_gate.dart';
 import 'artwork_store.dart';
 
@@ -29,6 +31,51 @@ class _GalleryScreenState extends State<GalleryScreen> {
       MaterialPageRoute(builder: (_) => CanvasScreen(resume: artwork)),
     );
     _reload();
+  }
+
+  Future<void> _showItemMenu(Artwork artwork) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.brush_rounded, size: 32),
+              title: const Text('Weitermalen', style: TextStyle(fontSize: 18)),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                _open(artwork);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.ios_share_rounded, size: 32),
+              title: const Text('Teilen (für Eltern)',
+                  style: TextStyle(fontSize: 18)),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                _share(artwork);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline_rounded, size: 32),
+              title: const Text('Wegwerfen', style: TextStyle(fontSize: 18)),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                _delete(artwork);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _share(Artwork artwork) async {
+    if (!await ParentalGate.show(context)) return;
+    Sfx.instance.tada();
+    await share_util.shareSavedArtwork(artwork);
   }
 
   Future<void> _delete(Artwork artwork) async {
@@ -108,7 +155,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
                   onTap: () => _open(artwork),
-                  onLongPress: () => _delete(artwork),
+                  onLongPress: () => _showItemMenu(artwork),
                   child: artwork.thumbFile.existsSync()
                       ? Image.file(
                           artwork.thumbFile,

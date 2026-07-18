@@ -4,7 +4,10 @@ import 'dart:ui' as ui;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../models/artwork.dart';
+import '../models/coloring_page.dart';
 import 'image_io.dart';
+import 'svg_raster.dart';
 
 /// Composes the full-resolution artwork and opens the system share sheet.
 Future<void> shareArtwork({
@@ -28,4 +31,34 @@ Future<void> shareArtwork({
   await SharePlus.instance.share(
     ShareParams(files: [XFile(file.path, mimeType: 'image/png')]),
   );
+}
+
+/// Shares a saved artwork straight from the gallery: loads the paint layer
+/// from disk and re-rasterizes the line art if the artwork is a coloring
+/// page.
+Future<void> shareSavedArtwork(Artwork artwork) async {
+  ui.Image? paintLayer;
+  ui.Image? lineArt;
+  try {
+    if (await artwork.paintFile.exists()) {
+      paintLayer = await pngBytesToImage(await artwork.paintFile.readAsBytes());
+    }
+    if (artwork.pageId != null) {
+      final page = await ColoringPage.byId(artwork.pageId!);
+      if (page != null) {
+        final raster = await rasterizeSvgAsset(
+            page.assetPath, artwork.width, artwork.height);
+        lineArt = raster.image;
+      }
+    }
+    await shareArtwork(
+      width: artwork.width,
+      height: artwork.height,
+      paintLayer: paintLayer,
+      lineArt: lineArt,
+    );
+  } finally {
+    paintLayer?.dispose();
+    lineArt?.dispose();
+  }
 }

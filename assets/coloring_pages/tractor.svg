@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- big rear wheel -->
+    <circle cx="330" cy="520" r="130"/>
+    <circle cx="330" cy="520" r="60"/>
+    <!-- front wheel -->
+    <circle cx="720" cy="560" r="85"/>
+    <circle cx="720" cy="560" r="35"/>
+    <!-- body -->
+    <path d="M 240 390 L 240 300 L 480 300 L 480 230 L 640 230 L 640 300 L 700 300 C 760 300 800 340 810 400 L 810 470 L 640 470"/>
+    <path d="M 430 430 L 620 460"/>
+    <!-- cabin window -->
+    <path d="M 500 250 L 620 250 L 620 300 L 500 300 Z"/>
+    <!-- chimney -->
+    <path d="M 280 300 L 280 200 L 320 200 L 320 300"/>
+    <path d="M 300 180 C 295 165 305 155 300 140"/>
+    <!-- headlight -->
+    <circle cx="790" cy="430" r="16"/>
+    <!-- road -->
+    <path d="M 60 690 L 964 690"/>
+    <!-- sun -->
+    <circle cx="890" cy="120" r="50"/>
+    <path d="M 890 45 L 890 22"/>
+    <path d="M 890 195 L 890 218"/>
+    <path d="M 815 120 L 792 120"/>
+    <path d="M 965 120 L 988 120"/>
+    <!-- cloud -->
+    <path d="M 130 150 C 130 125 165 117 182 130 C 190 105 232 105 245 126 C 270 118 290 139 282 160 C 295 180 275 197 254 193 L 152 193 C 130 193 118 170 130 150 Z"/>
+  </g>
+</svg>
