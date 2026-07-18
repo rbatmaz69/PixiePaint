@@ -36,6 +36,24 @@ class ToolBarRail extends StatelessWidget {
                 selected: controller.tool == ToolKind.crayon,
                 onTap: () => controller.selectTool(ToolKind.crayon),
               ),
+              _ToolButton(
+                icon: Icons.looks,
+                label: 'Regenbogen',
+                selected: controller.tool == ToolKind.rainbow,
+                onTap: () => controller.selectTool(ToolKind.rainbow),
+              ),
+              _ToolButton(
+                icon: Icons.auto_awesome,
+                label: 'Glitzer',
+                selected: controller.tool == ToolKind.glitter,
+                onTap: () => controller.selectTool(ToolKind.glitter),
+              ),
+              _ToolButton(
+                icon: Icons.flash_on,
+                label: 'Neon',
+                selected: controller.tool == ToolKind.neon,
+                onTap: () => controller.selectTool(ToolKind.neon),
+              ),
               if (showFill)
                 _ToolButton(
                   icon: Icons.format_color_fill,
@@ -49,14 +67,14 @@ class ToolBarRail extends StatelessWidget {
                 selected: controller.tool == ToolKind.eraser,
                 onTap: () => controller.selectTool(ToolKind.eraser),
               ),
-              const Divider(height: 16, indent: 12, endIndent: 12),
+              const Divider(height: 10, indent: 12, endIndent: 12),
               for (var i = 0; i < kBrushSizes.length; i++)
                 _SizeButton(
                   diameter: 12.0 + i * 8,
                   selected: controller.sizeIndex == i,
                   onTap: () => controller.selectSize(i),
                 ),
-              const Divider(height: 16, indent: 12, endIndent: 12),
+              const Divider(height: 10, indent: 12, endIndent: 12),
               _ActionButton(
                 icon: Icons.undo,
                 enabled: controller.canUndo,
@@ -118,7 +136,7 @@ class _ToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+      padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 6),
       child: Tooltip(
         message: label,
         child: Material(
@@ -128,8 +146,8 @@ class _ToolButton extends StatelessWidget {
             customBorder: const CircleBorder(),
             onTap: onTap,
             child: SizedBox(
-              width: 60,
-              height: 60,
+              width: 54,
+              height: 54,
               child: Icon(
                 icon,
                 size: selected ? 34 : 28,
@@ -188,8 +206,8 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      iconSize: 30,
-      padding: const EdgeInsets.all(12),
+      iconSize: 28,
+      padding: const EdgeInsets.all(8),
       onPressed: enabled ? onTap : null,
       icon: Icon(icon),
     );

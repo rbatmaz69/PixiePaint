@@ -1,8 +1,24 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/painting.dart' show HSVColor;
+
 import '../models/tool.dart';
 import 'stroke.dart';
+
+class GlitterDot {
+  final Offset pos;
+  final double radius;
+  final int colorIndex; // 0 white, 1 stroke color, 2 gold
+  final bool star;
+
+  const GlitterDot({
+    required this.pos,
+    required this.radius,
+    required this.colorIndex,
+    required this.star,
+  });
+}
 
 /// Draws a stroke onto a canvas in canvas coordinates.
 ///
@@ -21,6 +37,12 @@ class StrokeRenderer {
         _drawMarker(canvas, stroke);
       case ToolKind.crayon:
         _drawCrayon(canvas, stroke);
+      case ToolKind.rainbow:
+        _drawRainbow(canvas, stroke);
+      case ToolKind.glitter:
+        _drawGlitter(canvas, stroke);
+      case ToolKind.neon:
+        _drawNeon(canvas, stroke);
       case ToolKind.fill:
         break; // fills are not strokes
     }
@@ -100,6 +122,133 @@ class StrokeRenderer {
       canvas.drawPath(_smoothPath(stroke.points), paint);
       canvas.restore();
     }
+  }
+
+  /// Hue (0..360) at a given distance along a rainbow stroke. Pure so the
+  /// preview is stable frame-to-frame and the cycle is unit-testable.
+  static double hueAt(double distance, int seed) =>
+      ((seed % 360) + distance / kRainbowCycleLength * 360) % 360;
+
+  static const double kRainbowCycleLength = 500; // canvas px per full cycle
+
+  /// Pressure-sensitive segments whose hue advances with the distance
+  /// travelled. Ignores the selected color.
+  static void _drawRainbow(Canvas canvas, Stroke stroke) {
+    final pts = stroke.points;
+    Color colorAt(double dist) =>
+        HSVColor.fromAHSV(1, hueAt(dist, stroke.seed), 0.85, 1).toColor();
+    if (pts.length == 1) {
+      canvas.drawCircle(pts.first.pos,
+          _width(stroke, pts.first.pressure) / 2, Paint()..color = colorAt(0));
+      return;
+    }
+    final paint = _paintFor(stroke);
+    var dist = 0.0;
+    for (var i = 1; i < pts.length; i++) {
+      final a = pts[i - 1];
+      final b = pts[i];
+      dist += (b.pos - a.pos).distance;
+      paint
+        ..color = colorAt(dist)
+        ..strokeWidth = _width(stroke, (a.pressure + b.pressure) / 2);
+      canvas.drawLine(a.pos, b.pos, paint);
+    }
+  }
+
+  static const int kMaxGlitterDots = 1500;
+  static const Color _gold = Color(0xFFFFE082);
+
+  /// Sparkle positions along the stroke. The RNG is consumed strictly
+  /// segment-by-segment, so the dots for a point prefix never change as new
+  /// points are appended — the live preview doesn't flicker.
+  static List<GlitterDot> glitterDots(
+      List<StrokePoint> pts, double baseWidth, int seed) {
+    final rng = Random(seed);
+    final dots = <GlitterDot>[];
+    for (var i = 1; i < pts.length && dots.length < kMaxGlitterDots; i++) {
+      final a = pts[i - 1].pos;
+      final b = pts[i].pos;
+      final seg = b - a;
+      final len = seg.distance;
+      final n = (len / 12).ceil().clamp(1, 4);
+      final normal = len > 0
+          ? Offset(-seg.dy / len, seg.dx / len)
+          : const Offset(0, 1);
+      for (var k = 0; k < n && dots.length < kMaxGlitterDots; k++) {
+        final t = rng.nextDouble();
+        final side = (rng.nextDouble() - 0.5) * 2 * baseWidth;
+        dots.add(GlitterDot(
+          pos: a + seg * t + normal * side,
+          radius: 1.5 + rng.nextDouble() * 2.5,
+          colorIndex: rng.nextInt(3),
+          star: rng.nextDouble() < 0.25,
+        ));
+      }
+    }
+    return dots;
+  }
+
+  static void _drawGlitter(Canvas canvas, Stroke stroke) {
+    // Thin base trail in the selected color.
+    if (stroke.points.length > 1) {
+      final base = _paintFor(stroke)
+        ..color = stroke.color.withValues(alpha: 0.5)
+        ..strokeWidth = stroke.baseWidth * 0.35;
+      canvas.drawPath(_smoothPath(stroke.points), base);
+    }
+    final colors = [const Color(0xFFFFFFFF), stroke.color, _gold];
+    for (final dot in
+        glitterDots(stroke.points, stroke.baseWidth, stroke.seed)) {
+      final paint = Paint()..color = colors[dot.colorIndex];
+      if (dot.star) {
+        canvas.drawPath(_starPath(dot.pos, dot.radius * 2.2), paint);
+      } else {
+        canvas.drawCircle(dot.pos, dot.radius, paint);
+      }
+    }
+  }
+
+  /// Simple 4-point sparkle star.
+  static Path _starPath(Offset c, double r) {
+    final inner = r * 0.35;
+    return Path()
+      ..moveTo(c.dx, c.dy - r)
+      ..lineTo(c.dx + inner, c.dy - inner)
+      ..lineTo(c.dx + r, c.dy)
+      ..lineTo(c.dx + inner, c.dy + inner)
+      ..lineTo(c.dx, c.dy + r)
+      ..lineTo(c.dx - inner, c.dy + inner)
+      ..lineTo(c.dx - r, c.dy)
+      ..lineTo(c.dx - inner, c.dy - inner)
+      ..close();
+  }
+
+  /// Bright core over a blurred glow — two passes over one smoothed path
+  /// (constant width, so no self-overlap artifacts).
+  static void _drawNeon(Canvas canvas, Stroke stroke) {
+    if (stroke.points.length == 1) {
+      final p = stroke.points.first.pos;
+      canvas.drawCircle(
+          p,
+          stroke.baseWidth * 1.2,
+          Paint()
+            ..color = stroke.color.withValues(alpha: 0.85)
+            ..maskFilter =
+                MaskFilter.blur(BlurStyle.normal, stroke.baseWidth * 0.5));
+      canvas.drawCircle(p, stroke.baseWidth * 0.45,
+          Paint()..color = Color.lerp(stroke.color, const Color(0xFFFFFFFF), 0.65)!);
+      return;
+    }
+    final path = _smoothPath(stroke.points);
+    final glow = _paintFor(stroke)
+      ..color = stroke.color.withValues(alpha: 0.85)
+      ..strokeWidth = stroke.baseWidth * 2.4
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, stroke.baseWidth * 0.5);
+    canvas.drawPath(path, glow);
+    final core = _paintFor(stroke)
+      ..color = Color.lerp(stroke.color, const Color(0xFFFFFFFF), 0.65)!
+      ..strokeWidth = stroke.baseWidth * 0.9;
+    canvas.drawPath(path, core);
   }
 
   /// Quadratic-bezier midpoint smoothing over the raw pointer polyline.
