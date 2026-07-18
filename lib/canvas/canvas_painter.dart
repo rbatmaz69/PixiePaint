@@ -15,6 +15,13 @@ class CanvasPainter extends CustomPainter {
     final rect = Offset.zero & size;
     canvas.drawRect(rect, Paint()..color = Colors.white);
 
+    // Photo background sits below the eraser saveLayer so erasing can
+    // never remove it.
+    final background = controller.backgroundImage;
+    if (background != null) {
+      canvas.drawImage(background, Offset.zero, Paint());
+    }
+
     final stroke = controller.activeStroke;
     final erasing = stroke?.kind == ToolKind.eraser;
     if (erasing) canvas.saveLayer(rect, Paint());

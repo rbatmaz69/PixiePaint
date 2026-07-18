@@ -42,9 +42,11 @@ class ArtworkStore {
   static Future<Artwork> save({
     required String id,
     required String? pageId,
+    bool hasPhoto = false,
     required int width,
     required int height,
     required Uint8List? paintPng,
+    Uint8List? backgroundPng,
     required Uint8List thumbPng,
   }) async {
     final root = await _root();
@@ -53,6 +55,7 @@ class ArtworkStore {
     final artwork = Artwork(
       id: id,
       pageId: pageId,
+      hasPhoto: hasPhoto,
       width: width,
       height: height,
       updatedAt: DateTime.now(),
@@ -62,6 +65,9 @@ class ArtworkStore {
       await artwork.paintFile.writeAsBytes(paintPng);
     } else if (await artwork.paintFile.exists()) {
       await artwork.paintFile.delete();
+    }
+    if (backgroundPng != null) {
+      await artwork.backgroundFile.writeAsBytes(backgroundPng);
     }
     await artwork.thumbFile.writeAsBytes(thumbPng);
     await File('${dir.path}/meta.json')

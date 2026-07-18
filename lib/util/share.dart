@@ -13,12 +13,14 @@ import 'svg_raster.dart';
 Future<void> shareArtwork({
   required int width,
   required int height,
+  ui.Image? background,
   ui.Image? paintLayer,
   ui.Image? lineArt,
 }) async {
   final composed = await composeArtwork(
     width: width,
     height: height,
+    background: background,
     paintLayer: paintLayer,
     lineArt: lineArt,
   );
@@ -37,9 +39,14 @@ Future<void> shareArtwork({
 /// from disk and re-rasterizes the line art if the artwork is a coloring
 /// page.
 Future<void> shareSavedArtwork(Artwork artwork) async {
+  ui.Image? background;
   ui.Image? paintLayer;
   ui.Image? lineArt;
   try {
+    if (artwork.hasPhoto && await artwork.backgroundFile.exists()) {
+      background =
+          await pngBytesToImage(await artwork.backgroundFile.readAsBytes());
+    }
     if (await artwork.paintFile.exists()) {
       paintLayer = await pngBytesToImage(await artwork.paintFile.readAsBytes());
     }
@@ -54,10 +61,12 @@ Future<void> shareSavedArtwork(Artwork artwork) async {
     await shareArtwork(
       width: artwork.width,
       height: artwork.height,
+      background: background,
       paintLayer: paintLayer,
       lineArt: lineArt,
     );
   } finally {
+    background?.dispose();
     paintLayer?.dispose();
     lineArt?.dispose();
   }

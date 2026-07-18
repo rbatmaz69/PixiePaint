@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../canvas/canvas_screen.dart';
 import '../widgets/parental_gate.dart';
@@ -54,6 +55,12 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         _BigCard(
+                          emoji: '📷',
+                          label: 'Foto anmalen',
+                          color: const Color(0xFFFFCCBC),
+                          onTap: () => _pickPhoto(context),
+                        ),
+                        _BigCard(
                           emoji: '🖼️',
                           label: 'Meine Bilder',
                           color: const Color(0xFFC8E6C9),
@@ -91,6 +98,17 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Photo painting leaves the kid-safe context (system photo picker), so it
+/// sits behind the parental gate.
+Future<void> _pickPhoto(BuildContext context) async {
+  if (!await ParentalGate.show(context)) return;
+  final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+  if (file == null || !context.mounted) return;
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => CanvasScreen(photoPath: file.path)),
+  );
 }
 
 class _BigCard extends StatelessWidget {

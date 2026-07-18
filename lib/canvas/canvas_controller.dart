@@ -32,6 +32,9 @@ class CanvasController extends ChangeNotifier {
 
   ui.Image? paintLayer;
   ui.Image? lineArt;
+
+  /// Photo background drawn under the paint layer (photo mode).
+  ui.Image? backgroundImage;
   Uint8List? barrierAlpha;
   Stroke? activeStroke;
 
@@ -89,6 +92,12 @@ class CanvasController extends ChangeNotifier {
   void setPaintLayer(ui.Image? image) {
     paintLayer?.dispose();
     paintLayer = image;
+    _tick();
+  }
+
+  void setBackground(ui.Image? image) {
+    backgroundImage?.dispose();
+    backgroundImage = image;
     _tick();
   }
 
@@ -361,6 +370,7 @@ class CanvasController extends ChangeNotifier {
     _undoStack.dispose();
     paintLayer?.dispose();
     lineArt?.dispose();
+    backgroundImage?.dispose();
     repaint.dispose();
     super.dispose();
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,13 +21,15 @@ import 'painting_canvas.dart';
 const int kCanvasWidth = 2048;
 const int kCanvasHeight = 1536;
 
-/// The drawing screen for both modes: pass [page] to color a bundled
-/// picture, [resume] to continue a saved artwork, neither for free drawing.
+/// The drawing screen: pass [page] to color a bundled picture, [resume] to
+/// continue a saved artwork, [photoPath] to paint over a picked photo,
+/// nothing for free drawing.
 class CanvasScreen extends StatefulWidget {
-  const CanvasScreen({super.key, this.page, this.resume});
+  const CanvasScreen({super.key, this.page, this.resume, this.photoPath});
 
   final ColoringPage? page;
   final Artwork? resume;
+  final String? photoPath;
 
   @override
   State<CanvasScreen> createState() => _CanvasScreenState();
@@ -38,6 +41,8 @@ class _CanvasScreenState extends State<CanvasScreen>
   final CanvasViewportController viewport = CanvasViewportController();
   late final String artworkId;
   String? pageId;
+  late bool hasPhoto;
+  late bool _backgroundSaved;
   bool loading = true;
   bool everSaved = false;
   Timer? _autoSave;
@@ -50,6 +55,8 @@ class _CanvasScreenState extends State<CanvasScreen>
         canvasWidth: kCanvasWidth, canvasHeight: kCanvasHeight);
     artworkId = widget.resume?.id ?? ArtworkStore.newId();
     pageId = widget.resume?.pageId ?? widget.page?.id;
+    hasPhoto = widget.photoPath != null || (widget.resume?.hasPhoto ?? false);
+    _backgroundSaved = widget.resume?.hasPhoto ?? false;
     everSaved = widget.resume != null;
     _load();
     _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
@@ -67,6 +74,16 @@ class _CanvasScreenState extends State<CanvasScreen>
         controller.setLineArt(art.image, art.barrierAlpha);
       }
     }
+    final photoPath = widget.photoPath;
+    if (photoPath != null) {
+      final bytes = await File(photoPath).readAsBytes();
+      controller.setBackground(
+          await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight));
+    } else if ((widget.resume?.hasPhoto ?? false) &&
+        await widget.resume!.backgroundFile.exists()) {
+      final bytes = await widget.resume!.backgroundFile.readAsBytes();
+      controller.setBackground(await pngBytesToImage(bytes));
+    }
     final resume = widget.resume;
     if (resume != null && await resume.paintFile.exists()) {
       final bytes = await resume.paintFile.readAsBytes();
@@ -82,9 +99,14 @@ class _CanvasScreenState extends State<CanvasScreen>
     Uint8List? paintPng;
     final layer = controller.paintLayer;
     if (layer != null) paintPng = await imageToPngBytes(layer);
+    Uint8List? backgroundPng;
+    if (hasPhoto && !_backgroundSaved && controller.backgroundImage != null) {
+      backgroundPng = await imageToPngBytes(controller.backgroundImage!);
+    }
     final thumb = await composeArtwork(
       width: kCanvasWidth,
       height: kCanvasHeight,
+      background: controller.backgroundImage,
       paintLayer: controller.paintLayer,
       lineArt: controller.lineArt,
       targetWidth: 360,
@@ -94,11 +116,14 @@ class _CanvasScreenState extends State<CanvasScreen>
     await ArtworkStore.save(
       id: artworkId,
       pageId: pageId,
+      hasPhoto: hasPhoto,
       width: kCanvasWidth,
       height: kCanvasHeight,
       paintPng: paintPng,
+      backgroundPng: backgroundPng,
       thumbPng: thumbPng,
     );
+    if (backgroundPng != null) _backgroundSaved = true;
     everSaved = true;
     controller.dirty = false;
   }
@@ -117,6 +142,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     await share_util.shareArtwork(
       width: kCanvasWidth,
       height: kCanvasHeight,
+      background: controller.backgroundImage,
       paintLayer: controller.paintLayer,
       lineArt: controller.lineArt,
     );
