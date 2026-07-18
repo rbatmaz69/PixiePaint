@@ -13,6 +13,7 @@ import '../widgets/color_palette.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
+import 'canvas_viewport.dart';
 import 'painting_canvas.dart';
 
 const int kCanvasWidth = 2048;
@@ -33,6 +34,7 @@ class CanvasScreen extends StatefulWidget {
 class _CanvasScreenState extends State<CanvasScreen>
     with WidgetsBindingObserver {
   late final CanvasController controller;
+  final CanvasViewportController viewport = CanvasViewportController();
   late final String artworkId;
   String? pageId;
   bool loading = true;
@@ -129,6 +131,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     controller.dispose();
+    viewport.dispose();
     super.dispose();
   }
 
@@ -159,19 +162,29 @@ class _CanvasScreenState extends State<CanvasScreen>
                               padding: const EdgeInsets.all(8),
                               child: Stack(
                                 children: [
-                                  Center(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black
-                                                .withValues(alpha: 0.15),
-                                            blurRadius: 12,
-                                          ),
-                                        ],
-                                      ),
+                                  Positioned.fill(
+                                    child: CanvasViewport(
+                                      viewport: viewport,
+                                      controller: controller,
                                       child: PaintingCanvas(
                                           controller: controller),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 8,
+                                    right: 8,
+                                    child: ListenableBuilder(
+                                      listenable: viewport,
+                                      builder: (context, _) => viewport
+                                              .isZoomed
+                                          ? IconButton.filledTonal(
+                                              iconSize: 28,
+                                              onPressed: viewport.reset,
+                                              icon: const Icon(
+                                                  Icons.fit_screen_rounded),
+                                              tooltip: 'Ansicht zurücksetzen',
+                                            )
+                                          : const SizedBox.shrink(),
                                     ),
                                   ),
                                   ListenableBuilder(
