@@ -5,21 +5,40 @@ import '../models/tool.dart';
 import 'stamp_picker.dart';
 
 class ToolBarRail extends StatelessWidget {
-  const ToolBarRail({super.key, required this.controller, this.showFill = true});
+  const ToolBarRail({
+    super.key,
+    required this.controller,
+    this.showFill = true,
+    this.direction = Axis.vertical,
+  });
 
   final CanvasController controller;
   final bool showFill;
+  final Axis direction;
+
+  Widget get _divider => direction == Axis.vertical
+      ? const Divider(height: 10, indent: 12, endIndent: 12)
+      : const VerticalDivider(width: 10, indent: 12, endIndent: 12);
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
+        final children = _buildButtons(context);
         return SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _ToolButton(
+          scrollDirection: direction,
+          child: direction == Axis.vertical
+              ? Column(mainAxisSize: MainAxisSize.min, children: children)
+              : Row(mainAxisSize: MainAxisSize.min, children: children),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildButtons(BuildContext context) {
+    return [
+      _ToolButton(
                 icon: Icons.brush,
                 label: 'Pinsel',
                 selected: controller.tool == ToolKind.brush,
@@ -74,14 +93,14 @@ class ToolBarRail extends StatelessWidget {
                 selected: controller.tool == ToolKind.eraser,
                 onTap: () => controller.selectTool(ToolKind.eraser),
               ),
-              const Divider(height: 10, indent: 12, endIndent: 12),
+              _divider,
               for (var i = 0; i < kBrushSizes.length; i++)
                 _SizeButton(
                   diameter: 12.0 + i * 8,
                   selected: controller.sizeIndex == i,
                   onTap: () => controller.selectSize(i),
                 ),
-              const Divider(height: 10, indent: 12, endIndent: 12),
+              _divider,
               _ActionButton(
                 icon: Icons.undo,
                 enabled: controller.canUndo,
@@ -97,11 +116,7 @@ class ToolBarRail extends StatelessWidget {
                 enabled: !controller.isEmpty,
                 onTap: () => _confirmClear(context),
               ),
-            ],
-          ),
-        );
-      },
-    );
+    ];
   }
 
   Future<void> _confirmClear(BuildContext context) async {

@@ -149,79 +149,135 @@ class _CanvasScreenState extends State<CanvasScreen>
         body: SafeArea(
           child: loading
               ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          _LeftRail(
-                            controller: controller,
-                            onBack: _leave,
-                            onShare: _share,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: CanvasViewport(
-                                      viewport: viewport,
-                                      controller: controller,
-                                      child: PaintingCanvas(
-                                          controller: controller),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 8,
-                                    right: 8,
-                                    child: ListenableBuilder(
-                                      listenable: viewport,
-                                      builder: (context, _) => viewport
-                                              .isZoomed
-                                          ? IconButton.filledTonal(
-                                              iconSize: 28,
-                                              onPressed: viewport.reset,
-                                              icon: const Icon(
-                                                  Icons.fit_screen_rounded),
-                                              tooltip: 'Ansicht zurücksetzen',
-                                            )
-                                          : const SizedBox.shrink(),
-                                    ),
-                                  ),
-                                  ListenableBuilder(
-                                    listenable: controller,
-                                    builder: (context, _) =>
-                                        controller.isFilling
-                                            ? const Align(
-                                                alignment: Alignment.topCenter,
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(8),
-                                                  child: SizedBox(
-                                                    width: 28,
-                                                    height: 28,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            strokeWidth: 3),
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 76,
-                      child: ColorPalette(controller: controller),
-                    ),
-                  ],
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    final portrait =
+                        constraints.maxWidth < constraints.maxHeight;
+                    return portrait ? _buildPortrait() : _buildLandscape();
+                  },
                 ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLandscape() {
+    return Column(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              _LeftRail(
+                controller: controller,
+                onBack: _leave,
+                onShare: _share,
+              ),
+              Expanded(child: _canvasArea(portrait: false)),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 76,
+          child: ColorPalette(controller: controller),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPortrait() {
+    return Column(
+      children: [
+        Expanded(child: _canvasArea(portrait: true)),
+        Container(
+          height: 64,
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08), blurRadius: 8),
+            ],
+          ),
+          child: Center(
+            child: ToolBarRail(
+                controller: controller, direction: Axis.horizontal),
+          ),
+        ),
+        SizedBox(
+          height: 76,
+          child: ColorPalette(controller: controller),
+        ),
+      ],
+    );
+  }
+
+  Widget _canvasArea({required bool portrait}) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: CanvasViewport(
+              viewport: viewport,
+              controller: controller,
+              child: PaintingCanvas(controller: controller),
+            ),
+          ),
+          if (portrait) ...[
+            Positioned(
+              top: 8,
+              left: 8,
+              child: IconButton.filledTonal(
+                iconSize: 28,
+                onPressed: _leave,
+                icon: const Icon(Icons.arrow_back_rounded),
+                tooltip: 'Zurück',
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 56,
+              child: IconButton.filledTonal(
+                iconSize: 28,
+                onPressed: _share,
+                icon: const Icon(Icons.ios_share_rounded),
+                tooltip: 'Teilen (für Eltern)',
+              ),
+            ),
+          ],
+          Positioned(
+            top: 8,
+            right: 8,
+            child: ListenableBuilder(
+              listenable: viewport,
+              builder: (context, _) => viewport.isZoomed
+                  ? IconButton.filledTonal(
+                      iconSize: 28,
+                      onPressed: viewport.reset,
+                      icon: const Icon(Icons.fit_screen_rounded),
+                      tooltip: 'Ansicht zurücksetzen',
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+          ListenableBuilder(
+            listenable: controller,
+            builder: (context, _) => controller.isFilling
+                ? const Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(strokeWidth: 3),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
       ),
     );
   }
