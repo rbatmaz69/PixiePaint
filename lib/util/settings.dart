@@ -11,6 +11,7 @@ class Settings extends ChangeNotifier {
 
   bool stylusOnly = false;
   bool deleteNeedsGate = false;
+  bool soundsOn = true;
 
   File? _file;
 
@@ -22,20 +23,24 @@ class Settings extends ChangeNotifier {
         final json = jsonDecode(await _file!.readAsString());
         stylusOnly = json['stylusOnly'] as bool? ?? false;
         deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
+        soundsOn = json['soundsOn'] as bool? ?? true;
       }
     } catch (_) {
       // defaults are fine
     }
   }
 
-  Future<void> update({bool? stylusOnly, bool? deleteNeedsGate}) async {
+  Future<void> update(
+      {bool? stylusOnly, bool? deleteNeedsGate, bool? soundsOn}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
+    if (soundsOn != null) this.soundsOn = soundsOn;
     notifyListeners();
     try {
       await _file?.writeAsString(jsonEncode({
         'stylusOnly': this.stylusOnly,
         'deleteNeedsGate': this.deleteNeedsGate,
+        'soundsOn': this.soundsOn,
       }));
     } catch (_) {}
   }

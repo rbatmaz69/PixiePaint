@@ -30,6 +30,13 @@ class SettingsScreen extends StatelessWidget {
               value: settings.deleteNeedsGate,
               onChanged: (v) => settings.update(deleteNeedsGate: v),
             ),
+            SwitchListTile(
+              title: const Text('Töne & Vibration'),
+              subtitle:
+                  const Text('Leise Geräusche beim Malen und Stempeln.'),
+              value: settings.soundsOn,
+              onChanged: (v) => settings.update(soundsOn: v),
+            ),
             const SizedBox(height: 24),
             const ListTile(
               leading: Icon(Icons.info_outline),

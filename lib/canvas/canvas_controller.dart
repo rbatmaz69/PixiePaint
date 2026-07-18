@@ -10,6 +10,7 @@ import '../models/stamp.dart';
 import '../models/tool.dart';
 import '../util/image_io.dart';
 import '../util/settings.dart';
+import '../util/sfx.dart';
 import 'flood_fill.dart' as ff;
 import 'stroke.dart';
 import 'stroke_renderer.dart';
@@ -93,23 +94,27 @@ class CanvasController extends ChangeNotifier {
 
   void selectTool(ToolKind t) {
     tool = t;
+    Sfx.instance.tick();
     notifyListeners();
   }
 
   void selectSize(int index) {
     sizeIndex = index;
+    Sfx.instance.tick();
     notifyListeners();
   }
 
   void selectColor(Color c) {
     color = c;
     if (tool == ToolKind.eraser) tool = ToolKind.brush;
+    Sfx.instance.tick();
     notifyListeners();
   }
 
   void selectStamp(String emoji) {
     stampEmoji = emoji;
     tool = ToolKind.stamp;
+    Sfx.instance.tick();
     notifyListeners();
   }
 
@@ -245,6 +250,7 @@ class CanvasController extends ChangeNotifier {
     final picture = recorder.endRecording();
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();
+    Sfx.instance.pop();
     _pushUndoAndReplace(newLayer);
   }
 
@@ -316,6 +322,7 @@ class CanvasController extends ChangeNotifier {
           ));
       if (result != null) {
         final newLayer = await rgbaToImage(result, w, h);
+        Sfx.instance.pop();
         _pushUndoAndReplace(newLayer);
       }
     } finally {

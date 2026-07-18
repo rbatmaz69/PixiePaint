@@ -7,6 +7,7 @@ import '../gallery/artwork_store.dart';
 import '../models/artwork.dart';
 import '../models/coloring_page.dart';
 import '../util/image_io.dart';
+import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
 import '../widgets/color_palette.dart';
@@ -112,6 +113,7 @@ class _CanvasScreenState extends State<CanvasScreen>
 
   Future<void> _share() async {
     if (!await ParentalGate.show(context)) return;
+    Sfx.instance.tada();
     await share_util.shareArtwork(
       width: kCanvasWidth,
       height: kCanvasHeight,
