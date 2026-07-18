@@ -1,0 +1,13 @@
+[
+  {"id": "cat", "title": "Katze", "file": "cat.svg", "category": "Tiere"},
+  {"id": "dog", "title": "Hund", "file": "dog.svg", "category": "Tiere"},
+  {"id": "fish", "title": "Fisch", "file": "fish.svg", "category": "Tiere"},
+  {"id": "turtle", "title": "Schildkröte", "file": "turtle.svg", "category": "Tiere"},
+  {"id": "butterfly", "title": "Schmetterling", "file": "butterfly.svg", "category": "Tiere"},
+  {"id": "flower", "title": "Blume", "file": "flower.svg", "category": "Natur"},
+  {"id": "house", "title": "Haus", "file": "house.svg", "category": "Natur"},
+  {"id": "car", "title": "Auto", "file": "car.svg", "category": "Fahrzeuge"},
+  {"id": "rocket", "title": "Rakete", "file": "rocket.svg", "category": "Fahrzeuge"},
+  {"id": "sailboat", "title": "Segelboot", "file": "sailboat.svg", "category": "Fahrzeuge"},
+  {"id": "balloon", "title": "Heißluftballon", "file": "balloon.svg", "category": "Fahrzeuge"}
+]

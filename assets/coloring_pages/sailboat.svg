@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- hull -->
+    <path d="M 280 520 L 744 520 L 680 620 L 344 620 Z"/>
+    <!-- mast -->
+    <path d="M 512 520 L 512 120"/>
+    <!-- main sail -->
+    <path d="M 532 140 L 532 490 L 760 490 Z"/>
+    <!-- front sail -->
+    <path d="M 492 160 L 492 490 L 300 490 Z"/>
+    <!-- flag -->
+    <path d="M 512 120 L 512 80 L 590 100 L 512 120"/>
+    <!-- porthole -->
+    <circle cx="512" cy="570" r="22"/>
+    <!-- waves -->
+    <path d="M 60 680 C 100 650 140 650 180 680 C 220 710 260 710 300 680 C 340 650 380 650 420 680"/>
+    <path d="M 600 680 C 640 650 680 650 720 680 C 760 710 800 710 840 680 C 880 650 920 650 960 680"/>
+    <!-- sun -->
+    <circle cx="880" cy="130" r="55"/>
+    <path d="M 880 50 L 880 25"/>
+    <path d="M 880 210 L 880 235"/>
+    <path d="M 800 130 L 775 130"/>
+    <path d="M 960 130 L 985 130"/>
+    <!-- birds -->
+    <path d="M 160 180 C 180 160 200 160 215 175 C 230 160 250 160 270 180"/>
+    <path d="M 240 260 C 255 245 270 245 282 256 C 294 245 309 245 324 260"/>
+  </g>
+</svg>

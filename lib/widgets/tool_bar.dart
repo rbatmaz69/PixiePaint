@@ -1,0 +1,197 @@
+import 'package:flutter/material.dart';
+
+import '../canvas/canvas_controller.dart';
+import '../models/tool.dart';
+
+class ToolBarRail extends StatelessWidget {
+  const ToolBarRail({super.key, required this.controller, this.showFill = true});
+
+  final CanvasController controller;
+  final bool showFill;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _ToolButton(
+                icon: Icons.brush,
+                label: 'Pinsel',
+                selected: controller.tool == ToolKind.brush,
+                onTap: () => controller.selectTool(ToolKind.brush),
+              ),
+              _ToolButton(
+                icon: Icons.edit,
+                label: 'Filzstift',
+                selected: controller.tool == ToolKind.marker,
+                onTap: () => controller.selectTool(ToolKind.marker),
+              ),
+              _ToolButton(
+                icon: Icons.gesture,
+                label: 'Buntstift',
+                selected: controller.tool == ToolKind.crayon,
+                onTap: () => controller.selectTool(ToolKind.crayon),
+              ),
+              if (showFill)
+                _ToolButton(
+                  icon: Icons.format_color_fill,
+                  label: 'Füllen',
+                  selected: controller.tool == ToolKind.fill,
+                  onTap: () => controller.selectTool(ToolKind.fill),
+                ),
+              _ToolButton(
+                icon: Icons.cleaning_services,
+                label: 'Radierer',
+                selected: controller.tool == ToolKind.eraser,
+                onTap: () => controller.selectTool(ToolKind.eraser),
+              ),
+              const Divider(height: 16, indent: 12, endIndent: 12),
+              for (var i = 0; i < kBrushSizes.length; i++)
+                _SizeButton(
+                  diameter: 12.0 + i * 8,
+                  selected: controller.sizeIndex == i,
+                  onTap: () => controller.selectSize(i),
+                ),
+              const Divider(height: 16, indent: 12, endIndent: 12),
+              _ActionButton(
+                icon: Icons.undo,
+                enabled: controller.canUndo,
+                onTap: controller.undo,
+              ),
+              _ActionButton(
+                icon: Icons.redo,
+                enabled: controller.canRedo,
+                onTap: controller.redo,
+              ),
+              _ActionButton(
+                icon: Icons.delete_sweep_outlined,
+                enabled: !controller.isEmpty,
+                onTap: () => _confirmClear(context),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmClear(BuildContext context) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Alles wegwischen?'),
+        content: const Text('Möchtest du noch einmal von vorne anfangen?'),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Weitermalen!'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Von vorne'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) controller.clearAll();
+  }
+}
+
+class _ToolButton extends StatelessWidget {
+  const _ToolButton({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+      child: Tooltip(
+        message: label,
+        child: Material(
+          color: selected ? scheme.primaryContainer : Colors.transparent,
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onTap,
+            child: SizedBox(
+              width: 60,
+              height: 60,
+              child: Icon(
+                icon,
+                size: selected ? 34 : 28,
+                color: selected ? scheme.primary : scheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SizeButton extends StatelessWidget {
+  const _SizeButton(
+      {required this.diameter, required this.selected, required this.onTap});
+
+  final double diameter;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return InkWell(
+      customBorder: const CircleBorder(),
+      onTap: onTap,
+      child: Container(
+        width: 52,
+        height: 44,
+        alignment: Alignment.center,
+        child: Container(
+          width: diameter,
+          height: diameter,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: selected ? scheme.primary : scheme.onSurfaceVariant,
+            border: selected
+                ? Border.all(color: scheme.primaryContainer, width: 3)
+                : null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton(
+      {required this.icon, required this.enabled, required this.onTap});
+
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 30,
+      padding: const EdgeInsets.all(12),
+      onPressed: enabled ? onTap : null,
+      icon: Icon(icon),
+    );
+  }
+}

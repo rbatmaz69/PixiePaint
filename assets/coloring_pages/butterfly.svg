@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- left upper wing -->
+    <path d="M 480 330 C 380 180 220 120 150 200 C 90 270 170 380 460 390 Z"/>
+    <!-- right upper wing -->
+    <path d="M 544 330 C 644 180 804 120 874 200 C 934 270 854 380 564 390 Z"/>
+    <!-- left lower wing -->
+    <path d="M 465 420 C 340 440 240 540 290 620 C 340 690 460 620 485 450 Z"/>
+    <!-- right lower wing -->
+    <path d="M 559 420 C 684 440 784 540 734 620 C 684 690 564 620 539 450 Z"/>
+    <!-- wing spots -->
+    <circle cx="280" cy="250" r="35"/>
+    <circle cx="744" cy="250" r="35"/>
+    <circle cx="360" cy="540" r="28"/>
+    <circle cx="664" cy="540" r="28"/>
+    <!-- body -->
+    <ellipse cx="512" cy="420" rx="34" ry="130"/>
+    <circle cx="512" cy="250" r="42"/>
+    <!-- antennae -->
+    <path d="M 495 215 C 470 160 430 130 400 120"/>
+    <path d="M 529 215 C 554 160 594 130 624 120"/>
+    <circle cx="392" cy="115" r="10"/>
+    <circle cx="632" cy="115" r="10"/>
+  </g>
+</svg>

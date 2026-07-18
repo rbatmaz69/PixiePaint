@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <ellipse cx="560" cy="540" rx="250" ry="150"/>
+    <!-- head -->
+    <circle cx="360" cy="300" r="140"/>
+    <!-- left floppy ear -->
+    <path d="M 250 230 C 180 240 160 340 200 400 C 230 440 280 420 285 370"/>
+    <!-- right floppy ear -->
+    <path d="M 470 230 C 540 240 560 340 520 400 C 490 440 440 420 435 370"/>
+    <!-- eyes -->
+    <circle cx="320" cy="280" r="22"/>
+    <circle cx="400" cy="280" r="22"/>
+    <!-- snout -->
+    <ellipse cx="360" cy="360" rx="60" ry="42"/>
+    <circle cx="360" cy="345" r="16"/>
+    <path d="M 360 361 L 360 385"/>
+    <!-- tail -->
+    <path d="M 810 520 C 880 480 900 400 870 350"/>
+    <!-- legs -->
+    <ellipse cx="430" cy="670" rx="52" ry="30"/>
+    <ellipse cx="690" cy="670" rx="52" ry="30"/>
+    <!-- collar -->
+    <path d="M 300 420 C 340 450 380 450 420 420"/>
+  </g>
+</svg>

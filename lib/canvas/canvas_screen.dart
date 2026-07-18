@@ -1,0 +1,259 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../gallery/artwork_store.dart';
+import '../models/artwork.dart';
+import '../models/coloring_page.dart';
+import '../util/image_io.dart';
+import '../util/share.dart' as share_util;
+import '../util/svg_raster.dart';
+import '../widgets/color_palette.dart';
+import '../widgets/parental_gate.dart';
+import '../widgets/tool_bar.dart';
+import 'canvas_controller.dart';
+import 'painting_canvas.dart';
+
+const int kCanvasWidth = 2048;
+const int kCanvasHeight = 1536;
+
+/// The drawing screen for both modes: pass [page] to color a bundled
+/// picture, [resume] to continue a saved artwork, neither for free drawing.
+class CanvasScreen extends StatefulWidget {
+  const CanvasScreen({super.key, this.page, this.resume});
+
+  final ColoringPage? page;
+  final Artwork? resume;
+
+  @override
+  State<CanvasScreen> createState() => _CanvasScreenState();
+}
+
+class _CanvasScreenState extends State<CanvasScreen>
+    with WidgetsBindingObserver {
+  late final CanvasController controller;
+  late final String artworkId;
+  String? pageId;
+  bool loading = true;
+  bool everSaved = false;
+  Timer? _autoSave;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    controller = CanvasController(
+        canvasWidth: kCanvasWidth, canvasHeight: kCanvasHeight);
+    artworkId = widget.resume?.id ?? ArtworkStore.newId();
+    pageId = widget.resume?.pageId ?? widget.page?.id;
+    everSaved = widget.resume != null;
+    _load();
+    _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (controller.dirty) _save();
+    });
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  Future<void> _load() async {
+    if (pageId != null) {
+      final page = await ColoringPage.byId(pageId!);
+      if (page != null) {
+        final art = await rasterizeSvgAsset(
+            page.assetPath, kCanvasWidth, kCanvasHeight);
+        controller.setLineArt(art.image, art.barrierAlpha);
+      }
+    }
+    final resume = widget.resume;
+    if (resume != null && await resume.paintFile.exists()) {
+      final bytes = await resume.paintFile.readAsBytes();
+      controller.setPaintLayer(await pngBytesToImage(bytes));
+    }
+    if (mounted) setState(() => loading = false);
+  }
+
+  Future<void> _save() async {
+    if (!controller.dirty && everSaved) return;
+    // Don't create junk artworks for an untouched canvas.
+    if (controller.isEmpty && !everSaved) return;
+    Uint8List? paintPng;
+    final layer = controller.paintLayer;
+    if (layer != null) paintPng = await imageToPngBytes(layer);
+    final thumb = await composeArtwork(
+      width: kCanvasWidth,
+      height: kCanvasHeight,
+      paintLayer: controller.paintLayer,
+      lineArt: controller.lineArt,
+      targetWidth: 360,
+    );
+    final thumbPng = await imageToPngBytes(thumb);
+    thumb.dispose();
+    await ArtworkStore.save(
+      id: artworkId,
+      pageId: pageId,
+      width: kCanvasWidth,
+      height: kCanvasHeight,
+      paintPng: paintPng,
+      thumbPng: thumbPng,
+    );
+    everSaved = true;
+    controller.dirty = false;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      if (controller.dirty) _save();
+    }
+  }
+
+  Future<void> _share() async {
+    if (!await ParentalGate.show(context)) return;
+    await share_util.shareArtwork(
+      width: kCanvasWidth,
+      height: kCanvasHeight,
+      paintLayer: controller.paintLayer,
+      lineArt: controller.lineArt,
+    );
+  }
+
+  Future<void> _leave() async {
+    if (controller.dirty) await _save();
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  @override
+  void dispose() {
+    _autoSave?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _leave();
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFEDE7F6),
+        body: SafeArea(
+          child: loading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          _LeftRail(
+                            controller: controller,
+                            onBack: _leave,
+                            onShare: _share,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black
+                                                .withValues(alpha: 0.15),
+                                            blurRadius: 12,
+                                          ),
+                                        ],
+                                      ),
+                                      child: PaintingCanvas(
+                                          controller: controller),
+                                    ),
+                                  ),
+                                  ListenableBuilder(
+                                    listenable: controller,
+                                    builder: (context, _) =>
+                                        controller.isFilling
+                                            ? const Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: SizedBox(
+                                                    width: 28,
+                                                    height: 28,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                            strokeWidth: 3),
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 76,
+                      child: ColorPalette(controller: controller),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LeftRail extends StatelessWidget {
+  const _LeftRail(
+      {required this.controller, required this.onBack, required this.onShare});
+
+  final CanvasController controller;
+  final VoidCallback onBack;
+  final VoidCallback onShare;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 76,
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08), blurRadius: 8),
+        ],
+      ),
+      child: Column(
+        children: [
+          IconButton(
+            iconSize: 30,
+            padding: const EdgeInsets.all(12),
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back_rounded),
+            tooltip: 'Zurück',
+          ),
+          Expanded(
+            child: ToolBarRail(controller: controller),
+          ),
+          IconButton(
+            iconSize: 28,
+            padding: const EdgeInsets.all(12),
+            onPressed: onShare,
+            icon: const Icon(Icons.ios_share_rounded),
+            tooltip: 'Teilen (für Eltern)',
+          ),
+        ],
+      ),
+    );
+  }
+}
