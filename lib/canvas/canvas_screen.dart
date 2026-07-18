@@ -12,6 +12,7 @@ import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
 import '../widgets/color_palette.dart';
+import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
@@ -71,7 +72,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       if (page != null) {
         final art = await rasterizeSvgAsset(
             page.assetPath, kCanvasWidth, kCanvasHeight);
-        controller.setLineArt(art.image, art.barrierAlpha);
+        controller.setLineArt(art);
       }
     }
     final photoPath = widget.photoPath;
@@ -146,6 +147,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       paintLayer: controller.paintLayer,
       lineArt: controller.lineArt,
     );
+    if (mounted) showConfetti(context);
   }
 
   Future<void> _leave() async {

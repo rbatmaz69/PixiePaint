@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'canvas_controller.dart';
 import 'canvas_painter.dart';
+import 'fill_burst.dart';
 
 /// The drawing surface at fixed canvas resolution. Sizing and zoom/pan are
 /// applied by [CanvasViewport]; pointer positions arrive here already in
@@ -22,12 +23,22 @@ class PaintingCanvas extends StatelessWidget {
       onPointerMove: controller.pointerMove,
       onPointerUp: controller.pointerUp,
       onPointerCancel: controller.pointerUp,
-      child: RepaintBoundary(
-        child: CustomPaint(
-          painter: CanvasPainter(controller),
-          size: Size(w, h),
-          isComplex: true,
-        ),
+      child: Stack(
+        children: [
+          RepaintBoundary(
+            child: CustomPaint(
+              painter: CanvasPainter(controller),
+              size: Size(w, h),
+              isComplex: true,
+            ),
+          ),
+          // Fill-burst effect lives in canvas space so it scales with zoom.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: FillBurstOverlay(controller: controller),
+            ),
+          ),
+        ],
       ),
     );
   }

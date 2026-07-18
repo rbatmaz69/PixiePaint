@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' hide TextStyle;
+import 'dart:ui' as ui show Image;
 
 import 'package:flutter/painting.dart'
     show HSVColor, TextPainter, TextSpan, TextStyle;
@@ -110,16 +112,48 @@ class StrokeRenderer {
     canvas.drawPath(_smoothPath(stroke.points), paint);
   }
 
-  /// Waxy look: three jittered semi-transparent passes with a slight blur.
-  /// Jitter comes from the stroke's fixed seed so the preview doesn't
-  /// flicker between frames.
+  static ui.Image? _noise;
+
+  /// Deterministic 256px noise tile (fixed seed) for the crayon texture.
+  /// Lazily built with toImageSync, so pure unit tests never touch it.
+  static ui.Image get noiseTexture => _noise ??= _makeNoise();
+
+  static final Float64List _identityMatrix = Float64List.fromList(
+      [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+
+  static ui.Image _makeNoise() {
+    final rng = Random(1234);
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder, const Rect.fromLTWH(0, 0, 256, 256));
+    final paint = Paint();
+    for (var i = 0; i < 2000; i++) {
+      paint.color = Color.fromRGBO(
+          255, 255, 255, 0.25 + rng.nextDouble() * 0.75);
+      canvas.drawCircle(
+          Offset(rng.nextDouble() * 256, rng.nextDouble() * 256),
+          0.6 + rng.nextDouble() * 1.4,
+          paint);
+    }
+    final picture = recorder.endRecording();
+    final image = picture.toImageSync(256, 256);
+    picture.dispose();
+    return image;
+  }
+
+  /// Waxy look: three jittered semi-transparent passes over a repeating
+  /// noise texture (the shader supplies the paper grain, the color filter
+  /// tints it). Jitter comes from the stroke's fixed seed so the preview
+  /// doesn't flicker between frames.
   static void _drawCrayon(Canvas canvas, Stroke stroke) {
     final rng = Random(stroke.seed);
     for (var pass = 0; pass < 3; pass++) {
       final dx = (rng.nextDouble() - 0.5) * stroke.baseWidth * 0.35;
       final dy = (rng.nextDouble() - 0.5) * stroke.baseWidth * 0.35;
       final paint = _paintFor(stroke)
-        ..color = stroke.color.withValues(alpha: 0.30)
+        ..shader = ImageShader(noiseTexture, TileMode.repeated,
+            TileMode.repeated, _identityMatrix)
+        ..colorFilter = ColorFilter.mode(
+            stroke.color.withValues(alpha: 0.30), BlendMode.srcIn)
         ..strokeWidth = stroke.baseWidth * (0.8 + rng.nextDouble() * 0.4)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.2);
       if (stroke.points.length == 1) {
@@ -127,7 +161,8 @@ class StrokeRenderer {
             stroke.points.first.pos + Offset(dx, dy),
             stroke.baseWidth / 2,
             Paint()
-              ..color = paint.color
+              ..shader = paint.shader
+              ..colorFilter = paint.colorFilter
               ..maskFilter = paint.maskFilter);
         continue;
       }

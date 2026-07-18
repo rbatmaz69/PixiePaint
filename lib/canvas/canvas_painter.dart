@@ -38,9 +38,13 @@ class CanvasPainter extends CustomPainter {
           kStampSizes[controller.sizeIndex]);
     }
 
-    final lineArt = controller.lineArt;
-    if (lineArt != null) {
-      canvas.drawImage(lineArt, Offset.zero, Paint());
+    // Prefer the vector picture: it re-rasterizes under the viewport
+    // transform, keeping outlines sharp at any zoom.
+    final lineArtPicture = controller.lineArtPicture;
+    if (lineArtPicture != null) {
+      canvas.drawPicture(lineArtPicture);
+    } else if (controller.lineArt != null) {
+      canvas.drawImage(controller.lineArt!, Offset.zero, Paint());
     }
   }
 

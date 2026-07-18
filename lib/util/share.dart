@@ -41,7 +41,7 @@ Future<void> shareArtwork({
 Future<void> shareSavedArtwork(Artwork artwork) async {
   ui.Image? background;
   ui.Image? paintLayer;
-  ui.Image? lineArt;
+  RasterizedLineArt? raster;
   try {
     if (artwork.hasPhoto && await artwork.backgroundFile.exists()) {
       background =
@@ -53,9 +53,8 @@ Future<void> shareSavedArtwork(Artwork artwork) async {
     if (artwork.pageId != null) {
       final page = await ColoringPage.byId(artwork.pageId!);
       if (page != null) {
-        final raster = await rasterizeSvgAsset(
+        raster = await rasterizeSvgAsset(
             page.assetPath, artwork.width, artwork.height);
-        lineArt = raster.image;
       }
     }
     await shareArtwork(
@@ -63,11 +62,11 @@ Future<void> shareSavedArtwork(Artwork artwork) async {
       height: artwork.height,
       background: background,
       paintLayer: paintLayer,
-      lineArt: lineArt,
+      lineArt: raster?.image,
     );
   } finally {
     background?.dispose();
     paintLayer?.dispose();
-    lineArt?.dispose();
+    raster?.dispose();
   }
 }

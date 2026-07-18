@@ -5,6 +5,7 @@ import '../models/artwork.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
+import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
 import 'artwork_store.dart';
 
@@ -76,6 +77,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     if (!await ParentalGate.show(context)) return;
     Sfx.instance.tada();
     await share_util.shareSavedArtwork(artwork);
+    if (mounted) showConfetti(context);
   }
 
   Future<void> _delete(Artwork artwork) async {

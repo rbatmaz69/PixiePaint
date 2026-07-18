@@ -11,6 +11,7 @@ import '../models/tool.dart';
 import '../util/image_io.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
+import '../util/svg_raster.dart';
 import 'flood_fill.dart' as ff;
 import 'stroke.dart';
 import 'stroke_renderer.dart';
@@ -30,8 +31,17 @@ class CanvasController extends ChangeNotifier {
   /// Bumped every time the canvas content must repaint.
   final ValueNotifier<int> repaint = ValueNotifier<int>(0);
 
+  /// Seed position of the last successful flood fill (drives the burst
+  /// animation overlay).
+  final ValueNotifier<Offset?> lastFill = ValueNotifier<Offset?>(null);
+
   ui.Image? paintLayer;
   ui.Image? lineArt;
+
+  /// Vector display list of the line art — drawn on screen instead of the
+  /// raster so outlines stay sharp when zoomed.
+  ui.Picture? lineArtPicture;
+  ui.Picture? _lineArtSource;
 
   /// Photo background drawn under the paint layer (photo mode).
   ui.Image? backgroundImage;
@@ -82,10 +92,14 @@ class CanvasController extends ChangeNotifier {
   ui.Rect get _bounds =>
       ui.Rect.fromLTWH(0, 0, canvasWidth.toDouble(), canvasHeight.toDouble());
 
-  void setLineArt(ui.Image image, Uint8List barrier) {
+  void setLineArt(RasterizedLineArt art) {
     lineArt?.dispose();
-    lineArt = image;
-    barrierAlpha = barrier;
+    lineArtPicture?.dispose();
+    _lineArtSource?.dispose();
+    lineArt = art.image;
+    barrierAlpha = art.barrierAlpha;
+    lineArtPicture = art.picture;
+    _lineArtSource = art.sourcePicture;
     _tick();
   }
 
@@ -333,6 +347,9 @@ class CanvasController extends ChangeNotifier {
         final newLayer = await rgbaToImage(result, w, h);
         Sfx.instance.pop();
         _pushUndoAndReplace(newLayer);
+        // Reset first so refilling the same spot still notifies.
+        lastFill.value = null;
+        lastFill.value = pos;
       }
     } finally {
       isFilling = false;
@@ -370,7 +387,10 @@ class CanvasController extends ChangeNotifier {
     _undoStack.dispose();
     paintLayer?.dispose();
     lineArt?.dispose();
+    lineArtPicture?.dispose();
+    _lineArtSource?.dispose();
     backgroundImage?.dispose();
+    lastFill.dispose();
     repaint.dispose();
     super.dispose();
   }
