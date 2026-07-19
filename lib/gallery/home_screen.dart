@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../l10n/l10n.dart';
 import '../photo/photo_lineart_screen.dart';
 import '../widgets/parental_gate.dart';
 import 'gallery_screen.dart';
@@ -39,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         _BigCard(
                           emoji: '🖍️',
-                          label: 'Ausmalen',
+                          label: context.l10n.cardColoring,
                           color: const Color(0xFFFFF59D),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
@@ -48,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         _BigCard(
                           emoji: '✏️',
-                          label: 'Frei malen',
+                          label: context.l10n.cardFreeDraw,
                           color: const Color(0xFFB3E5FC),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
@@ -57,13 +58,13 @@ class HomeScreen extends StatelessWidget {
                         ),
                         _BigCard(
                           emoji: '📷',
-                          label: 'Foto anmalen',
+                          label: context.l10n.cardPhoto,
                           color: const Color(0xFFFFCCBC),
                           onTap: () => _pickPhoto(context),
                         ),
                         _BigCard(
                           emoji: '🖼️',
-                          label: 'Meine Bilder',
+                          label: context.l10n.cardGallery,
                           color: const Color(0xFFC8E6C9),
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
@@ -91,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 icon: Icon(Icons.settings_rounded,
                     color: Colors.black.withValues(alpha: 0.3)),
-                tooltip: 'Einstellungen (für Eltern)',
+                tooltip: context.l10n.settingsTooltip,
               ),
             ),
           ],
@@ -113,19 +114,18 @@ Future<void> _pickPhoto(BuildContext context) async {
     context: context,
     builder: (context) => SimpleDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      title: const Text('Was machen wir mit dem Foto?',
-          textAlign: TextAlign.center),
+      title: Text(context.l10n.photoDialogTitle, textAlign: TextAlign.center),
       contentPadding: const EdgeInsets.all(20),
       children: [
         _PhotoModeButton(
           emoji: '🖌️',
-          label: 'Foto anmalen',
+          label: context.l10n.photoModePaint,
           onTap: () => Navigator.of(context).pop(_PhotoMode.paintOver),
         ),
         const SizedBox(height: 12),
         _PhotoModeButton(
           emoji: '✨',
-          label: 'Ausmalbild zaubern',
+          label: context.l10n.photoModeLineArt,
           onTap: () => Navigator.of(context).pop(_PhotoMode.lineArt),
         ),
       ],

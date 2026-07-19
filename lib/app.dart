@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'gallery/home_screen.dart';
+import 'l10n/l10n.dart';
 
 class PixiePaintApp extends StatelessWidget {
   const PixiePaintApp({super.key});
@@ -8,7 +9,10 @@ class PixiePaintApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PixiePaint',
+      onGenerateTitle: (context) => context.l10n.appTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // German first — it is the fallback for unsupported system languages.
+      supportedLocales: const [Locale('de'), Locale('en')],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

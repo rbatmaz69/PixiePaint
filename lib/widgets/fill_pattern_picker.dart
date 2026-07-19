@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../canvas/fill_pattern.dart';
+import '../l10n/l10n.dart';
 
 /// Bottom sheet with the four fill patterns; picking one selects the fill
 /// tool with that pattern (mirrors the stamp picker).
@@ -18,11 +19,11 @@ Future<void> showFillPatternPicker(
           runSpacing: 12,
           alignment: WrapAlignment.center,
           children: [
-            for (final (pattern, label) in const [
-              (FillPattern.solid, 'Einfarbig'),
-              (FillPattern.dots, 'Punkte'),
-              (FillPattern.stripes, 'Streifen'),
-              (FillPattern.rainbow, 'Regenbogen'),
+            for (final (pattern, label) in [
+              (FillPattern.solid, context.l10n.patternSolid),
+              (FillPattern.dots, context.l10n.patternDots),
+              (FillPattern.stripes, context.l10n.patternStripes),
+              (FillPattern.rainbow, context.l10n.patternRainbow),
             ])
               _PatternTile(
                 pattern: pattern,

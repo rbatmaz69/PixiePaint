@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
+import '../util/review.dart';
 import '../util/settings.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -9,41 +11,41 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = Settings.instance;
     return Scaffold(
-      appBar: AppBar(title: const Text('Einstellungen')),
+      appBar: AppBar(title: Text(context.l10n.settingsTitle)),
       body: ListenableBuilder(
         listenable: settings,
         builder: (context, _) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
             SwitchListTile(
-              title: const Text('Nur mit Stift malen'),
-              subtitle: const Text(
-                  'Fingerberührungen malen nicht – praktisch, damit die '
-                  'Handfläche keine Striche macht.'),
+              title: Text(context.l10n.stylusOnlyTitle),
+              subtitle: Text(context.l10n.stylusOnlySubtitle),
               value: settings.stylusOnly,
               onChanged: (v) => settings.update(stylusOnly: v),
             ),
             SwitchListTile(
-              title: const Text('Löschen nur für Eltern'),
-              subtitle: const Text(
-                  'Bilder können nur nach der Eltern-Frage gelöscht werden.'),
+              title: Text(context.l10n.deleteGateTitle),
+              subtitle: Text(context.l10n.deleteGateSubtitle),
               value: settings.deleteNeedsGate,
               onChanged: (v) => settings.update(deleteNeedsGate: v),
             ),
             SwitchListTile(
-              title: const Text('Töne & Vibration'),
-              subtitle:
-                  const Text('Leise Geräusche beim Malen und Stempeln.'),
+              title: Text(context.l10n.soundsTitle),
+              subtitle: Text(context.l10n.soundsSubtitle),
               value: settings.soundsOn,
               onChanged: (v) => settings.update(soundsOn: v),
             ),
             const SizedBox(height: 24),
-            const ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('PixiePaint'),
-              subtitle: Text(
-                  'Eine Malbuch-App für Kinder. Keine Werbung, keine '
-                  'Datensammlung – alle Bilder bleiben auf diesem Gerät.'),
+            ListTile(
+              leading: const Icon(Icons.star_outline_rounded),
+              title: Text(context.l10n.rateApp),
+              subtitle: Text(context.l10n.rateAppSubtitle),
+              onTap: openStoreListing,
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(context.l10n.aboutTitle),
+              subtitle: Text(context.l10n.aboutBody),
             ),
           ],
         ),

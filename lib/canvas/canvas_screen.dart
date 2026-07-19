@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../gallery/artwork_store.dart';
+import '../l10n/l10n.dart';
 import '../models/artwork.dart';
 import '../models/coloring_page.dart';
 import '../photo/photo_lineart.dart';
 import '../util/image_io.dart';
+import '../util/review.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
@@ -173,6 +175,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       lineArt: controller.lineArt,
     );
     if (mounted) showConfetti(context);
+    await countShareAndMaybeReview();
   }
 
   Future<void> _leave() async {
@@ -285,7 +288,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                 iconSize: 28,
                 onPressed: _leave,
                 icon: const Icon(Icons.arrow_back_rounded),
-                tooltip: 'Zurück',
+                tooltip: context.l10n.back,
               ),
             ),
             Positioned(
@@ -295,7 +298,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                 iconSize: 28,
                 onPressed: _share,
                 icon: const Icon(Icons.ios_share_rounded),
-                tooltip: 'Teilen (für Eltern)',
+                tooltip: context.l10n.shareForParents,
               ),
             ),
           ],
@@ -309,7 +312,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                       iconSize: 28,
                       onPressed: viewport.reset,
                       icon: const Icon(Icons.fit_screen_rounded),
-                      tooltip: 'Ansicht zurücksetzen',
+                      tooltip: context.l10n.resetView,
                     )
                   : const SizedBox.shrink(),
             ),
@@ -364,7 +367,7 @@ class _LeftRail extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             onPressed: onBack,
             icon: const Icon(Icons.arrow_back_rounded),
-            tooltip: 'Zurück',
+            tooltip: context.l10n.back,
           ),
           Expanded(
             child: ToolBarRail(controller: controller),
@@ -374,7 +377,7 @@ class _LeftRail extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             onPressed: onShare,
             icon: const Icon(Icons.ios_share_rounded),
-            tooltip: 'Teilen (für Eltern)',
+            tooltip: context.l10n.shareForParents,
           ),
         ],
       ),

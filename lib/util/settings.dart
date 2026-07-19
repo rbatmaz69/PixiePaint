@@ -13,6 +13,10 @@ class Settings extends ChangeNotifier {
   bool deleteNeedsGate = false;
   bool soundsOn = true;
 
+  /// Successful shares so far — drives the one-time review prompt.
+  int shareCount = 0;
+  bool reviewRequested = false;
+
   File? _file;
 
   Future<void> load() async {
@@ -24,6 +28,8 @@ class Settings extends ChangeNotifier {
         stylusOnly = json['stylusOnly'] as bool? ?? false;
         deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
         soundsOn = json['soundsOn'] as bool? ?? true;
+        shareCount = json['shareCount'] as int? ?? 0;
+        reviewRequested = json['reviewRequested'] as bool? ?? false;
       }
     } catch (_) {
       // defaults are fine
@@ -36,11 +42,27 @@ class Settings extends ChangeNotifier {
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
     notifyListeners();
+    await _persist();
+  }
+
+  Future<void> registerShare() async {
+    shareCount++;
+    await _persist();
+  }
+
+  Future<void> markReviewRequested() async {
+    reviewRequested = true;
+    await _persist();
+  }
+
+  Future<void> _persist() async {
     try {
       await _file?.writeAsString(jsonEncode({
-        'stylusOnly': this.stylusOnly,
-        'deleteNeedsGate': this.deleteNeedsGate,
-        'soundsOn': this.soundsOn,
+        'stylusOnly': stylusOnly,
+        'deleteNeedsGate': deleteNeedsGate,
+        'soundsOn': soundsOn,
+        'shareCount': shareCount,
+        'reviewRequested': reviewRequested,
       }));
     } catch (_) {}
   }

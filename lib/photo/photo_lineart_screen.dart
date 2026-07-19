@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../l10n/l10n.dart';
 import '../util/sfx.dart';
 import 'edge_detect.dart';
 import 'photo_lineart.dart';
@@ -96,7 +97,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '✨ Ausmalbild zaubern',
+                      '✨ ${context.l10n.lineArtTitle}',
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall
@@ -127,10 +128,10 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                       spacing: 8,
                       alignment: WrapAlignment.center,
                       children: [
-                        for (final (detail, label) in const [
-                          (LineArtDetail.bold, 'Wenig Details'),
-                          (LineArtDetail.medium, 'Mittel'),
-                          (LineArtDetail.fine, 'Viele Details'),
+                        for (final (detail, label) in [
+                          (LineArtDetail.bold, context.l10n.detailFew),
+                          (LineArtDetail.medium, context.l10n.detailMedium),
+                          (LineArtDetail.fine, context.l10n.detailMany),
                         ])
                           ChoiceChip(
                             label: Text(label),
@@ -156,7 +157,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                               child:
                                   CircularProgressIndicator(strokeWidth: 2.5))
                           : const Icon(Icons.brush_rounded),
-                      label: const Text('Los geht\'s!'),
+                      label: Text(context.l10n.letsGo),
                     ),
                   ],
                 ),
@@ -169,7 +170,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                 iconSize: 28,
                 onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(Icons.arrow_back_rounded),
-                tooltip: 'Zurück',
+                tooltip: context.l10n.back,
               ),
             ),
           ],

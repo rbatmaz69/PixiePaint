@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
+
 /// Simple multiplication question that small children can't answer.
 /// Returns true if the adult solved it (3 attempts allowed).
 class ParentalGate {
@@ -53,7 +55,7 @@ class _GateDialogState extends State<_GateDialog> {
       return;
     }
     setState(() {
-      error = 'Leider falsch, versuch es noch einmal.';
+      error = context.l10n.gateWrong;
       controller.clear();
     });
   }
@@ -61,13 +63,13 @@ class _GateDialogState extends State<_GateDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Frag deine Eltern!'),
+      title: Text(context.l10n.gateTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Dieser Bereich ist für Erwachsene.\nLöse die Aufgabe:'),
+          Text(context.l10n.gateBody),
           const SizedBox(height: 12),
-          Text('$a × $b = ?',
+          Text(context.l10n.gateQuestion(a, b),
               style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 12),
           TextField(
@@ -77,7 +79,7 @@ class _GateDialogState extends State<_GateDialog> {
             textAlign: TextAlign.center,
             onSubmitted: (_) => _check(),
             decoration: InputDecoration(
-              hintText: 'Antwort',
+              hintText: context.l10n.gateHint,
               errorText: error,
             ),
           ),
@@ -86,11 +88,11 @@ class _GateDialogState extends State<_GateDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Abbrechen'),
+          child: Text(context.l10n.gateCancel),
         ),
         FilledButton(
           onPressed: _check,
-          child: const Text('Weiter'),
+          child: Text(context.l10n.gateContinue),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
+import '../l10n/l10n.dart';
 import '../models/tool.dart';
 import 'fill_pattern_picker.dart';
 import 'stamp_picker.dart';
@@ -41,42 +42,42 @@ class ToolBarRail extends StatelessWidget {
     return [
       _ToolButton(
                 icon: Icons.brush,
-                label: 'Pinsel',
+                label: context.l10n.toolBrush,
                 selected: controller.tool == ToolKind.brush,
                 onTap: () => controller.selectTool(ToolKind.brush),
               ),
               _ToolButton(
                 icon: Icons.edit,
-                label: 'Filzstift',
+                label: context.l10n.toolMarker,
                 selected: controller.tool == ToolKind.marker,
                 onTap: () => controller.selectTool(ToolKind.marker),
               ),
               _ToolButton(
                 icon: Icons.gesture,
-                label: 'Buntstift',
+                label: context.l10n.toolCrayon,
                 selected: controller.tool == ToolKind.crayon,
                 onTap: () => controller.selectTool(ToolKind.crayon),
               ),
               _ToolButton(
                 icon: Icons.looks,
-                label: 'Regenbogen',
+                label: context.l10n.toolRainbow,
                 selected: controller.tool == ToolKind.rainbow,
                 onTap: () => controller.selectTool(ToolKind.rainbow),
               ),
               _ToolButton(
                 icon: Icons.auto_awesome,
-                label: 'Glitzer',
+                label: context.l10n.toolGlitter,
                 selected: controller.tool == ToolKind.glitter,
                 onTap: () => controller.selectTool(ToolKind.glitter),
               ),
               _ToolButton(
                 icon: Icons.flash_on,
-                label: 'Neon',
+                label: context.l10n.toolNeon,
                 selected: controller.tool == ToolKind.neon,
                 onTap: () => controller.selectTool(ToolKind.neon),
               ),
               _ToolButton(
-                label: 'Sticker',
+                label: context.l10n.toolSticker,
                 emoji: controller.stampEmoji,
                 selected: controller.tool == ToolKind.stamp,
                 onTap: () => showStampPicker(context, controller),
@@ -84,13 +85,13 @@ class ToolBarRail extends StatelessWidget {
               if (showFill)
                 _ToolButton(
                   icon: Icons.format_color_fill,
-                  label: 'Füllen',
+                  label: context.l10n.toolFill,
                   selected: controller.tool == ToolKind.fill,
                   onTap: () => showFillPatternPicker(context, controller),
                 ),
               _ToolButton(
                 icon: Icons.cleaning_services,
-                label: 'Radierer',
+                label: context.l10n.toolEraser,
                 selected: controller.tool == ToolKind.eraser,
                 onTap: () => controller.selectTool(ToolKind.eraser),
               ),
@@ -124,16 +125,16 @@ class ToolBarRail extends StatelessWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Alles wegwischen?'),
-        content: const Text('Möchtest du noch einmal von vorne anfangen?'),
+        title: Text(context.l10n.clearTitle),
+        content: Text(context.l10n.clearBody),
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Weitermalen!'),
+            child: Text(context.l10n.clearKeep),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Von vorne'),
+            child: Text(context.l10n.clearConfirm),
           ),
         ],
       ),

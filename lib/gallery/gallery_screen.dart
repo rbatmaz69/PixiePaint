@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../l10n/l10n.dart';
 import '../models/artwork.dart';
+import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
@@ -44,7 +46,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.brush_rounded, size: 32),
-              title: const Text('Weitermalen', style: TextStyle(fontSize: 18)),
+              title: Text(context.l10n.continuePainting,
+                  style: const TextStyle(fontSize: 18)),
               onTap: () {
                 Navigator.pop(sheetContext);
                 _open(artwork);
@@ -52,8 +55,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.ios_share_rounded, size: 32),
-              title: const Text('Teilen (für Eltern)',
-                  style: TextStyle(fontSize: 18)),
+              title: Text(context.l10n.shareForParents,
+                  style: const TextStyle(fontSize: 18)),
               onTap: () {
                 Navigator.pop(sheetContext);
                 _share(artwork);
@@ -61,7 +64,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded, size: 32),
-              title: const Text('Wegwerfen', style: TextStyle(fontSize: 18)),
+              title: Text(context.l10n.deleteAction,
+                  style: const TextStyle(fontSize: 18)),
               onTap: () {
                 Navigator.pop(sheetContext);
                 _delete(artwork);
@@ -78,6 +82,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     Sfx.instance.tada();
     await share_util.shareSavedArtwork(artwork);
     if (mounted) showConfetti(context);
+    await countShareAndMaybeReview();
   }
 
   Future<void> _delete(Artwork artwork) async {
@@ -88,16 +93,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Bild wegwerfen?'),
-        content: const Text('Das Bild ist dann für immer weg.'),
+        title: Text(context.l10n.deleteTitle),
+        content: Text(context.l10n.deleteBody),
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Behalten!'),
+            child: Text(context.l10n.deleteKeep),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Wegwerfen'),
+            child: Text(context.l10n.deleteAction),
           ),
         ],
       ),
@@ -113,7 +118,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFE8F5E9),
       appBar: AppBar(
-        title: const Text('Meine Bilder'),
+        title: Text(context.l10n.galleryTitle),
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder<List<Artwork>>(
@@ -131,7 +136,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   const Text('🖼️', style: TextStyle(fontSize: 64)),
                   const SizedBox(height: 12),
                   Text(
-                    'Noch keine Bilder –\nmal doch eins!',
+                    context.l10n.galleryEmpty,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),

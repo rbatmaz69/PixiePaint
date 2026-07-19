@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../l10n/l10n.dart';
 import '../models/coloring_page.dart';
 
 class PagePickerScreen extends StatelessWidget {
@@ -19,33 +20,40 @@ class PagePickerScreen extends StatelessWidget {
           );
         }
         final pages = snapshot.data!;
+        final lang = Localizations.localeOf(context).languageCode;
+        // Group by the German category (stable key); display localized.
         final categories = <String>[];
+        final categoryLabels = <String, String>{};
         for (final p in pages) {
-          if (!categories.contains(p.category)) categories.add(p.category);
+          if (!categories.contains(p.category)) {
+            categories.add(p.category);
+            categoryLabels[p.category] = p.categoryFor(lang);
+          }
         }
-        final tabs = ['Alle', ...categories];
         return DefaultTabController(
-          length: tabs.length,
+          length: categories.length + 1,
           child: Scaffold(
             backgroundColor: const Color(0xFFFFF8E1),
             appBar: AppBar(
-              title: const Text('Such dir ein Bild aus!'),
+              title: Text(context.l10n.pickerTitle),
               backgroundColor: Colors.transparent,
               bottom: TabBar(
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
                 labelStyle: const TextStyle(
                     fontSize: 17, fontWeight: FontWeight.bold),
-                tabs: [for (final t in tabs) Tab(text: t)],
+                tabs: [
+                  Tab(text: context.l10n.categoryAll),
+                  for (final c in categories) Tab(text: categoryLabels[c]),
+                ],
               ),
             ),
             body: TabBarView(
               children: [
-                for (final t in tabs)
+                _PageGrid(pages: pages),
+                for (final c in categories)
                   _PageGrid(
-                    pages: t == 'Alle'
-                        ? pages
-                        : [for (final p in pages) if (p.category == t) p],
+                    pages: [for (final p in pages) if (p.category == c) p],
                   ),
               ],
             ),
@@ -95,7 +103,8 @@ class _PageGrid extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    page.title,
+                    page.titleFor(
+                        Localizations.localeOf(context).languageCode),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
