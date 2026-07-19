@@ -463,6 +463,36 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Öffnet den Play Store.'**
   String get rateAppSubtitle;
+
+  /// No description provided for @canvasLoading.
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Bild kommt…'**
+  String get canvasLoading;
+
+  /// No description provided for @galleryEmptyCta.
+  ///
+  /// In de, this message translates to:
+  /// **'Such dir ein Bild aus!'**
+  String get galleryEmptyCta;
+
+  /// No description provided for @settingsSectionSafety.
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherheit'**
+  String get settingsSectionSafety;
+
+  /// No description provided for @settingsSectionFun.
+  ///
+  /// In de, this message translates to:
+  /// **'Spaß'**
+  String get settingsSectionFun;
+
+  /// No description provided for @settingsSectionAbout.
+  ///
+  /// In de, this message translates to:
+  /// **'Info'**
+  String get settingsSectionAbout;
 }
 
 class _AppLocalizationsDelegate

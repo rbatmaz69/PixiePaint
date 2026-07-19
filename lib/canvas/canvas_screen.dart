@@ -8,7 +8,11 @@ import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
 import '../models/coloring_page.dart';
+import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
+import '../ui/app_theme.dart';
+import '../ui/bouncy.dart';
+import '../ui/loading_pixie.dart';
 import '../util/image_io.dart';
 import '../util/review.dart';
 import '../util/sfx.dart';
@@ -201,17 +205,21 @@ class _CanvasScreenState extends State<CanvasScreen>
         if (!didPop) _leave();
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFEDE7F6),
-        body: SafeArea(
-          child: loading
-              ? const Center(child: CircularProgressIndicator())
-              : LayoutBuilder(
-                  builder: (context, constraints) {
-                    final portrait =
-                        constraints.maxWidth < constraints.maxHeight;
-                    return portrait ? _buildPortrait() : _buildLandscape();
-                  },
-                ),
+        body: Container(
+          decoration:
+              const BoxDecoration(gradient: PixieGradients.canvasBg),
+          child: SafeArea(
+            child: loading
+                ? Center(
+                    child: LoadingPixie(label: context.l10n.canvasLoading))
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      final portrait =
+                          constraints.maxWidth < constraints.maxHeight;
+                      return portrait ? _buildPortrait() : _buildLandscape();
+                    },
+                  ),
+          ),
         ),
       ),
     );
@@ -273,32 +281,45 @@ class _CanvasScreenState extends State<CanvasScreen>
       padding: const EdgeInsets.all(8),
       child: Stack(
         children: [
+          // The canvas as a sheet of "paper": rounded, softly shadowed.
           Positioned.fill(
-            child: CanvasViewport(
-              viewport: viewport,
-              controller: controller,
-              child: PaintingCanvas(controller: controller),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.10),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: CanvasViewport(
+                viewport: viewport,
+                controller: controller,
+                child: PaintingCanvas(controller: controller),
+              ),
             ),
           ),
           if (portrait) ...[
             Positioned(
               top: 8,
               left: 8,
-              child: IconButton.filledTonal(
-                iconSize: 28,
-                onPressed: _leave,
-                icon: const Icon(Icons.arrow_back_rounded),
+              child: _RoundButton(
+                icon: Icons.arrow_back_rounded,
                 tooltip: context.l10n.back,
+                onTap: _leave,
               ),
             ),
             Positioned(
               top: 8,
-              right: 56,
-              child: IconButton.filledTonal(
-                iconSize: 28,
-                onPressed: _share,
-                icon: const Icon(Icons.ios_share_rounded),
+              right: 60,
+              child: _RoundButton(
+                icon: Icons.ios_share_rounded,
                 tooltip: context.l10n.shareForParents,
+                onTap: _share,
               ),
             ),
           ],
@@ -308,13 +329,22 @@ class _CanvasScreenState extends State<CanvasScreen>
             child: ListenableBuilder(
               listenable: viewport,
               builder: (context, _) => viewport.isZoomed
-                  ? IconButton.filledTonal(
-                      iconSize: 28,
-                      onPressed: viewport.reset,
-                      icon: const Icon(Icons.fit_screen_rounded),
+                  ? _RoundButton(
+                      icon: Icons.fit_screen_rounded,
                       tooltip: context.l10n.resetView,
+                      onTap: viewport.reset,
                     )
                   : const SizedBox.shrink(),
+            ),
+          ),
+          // Confirmation chip after a tool change (emoji carries the info
+          // for kids who can't read yet).
+          Positioned(
+            top: 12,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: IgnorePointer(child: _ToolChip(controller: controller)),
             ),
           ),
           ListenableBuilder(
@@ -323,17 +353,135 @@ class _CanvasScreenState extends State<CanvasScreen>
                 ? const Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: SizedBox(
-                        width: 28,
-                        height: 28,
-                        child: CircularProgressIndicator(strokeWidth: 3),
-                      ),
+                      padding: EdgeInsets.only(top: 56),
+                      child: LoadingPixie(emoji: '🪣'),
                     ),
                   )
                 : const SizedBox.shrink(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// White round floating button used for the canvas overlays.
+class _RoundButton extends StatelessWidget {
+  const _RoundButton(
+      {required this.icon, required this.tooltip, required this.onTap});
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Bouncy(
+        onTap: onTap,
+        child: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(icon,
+              size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        ),
+      ),
+    );
+  }
+}
+
+/// Floating pill that briefly confirms a tool change ("🖌️ Pinsel"), then
+/// fades out.
+class _ToolChip extends StatefulWidget {
+  const _ToolChip({required this.controller});
+
+  final CanvasController controller;
+
+  @override
+  State<_ToolChip> createState() => _ToolChipState();
+}
+
+class _ToolChipState extends State<_ToolChip> {
+  late ToolKind _lastTool = widget.controller.tool;
+  late String _lastStamp = widget.controller.stampEmoji;
+  bool _visible = false;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onChange);
+  }
+
+  void _onChange() {
+    final tool = widget.controller.tool;
+    final stamp = widget.controller.stampEmoji;
+    if (tool == _lastTool && stamp == _lastStamp) return;
+    _lastTool = tool;
+    _lastStamp = stamp;
+    _timer?.cancel();
+    setState(() => _visible = true);
+    _timer = Timer(const Duration(milliseconds: 1500), () {
+      if (mounted) setState(() => _visible = false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    widget.controller.removeListener(_onChange);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSlide(
+      offset: _visible ? Offset.zero : const Offset(0, -0.4),
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutBack,
+      child: AnimatedOpacity(
+        opacity: _visible ? 1 : 0,
+        duration: const Duration(milliseconds: 250),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.12),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                toolEmoji(_lastTool, stampEmoji: _lastStamp),
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                toolLabel(context, _lastTool),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -362,23 +510,29 @@ class _LeftRail extends StatelessWidget {
       ),
       child: Column(
         children: [
-          IconButton(
-            iconSize: 30,
-            padding: const EdgeInsets.all(12),
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_rounded),
-            tooltip: context.l10n.back,
+          const SizedBox(height: 6),
+          Tooltip(
+            message: context.l10n.back,
+            child: Bouncy(
+              onTap: onBack,
+              child: Icon(Icons.arrow_back_rounded,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
           ),
           Expanded(
             child: ToolBarRail(controller: controller),
           ),
-          IconButton(
-            iconSize: 28,
-            padding: const EdgeInsets.all(12),
-            onPressed: onShare,
-            icon: const Icon(Icons.ios_share_rounded),
-            tooltip: context.l10n.shareForParents,
+          Tooltip(
+            message: context.l10n.shareForParents,
+            child: Bouncy(
+              onTap: onShare,
+              child: Icon(Icons.ios_share_rounded,
+                  size: 26,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
           ),
+          const SizedBox(height: 6),
         ],
       ),
     );

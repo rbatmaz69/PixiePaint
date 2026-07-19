@@ -195,4 +195,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateAppSubtitle => 'Opens the Play Store.';
+
+  @override
+  String get canvasLoading => 'Your picture is coming…';
+
+  @override
+  String get galleryEmptyCta => 'Pick a picture!';
+
+  @override
+  String get settingsSectionSafety => 'Safety';
+
+  @override
+  String get settingsSectionFun => 'Fun';
+
+  @override
+  String get settingsSectionAbout => 'About';
 }

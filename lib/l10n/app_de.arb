@@ -66,5 +66,10 @@
   "aboutTitle": "PixiePaint",
   "aboutBody": "Eine Malbuch-App für Kinder. Keine Werbung, keine Datensammlung – alle Bilder bleiben auf diesem Gerät.",
   "rateApp": "App bewerten",
-  "rateAppSubtitle": "Öffnet den Play Store."
+  "rateAppSubtitle": "Öffnet den Play Store.",
+  "canvasLoading": "Dein Bild kommt…",
+  "galleryEmptyCta": "Such dir ein Bild aus!",
+  "settingsSectionSafety": "Sicherheit",
+  "settingsSectionFun": "Spaß",
+  "settingsSectionAbout": "Info"
 }

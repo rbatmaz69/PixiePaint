@@ -3,40 +3,41 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_controller.dart';
 import '../canvas/fill_pattern.dart';
 import '../l10n/l10n.dart';
+import '../ui/bouncy.dart';
+import '../ui/kid_sheet.dart';
 
 /// Bottom sheet with the four fill patterns; picking one selects the fill
-/// tool with that pattern (mirrors the stamp picker).
+/// tool with that pattern.
 Future<void> showFillPatternPicker(
     BuildContext context, CanvasController controller) {
-  return showModalBottomSheet<void>(
+  return showKidSheet<void>(
     context: context,
-    showDragHandle: true,
-    builder: (context) => SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          alignment: WrapAlignment.center,
-          children: [
-            for (final (pattern, label) in [
-              (FillPattern.solid, context.l10n.patternSolid),
-              (FillPattern.dots, context.l10n.patternDots),
-              (FillPattern.stripes, context.l10n.patternStripes),
-              (FillPattern.rainbow, context.l10n.patternRainbow),
-            ])
-              _PatternTile(
-                pattern: pattern,
-                label: label,
-                color: controller.color,
-                selected: controller.fillPattern == pattern,
-                onTap: () {
-                  controller.selectFillPattern(pattern);
-                  Navigator.of(context).pop();
-                },
-              ),
-          ],
-        ),
+    emoji: '🪣',
+    title: context.l10n.toolFill,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+      child: Wrap(
+        spacing: 14,
+        runSpacing: 14,
+        alignment: WrapAlignment.center,
+        children: [
+          for (final (pattern, label) in [
+            (FillPattern.solid, context.l10n.patternSolid),
+            (FillPattern.dots, context.l10n.patternDots),
+            (FillPattern.stripes, context.l10n.patternStripes),
+            (FillPattern.rainbow, context.l10n.patternRainbow),
+          ])
+            _PatternTile(
+              pattern: pattern,
+              label: label,
+              color: controller.color,
+              selected: controller.fillPattern == pattern,
+              onTap: () {
+                controller.selectFillPattern(pattern);
+                Navigator.of(context).pop();
+              },
+            ),
+        ],
       ),
     ),
   );
@@ -60,28 +61,31 @@ class _PatternTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CustomPaint(
-                  size: const Size(64, 64),
-                  painter: _PatternPreviewPainter(pattern, color),
-                ),
+    return Bouncy(
+      onTap: onTap,
+      playTick: false,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(24),
+          border: selected
+              ? Border.all(color: scheme.primary, width: 2.5)
+              : null,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CustomPaint(
+                size: const Size(84, 84),
+                painter: _PatternPreviewPainter(pattern, color),
               ),
-              const SizedBox(height: 6),
-              Text(label, style: Theme.of(context).textTheme.labelMedium),
-            ],
-          ),
+            ),
+            const SizedBox(height: 8),
+            Text(label, style: Theme.of(context).textTheme.titleSmall),
+          ],
         ),
       ),
     );

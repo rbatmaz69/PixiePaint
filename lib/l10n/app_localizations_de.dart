@@ -196,4 +196,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get rateAppSubtitle => 'Öffnet den Play Store.';
+
+  @override
+  String get canvasLoading => 'Dein Bild kommt…';
+
+  @override
+  String get galleryEmptyCta => 'Such dir ein Bild aus!';
+
+  @override
+  String get settingsSectionSafety => 'Sicherheit';
+
+  @override
+  String get settingsSectionFun => 'Spaß';
+
+  @override
+  String get settingsSectionAbout => 'Info';
 }

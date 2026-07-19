@@ -66,5 +66,10 @@
   "aboutTitle": "PixiePaint",
   "aboutBody": "A coloring book app for kids. No ads, no data collection – all pictures stay on this device.",
   "rateApp": "Rate the app",
-  "rateAppSubtitle": "Opens the Play Store."
+  "rateAppSubtitle": "Opens the Play Store.",
+  "canvasLoading": "Your picture is coming…",
+  "galleryEmptyCta": "Pick a picture!",
+  "settingsSectionSafety": "Safety",
+  "settingsSectionFun": "Fun",
+  "settingsSectionAbout": "About"
 }

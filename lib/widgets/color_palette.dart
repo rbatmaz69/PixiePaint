@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
+import '../ui/bouncy.dart';
 
 const List<Color> kPaletteColors = [
   Color(0xFFE53935), // rot
@@ -33,17 +34,14 @@ class ColorPalette extends StatelessWidget {
       builder: (context, _) {
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
               for (final c in kPaletteColors)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: _ColorDot(
-                    color: c,
-                    selected: controller.color == c,
-                    onTap: () => controller.selectColor(c),
-                  ),
+                _ColorSwatch(
+                  color: c,
+                  selected: controller.color == c,
+                  onTap: () => controller.selectColor(c),
                 ),
             ],
           ),
@@ -53,8 +51,11 @@ class ColorPalette extends StatelessWidget {
   }
 }
 
-class _ColorDot extends StatelessWidget {
-  const _ColorDot(
+/// Squircle swatch in a fixed-size slot: selection only scales and decorates
+/// (AnimatedScale), never changes layout — so picking a color doesn't
+/// relayout the whole scroll row.
+class _ColorSwatch extends StatelessWidget {
+  const _ColorSwatch(
       {required this.color, required this.selected, required this.onTap});
 
   final Color color;
@@ -64,29 +65,49 @@ class _ColorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWhite = color == const Color(0xFFFFFFFF);
-    return GestureDetector(
+    return Bouncy(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        width: selected ? 58 : 48,
-        height: selected ? 58 : 48,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: selected
-                ? Theme.of(context).colorScheme.primary
-                : (isWhite ? Colors.black26 : Colors.transparent),
-            width: selected ? 4 : 1.5,
+      playTick: false,
+      minSize: 0,
+      child: SizedBox(
+        width: 56,
+        height: 60,
+        child: Center(
+          child: AnimatedScale(
+            scale: selected ? 1.22 : 1.0,
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutBack,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(selected ? 14 : 21),
+                border: Border.all(
+                  color: selected
+                      ? Colors.white
+                      : (isWhite ? Colors.black26 : Colors.transparent),
+                  width: selected ? 3 : 1.5,
+                ),
+                boxShadow: selected
+                    ? [
+                        BoxShadow(
+                          color: (isWhite ? Colors.black26 : color)
+                              .withValues(alpha: 0.45),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : null,
+              ),
+              child: selected
+                  ? Icon(Icons.check,
+                      color: isWhite ? Colors.black54 : Colors.white, size: 24)
+                  : null,
+            ),
           ),
-          boxShadow: selected
-              ? [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 8)]
-              : null,
         ),
-        child: selected
-            ? Icon(Icons.check,
-                color: isWhite ? Colors.black54 : Colors.white, size: 28)
-            : null,
       ),
     );
   }
