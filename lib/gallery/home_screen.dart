@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../photo/photo_lineart_screen.dart';
 import '../widgets/parental_gate.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
@@ -100,15 +101,81 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+enum _PhotoMode { paintOver, lineArt }
+
 /// Photo painting leaves the kid-safe context (system photo picker), so it
 /// sits behind the parental gate.
 Future<void> _pickPhoto(BuildContext context) async {
   if (!await ParentalGate.show(context)) return;
   final file = await ImagePicker().pickImage(source: ImageSource.gallery);
   if (file == null || !context.mounted) return;
-  Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => CanvasScreen(photoPath: file.path)),
+  final mode = await showDialog<_PhotoMode>(
+    context: context,
+    builder: (context) => SimpleDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      title: const Text('Was machen wir mit dem Foto?',
+          textAlign: TextAlign.center),
+      contentPadding: const EdgeInsets.all(20),
+      children: [
+        _PhotoModeButton(
+          emoji: '🖌️',
+          label: 'Foto anmalen',
+          onTap: () => Navigator.of(context).pop(_PhotoMode.paintOver),
+        ),
+        const SizedBox(height: 12),
+        _PhotoModeButton(
+          emoji: '✨',
+          label: 'Ausmalbild zaubern',
+          onTap: () => Navigator.of(context).pop(_PhotoMode.lineArt),
+        ),
+      ],
+    ),
   );
+  if (mode == null || !context.mounted) return;
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => mode == _PhotoMode.paintOver
+          ? CanvasScreen(photoPath: file.path)
+          : PhotoLineArtScreen(photoPath: file.path),
+    ),
+  );
+}
+
+class _PhotoModeButton extends StatelessWidget {
+  const _PhotoModeButton(
+      {required this.emoji, required this.label, required this.onTap});
+
+  final String emoji;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 32)),
+              const SizedBox(width: 16),
+              Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _BigCard extends StatelessWidget {

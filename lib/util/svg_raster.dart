@@ -13,19 +13,21 @@ class RasterizedLineArt {
   final Uint8List barrierAlpha;
 
   /// Full-canvas vector display list (fit/centering baked in). Drawing this
-  /// instead of [image] keeps the outlines sharp at any zoom.
-  final ui.Picture picture;
+  /// instead of [image] keeps the outlines sharp at any zoom. Null for
+  /// raster-only line art (photo line art) — the painter falls back to
+  /// [image].
+  final ui.Picture? picture;
 
   /// The inner SVG picture; retained because [picture] may reference it.
-  final ui.Picture sourcePicture;
+  final ui.Picture? sourcePicture;
 
   const RasterizedLineArt(
       this.image, this.barrierAlpha, this.picture, this.sourcePicture);
 
   void dispose() {
     image.dispose();
-    picture.dispose();
-    sourcePicture.dispose();
+    picture?.dispose();
+    sourcePicture?.dispose();
   }
 }
 

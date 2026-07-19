@@ -43,10 +43,12 @@ class ArtworkStore {
     required String id,
     required String? pageId,
     bool hasPhoto = false,
+    bool hasPhotoLineArt = false,
     required int width,
     required int height,
     required Uint8List? paintPng,
     Uint8List? backgroundPng,
+    Uint8List? lineArtPng,
     required Uint8List thumbPng,
   }) async {
     final root = await _root();
@@ -56,6 +58,7 @@ class ArtworkStore {
       id: id,
       pageId: pageId,
       hasPhoto: hasPhoto,
+      hasPhotoLineArt: hasPhotoLineArt,
       width: width,
       height: height,
       updatedAt: DateTime.now(),
@@ -68,6 +71,9 @@ class ArtworkStore {
     }
     if (backgroundPng != null) {
       await artwork.backgroundFile.writeAsBytes(backgroundPng);
+    }
+    if (lineArtPng != null) {
+      await artwork.lineArtFile.writeAsBytes(lineArtPng);
     }
     await artwork.thumbFile.writeAsBytes(thumbPng);
     await File('${dir.path}/meta.json')

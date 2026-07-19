@@ -4,6 +4,7 @@ class Artwork {
   final String id;
   final String? pageId;
   final bool hasPhoto;
+  final bool hasPhotoLineArt;
   final int width;
   final int height;
   final DateTime updatedAt;
@@ -13,6 +14,7 @@ class Artwork {
     required this.id,
     required this.pageId,
     this.hasPhoto = false,
+    this.hasPhotoLineArt = false,
     required this.width,
     required this.height,
     required this.updatedAt,
@@ -22,11 +24,13 @@ class Artwork {
   File get paintFile => File('$dirPath/paint.png');
   File get thumbFile => File('$dirPath/thumb.png');
   File get backgroundFile => File('$dirPath/background.png');
+  File get lineArtFile => File('$dirPath/lineart.png');
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'pageId': pageId,
         'hasPhoto': hasPhoto,
+        'hasPhotoLineArt': hasPhotoLineArt,
         'width': width,
         'height': height,
         'updatedAt': updatedAt.toIso8601String(),
@@ -36,6 +40,7 @@ class Artwork {
         id: json['id'] as String,
         pageId: json['pageId'] as String?,
         hasPhoto: json['hasPhoto'] as bool? ?? false,
+        hasPhotoLineArt: json['hasPhotoLineArt'] as bool? ?? false,
         width: json['width'] as int,
         height: json['height'] as int,
         updatedAt: DateTime.parse(json['updatedAt'] as String),

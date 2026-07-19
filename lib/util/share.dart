@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../models/artwork.dart';
 import '../models/coloring_page.dart';
+import '../photo/photo_lineart.dart';
 import 'image_io.dart';
 import 'svg_raster.dart';
 
@@ -37,7 +38,7 @@ Future<void> shareArtwork({
 
 /// Shares a saved artwork straight from the gallery: loads the paint layer
 /// from disk and re-rasterizes the line art if the artwork is a coloring
-/// page.
+/// page (photo line art is reloaded from its saved PNG instead).
 Future<void> shareSavedArtwork(Artwork artwork) async {
   ui.Image? background;
   ui.Image? paintLayer;
@@ -56,6 +57,8 @@ Future<void> shareSavedArtwork(Artwork artwork) async {
         raster = await rasterizeSvgAsset(
             page.assetPath, artwork.width, artwork.height);
       }
+    } else if (artwork.hasPhotoLineArt && await artwork.lineArtFile.exists()) {
+      raster = await lineArtFromPng(await artwork.lineArtFile.readAsBytes());
     }
     await shareArtwork(
       width: artwork.width,
