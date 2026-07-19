@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
+import '../ui/kid_dialog.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
@@ -90,22 +91,26 @@ class _GalleryScreenState extends State<GalleryScreen> {
       if (!await ParentalGate.show(context)) return;
     }
     if (!mounted) return;
-    final ok = await showDialog<bool>(
+    final ok = await showKidDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.deleteTitle),
-        content: Text(context.l10n.deleteBody),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(context.l10n.deleteKeep),
+      emoji: '🗑️',
+      title: context.l10n.deleteTitle,
+      body: Text(context.l10n.deleteBody, textAlign: TextAlign.center),
+      actions: [
+        Builder(
+          builder: (context) => KidDialogButton(
+            label: context.l10n.deleteKeep,
+            emoji: '💚',
+            onTap: () => Navigator.pop(context, false),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(context.l10n.deleteAction),
+        ),
+        Builder(
+          builder: (context) => KidDialogTextButton(
+            label: context.l10n.deleteAction,
+            onTap: () => Navigator.pop(context, true),
           ),
-        ],
-      ),
+        ),
+      ],
     );
     if (ok == true) {
       await ArtworkStore.delete(artwork);

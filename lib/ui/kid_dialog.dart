@@ -1,0 +1,124 @@
+import 'package:flutter/material.dart';
+
+import 'app_theme.dart';
+import 'bouncy.dart';
+
+/// Kid-friendly dialog shell: big emoji header, Fredoka title, and large
+/// full-width action buttons. The safe default action should be a
+/// [KidDialogButton] (big, colorful); destructive/secondary actions a
+/// [KidDialogTextButton] (small, subtle).
+Future<T?> showKidDialog<T>({
+  required BuildContext context,
+  required String emoji,
+  required String title,
+  Widget? body,
+  List<Widget> actions = const [],
+}) {
+  return showDialog<T>(
+    context: context,
+    builder: (context) => Dialog(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(emoji,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 48)),
+              const SizedBox(height: 8),
+              Text(title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge),
+              if (body != null) ...[
+                const SizedBox(height: 12),
+                body,
+              ],
+              const SizedBox(height: 20),
+              for (final (i, action) in actions.indexed) ...[
+                if (i > 0) const SizedBox(height: 10),
+                action,
+              ],
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// Big, colorful full-width dialog button — the safe/primary choice.
+class KidDialogButton extends StatelessWidget {
+  const KidDialogButton({
+    super.key,
+    required this.label,
+    required this.onTap,
+    this.emoji,
+    this.gradient,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+  final String? emoji;
+  final Gradient? gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Bouncy(
+      onTap: onTap,
+      minSize: 56,
+      child: Container(
+        width: double.infinity,
+        constraints: const BoxConstraints(minHeight: 56),
+        decoration: BoxDecoration(
+          gradient: gradient,
+          color: gradient == null ? scheme.primaryContainer : null,
+          borderRadius: BorderRadius.circular(PixieTokens.rSmall + 4),
+        ),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (emoji != null) ...[
+              Text(emoji!, style: const TextStyle(fontSize: 26)),
+              const SizedBox(width: 10),
+            ],
+            Flexible(
+              child: Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: scheme.onPrimaryContainer),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Small, subtle dialog action — for cancel/destructive choices that should
+/// never be the eye-catcher.
+class KidDialogTextButton extends StatelessWidget {
+  const KidDialogTextButton({super.key, required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      child: Text(label),
+    );
+  }
+}

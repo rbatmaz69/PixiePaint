@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
+import '../ui/kid_dialog.dart';
 
 /// Simple multiplication question that small children can't answer.
 /// Returns true if the adult solved it (3 attempts allowed).
@@ -62,39 +63,55 @@ class _GateDialogState extends State<_GateDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(context.l10n.gateTitle),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(context.l10n.gateBody),
-          const SizedBox(height: 12),
-          Text(context.l10n.gateQuestion(a, b),
-              style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 12),
-          TextField(
-            controller: controller,
-            autofocus: true,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            onSubmitted: (_) => _check(),
-            decoration: InputDecoration(
-              hintText: context.l10n.gateHint,
-              errorText: error,
-            ),
+    return Dialog(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('🔒',
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 48)),
+              const SizedBox(height: 8),
+              Text(context.l10n.gateTitle,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 12),
+              Text(context.l10n.gateBody, textAlign: TextAlign.center),
+              const SizedBox(height: 12),
+              Text(context.l10n.gateQuestion(a, b),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                onSubmitted: (_) => _check(),
+                decoration: InputDecoration(
+                  hintText: context.l10n.gateHint,
+                  errorText: error,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              KidDialogButton(
+                label: context.l10n.gateContinue,
+                onTap: _check,
+              ),
+              const SizedBox(height: 6),
+              KidDialogTextButton(
+                label: context.l10n.gateCancel,
+                onTap: () => Navigator.of(context).pop(false),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(context.l10n.gateCancel),
-        ),
-        FilledButton(
-          onPressed: _check,
-          child: Text(context.l10n.gateContinue),
-        ),
-      ],
     );
   }
 }

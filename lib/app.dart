@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'gallery/home_screen.dart';
 import 'l10n/l10n.dart';
+import 'ui/app_theme.dart';
 
 class PixiePaintApp extends StatelessWidget {
   const PixiePaintApp({super.key});
@@ -14,17 +15,7 @@ class PixiePaintApp extends StatelessWidget {
       // German first — it is the fallback for unsupported system languages.
       supportedLocales: const [Locale('de'), Locale('en')],
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF7C4DFF)),
-        visualDensity: VisualDensity.comfortable,
-        filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(64, 48),
-            textStyle: const TextStyle(fontSize: 16),
-          ),
-        ),
-      ),
+      theme: buildPixieTheme(),
       home: const HomeScreen(),
     );
   }

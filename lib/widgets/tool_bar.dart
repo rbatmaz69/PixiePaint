@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/tool.dart';
+import '../ui/kid_dialog.dart';
 import 'fill_pattern_picker.dart';
 import 'stamp_picker.dart';
 
@@ -122,22 +123,26 @@ class ToolBarRail extends StatelessWidget {
   }
 
   Future<void> _confirmClear(BuildContext context) async {
-    final ok = await showDialog<bool>(
+    final ok = await showKidDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.clearTitle),
-        content: Text(context.l10n.clearBody),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(context.l10n.clearKeep),
+      emoji: '🧽',
+      title: context.l10n.clearTitle,
+      body: Text(context.l10n.clearBody, textAlign: TextAlign.center),
+      actions: [
+        Builder(
+          builder: (context) => KidDialogButton(
+            label: context.l10n.clearKeep,
+            emoji: '🖌️',
+            onTap: () => Navigator.pop(context, false),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(context.l10n.clearConfirm),
+        ),
+        Builder(
+          builder: (context) => KidDialogTextButton(
+            label: context.l10n.clearConfirm,
+            onTap: () => Navigator.pop(context, true),
           ),
-        ],
-      ),
+        ),
+      ],
     );
     if (ok == true) controller.clearAll();
   }
