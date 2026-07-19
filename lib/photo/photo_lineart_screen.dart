@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
+import '../ui/app_theme.dart';
+import '../ui/bouncy.dart';
+import '../ui/loading_pixie.dart';
+import '../ui/soft_card.dart';
 import '../util/sfx.dart';
 import 'edge_detect.dart';
 import 'photo_lineart.dart';
@@ -86,94 +90,154 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3E5F5),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '✨ ${context.l10n.lineArtTitle}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 480),
-                      decoration: BoxDecoration(
+      body: Container(
+        decoration: const BoxDecoration(gradient: PixieGradients.photoBg),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '✨ ${context.l10n.lineArtTitle}',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 16),
+                      SoftCard(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.08),
-                              blurRadius: 8),
+                        radius: 24,
+                        shadowColor: Colors.black45,
+                        width: 480,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: AspectRatio(
+                            aspectRatio: 4 / 3,
+                            child: _preview == null
+                                ? const Center(
+                                    child: LoadingPixie(emoji: '✨'))
+                                : RawImage(
+                                    image: _preview, fit: BoxFit.contain),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (final (detail, label) in [
+                            (LineArtDetail.bold, context.l10n.detailFew),
+                            (LineArtDetail.medium, context.l10n.detailMedium),
+                            (LineArtDetail.fine, context.l10n.detailMany),
+                          ])
+                            _DetailPill(
+                              label: label,
+                              selected: _detail == detail,
+                              onTap: () => _select(detail),
+                            ),
                         ],
                       ),
-                      clipBehavior: Clip.antiAlias,
-                      child: AspectRatio(
-                        aspectRatio: 4 / 3,
-                        child: _preview == null
-                            ? const Center(child: CircularProgressIndicator())
-                            : RawImage(image: _preview, fit: BoxFit.contain),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 8,
-                      alignment: WrapAlignment.center,
-                      children: [
-                        for (final (detail, label) in [
-                          (LineArtDetail.bold, context.l10n.detailFew),
-                          (LineArtDetail.medium, context.l10n.detailMedium),
-                          (LineArtDetail.fine, context.l10n.detailMany),
-                        ])
-                          ChoiceChip(
-                            label: Text(label),
-                            selected: _detail == detail,
-                            onSelected: (_) => _select(detail),
+                      const SizedBox(height: 22),
+                      Bouncy(
+                        onTap: _masks[_detail] == null || _starting
+                            ? null
+                            : _start,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: PixieGradients.freeDraw,
+                            borderRadius: BorderRadius.circular(22),
+                            boxShadow: PixieTokens.softShadow(
+                                const Color(0xFF7FDBDA)),
                           ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed:
-                          _masks[_detail] == null || _starting ? null : _start,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                        textStyle: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 36, vertical: 16),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _starting
+                                  ? const SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2.5),
+                                    )
+                                  : const Icon(Icons.brush_rounded, size: 24),
+                              const SizedBox(width: 10),
+                              Text(
+                                context.l10n.letsGo,
+                                style:
+                                    Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      icon: _starting
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child:
-                                  CircularProgressIndicator(strokeWidth: 2.5))
-                          : const Icon(Icons.brush_rounded),
-                      label: Text(context.l10n.letsGo),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 8,
-              left: 8,
-              child: IconButton.filledTonal(
-                iconSize: 28,
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back_rounded),
-                tooltip: context.l10n.back,
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Bouncy(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Tooltip(
+                      message: context.l10n.back,
+                      child: Icon(Icons.arrow_back_rounded,
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DetailPill extends StatelessWidget {
+  const _DetailPill(
+      {required this.label, required this.selected, required this.onTap});
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Bouncy(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? scheme.primaryContainer : Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          border: selected
+              ? Border.all(color: scheme.primary, width: 2)
+              : Border.all(color: Colors.transparent, width: 2),
+        ),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: selected ? scheme.primary : scheme.onSurfaceVariant,
+              ),
         ),
       ),
     );

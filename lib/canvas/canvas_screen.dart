@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
@@ -209,16 +210,59 @@ class _CanvasScreenState extends State<CanvasScreen>
           decoration:
               const BoxDecoration(gradient: PixieGradients.canvasBg),
           child: SafeArea(
-            child: loading
-                ? Center(
-                    child: LoadingPixie(label: context.l10n.canvasLoading))
-                : LayoutBuilder(
-                    builder: (context, constraints) {
-                      final portrait =
-                          constraints.maxWidth < constraints.maxHeight;
-                      return portrait ? _buildPortrait() : _buildLandscape();
-                    },
-                  ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: loading
+                  ? KeyedSubtree(
+                      key: const ValueKey('loading'), child: _buildLoading())
+                  : KeyedSubtree(
+                      key: const ValueKey('canvas'),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final portrait =
+                              constraints.maxWidth < constraints.maxHeight;
+                          return portrait
+                              ? _buildPortrait()
+                              : _buildLandscape();
+                        },
+                      ),
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// While rasterizing a bundled page, show it as a sheet of paper — the
+  /// Hero flight from the picker tile lands here, hiding the load time.
+  Widget _buildLoading() {
+    final page = widget.page;
+    if (page == null) {
+      return Center(child: LoadingPixie(label: context.l10n.canvasLoading));
+    }
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: AspectRatio(
+          aspectRatio: kCanvasWidth / kCanvasHeight,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.10),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Hero(
+              tag: page.id,
+              child: SvgPicture.asset(page.assetPath, fit: BoxFit.contain),
+            ),
           ),
         ),
       ),
