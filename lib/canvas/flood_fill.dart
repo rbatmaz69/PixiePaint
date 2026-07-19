@@ -1,13 +1,17 @@
 import 'dart:typed_data';
 
+import 'fill_pattern.dart';
+
 /// Scanline flood fill over an RGBA byte buffer. Pure Dart, no dart:ui —
 /// safe to run via `Isolate.run`.
 ///
 /// [rgba] is the paint layer (straight RGBA, w*h*4 bytes) and is modified
 /// in place. [barrierAlpha] is the alpha channel of the rasterized line
 /// art (w*h bytes) or null in free-draw mode; pixels with alpha > 128 are
-/// walls. Returns the modified buffer, or null if the fill was a no-op
-/// (seed on a wall, or region already has the fill color).
+/// walls. [pattern] paints the region with a pattern derived from the fill
+/// color instead of the flat color. Returns the modified buffer, or null if
+/// the fill was a no-op (seed on a wall, or region already has the fill
+/// color).
 Uint8List? floodFill({
   required Uint8List rgba,
   required Uint8List? barrierAlpha,
@@ -20,6 +24,7 @@ Uint8List? floodFill({
   required int fillB,
   int tolerance = 32,
   int dilationPasses = 3,
+  FillPattern pattern = FillPattern.solid,
 }) {
   if (seedX < 0 || seedY < 0 || seedX >= width || seedY >= height) return null;
   final seedIdx = seedY * width + seedX;
@@ -30,8 +35,10 @@ Uint8List? floodFill({
   final tb = rgba[seedIdx * 4 + 2];
   final ta = rgba[seedIdx * 4 + 3];
 
-  // Already this color? No-op so we don't push junk undo states.
-  if (ta == 255 &&
+  // Already this color? No-op so we don't push junk undo states. (Patterned
+  // fills always repaint — adding dots to a flat region is meaningful.)
+  if (pattern == FillPattern.solid &&
+      ta == 255 &&
       (tr - fillR).abs() <= 8 &&
       (tg - fillG).abs() <= 8 &&
       (tb - fillB).abs() <= 8) {
@@ -121,9 +128,16 @@ Uint8List? floodFill({
   for (var i = 0; i < filled.length; i++) {
     if (filled[i] != 0) {
       final o = i * 4;
-      rgba[o] = fillR;
-      rgba[o + 1] = fillG;
-      rgba[o + 2] = fillB;
+      var r = fillR, g = fillG, b = fillB;
+      if (pattern != FillPattern.solid) {
+        final c = patternColorAt(pattern, i % width, i ~/ width, r, g, b);
+        r = (c >> 16) & 0xFF;
+        g = (c >> 8) & 0xFF;
+        b = c & 0xFF;
+      }
+      rgba[o] = r;
+      rgba[o + 1] = g;
+      rgba[o + 2] = b;
       rgba[o + 3] = 255;
     }
   }

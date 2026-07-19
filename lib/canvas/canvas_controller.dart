@@ -12,6 +12,7 @@ import '../util/image_io.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/svg_raster.dart';
+import 'fill_pattern.dart';
 import 'flood_fill.dart' as ff;
 import 'stroke.dart';
 import 'stroke_renderer.dart';
@@ -52,6 +53,7 @@ class CanvasController extends ChangeNotifier {
   int sizeIndex = 1;
   Color color = const Color(0xFFE53935);
   String stampEmoji = '⭐';
+  FillPattern fillPattern = FillPattern.solid;
 
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
@@ -137,6 +139,13 @@ class CanvasController extends ChangeNotifier {
   void selectStamp(String emoji) {
     stampEmoji = emoji;
     tool = ToolKind.stamp;
+    Sfx.instance.tick();
+    notifyListeners();
+  }
+
+  void selectFillPattern(FillPattern p) {
+    fillPattern = p;
+    tool = ToolKind.fill;
     Sfx.instance.tick();
     notifyListeners();
   }
@@ -329,6 +338,7 @@ class CanvasController extends ChangeNotifier {
       final seedX = pos.dx.floor().clamp(0, w - 1);
       final seedY = pos.dy.floor().clamp(0, h - 1);
       final c = color;
+      final pattern = fillPattern;
       final result = await Isolate.run(() => ff.floodFill(
             rgba: rgba,
             barrierAlpha: barrier,
@@ -342,6 +352,7 @@ class CanvasController extends ChangeNotifier {
             tolerance: kFillTolerance,
             // Without line art there is nothing to hide the dilation under.
             dilationPasses: barrier == null ? 0 : 3,
+            pattern: pattern,
           ));
       if (result != null) {
         final newLayer = await rgbaToImage(result, w, h);

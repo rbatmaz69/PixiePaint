@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../models/tool.dart';
+import 'fill_pattern_picker.dart';
 import 'stamp_picker.dart';
 
 class ToolBarRail extends StatelessWidget {
@@ -85,7 +86,7 @@ class ToolBarRail extends StatelessWidget {
                   icon: Icons.format_color_fill,
                   label: 'Füllen',
                   selected: controller.tool == ToolKind.fill,
-                  onTap: () => controller.selectTool(ToolKind.fill),
+                  onTap: () => showFillPatternPicker(context, controller),
                 ),
               _ToolButton(
                 icon: Icons.cleaning_services,
