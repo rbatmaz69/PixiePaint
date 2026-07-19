@@ -40,6 +40,8 @@ Ergebnis: `build/app/outputs/bundle/release/app-release.aab`
 
 Hinweis: Ohne `key.properties` baut der Befehl trotzdem (Debug-Signatur als Fallback) – so eine .aab akzeptiert der Play Store aber **nicht**. Für Uploads muss `key.properties` existieren.
 
+**Fehler „Release app bundle failed to strip debug symbols"?** Die .aab ist dann trotzdem fertig gebaut und signiert (liegt am Ergebnispfad oben) – Flutter kann nur seine Kontroll-Prüfung nicht ausführen, weil im Android SDK die „Command-line Tools" fehlen (`flutter doctor` zeigt das an). Dauerhaft beheben: Android Studio → Settings → Languages & Frameworks → Android SDK → Tab „SDK Tools" → Haken bei **„Android SDK Command-line Tools (latest)"** → Apply. Alternativ baut `cd android && ./gradlew bundleRelease` das Bundle direkt ohne diese Prüfung.
+
 ## 4. Datenschutzerklärung veröffentlichen
 
 Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):

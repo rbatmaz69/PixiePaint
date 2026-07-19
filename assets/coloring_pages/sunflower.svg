@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- petals (10, offset so none points straight down into the stem) -->
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(18 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(54 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(90 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(126 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(162 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(198 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(234 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(270 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(306 512 295)"/>
+    <ellipse cx="512" cy="125" rx="42" ry="92" transform="rotate(342 512 295)"/>
+    <!-- center -->
+    <circle cx="512" cy="295" r="88"/>
+    <!-- stem -->
+    <path d="M 494 380 C 482 500 496 600 490 700 L 538 700 C 532 600 546 500 530 380 Z"/>
+    <!-- leaves -->
+    <path d="M 488 550 C 400 510 335 530 315 580 C 358 620 450 610 492 570 Z"/>
+    <path d="M 536 630 C 624 590 689 610 709 660 C 666 700 574 690 532 650 Z"/>
+  </g>
+</svg>

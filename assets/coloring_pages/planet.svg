@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- planet -->
+    <circle cx="512" cy="380" r="210"/>
+    <!-- ring -->
+    <ellipse cx="512" cy="380" rx="400" ry="115" transform="rotate(-12 512 380)"/>
+    <ellipse cx="512" cy="380" rx="320" ry="82" transform="rotate(-12 512 380)"/>
+    <!-- craters (top cap, clear of the ring band) -->
+    <circle cx="455" cy="225" r="26"/>
+    <circle cx="570" cy="218" r="22"/>
+    <!-- stars -->
+    <path d="M 160 130 L 172 164 L 206 176 L 172 188 L 160 222 L 148 188 L 114 176 L 148 164 Z"/>
+    <path d="M 860 110 L 870 138 L 898 148 L 870 158 L 860 186 L 850 158 L 822 148 L 850 138 Z"/>
+    <path d="M 830 620 L 840 648 L 868 658 L 840 668 L 830 696 L 820 668 L 792 658 L 820 648 Z"/>
+    <path d="M 170 600 L 178 622 L 200 630 L 178 638 L 170 660 L 162 638 L 140 630 L 162 622 Z"/>
+    <!-- little moon -->
+    <circle cx="870" cy="540" r="34"/>
+  </g>
+</svg>

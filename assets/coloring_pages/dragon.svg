@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- tail -->
+    <path d="M 265 520 C 170 540 115 480 135 415 C 148 372 200 372 210 410 C 218 442 188 462 215 490"/>
+    <!-- wing -->
+    <path d="M 420 375 C 390 250 300 200 210 225 C 250 272 262 318 310 348 C 272 360 250 380 240 410 C 320 442 405 420 445 395 Z"/>
+    <!-- back spike -->
+    <path d="M 470 370 L 500 300 L 540 365 Z"/>
+    <!-- body -->
+    <ellipse cx="460" cy="510" rx="215" ry="150"/>
+    <!-- belly -->
+    <ellipse cx="470" cy="555" rx="135" ry="92"/>
+    <!-- head -->
+    <circle cx="680" cy="300" r="115"/>
+    <!-- horns -->
+    <path d="M 630 205 L 600 115 L 675 165 Z"/>
+    <path d="M 720 195 L 745 105 L 785 170 Z"/>
+    <!-- eye -->
+    <circle cx="655" cy="265" r="22"/>
+    <!-- snout -->
+    <ellipse cx="785" cy="330" rx="62" ry="44"/>
+    <!-- nostril -->
+    <circle cx="800" cy="320" r="11"/>
+    <!-- smile on the snout -->
+    <path d="M 752 352 C 775 368 803 364 820 348"/>
+    <!-- legs -->
+    <ellipse cx="390" cy="672" rx="70" ry="36"/>
+    <ellipse cx="565" cy="672" rx="70" ry="36"/>
+  </g>
+</svg>

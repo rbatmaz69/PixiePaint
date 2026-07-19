@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- body -->
+    <ellipse cx="512" cy="460" rx="235" ry="170"/>
+    <!-- eye bumps -->
+    <circle cx="405" cy="265" r="65"/>
+    <circle cx="619" cy="265" r="65"/>
+    <!-- pupils -->
+    <circle cx="405" cy="265" r="26"/>
+    <circle cx="619" cy="265" r="26"/>
+    <!-- smile -->
+    <path d="M 395 395 C 450 440 574 440 629 395"/>
+    <!-- belly -->
+    <ellipse cx="512" cy="535" rx="140" ry="80"/>
+    <!-- front feet -->
+    <ellipse cx="345" cy="628" rx="72" ry="38"/>
+    <ellipse cx="679" cy="628" rx="72" ry="38"/>
+    <!-- lily pad -->
+    <path d="M 175 700 C 220 662 380 640 512 640 C 644 640 804 662 849 700 C 790 730 640 745 512 745 C 384 745 234 730 175 700 Z"/>
+  </g>
+</svg>

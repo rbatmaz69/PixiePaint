@@ -20,5 +20,15 @@
   {"id": "castle", "title": "Burg", "titleEn": "Castle", "file": "castle.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
   {"id": "mushroom_house", "title": "Pilzhaus", "titleEn": "Mushroom house", "file": "mushroom_house.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
   {"id": "icecream", "title": "Eis", "titleEn": "Ice cream", "file": "icecream.svg", "category": "Leckereien", "categoryEn": "Treats"},
-  {"id": "cupcake", "title": "Törtchen", "titleEn": "Cupcake", "file": "cupcake.svg", "category": "Leckereien", "categoryEn": "Treats"}
+  {"id": "cupcake", "title": "Törtchen", "titleEn": "Cupcake", "file": "cupcake.svg", "category": "Leckereien", "categoryEn": "Treats"},
+  {"id": "frog", "title": "Frosch", "titleEn": "Frog", "file": "frog.svg", "category": "Tiere", "categoryEn": "Animals"},
+  {"id": "bunny", "title": "Hase", "titleEn": "Bunny", "file": "bunny.svg", "category": "Tiere", "categoryEn": "Animals"},
+  {"id": "tree", "title": "Baum", "titleEn": "Tree", "file": "tree.svg", "category": "Natur", "categoryEn": "Nature"},
+  {"id": "sunflower", "title": "Sonnenblume", "titleEn": "Sunflower", "file": "sunflower.svg", "category": "Natur", "categoryEn": "Nature"},
+  {"id": "excavator", "title": "Bagger", "titleEn": "Excavator", "file": "excavator.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
+  {"id": "dragon", "title": "Drache", "titleEn": "Dragon", "file": "dragon.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
+  {"id": "mermaid", "title": "Meerjungfrau", "titleEn": "Mermaid", "file": "mermaid.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
+  {"id": "donut", "title": "Donut", "titleEn": "Donut", "file": "donut.svg", "category": "Leckereien", "categoryEn": "Treats"},
+  {"id": "planet", "title": "Planet", "titleEn": "Planet", "file": "planet.svg", "category": "Weltraum", "categoryEn": "Space"},
+  {"id": "astronaut", "title": "Astronaut", "titleEn": "Astronaut", "file": "astronaut.svg", "category": "Weltraum", "categoryEn": "Space"}
 ]

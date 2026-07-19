@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- ears -->
+    <ellipse cx="437" cy="150" rx="48" ry="125" transform="rotate(-14 437 150)"/>
+    <ellipse cx="587" cy="150" rx="48" ry="125" transform="rotate(14 587 150)"/>
+    <!-- inner ears -->
+    <ellipse cx="440" cy="160" rx="22" ry="85" transform="rotate(-14 440 160)"/>
+    <ellipse cx="584" cy="160" rx="22" ry="85" transform="rotate(14 584 160)"/>
+    <!-- head -->
+    <circle cx="512" cy="330" r="130"/>
+    <!-- body -->
+    <ellipse cx="512" cy="565" rx="175" ry="130"/>
+    <!-- belly -->
+    <ellipse cx="512" cy="595" rx="105" ry="82"/>
+    <!-- eyes -->
+    <circle cx="463" cy="310" r="22"/>
+    <circle cx="561" cy="310" r="22"/>
+    <!-- nose -->
+    <path d="M 494 362 L 530 362 L 512 386 Z"/>
+    <!-- mouth -->
+    <path d="M 512 386 C 512 408 494 416 478 410"/>
+    <path d="M 512 386 C 512 408 530 416 546 410"/>
+    <!-- whiskers -->
+    <path d="M 435 360 L 345 348"/>
+    <path d="M 435 382 L 350 394"/>
+    <path d="M 589 360 L 679 348"/>
+    <path d="M 589 382 L 674 394"/>
+    <!-- front paws -->
+    <ellipse cx="445" cy="672" rx="55" ry="30"/>
+    <ellipse cx="579" cy="672" rx="55" ry="30"/>
+  </g>
+</svg>

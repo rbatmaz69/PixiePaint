@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- helmet -->
+    <circle cx="512" cy="210" r="125"/>
+    <!-- visor -->
+    <circle cx="512" cy="215" r="82"/>
+    <!-- face -->
+    <circle cx="484" cy="205" r="13"/>
+    <circle cx="540" cy="205" r="13"/>
+    <path d="M 482 240 C 496 256 528 256 542 240"/>
+    <!-- torso -->
+    <path d="M 432 325 C 420 350 414 420 420 480 C 426 522 462 548 512 548 C 562 548 598 522 604 480 C 610 420 604 350 592 325 Z"/>
+    <!-- chest panel -->
+    <rect x="470" y="390" width="84" height="62" rx="12"/>
+    <!-- arms -->
+    <ellipse cx="382" cy="420" rx="42" ry="88" transform="rotate(22 382 420)"/>
+    <ellipse cx="642" cy="420" rx="42" ry="88" transform="rotate(-22 642 420)"/>
+    <!-- gloves -->
+    <circle cx="342" cy="508" r="34"/>
+    <circle cx="682" cy="508" r="34"/>
+    <!-- legs -->
+    <ellipse cx="468" cy="618" rx="44" ry="80"/>
+    <ellipse cx="556" cy="618" rx="44" ry="80"/>
+    <!-- boots -->
+    <ellipse cx="450" cy="702" rx="54" ry="26"/>
+    <ellipse cx="574" cy="702" rx="54" ry="26"/>
+    <!-- stars -->
+    <path d="M 170 200 L 180 228 L 208 238 L 180 248 L 170 276 L 160 248 L 132 238 L 160 228 Z"/>
+    <path d="M 856 260 L 866 288 L 894 298 L 866 308 L 856 336 L 846 308 L 818 298 L 846 288 Z"/>
+    <path d="M 820 560 L 828 582 L 850 590 L 828 598 L 820 620 L 812 598 L 790 590 L 812 582 Z"/>
+  </g>
+</svg>

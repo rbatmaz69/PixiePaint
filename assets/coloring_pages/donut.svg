@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- donut -->
+    <circle cx="512" cy="384" r="270"/>
+    <!-- icing edge -->
+    <circle cx="512" cy="384" r="185"/>
+    <!-- hole -->
+    <circle cx="512" cy="384" r="85"/>
+    <!-- sprinkles in the icing band -->
+    <path d="M 495 175 L 530 165"/>
+    <path d="M 620 200 L 650 220"/>
+    <path d="M 700 300 L 730 285"/>
+    <path d="M 720 420 L 750 435"/>
+    <path d="M 660 540 L 685 565"/>
+    <path d="M 540 590 L 510 600"/>
+    <path d="M 395 560 L 370 585"/>
+    <path d="M 310 460 L 280 470"/>
+    <path d="M 300 330 L 270 315"/>
+    <path d="M 370 220 L 345 195"/>
+    <!-- plate -->
+    <path d="M 250 700 L 774 700"/>
+  </g>
+</svg>
