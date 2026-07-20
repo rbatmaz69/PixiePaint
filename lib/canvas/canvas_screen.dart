@@ -22,6 +22,7 @@ import '../util/svg_raster.dart';
 import '../widgets/color_palette.dart';
 import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
+import '../widgets/shape_picker.dart' as shapes;
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
 import 'canvas_viewport.dart';
@@ -460,6 +461,7 @@ class _ToolChip extends StatefulWidget {
 class _ToolChipState extends State<_ToolChip> {
   late ToolKind _lastTool = widget.controller.tool;
   late String _lastStamp = widget.controller.stampEmoji;
+  late ShapeKind _lastShape = widget.controller.shapeKind;
   bool _visible = false;
   Timer? _timer;
 
@@ -472,9 +474,13 @@ class _ToolChipState extends State<_ToolChip> {
   void _onChange() {
     final tool = widget.controller.tool;
     final stamp = widget.controller.stampEmoji;
-    if (tool == _lastTool && stamp == _lastStamp) return;
+    final shape = widget.controller.shapeKind;
+    if (tool == _lastTool && stamp == _lastStamp && shape == _lastShape) {
+      return;
+    }
     _lastTool = tool;
     _lastStamp = stamp;
+    _lastShape = shape;
     _timer?.cancel();
     setState(() => _visible = true);
     _timer = Timer(const Duration(milliseconds: 1500), () {
@@ -515,7 +521,9 @@ class _ToolChipState extends State<_ToolChip> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                toolEmoji(_lastTool, stampEmoji: _lastStamp),
+                toolEmoji(_lastTool,
+                    stampEmoji: _lastStamp,
+                    shapeEmoji: shapes.shapeEmoji(_lastShape)),
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(width: 8),

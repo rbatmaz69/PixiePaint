@@ -6,6 +6,8 @@ import '../models/tool.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import 'fill_pattern_picker.dart';
+import 'shape_picker.dart' as shapes;
+import 'size_picker.dart';
 import 'stamp_picker.dart';
 
 /// Accent color per tool — used for the selected highlight so every tool
@@ -21,10 +23,13 @@ Color toolAccent(ToolKind tool) => switch (tool) {
       ToolKind.fill => const Color(0xFF26A69A),
       ToolKind.stamp => const Color(0xFFFFB300),
       ToolKind.eyedropper => const Color(0xFF00897B),
+      ToolKind.shape => const Color(0xFF5C6BC0),
     };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
-String toolEmoji(ToolKind tool, {String stampEmoji = '⭐'}) => switch (tool) {
+String toolEmoji(ToolKind tool,
+        {String stampEmoji = '⭐', String shapeEmoji = '💜'}) =>
+    switch (tool) {
       ToolKind.brush => '🖌️',
       ToolKind.marker => '🖊️',
       ToolKind.crayon => '🖍️',
@@ -35,6 +40,7 @@ String toolEmoji(ToolKind tool, {String stampEmoji = '⭐'}) => switch (tool) {
       ToolKind.fill => '🪣',
       ToolKind.stamp => stampEmoji,
       ToolKind.eyedropper => '💧',
+      ToolKind.shape => shapeEmoji,
     };
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
@@ -48,6 +54,7 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
       ToolKind.fill => context.l10n.toolFill,
       ToolKind.stamp => context.l10n.toolSticker,
       ToolKind.eyedropper => context.l10n.toolEyedropper,
+      ToolKind.shape => context.l10n.toolShapes,
     };
 
 class ToolBarRail extends StatelessWidget {
@@ -102,6 +109,7 @@ class ToolBarRail extends StatelessWidget {
       ToolKind.glitter,
       ToolKind.neon,
       ToolKind.stamp,
+      ToolKind.shape,
       if (showFill) ToolKind.fill,
       ToolKind.eyedropper,
       ToolKind.eraser,
@@ -114,6 +122,8 @@ class ToolBarRail extends StatelessWidget {
             controller: controller,
             onTap: switch (tool) {
               ToolKind.stamp => () => showStampPicker(context, controller),
+              ToolKind.shape => () =>
+                  shapes.showShapePicker(context, controller),
               ToolKind.fill => () =>
                   showFillPatternPicker(context, controller),
               _ => () => controller.selectTool(tool),
@@ -121,13 +131,11 @@ class ToolBarRail extends StatelessWidget {
           ),
       ]),
       _group(context, [
-        for (var i = 0; i < kBrushSizes.length; i++)
-          _SizeButton(
-            previewDiameter: 10.0 + i * 9,
-            color: controller.color,
-            selected: controller.sizeIndex == i,
-            onTap: () => controller.selectSize(i),
-          ),
+        _SizeButton(
+          brushSize: controller.brushSize,
+          color: controller.color,
+          onTap: () => showSizePicker(context, controller),
+        ),
       ]),
       _group(context, [
         _ActionButton(
@@ -192,9 +200,17 @@ class _ToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected = controller.tool == tool;
     final accent = toolAccent(tool);
-    final isStamp = tool == ToolKind.stamp;
-    final showColorBadge = tool == ToolKind.brush || tool == ToolKind.fill;
+    final showColorBadge = tool == ToolKind.brush ||
+        tool == ToolKind.fill ||
+        tool == ToolKind.shape;
 
+    // Stamp and shape buttons show the selected motif as emoji instead of
+    // an icon.
+    final emoji = switch (tool) {
+      ToolKind.stamp => controller.stampEmoji,
+      ToolKind.shape => shapes.shapeEmoji(controller.shapeKind),
+      _ => null,
+    };
     final icon = switch (tool) {
       ToolKind.brush => Icons.brush,
       ToolKind.marker => Icons.edit,
@@ -206,6 +222,7 @@ class _ToolButton extends StatelessWidget {
       ToolKind.fill => Icons.format_color_fill,
       ToolKind.stamp => null,
       ToolKind.eyedropper => Icons.colorize_rounded,
+      ToolKind.shape => null,
     };
 
     return Tooltip(
@@ -235,9 +252,8 @@ class _ToolButton extends StatelessWidget {
                 scale: selected ? 1.18 : 1.0,
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOutBack,
-                child: isStamp
-                    ? Text(controller.stampEmoji,
-                        style: const TextStyle(fontSize: 24))
+                child: emoji != null
+                    ? Text(emoji, style: const TextStyle(fontSize: 24))
                     : Icon(
                         icon,
                         size: 26,
@@ -268,56 +284,61 @@ class _ToolButton extends StatelessWidget {
   }
 }
 
+/// Single size button: a dot whose diameter tracks the current brush size.
+/// Tapping opens the size sheet with the big slider and S/M/L presets.
 class _SizeButton extends StatelessWidget {
   const _SizeButton({
-    required this.previewDiameter,
+    required this.brushSize,
     required this.color,
-    required this.selected,
     required this.onTap,
   });
 
-  /// Dot diameter — proportional to the real brush width.
-  final double previewDiameter;
+  final double brushSize;
   final Color color;
-  final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final isWhite = color == const Color(0xFFFFFFFF);
+    // Map the canvas-unit size onto a readable 10–30 px preview dot.
+    final t = (brushSize - kMinBrushSize) / (kMaxBrushSize - kMinBrushSize);
+    final previewDiameter = 10.0 + t.clamp(0.0, 1.0) * 20.0;
     return Bouncy(
       onTap: onTap,
       playTick: false,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutBack,
+      child: Container(
         width: 48,
         height: 48,
         margin: const EdgeInsets.all(1),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected
-              ? scheme.primary.withValues(alpha: 0.15)
-              : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: AnimatedScale(
-          scale: selected ? 1.25 : 1.0,
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutBack,
-          child: Container(
-            width: previewDiameter,
-            height: previewDiameter,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color,
-              border: Border.all(
-                color: isWhite ? Colors.black26 : Colors.transparent,
-                width: 1.5,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOut,
+              width: previewDiameter,
+              height: previewDiameter,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+                border: Border.all(
+                  color: isWhite ? Colors.black26 : Colors.transparent,
+                  width: 1.5,
+                ),
               ),
             ),
-          ),
+            Positioned(
+              right: 4,
+              bottom: 4,
+              child: Icon(Icons.unfold_more_rounded,
+                  size: 14,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurfaceVariant
+                      .withValues(alpha: 0.6)),
+            ),
+          ],
         ),
       ),
     );

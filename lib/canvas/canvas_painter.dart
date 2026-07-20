@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/stamp.dart';
 import '../models/tool.dart';
 import 'canvas_controller.dart';
+import 'shape_renderer.dart';
 import 'stroke_renderer.dart';
 
 class CanvasPainter extends CustomPainter {
@@ -35,7 +35,15 @@ class CanvasPainter extends CustomPainter {
     final pendingStamp = controller.pendingStampPos;
     if (pendingStamp != null) {
       StrokeRenderer.drawStamp(canvas, controller.stampEmoji, pendingStamp,
-          kStampSizes[controller.sizeIndex]);
+          stampSizeFor(controller.brushSize));
+    }
+
+    // Semi-transparent live preview of the shape being dragged out.
+    final shapeCenter = controller.shapeCenter;
+    if (shapeCenter != null) {
+      ShapeRenderer.drawShape(canvas, controller.shapeKind, shapeCenter,
+          controller.shapeRadius, controller.color, controller.brushSize * 0.4,
+          opacity: 0.7);
     }
 
     // Prefer the vector picture: it re-rasterizes under the viewport

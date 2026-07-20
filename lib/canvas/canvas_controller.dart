@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../models/stamp.dart';
 import '../models/tool.dart';
 import '../util/color_utils.dart';
 import '../util/image_io.dart';
@@ -15,6 +14,7 @@ import '../util/sfx.dart';
 import '../util/svg_raster.dart';
 import 'fill_pattern.dart';
 import 'flood_fill.dart' as ff;
+import 'shape_renderer.dart';
 import 'stroke.dart';
 import 'stroke_renderer.dart';
 import 'undo_stack.dart';
@@ -51,13 +51,18 @@ class CanvasController extends ChangeNotifier {
   Stroke? activeStroke;
 
   ToolKind tool = ToolKind.brush;
-  int sizeIndex = 1;
+  double brushSize = 28;
   Color color = const Color(0xFFE53935);
   String stampEmoji = '⭐';
   FillPattern fillPattern = FillPattern.solid;
+  ShapeKind shapeKind = ShapeKind.heart;
 
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
+
+  /// Center and current drag position of a shape being placed.
+  Offset? shapeCenter;
+  Offset? shapeCurrent;
 
   /// Live position of an eyedropper pick (finger still down) and the color
   /// currently under it — drives the loupe overlay.
@@ -90,7 +95,8 @@ class CanvasController extends ChangeNotifier {
   void beginViewGesture() {
     if ((activeStroke != null ||
             pendingStampPos != null ||
-            pendingPickPos != null) &&
+            pendingPickPos != null ||
+            shapeCenter != null) &&
         !_activeIsStylus) {
       _cancelActiveStroke();
     }
@@ -136,9 +142,9 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void selectSize(int index) {
-    sizeIndex = index;
-    Sfx.instance.tick();
+  void selectSize(double size, {bool silent = false}) {
+    brushSize = size.clamp(kMinBrushSize, kMaxBrushSize);
+    if (!silent) Sfx.instance.tick();
     notifyListeners();
   }
 
@@ -164,7 +170,14 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get _baseWidth => kBrushSizes[sizeIndex];
+  void selectShape(ShapeKind kind) {
+    shapeKind = kind;
+    tool = ToolKind.shape;
+    Sfx.instance.tick();
+    notifyListeners();
+  }
+
+  double get _baseWidth => brushSize;
 
   // ---------------------------------------------------------------- pointer
 
@@ -218,6 +231,14 @@ class CanvasController extends ChangeNotifier {
       _preparePickBuffer();
       return;
     }
+    if (tool == ToolKind.shape) {
+      _activePointer = e.pointer;
+      _activeIsStylus = isStylus;
+      shapeCenter = pos;
+      shapeCurrent = pos;
+      _tick();
+      return;
+    }
 
     // Flipped stylus end = eraser, like a pencil.
     final kind = e.kind == PointerDeviceKind.invertedStylus
@@ -244,6 +265,11 @@ class CanvasController extends ChangeNotifier {
     if (pendingPickPos != null && e.pointer == _activePointer) {
       pendingPickPos = _clamp(e.localPosition);
       _samplePick();
+      _tick();
+      return;
+    }
+    if (shapeCenter != null && e.pointer == _activePointer) {
+      shapeCurrent = _clamp(e.localPosition);
       _tick();
       return;
     }
@@ -276,6 +302,10 @@ class CanvasController extends ChangeNotifier {
       _commitPick();
       return;
     }
+    if (shapeCenter != null) {
+      _commitShape();
+      return;
+    }
     _commitActiveStroke();
   }
 
@@ -296,6 +326,8 @@ class CanvasController extends ChangeNotifier {
     pendingPickPos = null;
     pickedPreview = null;
     _pickBuffer = null;
+    shapeCenter = null;
+    shapeCurrent = null;
     _activePointer = null;
     _activeIsStylus = false;
     _tick();
@@ -369,7 +401,37 @@ class CanvasController extends ChangeNotifier {
     if (paintLayer != null) {
       canvas.drawImage(paintLayer!, Offset.zero, Paint());
     }
-    StrokeRenderer.drawStamp(canvas, stampEmoji, pos, kStampSizes[sizeIndex]);
+    StrokeRenderer.drawStamp(canvas, stampEmoji, pos, stampSizeFor(brushSize));
+    final picture = recorder.endRecording();
+    final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
+    picture.dispose();
+    Sfx.instance.pop();
+    _pushUndoAndReplace(newLayer);
+  }
+
+  /// Radius of the shape currently being dragged. A bare tap still yields
+  /// a visible shape (min 20 canvas px).
+  double get shapeRadius {
+    final c = shapeCenter, p = shapeCurrent;
+    if (c == null || p == null) return 0;
+    return max(20.0, (p - c).distance);
+  }
+
+  void _commitShape() {
+    final center = shapeCenter;
+    if (center == null) return;
+    final radius = shapeRadius;
+    shapeCenter = null;
+    shapeCurrent = null;
+    _activePointer = null;
+    _activeIsStylus = false;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, _bounds);
+    if (paintLayer != null) {
+      canvas.drawImage(paintLayer!, Offset.zero, Paint());
+    }
+    ShapeRenderer.drawShape(canvas, shapeKind, center, radius, color, brushSize * 0.4);
     final picture = recorder.endRecording();
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();

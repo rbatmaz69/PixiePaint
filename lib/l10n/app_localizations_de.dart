@@ -90,6 +90,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get toolEyedropper => 'Pipette';
 
   @override
+  String get toolShapes => 'Formen';
+
+  @override
+  String get shapeCircle => 'Kreis';
+
+  @override
+  String get shapeSquare => 'Quadrat';
+
+  @override
+  String get shapeHeart => 'Herz';
+
+  @override
+  String get shapeStar => 'Stern';
+
+  @override
+  String get shapeRainbow => 'Regenbogen';
+
+  @override
+  String get sizeTitle => 'Pinselgröße';
+
+  @override
   String get colorPickerTitle => 'Alle Farben';
 
   @override

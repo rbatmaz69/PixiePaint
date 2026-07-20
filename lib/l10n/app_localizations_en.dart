@@ -90,6 +90,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolEyedropper => 'Color picker';
 
   @override
+  String get toolShapes => 'Shapes';
+
+  @override
+  String get shapeCircle => 'Circle';
+
+  @override
+  String get shapeSquare => 'Square';
+
+  @override
+  String get shapeHeart => 'Heart';
+
+  @override
+  String get shapeStar => 'Star';
+
+  @override
+  String get shapeRainbow => 'Rainbow';
+
+  @override
+  String get sizeTitle => 'Brush size';
+
+  @override
   String get colorPickerTitle => 'All colors';
 
   @override

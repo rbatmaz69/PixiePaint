@@ -260,6 +260,48 @@ abstract class AppLocalizations {
   /// **'Pipette'**
   String get toolEyedropper;
 
+  /// No description provided for @toolShapes.
+  ///
+  /// In de, this message translates to:
+  /// **'Formen'**
+  String get toolShapes;
+
+  /// No description provided for @shapeCircle.
+  ///
+  /// In de, this message translates to:
+  /// **'Kreis'**
+  String get shapeCircle;
+
+  /// No description provided for @shapeSquare.
+  ///
+  /// In de, this message translates to:
+  /// **'Quadrat'**
+  String get shapeSquare;
+
+  /// No description provided for @shapeHeart.
+  ///
+  /// In de, this message translates to:
+  /// **'Herz'**
+  String get shapeHeart;
+
+  /// No description provided for @shapeStar.
+  ///
+  /// In de, this message translates to:
+  /// **'Stern'**
+  String get shapeStar;
+
+  /// No description provided for @shapeRainbow.
+  ///
+  /// In de, this message translates to:
+  /// **'Regenbogen'**
+  String get shapeRainbow;
+
+  /// No description provided for @sizeTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Pinselgröße'**
+  String get sizeTitle;
+
   /// No description provided for @colorPickerTitle.
   ///
   /// In de, this message translates to:

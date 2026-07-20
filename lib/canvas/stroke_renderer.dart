@@ -49,6 +49,7 @@ class StrokeRenderer {
       case ToolKind.fill:
       case ToolKind.stamp:
       case ToolKind.eyedropper:
+      case ToolKind.shape:
         break; // not stroke-based
     }
   }
