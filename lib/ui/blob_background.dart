@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'pixie_palette.dart';
+
 /// Route observer so the blob animation pauses whenever any route (screen,
 /// dialog or sheet) is pushed on top. Registered in [PixiePaintApp].
 final RouteObserver<ModalRoute<dynamic>> pixieRouteObserver =
@@ -14,10 +16,18 @@ final RouteObserver<ModalRoute<dynamic>> pixieRouteObserver =
 /// never repaint the content. Pauses when the app is backgrounded or
 /// another route covers this one.
 class BlobBackground extends StatefulWidget {
-  const BlobBackground(
-      {super.key, required this.gradient, required this.builder});
+  const BlobBackground({
+    super.key,
+    required this.gradient,
+    required this.builder,
+    this.showDoodles = true,
+  });
 
   final Gradient gradient;
+
+  /// Sparse ink doodles (stars, hearts, squiggles) drifting on the same
+  /// wave as the blobs — the "paper" of the sticker book.
+  final bool showDoodles;
 
   /// Builds the foreground; [wave] loops 0→1 over ~28 s and can drive
   /// slow secondary motion (e.g. the header sway) without a second ticker.
@@ -93,8 +103,11 @@ class _BlobBackgroundState extends State<BlobBackground>
         RepaintBoundary(
           child: AnimatedBuilder(
             animation: _c,
-            builder: (context, _) =>
-                CustomPaint(painter: _BlobPainter(_c.value)),
+            builder: (context, _) => CustomPaint(
+              painter: _BlobPainter(_c.value),
+              foregroundPainter:
+                  widget.showDoodles ? _DoodlePainter(_c.value) : null,
+            ),
           ),
         ),
         RepaintBoundary(child: widget.builder(context, _c)),
@@ -113,12 +126,126 @@ class _Blob {
 }
 
 const _blobs = [
-  _Blob(0.15, 0.18, 0.30, Color(0xFFB39DDB), 0.00, 0.05, 0.04),
-  _Blob(0.85, 0.12, 0.24, Color(0xFF81D4FA), 0.35, 0.04, 0.05),
-  _Blob(0.90, 0.75, 0.32, Color(0xFFF48FB1), 0.60, 0.05, 0.03),
-  _Blob(0.10, 0.85, 0.26, Color(0xFFFFE082), 0.15, 0.04, 0.05),
-  _Blob(0.55, 0.45, 0.20, Color(0xFFA5D6A7), 0.80, 0.06, 0.04),
+  _Blob(0.15, 0.18, 0.30, PixiePalette.grapeLight, 0.00, 0.05, 0.04),
+  _Blob(0.85, 0.12, 0.24, PixiePalette.skyLight, 0.35, 0.04, 0.05),
+  _Blob(0.90, 0.75, 0.32, PixiePalette.bubblegumLight, 0.60, 0.05, 0.03),
+  _Blob(0.10, 0.85, 0.26, PixiePalette.sunshineLight, 0.15, 0.04, 0.05),
+  _Blob(0.55, 0.45, 0.20, PixiePalette.mintLight, 0.80, 0.06, 0.04),
 ];
+
+enum _DoodleKind { star, heart, circle, squiggle, sparkle }
+
+class _Doodle {
+  const _Doodle(this.kind, this.x, this.y, this.size, this.phase, this.rot);
+  final _DoodleKind kind;
+  final double x, y; // fraction of the area
+  final double size; // px
+  final double phase; // 0..1
+  final double rot; // base rotation, radians
+}
+
+/// Sparse hand-drawn doodles scattered like faint pen marks on the paper.
+const _doodles = [
+  _Doodle(_DoodleKind.star, 0.08, 0.10, 34, 0.05, 0.3),
+  _Doodle(_DoodleKind.squiggle, 0.30, 0.06, 44, 0.55, -0.2),
+  _Doodle(_DoodleKind.heart, 0.68, 0.09, 28, 0.30, 0.25),
+  _Doodle(_DoodleKind.sparkle, 0.92, 0.22, 26, 0.75, 0.0),
+  _Doodle(_DoodleKind.circle, 0.05, 0.38, 30, 0.45, 0.0),
+  _Doodle(_DoodleKind.sparkle, 0.45, 0.30, 24, 0.15, 0.5),
+  _Doodle(_DoodleKind.star, 0.88, 0.48, 38, 0.90, -0.35),
+  _Doodle(_DoodleKind.heart, 0.16, 0.62, 32, 0.65, -0.15),
+  _Doodle(_DoodleKind.squiggle, 0.60, 0.58, 48, 0.20, 0.15),
+  _Doodle(_DoodleKind.circle, 0.90, 0.80, 26, 0.40, 0.0),
+  _Doodle(_DoodleKind.star, 0.38, 0.86, 30, 0.10, 0.4),
+  _Doodle(_DoodleKind.sparkle, 0.70, 0.90, 28, 0.85, -0.25),
+];
+
+class _DoodlePainter extends CustomPainter {
+  _DoodlePainter(this.t);
+
+  final double t;
+
+  // Unit paths (fit roughly into -0.5..0.5), built once and reused.
+  static final Path _star = _makeStar();
+  static final Path _heart = _makeHeart();
+  static final Path _circle = Path()
+    ..addOval(Rect.fromCircle(center: Offset.zero, radius: 0.45));
+  static final Path _squiggle = _makeSquiggle();
+  static final Path _sparkle = _makeSparkle();
+
+  static Path _makeStar() {
+    final path = Path();
+    for (var i = 0; i < 10; i++) {
+      final r = i.isEven ? 0.5 : 0.22;
+      final a = -pi / 2 + i * pi / 5;
+      final p = Offset(cos(a), sin(a)) * r;
+      if (i == 0) {
+        path.moveTo(p.dx, p.dy);
+      } else {
+        path.lineTo(p.dx, p.dy);
+      }
+    }
+    return path..close();
+  }
+
+  static Path _makeHeart() {
+    return Path()
+      ..moveTo(0, 0.42)
+      ..cubicTo(-0.52, 0.05, -0.46, -0.42, 0, -0.18)
+      ..cubicTo(0.46, -0.42, 0.52, 0.05, 0, 0.42)
+      ..close();
+  }
+
+  static Path _makeSquiggle() {
+    return Path()
+      ..moveTo(-0.5, 0)
+      ..cubicTo(-0.3, -0.3, -0.15, 0.3, 0.05, 0)
+      ..cubicTo(0.25, -0.3, 0.35, 0.3, 0.5, 0);
+  }
+
+  static Path _makeSparkle() {
+    return Path()
+      ..moveTo(0, -0.5)
+      ..lineTo(0, 0.5)
+      ..moveTo(-0.5, 0)
+      ..lineTo(0.5, 0);
+  }
+
+  static Path _pathFor(_DoodleKind kind) => switch (kind) {
+        _DoodleKind.star => _star,
+        _DoodleKind.heart => _heart,
+        _DoodleKind.circle => _circle,
+        _DoodleKind.squiggle => _squiggle,
+        _DoodleKind.sparkle => _sparkle,
+      };
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = PixiePalette.ink.withValues(alpha: 0.07)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    for (final d in _doodles) {
+      final angle = 2 * pi * (t + d.phase);
+      final dx = (d.x + 0.015 * sin(angle)) * size.width;
+      final dy = (d.y + 0.015 * cos(angle)) * size.height;
+      canvas.save();
+      canvas.translate(dx, dy);
+      canvas.rotate(d.rot + sin(angle) * 4 * pi / 180);
+      // Unit paths are scaled by the canvas matrix, so the stroke width
+      // must be divided back to stay a constant 2.5 px.
+      canvas.scale(d.size);
+      paint.strokeWidth = 2.5 / d.size;
+      canvas.drawPath(_pathFor(d.kind), paint);
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DoodlePainter old) => old.t != t;
+}
 
 class _BlobPainter extends CustomPainter {
   const _BlobPainter(this.t);
