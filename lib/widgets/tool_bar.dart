@@ -20,6 +20,7 @@ Color toolAccent(ToolKind tool) => switch (tool) {
       ToolKind.eraser => const Color(0xFF90A4AE),
       ToolKind.fill => const Color(0xFF26A69A),
       ToolKind.stamp => const Color(0xFFFFB300),
+      ToolKind.eyedropper => const Color(0xFF00897B),
     };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -33,6 +34,7 @@ String toolEmoji(ToolKind tool, {String stampEmoji = '⭐'}) => switch (tool) {
       ToolKind.eraser => '🧽',
       ToolKind.fill => '🪣',
       ToolKind.stamp => stampEmoji,
+      ToolKind.eyedropper => '💧',
     };
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
@@ -45,6 +47,7 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
       ToolKind.eraser => context.l10n.toolEraser,
       ToolKind.fill => context.l10n.toolFill,
       ToolKind.stamp => context.l10n.toolSticker,
+      ToolKind.eyedropper => context.l10n.toolEyedropper,
     };
 
 class ToolBarRail extends StatelessWidget {
@@ -100,6 +103,7 @@ class ToolBarRail extends StatelessWidget {
       ToolKind.neon,
       ToolKind.stamp,
       if (showFill) ToolKind.fill,
+      ToolKind.eyedropper,
       ToolKind.eraser,
     ];
     return [
@@ -201,6 +205,7 @@ class _ToolButton extends StatelessWidget {
       ToolKind.eraser => Icons.cleaning_services,
       ToolKind.fill => Icons.format_color_fill,
       ToolKind.stamp => null,
+      ToolKind.eyedropper => Icons.colorize_rounded,
     };
 
     return Tooltip(

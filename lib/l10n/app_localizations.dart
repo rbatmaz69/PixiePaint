@@ -254,6 +254,24 @@ abstract class AppLocalizations {
   /// **'Radierer'**
   String get toolEraser;
 
+  /// No description provided for @toolEyedropper.
+  ///
+  /// In de, this message translates to:
+  /// **'Pipette'**
+  String get toolEyedropper;
+
+  /// No description provided for @colorPickerTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Farben'**
+  String get colorPickerTitle;
+
+  /// No description provided for @colorRecent.
+  ///
+  /// In de, this message translates to:
+  /// **'Zuletzt benutzt'**
+  String get colorRecent;
+
   /// No description provided for @clearTitle.
   ///
   /// In de, this message translates to:

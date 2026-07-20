@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart' show Color;
 import 'package:path_provider/path_provider.dart';
+
+import 'color_utils.dart';
 
 /// App settings, persisted as a small JSON file in the documents dir.
 class Settings extends ChangeNotifier {
@@ -17,6 +20,10 @@ class Settings extends ChangeNotifier {
   int shareCount = 0;
   bool reviewRequested = false;
 
+  /// Most-recent-first ARGB values picked via the big color sheet or the
+  /// eyedropper — shown as a quick-access row in the picker.
+  List<int> recentColors = [];
+
   File? _file;
 
   Future<void> load() async {
@@ -30,6 +37,10 @@ class Settings extends ChangeNotifier {
         soundsOn = json['soundsOn'] as bool? ?? true;
         shareCount = json['shareCount'] as int? ?? 0;
         reviewRequested = json['reviewRequested'] as bool? ?? false;
+        recentColors = (json['recentColors'] as List?)
+                ?.whereType<int>()
+                .toList() ??
+            [];
       }
     } catch (_) {
       // defaults are fine
@@ -41,6 +52,12 @@ class Settings extends ChangeNotifier {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> registerRecentColor(Color c) async {
+    recentColors = pushRecentArgb(recentColors, c.toARGB32());
     notifyListeners();
     await _persist();
   }
@@ -63,6 +80,7 @@ class Settings extends ChangeNotifier {
         'soundsOn': soundsOn,
         'shareCount': shareCount,
         'reviewRequested': reviewRequested,
+        'recentColors': recentColors,
       }));
     } catch (_) {}
   }

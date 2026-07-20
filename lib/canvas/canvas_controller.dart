@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../models/stamp.dart';
 import '../models/tool.dart';
+import '../util/color_utils.dart';
 import '../util/image_io.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
@@ -58,6 +59,13 @@ class CanvasController extends ChangeNotifier {
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
 
+  /// Live position of an eyedropper pick (finger still down) and the color
+  /// currently under it — drives the loupe overlay.
+  Offset? pendingPickPos;
+  Color? pickedPreview;
+  Uint8List? _pickBuffer;
+  ToolKind _toolBeforePick = ToolKind.brush;
+
   final UndoStack _undoStack = UndoStack();
   bool get canUndo => _undoStack.canUndo;
   bool get canRedo => _undoStack.canRedo;
@@ -80,7 +88,9 @@ class CanvasController extends ChangeNotifier {
   /// first-finger stroke is discarded (like palm rejection), never
   /// committed.
   void beginViewGesture() {
-    if ((activeStroke != null || pendingStampPos != null) &&
+    if ((activeStroke != null ||
+            pendingStampPos != null ||
+            pendingPickPos != null) &&
         !_activeIsStylus) {
       _cancelActiveStroke();
     }
@@ -118,6 +128,9 @@ class CanvasController extends ChangeNotifier {
   }
 
   void selectTool(ToolKind t) {
+    if (t == ToolKind.eyedropper && tool != ToolKind.eyedropper) {
+      _toolBeforePick = tool;
+    }
     tool = t;
     Sfx.instance.tick();
     notifyListeners();
@@ -132,6 +145,7 @@ class CanvasController extends ChangeNotifier {
   void selectColor(Color c) {
     color = c;
     if (tool == ToolKind.eraser) tool = ToolKind.brush;
+    if (tool == ToolKind.eyedropper) tool = _toolBeforePick;
     Sfx.instance.tick();
     notifyListeners();
   }
@@ -196,6 +210,14 @@ class CanvasController extends ChangeNotifier {
       _tick();
       return;
     }
+    if (tool == ToolKind.eyedropper) {
+      _activePointer = e.pointer;
+      _activeIsStylus = isStylus;
+      pendingPickPos = pos;
+      _tick();
+      _preparePickBuffer();
+      return;
+    }
 
     // Flipped stylus end = eraser, like a pencil.
     final kind = e.kind == PointerDeviceKind.invertedStylus
@@ -216,6 +238,12 @@ class CanvasController extends ChangeNotifier {
   void pointerMove(PointerMoveEvent e) {
     if (pendingStampPos != null && e.pointer == _activePointer) {
       pendingStampPos = _clamp(e.localPosition);
+      _tick();
+      return;
+    }
+    if (pendingPickPos != null && e.pointer == _activePointer) {
+      pendingPickPos = _clamp(e.localPosition);
+      _samplePick();
       _tick();
       return;
     }
@@ -244,6 +272,10 @@ class CanvasController extends ChangeNotifier {
       _commitStamp();
       return;
     }
+    if (pendingPickPos != null) {
+      _commitPick();
+      return;
+    }
     _commitActiveStroke();
   }
 
@@ -261,8 +293,67 @@ class CanvasController extends ChangeNotifier {
   void _cancelActiveStroke() {
     activeStroke = null;
     pendingStampPos = null;
+    pendingPickPos = null;
+    pickedPreview = null;
+    _pickBuffer = null;
     _activePointer = null;
     _activeIsStylus = false;
+    _tick();
+  }
+
+  // ------------------------------------------------------------- eyedropper
+
+  /// Composites all visible layers once per pick gesture into an RGBA
+  /// buffer, so every finger move afterwards is a plain array lookup. The
+  /// buffer is released when the finger lifts.
+  Future<void> _preparePickBuffer() async {
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, _bounds);
+    canvas.drawRect(_bounds, Paint()..color = const Color(0xFFFFFFFF));
+    if (backgroundImage != null) {
+      canvas.drawImage(backgroundImage!, Offset.zero, Paint());
+    }
+    if (paintLayer != null) {
+      canvas.drawImage(paintLayer!, Offset.zero, Paint());
+    }
+    if (lineArtPicture != null) {
+      canvas.drawPicture(lineArtPicture!);
+    } else if (lineArt != null) {
+      canvas.drawImage(lineArt!, Offset.zero, Paint());
+    }
+    final picture = recorder.endRecording();
+    final image = picture.toImageSync(canvasWidth, canvasHeight);
+    picture.dispose();
+    final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+    image.dispose();
+    if (pendingPickPos == null) return; // gesture ended while compositing
+    _pickBuffer = data?.buffer.asUint8List();
+    _samplePick();
+    _tick();
+  }
+
+  void _samplePick() {
+    final buf = _pickBuffer;
+    final pos = pendingPickPos;
+    if (buf == null || pos == null) return;
+    pickedPreview = colorAtRgba(
+        buf, canvasWidth, canvasHeight, pos.dx.floor(), pos.dy.floor());
+  }
+
+  void _commitPick() {
+    final picked = pickedPreview;
+    pendingPickPos = null;
+    pickedPreview = null;
+    _pickBuffer = null;
+    _activePointer = null;
+    _activeIsStylus = false;
+    if (picked != null) {
+      color = picked;
+      Settings.instance.registerRecentColor(picked);
+      tool = _toolBeforePick;
+      Sfx.instance.pop();
+      notifyListeners();
+    }
     _tick();
   }
 

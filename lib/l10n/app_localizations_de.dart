@@ -87,6 +87,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get toolEraser => 'Radierer';
 
   @override
+  String get toolEyedropper => 'Pipette';
+
+  @override
+  String get colorPickerTitle => 'Alle Farben';
+
+  @override
+  String get colorRecent => 'Zuletzt benutzt';
+
+  @override
   String get clearTitle => 'Alles wegwischen?';
 
   @override

@@ -48,6 +48,7 @@ class StrokeRenderer {
         _drawNeon(canvas, stroke);
       case ToolKind.fill:
       case ToolKind.stamp:
+      case ToolKind.eyedropper:
         break; // not stroke-based
     }
   }

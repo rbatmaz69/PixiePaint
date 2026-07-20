@@ -87,6 +87,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolEraser => 'Eraser';
 
   @override
+  String get toolEyedropper => 'Color picker';
+
+  @override
+  String get colorPickerTitle => 'All colors';
+
+  @override
+  String get colorRecent => 'Recently used';
+
+  @override
   String get clearTitle => 'Wipe everything?';
 
   @override

@@ -46,6 +46,40 @@ class CanvasPainter extends CustomPainter {
     } else if (controller.lineArt != null) {
       canvas.drawImage(controller.lineArt!, Offset.zero, Paint());
     }
+
+    final pickPos = controller.pendingPickPos;
+    if (pickPos != null) {
+      _drawPickLoupe(canvas, pickPos, controller.pickedPreview);
+    }
+  }
+
+  /// Eyedropper loupe: a white-ringed bubble above the finger showing the
+  /// color underneath, plus a small dot marking the sampled pixel.
+  void _drawPickLoupe(Canvas canvas, Offset pos, Color? picked) {
+    final color = picked ?? Colors.white;
+    final center = pos - const Offset(0, 140);
+    canvas.drawCircle(
+        center + const Offset(0, 6),
+        58,
+        Paint()
+          ..color = Colors.black26
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10));
+    canvas.drawCircle(center, 58, Paint()..color = Colors.white);
+    canvas.drawCircle(center, 48, Paint()..color = color);
+    canvas.drawCircle(
+        pos,
+        7,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3);
+    canvas.drawCircle(
+        pos,
+        9,
+        Paint()
+          ..color = Colors.black38
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5);
   }
 
   @override
