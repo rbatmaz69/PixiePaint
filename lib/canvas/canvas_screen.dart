@@ -41,8 +41,13 @@ const int kCanvasHeight = 1536;
 /// [photoLineArt] to color line art detected from a photo, nothing for free
 /// drawing.
 class CanvasScreen extends StatefulWidget {
-  const CanvasScreen(
-      {super.key, this.page, this.resume, this.photoPath, this.photoLineArt});
+  const CanvasScreen({
+    super.key,
+    this.page,
+    this.resume,
+    this.photoPath,
+    this.photoLineArt,
+  });
 
   final ColoringPage? page;
   final Artwork? resume;
@@ -74,11 +79,14 @@ class _CanvasScreenState extends State<CanvasScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     controller = CanvasController(
-        canvasWidth: kCanvasWidth, canvasHeight: kCanvasHeight);
+      canvasWidth: kCanvasWidth,
+      canvasHeight: kCanvasHeight,
+    );
     artworkId = widget.resume?.id ?? ArtworkStore.newId();
     pageId = widget.resume?.pageId ?? widget.page?.id;
     hasPhoto = widget.photoPath != null || (widget.resume?.hasPhoto ?? false);
-    hasPhotoLineArt = widget.photoLineArt != null ||
+    hasPhotoLineArt =
+        widget.photoLineArt != null ||
         (widget.resume?.hasPhotoLineArt ?? false);
     _backgroundSaved = widget.resume?.hasPhoto ?? false;
     _lineArtSaved = widget.resume?.hasPhotoLineArt ?? false;
@@ -95,7 +103,10 @@ class _CanvasScreenState extends State<CanvasScreen>
       final page = await ColoringPage.byId(pageId!);
       if (page != null) {
         final art = await rasterizeSvgAsset(
-            page.assetPath, kCanvasWidth, kCanvasHeight);
+          page.assetPath,
+          kCanvasWidth,
+          kCanvasHeight,
+        );
         controller.setLineArt(art);
       }
     }
@@ -104,13 +115,15 @@ class _CanvasScreenState extends State<CanvasScreen>
     } else if ((widget.resume?.hasPhotoLineArt ?? false) &&
         await widget.resume!.lineArtFile.exists()) {
       controller.setLineArt(
-          await lineArtFromPng(await widget.resume!.lineArtFile.readAsBytes()));
+        await lineArtFromPng(await widget.resume!.lineArtFile.readAsBytes()),
+      );
     }
     final photoPath = widget.photoPath;
     if (photoPath != null) {
       final bytes = await File(photoPath).readAsBytes();
       controller.setBackground(
-          await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight));
+        await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight),
+      );
     } else if ((widget.resume?.hasPhoto ?? false) &&
         await widget.resume!.backgroundFile.exists()) {
       final bytes = await widget.resume!.backgroundFile.readAsBytes();
@@ -235,14 +248,15 @@ class _CanvasScreenState extends State<CanvasScreen>
       },
       child: Scaffold(
         body: Container(
-          decoration:
-              const BoxDecoration(gradient: PixieGradients.canvasBg),
+          decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
           child: SafeArea(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: loading
                   ? KeyedSubtree(
-                      key: const ValueKey('loading'), child: _buildLoading())
+                      key: const ValueKey('loading'),
+                      child: _buildLoading(),
+                    )
                   : KeyedSubtree(
                       key: const ValueKey('canvas'),
                       child: LayoutBuilder(
@@ -312,10 +326,7 @@ class _CanvasScreenState extends State<CanvasScreen>
             ],
           ),
         ),
-        SizedBox(
-          height: 76,
-          child: ColorPalette(controller: controller),
-        ),
+        SizedBox(height: 76, child: ColorPalette(controller: controller)),
       ],
     );
   }
@@ -332,20 +343,20 @@ class _CanvasScreenState extends State<CanvasScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                  color: PixiePalette.grape.withValues(alpha: 0.15),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3)),
+                color: PixiePalette.grape.withValues(alpha: 0.15),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
             ],
           ),
           child: Center(
             child: ToolBarRail(
-                controller: controller, direction: Axis.horizontal),
+              controller: controller,
+              direction: Axis.horizontal,
+            ),
           ),
         ),
-        SizedBox(
-          height: 76,
-          child: ColorPalette(controller: controller),
-        ),
+        SizedBox(height: 76, child: ColorPalette(controller: controller)),
       ],
     );
   }
@@ -443,8 +454,8 @@ class _CanvasScreenState extends State<CanvasScreen>
                 opacity: anim,
                 child: ScaleTransition(
                   scale: Tween(begin: 0.7, end: 1.0).animate(
-                      CurvedAnimation(
-                          parent: anim, curve: Curves.easeOutBack)),
+                    CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+                  ),
                   child: child,
                 ),
               ),
@@ -468,8 +479,11 @@ class _CanvasScreenState extends State<CanvasScreen>
 
 /// White round floating sticker button used for the canvas overlays.
 class _RoundButton extends StatelessWidget {
-  const _RoundButton(
-      {required this.icon, required this.tooltip, required this.onTap});
+  const _RoundButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String tooltip;
@@ -554,9 +568,11 @@ class _ToolChipState extends State<_ToolChip> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                toolEmoji(_lastTool,
-                    stampEmoji: _lastStamp,
-                    shapeEmoji: shapes.shapeEmoji(_lastShape)),
+                toolEmoji(
+                  _lastTool,
+                  stampEmoji: _lastStamp,
+                  shapeEmoji: shapes.shapeEmoji(_lastShape),
+                ),
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(width: 8),
@@ -573,8 +589,11 @@ class _ToolChipState extends State<_ToolChip> {
 }
 
 class _LeftRail extends StatelessWidget {
-  const _LeftRail(
-      {required this.controller, required this.onBack, required this.onShare});
+  const _LeftRail({
+    required this.controller,
+    required this.onBack,
+    required this.onShare,
+  });
 
   final CanvasController controller;
   final VoidCallback onBack;
@@ -590,9 +609,10 @@ class _LeftRail extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-              color: PixiePalette.grape.withValues(alpha: 0.15),
-              blurRadius: 10,
-              offset: const Offset(0, 3)),
+            color: PixiePalette.grape.withValues(alpha: 0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
         ],
       ),
       child: Column(
@@ -602,21 +622,23 @@ class _LeftRail extends StatelessWidget {
             message: context.l10n.back,
             child: Bouncy(
               onTap: onBack,
-              child: Icon(Icons.arrow_back_rounded,
-                  size: 28,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              child: Icon(
+                Icons.arrow_back_rounded,
+                size: 28,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
-          Expanded(
-            child: ToolBarRail(controller: controller),
-          ),
+          Expanded(child: ToolBarRail(controller: controller)),
           Tooltip(
             message: context.l10n.shareForParents,
             child: Bouncy(
               onTap: onShare,
-              child: Icon(Icons.ios_share_rounded,
-                  size: 26,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              child: Icon(
+                Icons.ios_share_rounded,
+                size: 26,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           const SizedBox(height: 6),

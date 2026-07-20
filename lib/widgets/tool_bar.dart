@@ -15,49 +15,51 @@ import 'stamp_picker.dart';
 /// Accent color per tool — used for the selected highlight so every tool
 /// feels like its own little character. Harmonized with the PixiePalette.
 Color toolAccent(ToolKind tool) => switch (tool) {
-      ToolKind.brush => PixiePalette.grape,
-      ToolKind.marker => PixiePalette.sky,
-      ToolKind.crayon => PixiePalette.tangerine,
-      ToolKind.rainbow => PixiePalette.berry,
-      ToolKind.glitter => PixiePalette.bubblegum,
-      ToolKind.neon => const Color(0xFFFFB020),
-      ToolKind.eraser => const Color(0xFF90A4AE),
-      ToolKind.fill => const Color(0xFF2BB68A),
-      ToolKind.stamp => const Color(0xFFFFB020),
-      ToolKind.eyedropper => const Color(0xFF00A28C),
-      ToolKind.shape => const Color(0xFF7C6BF0),
-    };
+  ToolKind.brush => PixiePalette.grape,
+  ToolKind.marker => PixiePalette.sky,
+  ToolKind.crayon => PixiePalette.tangerine,
+  ToolKind.rainbow => PixiePalette.berry,
+  ToolKind.glitter => PixiePalette.bubblegum,
+  ToolKind.neon => const Color(0xFFFFB020),
+  ToolKind.eraser => const Color(0xFF90A4AE),
+  ToolKind.fill => const Color(0xFF2BB68A),
+  ToolKind.stamp => const Color(0xFFFFB020),
+  ToolKind.eyedropper => const Color(0xFF00A28C),
+  ToolKind.shape => const Color(0xFF7C6BF0),
+};
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
-String toolEmoji(ToolKind tool,
-        {String stampEmoji = '⭐', String shapeEmoji = '💜'}) =>
-    switch (tool) {
-      ToolKind.brush => '🖌️',
-      ToolKind.marker => '🖊️',
-      ToolKind.crayon => '🖍️',
-      ToolKind.rainbow => '🌈',
-      ToolKind.glitter => '✨',
-      ToolKind.neon => '⚡',
-      ToolKind.eraser => '🧽',
-      ToolKind.fill => '🪣',
-      ToolKind.stamp => stampEmoji,
-      ToolKind.eyedropper => '💧',
-      ToolKind.shape => shapeEmoji,
-    };
+String toolEmoji(
+  ToolKind tool, {
+  String stampEmoji = '⭐',
+  String shapeEmoji = '💜',
+}) => switch (tool) {
+  ToolKind.brush => '🖌️',
+  ToolKind.marker => '🖊️',
+  ToolKind.crayon => '🖍️',
+  ToolKind.rainbow => '🌈',
+  ToolKind.glitter => '✨',
+  ToolKind.neon => '⚡',
+  ToolKind.eraser => '🧽',
+  ToolKind.fill => '🪣',
+  ToolKind.stamp => stampEmoji,
+  ToolKind.eyedropper => '💧',
+  ToolKind.shape => shapeEmoji,
+};
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
-      ToolKind.brush => context.l10n.toolBrush,
-      ToolKind.marker => context.l10n.toolMarker,
-      ToolKind.crayon => context.l10n.toolCrayon,
-      ToolKind.rainbow => context.l10n.toolRainbow,
-      ToolKind.glitter => context.l10n.toolGlitter,
-      ToolKind.neon => context.l10n.toolNeon,
-      ToolKind.eraser => context.l10n.toolEraser,
-      ToolKind.fill => context.l10n.toolFill,
-      ToolKind.stamp => context.l10n.toolSticker,
-      ToolKind.eyedropper => context.l10n.toolEyedropper,
-      ToolKind.shape => context.l10n.toolShapes,
-    };
+  ToolKind.brush => context.l10n.toolBrush,
+  ToolKind.marker => context.l10n.toolMarker,
+  ToolKind.crayon => context.l10n.toolCrayon,
+  ToolKind.rainbow => context.l10n.toolRainbow,
+  ToolKind.glitter => context.l10n.toolGlitter,
+  ToolKind.neon => context.l10n.toolNeon,
+  ToolKind.eraser => context.l10n.toolEraser,
+  ToolKind.fill => context.l10n.toolFill,
+  ToolKind.stamp => context.l10n.toolSticker,
+  ToolKind.eyedropper => context.l10n.toolEyedropper,
+  ToolKind.shape => context.l10n.toolShapes,
+};
 
 class ToolBarRail extends StatelessWidget {
   const ToolBarRail({
@@ -131,10 +133,11 @@ class ToolBarRail extends StatelessWidget {
             controller: controller,
             onTap: switch (tool) {
               ToolKind.stamp => () => showStampPicker(context, controller),
-              ToolKind.shape => () =>
-                  shapes.showShapePicker(context, controller),
-              ToolKind.fill => () =>
-                  showFillPatternPicker(context, controller),
+              ToolKind.shape => () => shapes.showShapePicker(
+                context,
+                controller,
+              ),
+              ToolKind.fill => () => showFillPatternPicker(context, controller),
               _ => () => controller.selectTool(tool),
             },
           ),
@@ -209,7 +212,8 @@ class _ToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected = controller.tool == tool;
     final accent = toolAccent(tool);
-    final showColorBadge = tool == ToolKind.brush ||
+    final showColorBadge =
+        tool == ToolKind.brush ||
         tool == ToolKind.fill ||
         tool == ToolKind.shape;
 
@@ -258,8 +262,7 @@ class _ToolButton extends StatelessWidget {
                 curve: Curves.easeOutBack,
                 child: Opacity(
                   opacity: selected ? 1.0 : 0.75,
-                  child:
-                      Text(emoji, style: const TextStyle(fontSize: 24)),
+                  child: Text(emoji, style: const TextStyle(fontSize: 24)),
                 ),
               ),
               if (showColorBadge)
@@ -331,12 +334,13 @@ class _SizeButton extends StatelessWidget {
             Positioned(
               right: 4,
               bottom: 4,
-              child: Icon(Icons.unfold_more_rounded,
-                  size: 14,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurfaceVariant
-                      .withValues(alpha: 0.6)),
+              child: Icon(
+                Icons.unfold_more_rounded,
+                size: 14,
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              ),
             ),
           ],
         ),
