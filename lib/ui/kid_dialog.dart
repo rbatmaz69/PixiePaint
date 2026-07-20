@@ -75,6 +75,8 @@ Future<T?> showKidDialog<T>({
 }
 
 /// Big, colorful full-width dialog button — the safe/primary choice.
+/// With [sticker] it gains the thick white outline + colored shadow, for
+/// standalone CTAs outside dialogs.
 class KidDialogButton extends StatelessWidget {
   const KidDialogButton({
     super.key,
@@ -82,16 +84,21 @@ class KidDialogButton extends StatelessWidget {
     required this.onTap,
     this.emoji,
     this.gradient,
+    this.sticker = false,
   });
 
   final String label;
   final VoidCallback onTap;
   final String? emoji;
   final Gradient? gradient;
+  final bool sticker;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final shadowColor = gradient is LinearGradient
+        ? (gradient as LinearGradient).colors.last
+        : scheme.primaryContainer;
     return Bouncy(
       onTap: onTap,
       minSize: 56,
@@ -102,6 +109,11 @@ class KidDialogButton extends StatelessWidget {
           gradient: gradient,
           color: gradient == null ? scheme.primaryContainer : null,
           borderRadius: BorderRadius.circular(PixieTokens.rSmall + 4),
+          border: sticker
+              ? Border.all(
+                  color: Colors.white, width: PixieTokens.stickerBorder)
+              : null,
+          boxShadow: sticker ? PixieTokens.softShadow(shadowColor) : null,
         ),
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
