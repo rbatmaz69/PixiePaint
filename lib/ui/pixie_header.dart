@@ -51,7 +51,7 @@ class PixieHeader extends StatelessWidget {
                   ?.copyWith(color: PixiePalette.ink),
             ),
           ),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );
