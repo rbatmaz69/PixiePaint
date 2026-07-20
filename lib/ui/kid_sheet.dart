@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'pop_in.dart';
+
 /// Kid-friendly bottom sheet shell: rounded top (via theme), drag handle,
-/// emoji title row, then the content.
+/// emoji title row (the emoji pops in), then the content.
 Future<T?> showKidSheet<T>({
   required BuildContext context,
   required String emoji,
@@ -19,7 +21,11 @@ Future<T?> showKidSheet<T>({
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 26)),
+                PopIn(
+                  from: 0.4,
+                  delay: const Duration(milliseconds: 100),
+                  child: Text(emoji, style: const TextStyle(fontSize: 26)),
+                ),
                 const SizedBox(width: 10),
                 Flexible(
                   child: Text(title,

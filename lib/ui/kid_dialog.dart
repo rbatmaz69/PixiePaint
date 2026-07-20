@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
 import 'bouncy.dart';
+import 'pop_in.dart';
 
 /// Kid-friendly dialog shell: big emoji header, Fredoka title, and large
 /// full-width action buttons. The safe default action should be a
 /// [KidDialogButton] (big, colorful); destructive/secondary actions a
 /// [KidDialogTextButton] (small, subtle).
+///
+/// Enters with a springy scale-in (easeOutBack) and a bouncing emoji —
+/// [showGeneralDialog] under the hood, behaviorally identical to
+/// [showDialog] otherwise.
 Future<T?> showKidDialog<T>({
   required BuildContext context,
   required String emoji,
@@ -14,9 +19,23 @@ Future<T?> showKidDialog<T>({
   Widget? body,
   List<Widget> actions = const [],
 }) {
-  return showDialog<T>(
+  return showGeneralDialog<T>(
     context: context,
-    builder: (context) => Dialog(
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black54,
+    transitionDuration: const Duration(milliseconds: 340),
+    transitionBuilder: (context, anim, _, child) => FadeTransition(
+      opacity: CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+      child: ScaleTransition(
+        scale: Tween(begin: 0.7, end: 1.0).animate(CurvedAnimation(
+            parent: anim,
+            curve: Curves.easeOutBack,
+            reverseCurve: Curves.easeIn)),
+        child: child,
+      ),
+    ),
+    pageBuilder: (context, _, _) => Dialog(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
@@ -25,9 +44,15 @@ Future<T?> showKidDialog<T>({
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(emoji,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 48)),
+              PopIn(
+                from: 0.4,
+                rotateFrom: -0.15,
+                delay: const Duration(milliseconds: 120),
+                duration: const Duration(milliseconds: 550),
+                child: Text(emoji,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 48)),
+              ),
               const SizedBox(height: 8),
               Text(title,
                   textAlign: TextAlign.center,
