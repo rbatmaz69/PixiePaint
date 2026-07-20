@@ -272,4 +272,46 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsSectionAbout => 'Info';
+
+  @override
+  String get rewardUnlockedTitle => 'Neuer Sticker!';
+
+  @override
+  String get rewardUnlockedBody => 'Du hast einen neuen Sticker freigemalt!';
+
+  @override
+  String get rewardUnlockedOk => 'Super!';
+
+  @override
+  String get rewardLockedTitle => 'Noch geheim!';
+
+  @override
+  String rewardRulePaintings(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Male noch $n Bilder fertig!',
+      one: 'Male noch 1 Bild fertig!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardRuleTools(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Probiere noch $n andere Werkzeuge aus!',
+      one: 'Probiere noch 1 anderes Werkzeug aus!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get rewardRuleShares => 'Teile ein Bild mit deinen Eltern!';
+
+  @override
+  String rewardProgress(int done, int target) {
+    return '$done von $target';
+  }
 }

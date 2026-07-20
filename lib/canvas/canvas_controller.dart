@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../models/tool.dart';
 import '../util/color_utils.dart';
 import '../util/image_io.dart';
+import '../util/progress.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/svg_raster.dart';
@@ -406,6 +407,7 @@ class CanvasController extends ChangeNotifier {
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();
     Sfx.instance.pop();
+    Progress.instance.registerToolUsed(ToolKind.stamp);
     _pushUndoAndReplace(newLayer);
   }
 
@@ -436,6 +438,7 @@ class CanvasController extends ChangeNotifier {
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();
     Sfx.instance.pop();
+    Progress.instance.registerToolUsed(ToolKind.shape);
     _pushUndoAndReplace(newLayer);
   }
 
@@ -459,6 +462,7 @@ class CanvasController extends ChangeNotifier {
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();
 
+    Progress.instance.registerToolUsed(stroke.kind);
     _pushUndoAndReplace(newLayer);
   }
 
@@ -510,6 +514,7 @@ class CanvasController extends ChangeNotifier {
       if (result != null) {
         final newLayer = await rgbaToImage(result, w, h);
         Sfx.instance.pop();
+        Progress.instance.registerToolUsed(ToolKind.fill);
         _pushUndoAndReplace(newLayer);
         // Reset first so refilling the same spot still notifies.
         lastFill.value = null;

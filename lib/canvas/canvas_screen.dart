@@ -14,7 +14,10 @@ import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
+import '../models/reward.dart';
+import '../ui/kid_dialog.dart';
 import '../util/image_io.dart';
+import '../util/progress.dart';
 import '../util/review.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
@@ -160,6 +163,11 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (lineArtPng != null) _lineArtSaved = true;
     everSaved = true;
     controller.dirty = false;
+    // A real, saved, non-empty picture counts as "finished" for the
+    // sticker rewards (autosave makes this equivalent to having painted).
+    if (controller.paintLayer != null) {
+      Progress.instance.registerArtworkCompleted(artworkId);
+    }
   }
 
   @override
@@ -186,7 +194,33 @@ class _CanvasScreenState extends State<CanvasScreen>
 
   Future<void> _leave() async {
     if (controller.dirty) await _save();
+    // Sticker unlock party — only on the way out, never mid-painting.
+    for (final reward in Progress.instance.takeUncelebrated()) {
+      if (!mounted) break;
+      await _celebrateReward(reward);
+    }
     if (mounted) Navigator.of(context).pop();
+  }
+
+  Future<void> _celebrateReward(StickerReward reward) async {
+    Sfx.instance.tada();
+    showConfetti(context);
+    await showKidDialog<void>(
+      context: context,
+      emoji: reward.emoji,
+      title: context.l10n.rewardUnlockedTitle,
+      body: Text(context.l10n.rewardUnlockedBody,
+          textAlign: TextAlign.center),
+      actions: [
+        Builder(
+          builder: (dialogContext) => KidDialogButton(
+            label: context.l10n.rewardUnlockedOk,
+            emoji: '🎉',
+            onTap: () => Navigator.pop(dialogContext),
+          ),
+        ),
+      ],
+    );
   }
 
   @override

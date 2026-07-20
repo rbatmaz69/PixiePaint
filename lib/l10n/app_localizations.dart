@@ -613,6 +613,54 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Info'**
   String get settingsSectionAbout;
+
+  /// No description provided for @rewardUnlockedTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Neuer Sticker!'**
+  String get rewardUnlockedTitle;
+
+  /// No description provided for @rewardUnlockedBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Du hast einen neuen Sticker freigemalt!'**
+  String get rewardUnlockedBody;
+
+  /// No description provided for @rewardUnlockedOk.
+  ///
+  /// In de, this message translates to:
+  /// **'Super!'**
+  String get rewardUnlockedOk;
+
+  /// No description provided for @rewardLockedTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Noch geheim!'**
+  String get rewardLockedTitle;
+
+  /// No description provided for @rewardRulePaintings.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Male noch 1 Bild fertig!} other{Male noch {n} Bilder fertig!}}'**
+  String rewardRulePaintings(int n);
+
+  /// No description provided for @rewardRuleTools.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Probiere noch 1 anderes Werkzeug aus!} other{Probiere noch {n} andere Werkzeuge aus!}}'**
+  String rewardRuleTools(int n);
+
+  /// No description provided for @rewardRuleShares.
+  ///
+  /// In de, this message translates to:
+  /// **'Teile ein Bild mit deinen Eltern!'**
+  String get rewardRuleShares;
+
+  /// No description provided for @rewardProgress.
+  ///
+  /// In de, this message translates to:
+  /// **'{done} von {target}'**
+  String rewardProgress(int done, int target);
 }
 
 class _AppLocalizationsDelegate

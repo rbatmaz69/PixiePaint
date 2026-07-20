@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app.dart';
+import 'util/progress.dart';
 import 'util/settings.dart';
 import 'util/sfx.dart';
 
@@ -15,6 +16,7 @@ Future<void> main() async {
     systemNavigationBarIconBrightness: Brightness.dark,
   ));
   await Settings.instance.load();
+  await Progress.instance.load();
   await Sfx.instance.init();
   runApp(const PixiePaintApp());
 }

@@ -91,5 +91,29 @@
   "galleryEmptyCta": "Such dir ein Bild aus!",
   "settingsSectionSafety": "Sicherheit",
   "settingsSectionFun": "Spaß",
-  "settingsSectionAbout": "Info"
+  "settingsSectionAbout": "Info",
+  "rewardUnlockedTitle": "Neuer Sticker!",
+  "rewardUnlockedBody": "Du hast einen neuen Sticker freigemalt!",
+  "rewardUnlockedOk": "Super!",
+  "rewardLockedTitle": "Noch geheim!",
+  "rewardRulePaintings": "{n, plural, =1{Male noch 1 Bild fertig!} other{Male noch {n} Bilder fertig!}}",
+  "@rewardRulePaintings": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "rewardRuleTools": "{n, plural, =1{Probiere noch 1 anderes Werkzeug aus!} other{Probiere noch {n} andere Werkzeuge aus!}}",
+  "@rewardRuleTools": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "rewardRuleShares": "Teile ein Bild mit deinen Eltern!",
+  "rewardProgress": "{done} von {target}",
+  "@rewardProgress": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "target": {"type": "int"}
+    }
+  }
 }
