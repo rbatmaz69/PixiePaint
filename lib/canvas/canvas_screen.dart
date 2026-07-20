@@ -14,6 +14,8 @@ import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/pixie_palette.dart';
+import '../ui/sticker.dart';
 import '../models/reward.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
@@ -278,7 +280,7 @@ class _CanvasScreenState extends State<CanvasScreen>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.10),
+                  color: PixiePalette.ink.withValues(alpha: 0.12),
                   blurRadius: 18,
                   offset: const Offset(0, 6),
                 ),
@@ -326,11 +328,13 @@ class _CanvasScreenState extends State<CanvasScreen>
           height: 64,
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08), blurRadius: 8),
+                  color: PixiePalette.grape.withValues(alpha: 0.15),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3)),
             ],
           ),
           child: Center(
@@ -359,7 +363,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.10),
+                    color: PixiePalette.ink.withValues(alpha: 0.12),
                     blurRadius: 18,
                     offset: const Offset(0, 6),
                   ),
@@ -462,7 +466,7 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 }
 
-/// White round floating button used for the canvas overlays.
+/// White round floating sticker button used for the canvas overlays.
 class _RoundButton extends StatelessWidget {
   const _RoundButton(
       {required this.icon, required this.tooltip, required this.onTap});
@@ -473,28 +477,11 @@ class _RoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: Bouncy(
-        onTap: onTap,
-        child: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(icon,
-              size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
-        ),
-      ),
+    return StickerCircleButton(
+      icon: icon,
+      tooltip: tooltip,
+      onTap: onTap,
+      accent: PixiePalette.grape,
     );
   }
 }
@@ -561,13 +548,7 @@ class _ToolChipState extends State<_ToolChip> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
+            boxShadow: PixieTokens.softShadow(PixiePalette.grape),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -605,11 +586,13 @@ class _LeftRail extends StatelessWidget {
       width: 76,
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08), blurRadius: 8),
+              color: PixiePalette.grape.withValues(alpha: 0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 3)),
         ],
       ),
       child: Column(

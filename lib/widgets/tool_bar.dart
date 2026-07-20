@@ -3,27 +3,29 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/tool.dart';
+import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/pixie_palette.dart';
 import 'fill_pattern_picker.dart';
 import 'shape_picker.dart' as shapes;
 import 'size_picker.dart';
 import 'stamp_picker.dart';
 
 /// Accent color per tool — used for the selected highlight so every tool
-/// feels like its own little character.
+/// feels like its own little character. Harmonized with the PixiePalette.
 Color toolAccent(ToolKind tool) => switch (tool) {
-      ToolKind.brush => const Color(0xFF7C4DFF),
-      ToolKind.marker => const Color(0xFF29B6F6),
-      ToolKind.crayon => const Color(0xFFFF8A65),
-      ToolKind.rainbow => const Color(0xFFEC407A),
-      ToolKind.glitter => const Color(0xFFF06292),
-      ToolKind.neon => const Color(0xFFFFC107),
+      ToolKind.brush => PixiePalette.grape,
+      ToolKind.marker => PixiePalette.sky,
+      ToolKind.crayon => PixiePalette.tangerine,
+      ToolKind.rainbow => PixiePalette.berry,
+      ToolKind.glitter => PixiePalette.bubblegum,
+      ToolKind.neon => const Color(0xFFFFB020),
       ToolKind.eraser => const Color(0xFF90A4AE),
-      ToolKind.fill => const Color(0xFF26A69A),
-      ToolKind.stamp => const Color(0xFFFFB300),
-      ToolKind.eyedropper => const Color(0xFF00897B),
-      ToolKind.shape => const Color(0xFF5C6BC0),
+      ToolKind.fill => const Color(0xFF2BB68A),
+      ToolKind.stamp => const Color(0xFFFFB020),
+      ToolKind.eyedropper => const Color(0xFF00A28C),
+      ToolKind.shape => const Color(0xFF7C6BF0),
     };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -91,8 +93,15 @@ class ToolBarRail extends StatelessWidget {
       margin: const EdgeInsets.all(4),
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        color: Colors.white.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: PixiePalette.grape.withValues(alpha: 0.12),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: direction == Axis.vertical
           ? Column(mainAxisSize: MainAxisSize.min, children: children)
@@ -204,25 +213,12 @@ class _ToolButton extends StatelessWidget {
         tool == ToolKind.fill ||
         tool == ToolKind.shape;
 
-    // Stamp and shape buttons show the selected motif as emoji instead of
-    // an icon.
+    // The whole toolbar speaks emoji — the same language as the pickers
+    // and the tool chip. Stamp/shape show their selected motif.
     final emoji = switch (tool) {
       ToolKind.stamp => controller.stampEmoji,
       ToolKind.shape => shapes.shapeEmoji(controller.shapeKind),
-      _ => null,
-    };
-    final icon = switch (tool) {
-      ToolKind.brush => Icons.brush,
-      ToolKind.marker => Icons.edit,
-      ToolKind.crayon => Icons.gesture,
-      ToolKind.rainbow => Icons.looks,
-      ToolKind.glitter => Icons.auto_awesome,
-      ToolKind.neon => Icons.flash_on,
-      ToolKind.eraser => Icons.cleaning_services,
-      ToolKind.fill => Icons.format_color_fill,
-      ToolKind.stamp => null,
-      ToolKind.eyedropper => Icons.colorize_rounded,
-      ToolKind.shape => null,
+      _ => toolEmoji(tool),
     };
 
     return Tooltip(
@@ -237,12 +233,20 @@ class _ToolButton extends StatelessWidget {
           height: 52,
           margin: const EdgeInsets.all(1),
           decoration: BoxDecoration(
-            color: selected
-                ? accent.withValues(alpha: 0.22)
-                : Colors.transparent,
+            color: selected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(selected ? 18 : 26),
-            border: selected
-                ? Border.all(color: accent.withValues(alpha: 0.6), width: 2.5)
+            border: Border.all(
+              color: selected ? accent : Colors.transparent,
+              width: 2.5,
+            ),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: accent.withValues(alpha: 0.25),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
                 : null,
           ),
           child: Stack(
@@ -252,15 +256,11 @@ class _ToolButton extends StatelessWidget {
                 scale: selected ? 1.18 : 1.0,
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOutBack,
-                child: emoji != null
-                    ? Text(emoji, style: const TextStyle(fontSize: 24))
-                    : Icon(
-                        icon,
-                        size: 26,
-                        color: selected
-                            ? accent
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                child: Opacity(
+                  opacity: selected ? 1.0 : 0.75,
+                  child:
+                      Text(emoji, style: const TextStyle(fontSize: 24)),
+                ),
               ),
               if (showColorBadge)
                 Positioned(
@@ -360,7 +360,6 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       onTap: enabled ? onTap : null,
       child: AnimatedContainer(
@@ -369,17 +368,18 @@ class _ActionButton extends StatelessWidget {
         height: 48,
         margin: const EdgeInsets.all(1),
         decoration: BoxDecoration(
-          color: filled && enabled
-              ? scheme.secondaryContainer
-              : Colors.transparent,
+          color: filled && enabled ? Colors.white : Colors.transparent,
           shape: BoxShape.circle,
+          boxShadow: filled && enabled
+              ? PixieTokens.softShadow(PixiePalette.grape)
+              : null,
         ),
         child: Icon(
           icon,
           size: 26,
           color: enabled
-              ? (filled ? scheme.onSecondaryContainer : scheme.onSurfaceVariant)
-              : scheme.onSurfaceVariant.withValues(alpha: 0.35),
+              ? PixiePalette.ink.withValues(alpha: 0.7)
+              : PixiePalette.ink.withValues(alpha: 0.3),
         ),
       ),
     );
