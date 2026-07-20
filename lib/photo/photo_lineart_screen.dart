@@ -115,11 +115,19 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                           borderRadius: BorderRadius.circular(24),
                           child: AspectRatio(
                             aspectRatio: 4 / 3,
-                            child: _preview == null
-                                ? const Center(
-                                    child: LoadingPixie(emoji: '✨'))
-                                : RawImage(
-                                    image: _preview, fit: BoxFit.contain),
+                            // Crossfade between detail levels instead of a
+                            // hard swap (identical aspect, no layout jump).
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              child: _preview == null
+                                  ? const Center(
+                                      key: ValueKey('loading'),
+                                      child: LoadingPixie(emoji: '✨'))
+                                  : RawImage(
+                                      key: ValueKey(_preview),
+                                      image: _preview,
+                                      fit: BoxFit.contain),
+                            ),
                           ),
                         ),
                       ),
@@ -158,14 +166,19 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              _starting
-                                  ? const SizedBox(
-                                      width: 22,
-                                      height: 22,
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2.5),
-                                    )
-                                  : const Icon(Icons.brush_rounded, size: 24),
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 180),
+                                child: _starting
+                                    ? const SizedBox(
+                                        key: ValueKey('starting'),
+                                        width: 26,
+                                        height: 26,
+                                        child: LoadingPixie(
+                                            emoji: '✨', size: 20),
+                                      )
+                                    : const Icon(Icons.brush_rounded,
+                                        key: ValueKey('idle'), size: 24),
+                              ),
                               const SizedBox(width: 10),
                               Text(
                                 context.l10n.letsGo,
