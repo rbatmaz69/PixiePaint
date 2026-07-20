@@ -1,13 +1,25 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-/// Design tokens: radii, spacing and the soft colored shadows used app-wide.
+import 'pixie_palette.dart';
+
+/// Design tokens: radii, spacing, sticker geometry and the soft colored
+/// shadows used app-wide.
 abstract final class PixieTokens {
   static const double rSmall = 16;
   static const double rCard = 28;
-  static const double rBlob = 40;
 
   static const double gap = 12;
   static const double gapLarge = 20;
+
+  /// Thick white outline that makes a surface read as a sticker.
+  static const double stickerBorder = 4.0;
+
+  /// Deterministic sticker tilt in radians for grid/list slot [index]:
+  /// cycles through -1.6°..+1.6° so neighboring stickers never align.
+  static double stickerTilt(int index) =>
+      (((index * 7) % 5) - 2) * 0.8 * math.pi / 180;
 
   /// Soft, colored shadow — softer and friendlier than plain black.
   static List<BoxShadow> softShadow(Color color) => [
@@ -19,55 +31,56 @@ abstract final class PixieTokens {
       ];
 }
 
-/// Pastel gradients: one per feature, plus screen backgrounds. These replace
-/// the previous flat per-screen hex colors.
+/// Gradients derived from [PixiePalette]: one per feature, plus warm paper
+/// washes for the screen backgrounds.
 abstract final class PixieGradients {
   static const LinearGradient coloring = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFFF3B0), Color(0xFFFFCF71)],
+    colors: [PixiePalette.sunshineLight, PixiePalette.sunshine],
   );
   static const LinearGradient freeDraw = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFB5E9FF), Color(0xFF7FDBDA)],
+    colors: [PixiePalette.skyLight, PixiePalette.sky],
   );
   static const LinearGradient photo = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFFD9C7), Color(0xFFFFB3C8)],
+    colors: [PixiePalette.tangerineLight, Color(0xFFFFB7CF)],
   );
   static const LinearGradient gallery = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFC9F5CF), Color(0xFF9BE3B6)],
+    colors: [PixiePalette.mintLight, PixiePalette.mint],
   );
 
-  // Screen backgrounds — gentle vertical washes.
+  // Screen backgrounds — warm paper fading into a whisper of the feature
+  // tint.
   static const LinearGradient homeBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFF6EDFF), Color(0xFFFFEFF6)],
+    colors: [PixiePalette.paper, Color(0xFFFFF0E4)],
   );
   static const LinearGradient canvasBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFEDE7F6), Color(0xFFE4F0FB)],
+    colors: [PixiePalette.paper, Color(0xFFF0EBFA)],
   );
   static const LinearGradient pickerBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFFFF8E1), Color(0xFFFFEFEF)],
+    colors: [PixiePalette.paper, Color(0xFFFFF3D9)],
   );
   static const LinearGradient galleryBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE8F5E9), Color(0xFFE0F5F9)],
+    colors: [PixiePalette.paper, Color(0xFFE9F7EE)],
   );
   static const LinearGradient photoBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFF6EDFF), Color(0xFFFFEBE0)],
+    colors: [PixiePalette.paper, Color(0xFFFFEBE0)],
   );
 }
 
@@ -104,24 +117,36 @@ ThemeData buildPixieTheme() {
   final scheme = ColorScheme.fromSeed(seedColor: const Color(0xFF7C4DFF));
   final base = ThemeData(useMaterial3: true, colorScheme: scheme);
 
-  TextStyle style(TextStyle? t, FontWeight w) =>
-      (t ?? const TextStyle()).copyWith(fontFamily: 'Fredoka', fontWeight: w);
+  // Real type scale (not stock M3 sizes): bigger, friendlier headlines,
+  // warm ink instead of near-black. Only the text theme carries ink — the
+  // color scheme keeps its M3 derivations intact.
+  TextStyle style(TextStyle? t, FontWeight w,
+          {double? size, double? spacing, double? height}) =>
+      (t ?? const TextStyle()).copyWith(
+        fontFamily: 'Fredoka',
+        fontWeight: w,
+        fontSize: size,
+        letterSpacing: spacing,
+        height: height,
+        color: PixiePalette.ink,
+      );
 
   final text = base.textTheme;
   final textTheme = text.copyWith(
     displayLarge: style(text.displayLarge, FontWeight.w700),
     displayMedium: style(text.displayMedium, FontWeight.w700),
-    displaySmall: style(text.displaySmall, FontWeight.w700),
+    displaySmall: style(text.displaySmall, FontWeight.w700, size: 40),
     headlineLarge: style(text.headlineLarge, FontWeight.w700),
-    headlineMedium: style(text.headlineMedium, FontWeight.w700),
-    headlineSmall: style(text.headlineSmall, FontWeight.w700),
-    titleLarge: style(text.titleLarge, FontWeight.w600),
-    titleMedium: style(text.titleMedium, FontWeight.w600),
-    titleSmall: style(text.titleSmall, FontWeight.w600),
-    bodyLarge: style(text.bodyLarge, FontWeight.w500),
-    bodyMedium: style(text.bodyMedium, FontWeight.w500),
+    headlineMedium: style(text.headlineMedium, FontWeight.w700, size: 30),
+    headlineSmall: style(text.headlineSmall, FontWeight.w700, size: 26),
+    titleLarge: style(text.titleLarge, FontWeight.w600, size: 22),
+    titleMedium: style(text.titleMedium, FontWeight.w600, size: 18),
+    titleSmall: style(text.titleSmall, FontWeight.w600, size: 16),
+    bodyLarge: style(text.bodyLarge, FontWeight.w500, size: 17, height: 1.3),
+    bodyMedium: style(text.bodyMedium, FontWeight.w500, size: 15),
     bodySmall: style(text.bodySmall, FontWeight.w500),
-    labelLarge: style(text.labelLarge, FontWeight.w600),
+    labelLarge:
+        style(text.labelLarge, FontWeight.w600, size: 16, spacing: 0.2),
     labelMedium: style(text.labelMedium, FontWeight.w500),
     labelSmall: style(text.labelSmall, FontWeight.w500),
   );
@@ -152,25 +177,38 @@ ThemeData buildPixieTheme() {
             fontFamily: 'Fredoka', fontSize: 15, fontWeight: FontWeight.w500),
       ),
     ),
+    // Dialogs and sheets are stickers themselves: paper fill + thick white
+    // outline against the dark barrier.
     dialogTheme: DialogThemeData(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(PixieTokens.rCard + 4)),
-      backgroundColor: Colors.white,
+        borderRadius: BorderRadius.circular(PixieTokens.rCard + 4),
+        side: const BorderSide(
+            color: Colors.white, width: PixieTokens.stickerBorder + 1),
+      ),
+      backgroundColor: const Color(0xFFFFFDF8),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFFFDF8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       showDragHandle: true,
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: WidgetStatePropertyAll(scheme.onPrimary),
+      thumbColor: const WidgetStatePropertyAll(Colors.white),
+      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       trackColor: WidgetStateProperty.resolveWith(
         (states) => states.contains(WidgetState.selected)
-            ? scheme.primary
+            ? PixiePalette.mint
             : scheme.surfaceContainerHighest,
       ),
+    ),
+    sliderTheme: SliderThemeData(
+      trackHeight: 12,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 14),
+      overlayShape: const RoundSliderOverlayShape(overlayRadius: 26),
+      activeTrackColor: scheme.primary,
+      inactiveTrackColor: PixiePalette.grapeLight,
     ),
     tabBarTheme: TabBarThemeData(
       dividerHeight: 0,

@@ -80,26 +80,15 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                   ),
                 ),
               ),
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: 12,
-                  thumbShape: const RoundSliderThumbShape(
-                    enabledThumbRadius: 16,
-                  ),
-                  overlayShape: const RoundSliderOverlayShape(
-                    overlayRadius: 26,
-                  ),
+              Slider(
+                min: kMinBrushSize,
+                max: kMaxBrushSize,
+                value: controller.brushSize.clamp(
+                  kMinBrushSize,
+                  kMaxBrushSize,
                 ),
-                child: Slider(
-                  min: kMinBrushSize,
-                  max: kMaxBrushSize,
-                  value: controller.brushSize.clamp(
-                    kMinBrushSize,
-                    kMaxBrushSize,
-                  ),
-                  onChanged: (v) => controller.selectSize(v, silent: true),
-                  onChangeEnd: (_) => Sfx.instance.tick(),
-                ),
+                onChanged: (v) => controller.selectSize(v, silent: true),
+                onChangeEnd: (_) => Sfx.instance.tick(),
               ),
               const SizedBox(height: 8),
               Row(
