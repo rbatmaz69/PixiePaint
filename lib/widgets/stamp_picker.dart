@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
@@ -7,19 +9,50 @@ import '../models/stamp.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
+import '../util/anim_math.dart';
 import '../util/progress.dart';
 import '../util/sfx.dart';
 
 /// Bottom sheet with a grid of emoji stamps; picking one selects the stamp
 /// tool with that motif. Reward stickers appear at the end — locked ones as
-/// mystery boxes that explain how to earn them.
+/// mystery boxes that wiggle now and then and explain how to earn them.
 Future<void> showStampPicker(
     BuildContext context, CanvasController controller) {
   return showKidSheet<void>(
     context: context,
     emoji: controller.stampEmoji,
     title: context.l10n.toolSticker,
-    child: GridView.builder(
+    child: _StampGrid(controller: controller),
+  );
+}
+
+class _StampGrid extends StatefulWidget {
+  const _StampGrid({required this.controller});
+
+  final CanvasController controller;
+
+  @override
+  State<_StampGrid> createState() => _StampGridState();
+}
+
+class _StampGridState extends State<_StampGrid>
+    with SingleTickerProviderStateMixin {
+  /// One shared ticker for all locked tiles' wiggle. Bound to the sheet's
+  /// (short) lifetime — same acceptability class as LoadingPixie.
+  late final AnimationController _wiggle = AnimationController(
+      vsync: this, duration: const Duration(seconds: 3))
+    ..repeat();
+
+  @override
+  void dispose() {
+    _wiggle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = widget.controller;
+    return GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -39,7 +72,8 @@ Future<void> showStampPicker(
             },
           );
         }
-        final reward = kRewards[i - kStamps.length];
+        final rewardIndex = i - kStamps.length;
+        final reward = kRewards[rewardIndex];
         if (Progress.instance.isRewardUnlocked(reward)) {
           return _StampTile(
             emoji: reward.emoji,
@@ -50,10 +84,14 @@ Future<void> showStampPicker(
             },
           );
         }
-        return _LockedRewardTile(reward: reward);
+        return _LockedRewardTile(
+          reward: reward,
+          index: rewardIndex,
+          wiggle: _wiggle,
+        );
       },
-    ),
-  );
+    );
+  }
 }
 
 class _StampTile extends StatelessWidget {
@@ -86,36 +124,77 @@ class _StampTile extends StatelessWidget {
 }
 
 /// Mystery box for a still-locked reward sticker: big ❓ with a lock badge.
-/// Tapping explains the goal in kid terms instead of selecting.
-class _LockedRewardTile extends StatelessWidget {
-  const _LockedRewardTile({required this.reward});
+/// Wags gently now and then (shared ticker), shakes "no" when tapped, then
+/// explains the goal in kid terms.
+class _LockedRewardTile extends StatefulWidget {
+  const _LockedRewardTile({
+    required this.reward,
+    required this.index,
+    required this.wiggle,
+  });
 
   final StickerReward reward;
+  final int index;
+  final Animation<double> wiggle;
+
+  @override
+  State<_LockedRewardTile> createState() => _LockedRewardTileState();
+}
+
+class _LockedRewardTileState extends State<_LockedRewardTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _shake = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 300));
+
+  @override
+  void dispose() {
+    _shake.dispose();
+    super.dispose();
+  }
+
+  void _onTap() {
+    _shake.forward(from: 0);
+    _explain(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       playTick: false,
-      onTap: () => _explain(context),
-      child: Container(
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Text('❓',
-                style: TextStyle(
-                    fontSize: 32,
-                    color: scheme.onSurfaceVariant.withValues(alpha: 0.7))),
-            const Positioned(
-              right: 6,
-              bottom: 6,
-              child: Text('🔒', style: TextStyle(fontSize: 14)),
+      onTap: _onTap,
+      child: AnimatedBuilder(
+        animation: Listenable.merge([widget.wiggle, _shake]),
+        builder: (context, child) {
+          final t = _shake.value;
+          final dx = _shake.isAnimating ? sin(t * 3 * pi) * 4 * (1 - t) : 0.0;
+          return Transform.translate(
+            offset: Offset(dx, 0),
+            child: Transform.rotate(
+              angle: lockedWiggleAngle(widget.wiggle.value, widget.index),
+              child: child,
             ),
-          ],
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text('❓',
+                  style: TextStyle(
+                      fontSize: 32,
+                      color: scheme.onSurfaceVariant.withValues(alpha: 0.7))),
+              const Positioned(
+                right: 6,
+                bottom: 6,
+                child: Text('🔒', style: TextStyle(fontSize: 14)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -123,6 +202,7 @@ class _LockedRewardTile extends StatelessWidget {
 
   void _explain(BuildContext context) {
     Sfx.instance.tick();
+    final reward = widget.reward;
     final snapshot = Progress.instance.snapshot();
     final remaining = remainingFor(reward, snapshot);
     final rule = switch (reward.kind) {

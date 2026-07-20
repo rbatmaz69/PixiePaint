@@ -15,7 +15,7 @@ import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
 import '../models/reward.dart';
-import '../ui/kid_dialog.dart';
+import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
@@ -204,22 +204,13 @@ class _CanvasScreenState extends State<CanvasScreen>
 
   Future<void> _celebrateReward(StickerReward reward) async {
     Sfx.instance.tada();
-    showConfetti(context);
-    await showKidDialog<void>(
-      context: context,
+    // Confetti fires from inside the reveal (above its scrim).
+    await showRewardReveal(
+      context,
       emoji: reward.emoji,
       title: context.l10n.rewardUnlockedTitle,
-      body: Text(context.l10n.rewardUnlockedBody,
-          textAlign: TextAlign.center),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: context.l10n.rewardUnlockedOk,
-            emoji: '🎉',
-            onTap: () => Navigator.pop(dialogContext),
-          ),
-        ),
-      ],
+      body: context.l10n.rewardUnlockedBody,
+      buttonLabel: context.l10n.rewardUnlockedOk,
     );
   }
 
