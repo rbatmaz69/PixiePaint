@@ -10,6 +10,10 @@ class Artwork {
   final DateTime updatedAt;
   final String dirPath;
 
+  /// Kid-given name shown on the polaroid frame; empty/null = unnamed.
+  final String? name;
+  final bool favorite;
+
   const Artwork({
     required this.id,
     required this.pageId,
@@ -19,12 +23,27 @@ class Artwork {
     required this.height,
     required this.updatedAt,
     required this.dirPath,
+    this.name,
+    this.favorite = false,
   });
 
   File get paintFile => File('$dirPath/paint.png');
   File get thumbFile => File('$dirPath/thumb.png');
   File get backgroundFile => File('$dirPath/background.png');
   File get lineArtFile => File('$dirPath/lineart.png');
+
+  Artwork copyWith({String? name, bool? favorite}) => Artwork(
+        id: id,
+        pageId: pageId,
+        hasPhoto: hasPhoto,
+        hasPhotoLineArt: hasPhotoLineArt,
+        width: width,
+        height: height,
+        updatedAt: updatedAt,
+        dirPath: dirPath,
+        name: name ?? this.name,
+        favorite: favorite ?? this.favorite,
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -34,6 +53,8 @@ class Artwork {
         'width': width,
         'height': height,
         'updatedAt': updatedAt.toIso8601String(),
+        if (name != null) 'name': name,
+        'favorite': favorite,
       };
 
   static Artwork fromJson(Map<String, dynamic> json, String dirPath) => Artwork(
@@ -45,5 +66,8 @@ class Artwork {
         height: json['height'] as int,
         updatedAt: DateTime.parse(json['updatedAt'] as String),
         dirPath: dirPath,
+        // Older meta.json files predate these fields.
+        name: json['name'] as String?,
+        favorite: json['favorite'] as bool? ?? false,
       );
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:path_provider/path_provider.dart';
@@ -36,10 +37,11 @@ Future<void> shareArtwork({
   );
 }
 
-/// Shares a saved artwork straight from the gallery: loads the paint layer
-/// from disk and re-rasterizes the line art if the artwork is a coloring
-/// page (photo line art is reloaded from its saved PNG instead).
-Future<void> shareSavedArtwork(Artwork artwork) async {
+/// Composes a saved artwork into full-resolution PNG bytes: loads the paint
+/// layer from disk and re-rasterizes the line art if the artwork is a
+/// coloring page (photo line art is reloaded from its saved PNG instead).
+/// Shared by the share sheet and the save-to-Photos export.
+Future<Uint8List> composeSavedArtworkPng(Artwork artwork) async {
   ui.Image? background;
   ui.Image? paintLayer;
   RasterizedLineArt? raster;
@@ -60,16 +62,31 @@ Future<void> shareSavedArtwork(Artwork artwork) async {
     } else if (artwork.hasPhotoLineArt && await artwork.lineArtFile.exists()) {
       raster = await lineArtFromPng(await artwork.lineArtFile.readAsBytes());
     }
-    await shareArtwork(
+    final composed = await composeArtwork(
       width: artwork.width,
       height: artwork.height,
       background: background,
       paintLayer: paintLayer,
       lineArt: raster?.image,
     );
+    final png = await imageToPngBytes(composed);
+    composed.dispose();
+    return png;
   } finally {
     background?.dispose();
     paintLayer?.dispose();
     raster?.dispose();
   }
+}
+
+/// Shares a saved artwork straight from the gallery via the system sheet.
+Future<void> shareSavedArtwork(Artwork artwork) async {
+  final png = await composeSavedArtworkPng(artwork);
+  final tmp = await getTemporaryDirectory();
+  final file = File(
+      '${tmp.path}/pixiepaint_${DateTime.now().millisecondsSinceEpoch}.png');
+  await file.writeAsBytes(png);
+  await SharePlus.instance.share(
+    ShareParams(files: [XFile(file.path, mimeType: 'image/png')]),
+  );
 }

@@ -54,6 +54,22 @@ class ArtworkStore {
     final root = await _root();
     final dir = Directory('${root.path}/$id');
     if (!await dir.exists()) await dir.create();
+    // Carry gallery-managed metadata (name, favorite) across autosaves —
+    // save() otherwise rebuilds meta.json from scratch and would wipe it.
+    String? name;
+    var favorite = false;
+    final metaFile = File('${dir.path}/meta.json');
+    try {
+      if (await metaFile.exists()) {
+        final old = Artwork.fromJson(
+            jsonDecode(await metaFile.readAsString()) as Map<String, dynamic>,
+            dir.path);
+        name = old.name;
+        favorite = old.favorite;
+      }
+    } catch (_) {
+      // corrupt meta — rebuild it fresh
+    }
     final artwork = Artwork(
       id: id,
       pageId: pageId,
@@ -63,6 +79,8 @@ class ArtworkStore {
       height: height,
       updatedAt: DateTime.now(),
       dirPath: dir.path,
+      name: name,
+      favorite: favorite,
     );
     if (paintPng != null) {
       await artwork.paintFile.writeAsBytes(paintPng);
@@ -79,6 +97,13 @@ class ArtworkStore {
     await File('${dir.path}/meta.json')
         .writeAsString(jsonEncode(artwork.toJson()));
     return artwork;
+  }
+
+  /// Rewrites only meta.json (rename/favorite) — PNGs and [Artwork.updatedAt]
+  /// stay untouched, so thumbnails keep their cache identity.
+  static Future<void> updateMeta(Artwork artwork) async {
+    await File('${artwork.dirPath}/meta.json')
+        .writeAsString(jsonEncode(artwork.toJson()));
   }
 
   static Future<void> delete(Artwork artwork) async {

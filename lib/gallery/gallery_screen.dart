@@ -11,6 +11,7 @@ import '../ui/loading_pixie.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import 'page_picker_screen.dart';
+import '../util/save_to_photos.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../widgets/confetti_burst.dart';
@@ -26,6 +27,7 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   late Future<List<Artwork>> _future;
+  bool _favoritesOnly = false;
 
   @override
   void initState() {
@@ -34,6 +36,90 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   void _reload() => setState(() => _future = ArtworkStore.list());
+
+  Future<void> _toggleFavorite(Artwork artwork) async {
+    Sfx.instance.pop();
+    await ArtworkStore.updateMeta(
+        artwork.copyWith(favorite: !artwork.favorite));
+    _reload();
+  }
+
+  Future<void> _rename(Artwork artwork) async {
+    final input = TextEditingController(text: artwork.name ?? '');
+    final name = await showKidDialog<String>(
+      context: context,
+      emoji: '✏️',
+      title: context.l10n.renameTitle,
+      body: TextField(
+        controller: input,
+        autofocus: true,
+        maxLength: 20,
+        textCapitalization: TextCapitalization.words,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.titleLarge,
+        decoration: const InputDecoration(counterText: ''),
+      ),
+      actions: [
+        Builder(
+          builder: (dialogContext) => KidDialogButton(
+            label: context.l10n.renameSave,
+            emoji: '💾',
+            onTap: () => Navigator.pop(dialogContext, input.text.trim()),
+          ),
+        ),
+        Builder(
+          builder: (dialogContext) => KidDialogTextButton(
+            label: context.l10n.gateCancel,
+            onTap: () => Navigator.pop(dialogContext),
+          ),
+        ),
+      ],
+    );
+    input.dispose();
+    if (name == null) return;
+    await ArtworkStore.updateMeta(artwork.copyWith(name: name));
+    _reload();
+  }
+
+  Future<void> _saveToPhotos(Artwork artwork) async {
+    if (!await ParentalGate.show(context)) return;
+    final ok = await saveArtworkToPhotos(artwork);
+    if (!mounted) return;
+    if (ok) {
+      Sfx.instance.tada();
+      showConfetti(context);
+      await showKidDialog<void>(
+        context: context,
+        emoji: '📷',
+        title: context.l10n.savedToPhotos,
+        actions: [
+          Builder(
+            builder: (dialogContext) => KidDialogButton(
+              label: context.l10n.okAction,
+              emoji: '🎉',
+              onTap: () => Navigator.pop(dialogContext),
+            ),
+          ),
+        ],
+      );
+    } else {
+      await showKidDialog<void>(
+        context: context,
+        emoji: '😕',
+        title: context.l10n.saveToPhotosFailedTitle,
+        body: Text(context.l10n.saveToPhotosFailed,
+            textAlign: TextAlign.center),
+        actions: [
+          Builder(
+            builder: (dialogContext) => KidDialogButton(
+              label: context.l10n.okAction,
+              onTap: () => Navigator.pop(dialogContext),
+            ),
+          ),
+        ],
+      );
+    }
+  }
 
   Future<void> _open(Artwork artwork) async {
     await Navigator.of(context).push(
@@ -61,6 +147,30 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _open(artwork);
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            Builder(
+              builder: (sheetContext) => KidDialogButton(
+                emoji: '✏️',
+                label: context.l10n.renameAction,
+                gradient: PixieGradients.freeDraw,
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _rename(artwork);
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            Builder(
+              builder: (sheetContext) => KidDialogButton(
+                emoji: '📷',
+                label: context.l10n.saveToPhotos,
+                gradient: PixieGradients.gallery,
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _saveToPhotos(artwork);
                 },
               ),
             ),
@@ -174,55 +284,205 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 ),
               );
             }
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 280,
-                mainAxisSpacing: 18,
-                crossAxisSpacing: 18,
-                childAspectRatio: 4 / 3.4,
-              ),
-              itemCount: artworks.length,
-              itemBuilder: (context, i) {
-                final artwork = artworks[i];
-                // "Polaroid": white frame, soft shadow, wider bottom edge.
-                return Bouncy(
-                  onTap: () => _open(artwork),
-                  onLongPress: () => _showItemMenu(artwork),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.10),
-                          blurRadius: 14,
-                          offset: const Offset(0, 5),
+            // Favorites bubble to the top, then newest first (list() is
+            // already sorted by updatedAt).
+            final sorted = [
+              ...artworks.where((a) => a.favorite),
+              ...artworks.where((a) => !a.favorite),
+            ];
+            final shown = _favoritesOnly
+                ? sorted.where((a) => a.favorite).toList()
+                : sorted;
+            final hasFavorites = artworks.any((a) => a.favorite);
+            return Column(
+              children: [
+                if (hasFavorites)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Row(
+                      children: [
+                        _FilterChip(
+                          label: context.l10n.filterAll,
+                          selected: !_favoritesOnly,
+                          onTap: () =>
+                              setState(() => _favoritesOnly = false),
+                        ),
+                        const SizedBox(width: 8),
+                        _FilterChip(
+                          label: '❤️ ${context.l10n.filterFavorites}',
+                          selected: _favoritesOnly,
+                          onTap: () => setState(() => _favoritesOnly = true),
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 22),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: artwork.thumbFile.existsSync()
-                          ? Image.file(
-                              artwork.thumbFile,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                              // Thumbnails change on disk under the same
-                              // path, so don't let the image cache serve
-                              // stale ones.
-                              key: ValueKey(artwork.updatedAt),
-                              cacheWidth: 560,
-                            )
-                          : const Center(child: Icon(Icons.image, size: 48)),
+                  ),
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 280,
+                      mainAxisSpacing: 18,
+                      crossAxisSpacing: 18,
+                      childAspectRatio: 4 / 3.4,
+                    ),
+                    itemCount: shown.length,
+                    itemBuilder: (context, i) => _PolaroidCard(
+                      artwork: shown[i],
+                      onTap: () => _open(shown[i]),
+                      onLongPress: () => _showItemMenu(shown[i]),
+                      onToggleFavorite: () => _toggleFavorite(shown[i]),
                     ),
                   ),
-                );
-              },
+                ),
+              ],
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+/// "Polaroid" card: white frame, soft shadow, wider bottom edge carrying
+/// the kid-given name, heart toggle floating on the photo corner.
+class _PolaroidCard extends StatelessWidget {
+  const _PolaroidCard({
+    required this.artwork,
+    required this.onTap,
+    required this.onLongPress,
+    required this.onToggleFavorite,
+  });
+
+  final Artwork artwork;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+  final VoidCallback onToggleFavorite;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasName = artwork.name?.isNotEmpty ?? false;
+    return Bouncy(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.10),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 26),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: artwork.thumbFile.existsSync()
+                      ? Image.file(
+                          artwork.thumbFile,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          // Thumbnails change on disk under the same path,
+                          // so don't let the image cache serve stale ones.
+                          key: ValueKey(artwork.updatedAt),
+                          cacheWidth: 560,
+                        )
+                      : const Center(child: Icon(Icons.image, size: 48)),
+                ),
+              ),
+            ),
+            if (hasName)
+              Positioned(
+                left: 12,
+                right: 12,
+                bottom: 3,
+                child: Text(
+                  artwork.name!,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Bouncy(
+                onTap: onToggleFavorite,
+                playTick: false,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.12),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    artwork.favorite ? '❤️' : '🤍',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Bouncy pill chip for the Alle/Favoriten filter row.
+class _FilterChip extends StatelessWidget {
+  const _FilterChip(
+      {required this.label, required this.selected, required this.onTap});
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Bouncy(
+      onTap: onTap,
+      playTick: false,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? scheme.primaryContainer : scheme.surface,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: selected ? 0.10 : 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: selected
+                    ? scheme.onPrimaryContainer
+                    : scheme.onSurfaceVariant,
+              ),
         ),
       ),
     );

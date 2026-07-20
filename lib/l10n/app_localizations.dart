@@ -380,6 +380,66 @@ abstract class AppLocalizations {
   /// **'Weitermalen'**
   String get continuePainting;
 
+  /// No description provided for @renameAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Umbenennen'**
+  String get renameAction;
+
+  /// No description provided for @renameTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Wie heißt dein Bild?'**
+  String get renameTitle;
+
+  /// No description provided for @renameSave.
+  ///
+  /// In de, this message translates to:
+  /// **'Speichern'**
+  String get renameSave;
+
+  /// No description provided for @saveToPhotos.
+  ///
+  /// In de, this message translates to:
+  /// **'In Fotos speichern (für Eltern)'**
+  String get saveToPhotos;
+
+  /// No description provided for @savedToPhotos.
+  ///
+  /// In de, this message translates to:
+  /// **'In Fotos gespeichert!'**
+  String get savedToPhotos;
+
+  /// No description provided for @saveToPhotosFailedTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Das hat nicht geklappt'**
+  String get saveToPhotosFailedTitle;
+
+  /// No description provided for @saveToPhotosFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte erlaube den Foto-Zugriff in den Geräte-Einstellungen und versuche es noch einmal.'**
+  String get saveToPhotosFailed;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle'**
+  String get filterAll;
+
+  /// No description provided for @filterFavorites.
+  ///
+  /// In de, this message translates to:
+  /// **'Favoriten'**
+  String get filterFavorites;
+
+  /// No description provided for @okAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Okay!'**
+  String get okAction;
+
   /// No description provided for @deleteAction.
   ///
   /// In de, this message translates to:

@@ -150,6 +150,37 @@ class AppLocalizationsDe extends AppLocalizations {
   String get continuePainting => 'Weitermalen';
 
   @override
+  String get renameAction => 'Umbenennen';
+
+  @override
+  String get renameTitle => 'Wie heißt dein Bild?';
+
+  @override
+  String get renameSave => 'Speichern';
+
+  @override
+  String get saveToPhotos => 'In Fotos speichern (für Eltern)';
+
+  @override
+  String get savedToPhotos => 'In Fotos gespeichert!';
+
+  @override
+  String get saveToPhotosFailedTitle => 'Das hat nicht geklappt';
+
+  @override
+  String get saveToPhotosFailed =>
+      'Bitte erlaube den Foto-Zugriff in den Geräte-Einstellungen und versuche es noch einmal.';
+
+  @override
+  String get filterAll => 'Alle';
+
+  @override
+  String get filterFavorites => 'Favoriten';
+
+  @override
+  String get okAction => 'Okay!';
+
+  @override
   String get deleteAction => 'Wegwerfen';
 
   @override
