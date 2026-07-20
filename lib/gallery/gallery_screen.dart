@@ -6,6 +6,7 @@ import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
 import '../ui/app_theme.dart';
+import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
@@ -265,9 +266,9 @@ class _GalleryScreenState extends State<GalleryScreen>
         backgroundColor: Colors.transparent,
       ),
       extendBodyBehindAppBar: false,
-      body: Container(
-        decoration: const BoxDecoration(gradient: PixieGradients.galleryBg),
-        child: FutureBuilder<List<Artwork>>(
+      body: BlobBackground(
+        gradient: PixieGradients.galleryBg,
+        builder: (context, _) => FutureBuilder<List<Artwork>>(
           future: _future,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {

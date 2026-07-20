@@ -5,6 +5,7 @@ import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/coloring_page.dart';
 import '../ui/app_theme.dart';
+import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
 
@@ -45,10 +46,9 @@ class _PagePickerScreenState extends State<PagePickerScreen>
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Scaffold(
-            body: Container(
-              decoration:
-                  const BoxDecoration(gradient: PixieGradients.pickerBg),
-              child: const Center(child: LoadingPixie()),
+            body: BlobBackground(
+              gradient: PixieGradients.pickerBg,
+              builder: (context, _) => const Center(child: LoadingPixie()),
             ),
           );
         }
@@ -67,10 +67,9 @@ class _PagePickerScreenState extends State<PagePickerScreen>
         return DefaultTabController(
           length: categories.length + 1,
           child: Scaffold(
-            body: Container(
-              decoration:
-                  const BoxDecoration(gradient: PixieGradients.pickerBg),
-              child: SafeArea(
+            body: BlobBackground(
+              gradient: PixieGradients.pickerBg,
+              builder: (context, _) => SafeArea(
                 child: Column(
                   children: [
                     Padding(

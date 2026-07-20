@@ -127,27 +127,31 @@ class _HomeScreenState extends State<HomeScreen>
               Positioned(
                 top: 8,
                 right: 8,
-                child: Bouncy(
-                  onTap: () async {
-                    if (await ParentalGate.show(context) && context.mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const SettingsScreen()),
-                      );
-                    }
-                  },
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.55),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Tooltip(
-                      message: context.l10n.settingsTooltip,
-                      child: Icon(Icons.settings_rounded,
-                          size: 26,
-                          color: Colors.black.withValues(alpha: 0.4)),
+                child: _staggered(
+                  5,
+                  Bouncy(
+                    onTap: () async {
+                      if (await ParentalGate.show(context) &&
+                          context.mounted) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const SettingsScreen()),
+                        );
+                      }
+                    },
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.55),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Tooltip(
+                        message: context.l10n.settingsTooltip,
+                        child: Icon(Icons.settings_rounded,
+                            size: 26,
+                            color: Colors.black.withValues(alpha: 0.4)),
+                      ),
                     ),
                   ),
                 ),
