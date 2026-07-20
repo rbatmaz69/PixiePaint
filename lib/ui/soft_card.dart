@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
+import 'pixie_palette.dart';
 
 /// Rounded card with a pastel gradient (or flat color) and a soft colored
 /// shadow — the basic surface of the playful design language.
@@ -31,7 +32,7 @@ class SoftCard extends StatelessWidget {
     final Color shadow = shadowColor ??
         (gradient is LinearGradient
             ? (gradient as LinearGradient).colors.last
-            : (color ?? Colors.black));
+            : (color ?? PixiePalette.ink));
     return Container(
       width: width,
       height: height,
