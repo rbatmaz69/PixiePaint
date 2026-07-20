@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'canvas_controller.dart';
 import 'canvas_painter.dart';
 import 'fill_burst.dart';
+import 'stamp_burst.dart';
 
 /// The drawing surface at fixed canvas resolution. Sizing and zoom/pan are
 /// applied by [CanvasViewport]; pointer positions arrive here already in
@@ -32,10 +33,16 @@ class PaintingCanvas extends StatelessWidget {
               isComplex: true,
             ),
           ),
-          // Fill-burst effect lives in canvas space so it scales with zoom.
+          // Burst effects live in canvas space so they scale with zoom —
+          // and stay OUTSIDE the canvas RepaintBoundary above.
           Positioned.fill(
             child: IgnorePointer(
               child: FillBurstOverlay(controller: controller),
+            ),
+          ),
+          Positioned.fill(
+            child: IgnorePointer(
+              child: StampBurstOverlay(controller: controller),
             ),
           ),
         ],

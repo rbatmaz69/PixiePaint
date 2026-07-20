@@ -398,13 +398,27 @@ class _CanvasScreenState extends State<CanvasScreen>
             right: 8,
             child: ListenableBuilder(
               listenable: viewport,
-              builder: (context, _) => viewport.isZoomed
-                  ? _RoundButton(
-                      icon: Icons.fit_screen_rounded,
-                      tooltip: context.l10n.resetView,
-                      onTap: viewport.reset,
-                    )
-                  : const SizedBox.shrink(),
+              builder: (context, _) {
+                final zoomed = viewport.isZoomed;
+                // Always mounted: pops in with overshoot, shrinks out fast.
+                return IgnorePointer(
+                  ignoring: !zoomed,
+                  child: AnimatedOpacity(
+                    opacity: zoomed ? 1 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedScale(
+                      scale: zoomed ? 1 : 0.3,
+                      duration: const Duration(milliseconds: 250),
+                      curve: zoomed ? Curves.easeOutBack : Curves.easeIn,
+                      child: _RoundButton(
+                        icon: Icons.fit_screen_rounded,
+                        tooltip: context.l10n.resetView,
+                        onTap: viewport.reset,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           // Confirmation chip after a tool change (emoji carries the info
@@ -419,15 +433,28 @@ class _CanvasScreenState extends State<CanvasScreen>
           ),
           ListenableBuilder(
             listenable: controller,
-            builder: (context, _) => controller.isFilling
-                ? const Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 56),
-                      child: LoadingPixie(emoji: '🪣'),
-                    ),
-                  )
-                : const SizedBox.shrink(),
+            builder: (context, _) => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (child, anim) => FadeTransition(
+                opacity: anim,
+                child: ScaleTransition(
+                  scale: Tween(begin: 0.7, end: 1.0).animate(
+                      CurvedAnimation(
+                          parent: anim, curve: Curves.easeOutBack)),
+                  child: child,
+                ),
+              ),
+              child: controller.isFilling
+                  ? const Align(
+                      key: ValueKey('filling'),
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 56),
+                        child: LoadingPixie(emoji: '🪣'),
+                      ),
+                    )
+                  : const SizedBox.shrink(key: ValueKey('idle')),
+            ),
           ),
         ],
       ),

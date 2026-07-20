@@ -38,6 +38,9 @@ class CanvasController extends ChangeNotifier {
   /// animation overlay).
   final ValueNotifier<Offset?> lastFill = ValueNotifier<Offset?>(null);
 
+  /// Position of the last committed stamp (drives the sparkle overlay).
+  final ValueNotifier<Offset?> lastStamp = ValueNotifier<Offset?>(null);
+
   ui.Image? paintLayer;
   ui.Image? lineArt;
 
@@ -409,6 +412,9 @@ class CanvasController extends ChangeNotifier {
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.stamp);
     _pushUndoAndReplace(newLayer);
+    // Reset first so re-stamping the same spot still notifies.
+    lastStamp.value = null;
+    lastStamp.value = pos;
   }
 
   /// Radius of the shape currently being dragged. A bare tap still yields
@@ -560,6 +566,7 @@ class CanvasController extends ChangeNotifier {
     _lineArtSource?.dispose();
     backgroundImage?.dispose();
     lastFill.dispose();
+    lastStamp.dispose();
     repaint.dispose();
     super.dispose();
   }
