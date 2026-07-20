@@ -5,6 +5,7 @@ import '../canvas/fill_pattern.dart';
 import '../l10n/l10n.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_sheet.dart';
+import '../ui/sticker.dart';
 
 /// Bottom sheet with the four fill patterns; picking one selects the fill
 /// tool with that pattern.
@@ -60,18 +61,16 @@ class _PatternTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       onTap: onTap,
       playTick: false,
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: selected ? scheme.primaryContainer : scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(24),
-          border: selected
-              ? Border.all(color: scheme.primary, width: 2.5)
-              : null,
+        decoration: stickerSelectionDecoration(
+          selected: selected,
+          accent: const Color(0xFF2BB68A),
+          restColor: const Color(0xFFF5F0E8),
+          radius: 24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

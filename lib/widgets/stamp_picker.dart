@@ -9,6 +9,7 @@ import '../models/stamp.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
+import '../ui/sticker.dart';
 import '../util/anim_math.dart';
 import '../util/progress.dart';
 import '../util/sfx.dart';
@@ -109,11 +110,9 @@ class _StampTile extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        decoration: BoxDecoration(
-          color: selected
-              ? Theme.of(context).colorScheme.primaryContainer
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+        decoration: stickerSelectionDecoration(
+          selected: selected,
+          accent: const Color(0xFFFFB020),
         ),
         child: Center(
           child: Text(emoji, style: TextStyle(fontSize: selected ? 40 : 36)),
@@ -178,7 +177,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
         },
         child: Container(
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerLow,
+            color: const Color(0xFFF5F0E8),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Stack(

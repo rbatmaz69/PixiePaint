@@ -61,6 +61,26 @@ class StickerCard extends StatelessWidget {
   }
 }
 
+/// The one selection treatment for picker tiles, chips and pills: selected
+/// = white sticker chip with an accent border and colored shadow; at rest a
+/// quiet [restColor].
+BoxDecoration stickerSelectionDecoration({
+  required bool selected,
+  required Color accent,
+  double radius = 20,
+  Color restColor = Colors.transparent,
+}) {
+  return BoxDecoration(
+    color: selected ? Colors.white : restColor,
+    borderRadius: BorderRadius.circular(radius),
+    border: Border.all(
+      color: selected ? accent : Colors.transparent,
+      width: 2.5,
+    ),
+    boxShadow: selected ? PixieTokens.softShadow(accent) : null,
+  );
+}
+
 /// White round sticker button for chrome (back, share, settings, undo…):
 /// white circle, colored soft shadow, built-in Bouncy press.
 class StickerCircleButton extends StatelessWidget {

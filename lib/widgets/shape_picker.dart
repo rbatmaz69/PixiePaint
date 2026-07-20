@@ -6,6 +6,7 @@ import '../l10n/l10n.dart';
 import '../models/tool.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_sheet.dart';
+import '../ui/sticker.dart';
 
 String shapeEmoji(ShapeKind kind) => switch (kind) {
       ShapeKind.circle => '⭕',
@@ -52,11 +53,10 @@ Future<void> showShapePicker(
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            decoration: BoxDecoration(
-              color: selected
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : Theme.of(context).colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(20),
+            decoration: stickerSelectionDecoration(
+              selected: selected,
+              accent: const Color(0xFF7C6BF0),
+              restColor: const Color(0xFFF5F0E8),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

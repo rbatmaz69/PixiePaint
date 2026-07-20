@@ -8,16 +8,20 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/pixie_header.dart';
+import '../ui/pixie_palette.dart';
+import '../ui/sticker.dart';
 
-/// Soft tint per category (keyed by the stable German category name).
+/// Soft tint per category (keyed by the stable German category name),
+/// derived from the PixiePalette.
 Color _categoryTint(String category) => switch (category) {
-      'Tiere' => const Color(0xFFFFF3E0),
-      'Natur' => const Color(0xFFE8F5E9),
-      'Fahrzeuge' => const Color(0xFFE3F2FD),
-      'Fantasie' => const Color(0xFFF3E5F5),
-      'Leckereien' => const Color(0xFFFFF0F3),
-      'Weltraum' => const Color(0xFFE8EAF6),
-      _ => const Color(0xFFF5F5F5),
+      'Tiere' => PixiePalette.sunshineLight,
+      'Natur' => PixiePalette.mintLight,
+      'Fahrzeuge' => PixiePalette.skyLight,
+      'Fantasie' => PixiePalette.grapeLight,
+      'Leckereien' => PixiePalette.bubblegumLight,
+      'Weltraum' => const Color(0xFFE2E0FF),
+      _ => const Color(0xFFF5F0E8),
     };
 
 class PagePickerScreen extends StatefulWidget {
@@ -72,32 +76,11 @@ class _PagePickerScreenState extends State<PagePickerScreen>
               builder: (context, _) => SafeArea(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                      child: Row(
-                        children: [
-                          Bouncy(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.7),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(Icons.arrow_back_rounded,
-                                  color: scheme.onSurfaceVariant),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              context.l10n.pickerTitle,
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                          ),
-                        ],
-                      ),
+                    PixieHeader(
+                      emoji: '🖍️',
+                      title: context.l10n.pickerTitle,
+                      accent: PixiePalette.sunshine,
+                      onBack: () => Navigator.of(context).pop(),
                     ),
                     TabBar(
                       isScrollable: true,
@@ -105,13 +88,8 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                       indicator: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                        boxShadow:
+                            PixieTokens.softShadow(PixiePalette.sunshine),
                       ),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicatorPadding:
@@ -178,12 +156,10 @@ class _PageGrid extends StatelessWidget {
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => CanvasScreen(page: page)),
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: tint,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: PixieTokens.softShadow(tint),
-            ),
+          child: StickerCard(
+            color: tint,
+            radius: 24,
+            tiltIndex: i,
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
