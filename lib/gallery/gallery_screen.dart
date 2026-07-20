@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_screen.dart';
@@ -25,14 +27,25 @@ class GalleryScreen extends StatefulWidget {
   State<GalleryScreen> createState() => _GalleryScreenState();
 }
 
-class _GalleryScreenState extends State<GalleryScreen> {
+class _GalleryScreenState extends State<GalleryScreen>
+    with SingleTickerProviderStateMixin {
   late Future<List<Artwork>> _future;
   bool _favoritesOnly = false;
+
+  late final AnimationController _entrance = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 900))
+    ..forward();
 
   @override
   void initState() {
     super.initState();
     _future = ArtworkStore.list();
+  }
+
+  @override
+  void dispose() {
+    _entrance.dispose();
+    super.dispose();
   }
 
   void _reload() => setState(() => _future = ArtworkStore.list());
@@ -41,7 +54,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
     Sfx.instance.pop();
     await ArtworkStore.updateMeta(
         artwork.copyWith(favorite: !artwork.favorite));
-    _reload();
+    // Let the heart pop finish before favorites resort to the top.
+    await Future<void>.delayed(const Duration(milliseconds: 350));
+    if (mounted) _reload();
   }
 
   Future<void> _rename(Artwork artwork) async {
@@ -297,23 +312,27 @@ class _GalleryScreenState extends State<GalleryScreen> {
             return Column(
               children: [
                 if (hasFavorites)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                    child: Row(
-                      children: [
-                        _FilterChip(
-                          label: context.l10n.filterAll,
-                          selected: !_favoritesOnly,
-                          onTap: () =>
-                              setState(() => _favoritesOnly = false),
-                        ),
-                        const SizedBox(width: 8),
-                        _FilterChip(
-                          label: '❤️ ${context.l10n.filterFavorites}',
-                          selected: _favoritesOnly,
-                          onTap: () => setState(() => _favoritesOnly = true),
-                        ),
-                      ],
+                  _staggered(
+                    0,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Row(
+                        children: [
+                          _FilterChip(
+                            label: context.l10n.filterAll,
+                            selected: !_favoritesOnly,
+                            onTap: () =>
+                                setState(() => _favoritesOnly = false),
+                          ),
+                          const SizedBox(width: 8),
+                          _FilterChip(
+                            label: '❤️ ${context.l10n.filterFavorites}',
+                            selected: _favoritesOnly,
+                            onTap: () =>
+                                setState(() => _favoritesOnly = true),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 Expanded(
@@ -327,12 +346,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       childAspectRatio: 4 / 3.4,
                     ),
                     itemCount: shown.length,
-                    itemBuilder: (context, i) => _PolaroidCard(
-                      artwork: shown[i],
-                      onTap: () => _open(shown[i]),
-                      onLongPress: () => _showItemMenu(shown[i]),
-                      onToggleFavorite: () => _toggleFavorite(shown[i]),
-                    ),
+                    itemBuilder: (context, i) {
+                      Widget card = _PolaroidCard(
+                        artwork: shown[i],
+                        onTap: () => _open(shown[i]),
+                        onLongPress: () => _showItemMenu(shown[i]),
+                        onToggleFavorite: () => _toggleFavorite(shown[i]),
+                      );
+                      // One-shot staggered entrance for the first visible
+                      // items only (matches the page picker).
+                      if (i < 12) card = _staggered(i + 1, card);
+                      return card;
+                    },
                   ),
                 ),
               ],
@@ -342,11 +367,33 @@ class _GalleryScreenState extends State<GalleryScreen> {
       ),
     );
   }
+
+  /// Fade + rise on the shared entrance controller, slot-staggered.
+  Widget _staggered(int slot, Widget child) {
+    final anim = CurvedAnimation(
+      parent: _entrance,
+      curve: Interval(
+        (0.05 * slot).clamp(0.0, 0.5),
+        (0.05 * slot + 0.5).clamp(0.0, 1.0),
+        curve: Curves.easeOutCubic,
+      ),
+    );
+    return FadeTransition(
+      opacity: anim,
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(0, 0.12), end: Offset.zero)
+            .animate(anim),
+        child: child,
+      ),
+    );
+  }
 }
 
 /// "Polaroid" card: white frame, soft shadow, wider bottom edge carrying
-/// the kid-given name, heart toggle floating on the photo corner.
-class _PolaroidCard extends StatelessWidget {
+/// the kid-given name, heart toggle floating on the photo corner. The heart
+/// flips with a springy scale and fires a tiny burst when favorited —
+/// optimistic local state so feedback is instant despite the async store.
+class _PolaroidCard extends StatefulWidget {
   const _PolaroidCard({
     required this.artwork,
     required this.onTap,
@@ -360,11 +407,40 @@ class _PolaroidCard extends StatelessWidget {
   final VoidCallback onToggleFavorite;
 
   @override
+  State<_PolaroidCard> createState() => _PolaroidCardState();
+}
+
+class _PolaroidCardState extends State<_PolaroidCard>
+    with SingleTickerProviderStateMixin {
+  late bool _fav = widget.artwork.favorite;
+  late final AnimationController _burst = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 500));
+
+  @override
+  void didUpdateWidget(_PolaroidCard old) {
+    super.didUpdateWidget(old);
+    _fav = widget.artwork.favorite;
+  }
+
+  @override
+  void dispose() {
+    _burst.dispose();
+    super.dispose();
+  }
+
+  void _onHeartTap() {
+    setState(() => _fav = !_fav);
+    if (_fav) _burst.forward(from: 0);
+    widget.onToggleFavorite();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final artwork = widget.artwork;
     final hasName = artwork.name?.isNotEmpty ?? false;
     return Bouncy(
-      onTap: onTap,
-      onLongPress: onLongPress,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -412,11 +488,23 @@ class _PolaroidCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
+            // Heart burst lives in a full-card layer: the 40px button would
+            // clip it.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: _burst,
+                  builder: (context, _) => CustomPaint(
+                    painter: _HeartBurstPainter(_burst.value),
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               top: 4,
               right: 4,
               child: Bouncy(
-                onTap: onToggleFavorite,
+                onTap: _onHeartTap,
                 playTick: false,
                 child: Container(
                   width: 40,
@@ -433,9 +521,18 @@ class _PolaroidCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Text(
-                    artwork.favorite ? '❤️' : '🤍',
-                    style: const TextStyle(fontSize: 18),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    transitionBuilder: (child, anim) => ScaleTransition(
+                      scale: CurvedAnimation(
+                          parent: anim, curve: Curves.easeOutBack),
+                      child: child,
+                    ),
+                    child: Text(
+                      _fav ? '❤️' : '🤍',
+                      key: ValueKey(_fav),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   ),
                 ),
               ),
@@ -445,6 +542,40 @@ class _PolaroidCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Six tiny pink dots flying outward from the heart's corner, fading out.
+class _HeartBurstPainter extends CustomPainter {
+  _HeartBurstPainter(this.t);
+
+  final double t;
+
+  static const List<Color> _pinks = [
+    Color(0xFFEC407A),
+    Color(0xFFF8BBD0),
+    Color(0xFFFF7096),
+  ];
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (t <= 0 || t >= 1) return;
+    final center = Offset(size.width - 24, 24);
+    final eased = Curves.easeOutCubic.transform(t);
+    final radius = 10 + eased * 22;
+    final paint = Paint();
+    for (var i = 0; i < 6; i++) {
+      final angle = i * pi / 3 + 0.4;
+      paint.color = _pinks[i % 3].withValues(alpha: (1 - t).clamp(0.0, 1.0));
+      canvas.drawCircle(
+        center + Offset(cos(angle), sin(angle)) * radius,
+        3.5 * (1 - eased) + 1,
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_HeartBurstPainter old) => old.t != t;
 }
 
 /// Bouncy pill chip for the Alle/Favoriten filter row.
