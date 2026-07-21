@@ -46,6 +46,12 @@ class StrokeRenderer {
         _drawGlitter(canvas, stroke);
       case ToolKind.neon:
         _drawNeon(canvas, stroke);
+      case ToolKind.trail:
+        _drawTrail(canvas, stroke);
+      case ToolKind.dotted:
+        _drawDotted(canvas, stroke);
+      case ToolKind.twin:
+        _drawTwin(canvas, stroke);
       case ToolKind.fill:
       case ToolKind.stamp:
       case ToolKind.eyedropper:
@@ -312,6 +318,156 @@ class StrokeRenderer {
       ..color = Color.lerp(stroke.color, const Color(0xFFFFFFFF), 0.65)!
       ..strokeWidth = stroke.baseWidth * 0.9;
     canvas.drawPath(path, core);
+  }
+
+  // ------------------------------------------------------------ pattern pens
+
+  /// Trail-pen motif spacing/size relative to the brush size.
+  static const double kTrailSpacingFactor = 2.2;
+  static const double kDottedSpacingFactor = 1.8;
+
+  /// Motif placements for the trail pen: hearts/stars/dots strung along the
+  /// stroke every ~[baseWidth]·2.2 px of arc length. Like [glitterDots],
+  /// spacing walks the segments in order and the RNG is consumed strictly
+  /// per emitted motif, so appending points never moves earlier motifs —
+  /// the live preview stays rock steady.
+  static List<({Offset pos, double size, int motif, double angle})>
+      trailMotifs(List<StrokePoint> pts, double baseWidth, int seed) {
+    final rng = Random(seed);
+    final spacing = baseWidth * kTrailSpacingFactor;
+    final motifs = <({Offset pos, double size, int motif, double angle})>[];
+    var untilNext = 0.0; // first motif right at the start
+    for (var i = 1; i < pts.length; i++) {
+      final a = pts[i - 1].pos;
+      final b = pts[i].pos;
+      final seg = b - a;
+      final len = seg.distance;
+      if (len == 0) continue;
+      var d = untilNext;
+      while (d <= len) {
+        final t = d / len;
+        motifs.add((
+          pos: a + seg * t,
+          size: baseWidth * (0.85 + rng.nextDouble() * 0.5),
+          motif: motifs.length % 3,
+          angle: (rng.nextDouble() - 0.5) * 0.7,
+        ));
+        d += spacing;
+      }
+      untilNext = d - len;
+    }
+    return motifs;
+  }
+
+  /// Dot centers for the dotted pen — deterministic, no seed needed.
+  static List<Offset> dottedCenters(List<StrokePoint> pts, double spacing) {
+    final centers = <Offset>[];
+    var untilNext = 0.0;
+    for (var i = 1; i < pts.length; i++) {
+      final a = pts[i - 1].pos;
+      final b = pts[i].pos;
+      final seg = b - a;
+      final len = seg.distance;
+      if (len == 0) continue;
+      var d = untilNext;
+      while (d <= len) {
+        centers.add(a + seg * (d / len));
+        d += spacing;
+      }
+      untilNext = d - len;
+    }
+    return centers;
+  }
+
+  /// The polyline shifted by [offset] along the averaged per-point normal —
+  /// the two rails of the twin pen. Pure for unit testing.
+  static List<Offset> offsetPolyline(List<StrokePoint> pts, double offset) {
+    final out = <Offset>[];
+    for (var i = 0; i < pts.length; i++) {
+      final prev = pts[max(0, i - 1)].pos;
+      final next = pts[min(pts.length - 1, i + 1)].pos;
+      final dir = next - prev;
+      final len = dir.distance;
+      final normal =
+          len > 0 ? Offset(-dir.dy / len, dir.dx / len) : const Offset(0, 1);
+      out.add(pts[i].pos + normal * offset);
+    }
+    return out;
+  }
+
+  static void _drawTrail(Canvas canvas, Stroke stroke) {
+    if (stroke.points.length == 1) {
+      canvas.drawCircle(stroke.points.first.pos, stroke.baseWidth * 0.5,
+          Paint()..color = stroke.color);
+      return;
+    }
+    final paint = Paint()..color = stroke.color;
+    for (final m
+        in trailMotifs(stroke.points, stroke.baseWidth, stroke.seed)) {
+      canvas.save();
+      canvas.translate(m.pos.dx, m.pos.dy);
+      canvas.rotate(m.angle);
+      switch (m.motif) {
+        case 0:
+          canvas.drawPath(_smallHeartPath(Offset.zero, m.size), paint);
+        case 1:
+          canvas.drawPath(_starPath(Offset.zero, m.size), paint);
+        default:
+          canvas.drawCircle(Offset.zero, m.size * 0.45, paint);
+      }
+      canvas.restore();
+    }
+  }
+
+  /// Plump little heart centered on [c], sized to roughly match the star.
+  static Path _smallHeartPath(Offset c, double r) {
+    final w = r * 1.3;
+    final top = c.dy - r * 0.55;
+    final bottom = c.dy + r * 0.75;
+    return Path()
+      ..moveTo(c.dx, bottom)
+      ..cubicTo(c.dx - w, c.dy + r * 0.05, c.dx - w * 0.85, top - r * 0.45,
+          c.dx, top)
+      ..cubicTo(c.dx + w * 0.85, top - r * 0.45, c.dx + w, c.dy + r * 0.05,
+          c.dx, bottom)
+      ..close();
+  }
+
+  static void _drawDotted(Canvas canvas, Stroke stroke) {
+    final paint = Paint()..color = stroke.color;
+    final radius = stroke.baseWidth * 0.5;
+    if (stroke.points.length == 1) {
+      canvas.drawCircle(stroke.points.first.pos, radius, paint);
+      return;
+    }
+    for (final c in dottedCenters(
+        stroke.points, stroke.baseWidth * kDottedSpacingFactor)) {
+      canvas.drawCircle(c, radius, paint);
+    }
+  }
+
+  static void _drawTwin(Canvas canvas, Stroke stroke) {
+    final offset = stroke.baseWidth * 0.55;
+    final paint = _paintFor(stroke)..strokeWidth = stroke.baseWidth * 0.4;
+    if (stroke.points.length == 1) {
+      final p = stroke.points.first.pos;
+      canvas.drawCircle(
+          p - Offset(offset, 0), stroke.baseWidth * 0.2, Paint()..color = stroke.color);
+      canvas.drawCircle(
+          p + Offset(offset, 0), stroke.baseWidth * 0.2, Paint()..color = stroke.color);
+      return;
+    }
+    for (final side in [-offset, offset]) {
+      final rail = offsetPolyline(stroke.points, side);
+      final path = Path()..moveTo(rail.first.dx, rail.first.dy);
+      for (var i = 1; i < rail.length - 1; i++) {
+        final mid = Offset((rail[i].dx + rail[i + 1].dx) / 2,
+            (rail[i].dy + rail[i + 1].dy) / 2);
+        path.quadraticBezierTo(rail[i].dx, rail[i].dy, mid.dx, mid.dy);
+      }
+      path.lineTo(rail.last.dx, rail.last.dy);
+      canvas.drawPath(path, paint);
+    }
   }
 
   /// Quadratic-bezier midpoint smoothing over the raw pointer polyline.

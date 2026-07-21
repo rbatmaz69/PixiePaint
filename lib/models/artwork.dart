@@ -21,6 +21,10 @@ class Artwork {
   /// Color-by-number: region ids already filled correctly (resume state).
   final List<int> cbnFilled;
 
+  /// Scene stage this artwork was painted on (the rendered stage itself
+  /// lives in background.png like a photo).
+  final String? sceneId;
+
   const Artwork({
     required this.id,
     required this.pageId,
@@ -34,6 +38,7 @@ class Artwork {
     this.favorite = false,
     this.traceId,
     this.cbnFilled = const [],
+    this.sceneId,
   });
 
   File get paintFile => File('$dirPath/paint.png');
@@ -58,6 +63,7 @@ class Artwork {
         favorite: favorite ?? this.favorite,
         traceId: traceId,
         cbnFilled: cbnFilled,
+        sceneId: sceneId,
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,6 +78,7 @@ class Artwork {
         'favorite': favorite,
         if (traceId != null) 'traceId': traceId,
         if (cbnFilled.isNotEmpty) 'cbnFilled': cbnFilled,
+        if (sceneId != null) 'sceneId': sceneId,
       };
 
   static Artwork fromJson(Map<String, dynamic> json, String dirPath) => Artwork(
@@ -90,5 +97,6 @@ class Artwork {
         cbnFilled: ((json['cbnFilled'] as List?) ?? const [])
             .whereType<int>()
             .toList(),
+        sceneId: json['sceneId'] as String?,
       );
 }

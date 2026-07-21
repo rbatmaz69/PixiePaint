@@ -31,6 +31,26 @@ class RasterizedLineArt {
   }
 }
 
+/// Rasterizes a bundled SVG to a plain image (scene backgrounds) — no
+/// barrier alpha, so flood fills behave like in photo mode.
+Future<ui.Image> rasterizeSvgToImage(
+    String assetPath, int width, int height) async {
+  final info = await vg.loadPicture(SvgAssetLoader(assetPath), null);
+  final recorder = ui.PictureRecorder();
+  final canvas = ui.Canvas(recorder,
+      ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
+  final scale = min(width / info.size.width, height / info.size.height);
+  canvas.translate((width - info.size.width * scale) / 2,
+      (height - info.size.height * scale) / 2);
+  canvas.scale(scale);
+  canvas.drawPicture(info.picture);
+  final picture = recorder.endRecording();
+  final image = await picture.toImage(width, height);
+  picture.dispose();
+  info.picture.dispose();
+  return image;
+}
+
 /// Rasterizes a bundled SVG onto a transparent [width]x[height] canvas,
 /// scaled to fit and centered.
 Future<RasterizedLineArt> rasterizeSvgAsset(

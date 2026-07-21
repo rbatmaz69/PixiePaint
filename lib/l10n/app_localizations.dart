@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Nachspuren'**
   String get cardTrace;
 
+  /// No description provided for @cardScenes.
+  ///
+  /// In de, this message translates to:
+  /// **'Sticker-Welt'**
+  String get cardScenes;
+
+  /// No description provided for @scenePickerTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Such dir eine Bühne aus!'**
+  String get scenePickerTitle;
+
   /// No description provided for @traceTitle.
   ///
   /// In de, this message translates to:
@@ -271,6 +283,24 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Neon'**
   String get toolNeon;
+
+  /// No description provided for @toolTrail.
+  ///
+  /// In de, this message translates to:
+  /// **'Herzchen-Spur'**
+  String get toolTrail;
+
+  /// No description provided for @toolDotted.
+  ///
+  /// In de, this message translates to:
+  /// **'Punkte-Stift'**
+  String get toolDotted;
+
+  /// No description provided for @toolTwin.
+  ///
+  /// In de, this message translates to:
+  /// **'Doppellinie'**
+  String get toolTwin;
 
   /// No description provided for @toolSticker.
   ///
@@ -655,6 +685,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Bilder können nur nach der Eltern-Frage gelöscht werden.'**
   String get deleteGateSubtitle;
+
+  /// No description provided for @leftHandedTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Linkshänder-Modus'**
+  String get leftHandedTitle;
+
+  /// No description provided for @leftHandedSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.'**
+  String get leftHandedSubtitle;
 
   /// No description provided for @soundsTitle.
   ///

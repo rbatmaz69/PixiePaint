@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FC3F7"/>
+      <stop offset="1" stop-color="#0288D1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="768" fill="url(#sea)"/>
+  <g fill="#FFFFFF" opacity="0.25">
+    <path d="M 200 0 L 320 0 L 240 768 L 160 768 Z"/>
+    <path d="M 620 0 L 700 0 L 660 768 L 560 768 Z"/>
+  </g>
+  <path d="M 0 660 Q 256 620 512 660 Q 768 700 1024 650 L 1024 768 L 0 768 Z" fill="#FFE0B2"/>
+  <g fill="#26A69A">
+    <path d="M 120 700 C 100 640 140 600 116 540 C 108 580 84 600 100 660 C 84 640 76 660 92 700 Z"/>
+    <path d="M 900 710 C 880 650 920 610 896 550 C 888 590 864 610 880 670 C 864 650 856 670 872 710 Z"/>
+  </g>
+  <g fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.7">
+    <circle cx="300" cy="200" r="18"/>
+    <circle cx="340" cy="140" r="12"/>
+    <circle cx="760" cy="240" r="16"/>
+    <circle cx="800" cy="170" r="10"/>
+  </g>
+  <g fill="#FF8A65">
+    <path d="M 480 720 q 20 -50 0 -70 q -20 20 0 70"/>
+    <path d="M 510 724 q 20 -44 0 -60 q -20 16 0 60"/>
+  </g>
+</svg>

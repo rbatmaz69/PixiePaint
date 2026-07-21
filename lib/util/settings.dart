@@ -17,6 +17,10 @@ class Settings extends ChangeNotifier {
   bool soundsOn = true;
   bool musicOn = false;
 
+  /// Mirrors the canvas layout: tool rail on the right (landscape) and the
+  /// floating buttons swapped, so a left drawing hand never crosses them.
+  bool leftHanded = false;
+
   /// Which background-music loop plays next (cycled by Music on each start).
   int musicTrack = 0;
 
@@ -41,6 +45,7 @@ class Settings extends ChangeNotifier {
         soundsOn = json['soundsOn'] as bool? ?? true;
         musicOn = json['musicOn'] as bool? ?? false;
         musicTrack = json['musicTrack'] as int? ?? 0;
+        leftHanded = json['leftHanded'] as bool? ?? false;
         shareCount = json['shareCount'] as int? ?? 0;
         reviewRequested = json['reviewRequested'] as bool? ?? false;
         recentColors = (json['recentColors'] as List?)
@@ -58,12 +63,14 @@ class Settings extends ChangeNotifier {
       bool? deleteNeedsGate,
       bool? soundsOn,
       bool? musicOn,
-      int? musicTrack}) async {
+      int? musicTrack,
+      bool? leftHanded}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
     if (musicOn != null) this.musicOn = musicOn;
     if (musicTrack != null) this.musicTrack = musicTrack;
+    if (leftHanded != null) this.leftHanded = leftHanded;
     notifyListeners();
     await _persist();
   }
@@ -92,6 +99,7 @@ class Settings extends ChangeNotifier {
         'soundsOn': soundsOn,
         'musicOn': musicOn,
         'musicTrack': musicTrack,
+        'leftHanded': leftHanded,
         'shareCount': shareCount,
         'reviewRequested': reviewRequested,
         'recentColors': recentColors,

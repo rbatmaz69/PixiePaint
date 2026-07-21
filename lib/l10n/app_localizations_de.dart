@@ -27,6 +27,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardTrace => 'Nachspuren';
 
   @override
+  String get cardScenes => 'Sticker-Welt';
+
+  @override
+  String get scenePickerTitle => 'Such dir eine Bühne aus!';
+
+  @override
   String get traceTitle => 'Such dir eine Vorlage aus!';
 
   @override
@@ -94,6 +100,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get toolNeon => 'Neon';
+
+  @override
+  String get toolTrail => 'Herzchen-Spur';
+
+  @override
+  String get toolDotted => 'Punkte-Stift';
+
+  @override
+  String get toolTwin => 'Doppellinie';
 
   @override
   String get toolSticker => 'Sticker';
@@ -292,6 +307,13 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get deleteGateSubtitle =>
       'Bilder können nur nach der Eltern-Frage gelöscht werden.';
+
+  @override
+  String get leftHandedTitle => 'Linkshänder-Modus';
+
+  @override
+  String get leftHandedSubtitle =>
+      'Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.';
 
   @override
   String get soundsTitle => 'Töne & Vibration';

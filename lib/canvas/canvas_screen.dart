@@ -14,6 +14,7 @@ import '../models/artwork.dart';
 import '../models/cbn_spec.dart';
 import '../models/coloring_page.dart';
 import '../models/draw_op.dart';
+import '../models/scene.dart';
 import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
@@ -28,6 +29,7 @@ import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
+import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
@@ -59,12 +61,16 @@ class CanvasScreen extends StatefulWidget {
     this.photoPath,
     this.photoLineArt,
     this.traceTemplate,
+    this.scene,
   });
 
   final ColoringPage? page;
   final Artwork? resume;
   final String? photoPath;
   final TraceTemplate? traceTemplate;
+
+  /// A ready-made stage rendered into the (eraser-proof) photo background.
+  final Scene? scene;
 
   /// Ownership passes to the canvas controller, which disposes it.
   final RasterizedLineArt? photoLineArt;
@@ -80,6 +86,7 @@ class _CanvasScreenState extends State<CanvasScreen>
   late final String artworkId;
   String? pageId;
   String? traceId;
+  String? sceneId;
   TraceCoverage? _traceCoverage;
   bool _traceCelebrated = false;
 
@@ -113,7 +120,12 @@ class _CanvasScreenState extends State<CanvasScreen>
     artworkId = widget.resume?.id ?? ArtworkStore.newId();
     pageId = widget.resume?.pageId ?? widget.page?.id;
     traceId = widget.traceTemplate?.id ?? widget.resume?.traceId;
-    hasPhoto = widget.photoPath != null || (widget.resume?.hasPhoto ?? false);
+    sceneId = widget.scene?.id ?? widget.resume?.sceneId;
+    // A scene is persisted exactly like a photo background: rendered once,
+    // saved as background.png, protected from the eraser.
+    hasPhoto = widget.photoPath != null ||
+        widget.scene != null ||
+        (widget.resume?.hasPhoto ?? false);
     hasPhotoLineArt =
         widget.photoLineArt != null ||
         (widget.resume?.hasPhotoLineArt ?? false);
@@ -152,7 +164,10 @@ class _CanvasScreenState extends State<CanvasScreen>
       );
     }
     final photoPath = widget.photoPath;
-    if (photoPath != null) {
+    if (widget.scene != null) {
+      controller.setBackground(await rasterizeSvgToImage(
+          widget.scene!.assetPath, kCanvasWidth, kCanvasHeight));
+    } else if (photoPath != null) {
       final bytes = await File(photoPath).readAsBytes();
       controller.setBackground(
         await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight),
@@ -385,6 +400,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       id: artworkId,
       pageId: pageId,
       traceId: traceId,
+      sceneId: sceneId,
       cbnFilled: _cbnFilledRegions.toList(),
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
@@ -538,20 +554,23 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   Widget _buildLandscape() {
+    final rail = _LeftRail(
+      controller: controller,
+      showFill: traceId == null,
+      fillOnly: _isCbn,
+      onBack: _leave,
+      onShare: _share,
+    );
+    final canvasArea = Expanded(child: _canvasArea(portrait: false));
+    // Left-handed kids get the rail on the right, out of the drawing arm's
+    // way.
+    final leftHanded = Settings.instance.leftHanded;
     return Column(
       children: [
         Expanded(
           child: Row(
-            children: [
-              _LeftRail(
-                controller: controller,
-                showFill: traceId == null,
-                fillOnly: _isCbn,
-                onBack: _leave,
-                onShare: _share,
-              ),
-              Expanded(child: _canvasArea(portrait: false)),
-            ],
+            children:
+                leftHanded ? [canvasArea, rail] : [rail, canvasArea],
           ),
         ),
         SizedBox(height: 76, child: _palette()),
@@ -633,7 +652,8 @@ class _CanvasScreenState extends State<CanvasScreen>
           if (portrait) ...[
             Positioned(
               top: 8,
-              left: 8,
+              left: Settings.instance.leftHanded ? null : 8,
+              right: Settings.instance.leftHanded ? 8 : null,
               child: _RoundButton(
                 icon: Icons.arrow_back_rounded,
                 tooltip: context.l10n.back,
@@ -642,7 +662,8 @@ class _CanvasScreenState extends State<CanvasScreen>
             ),
             Positioned(
               top: 8,
-              right: 60,
+              left: Settings.instance.leftHanded ? 60 : null,
+              right: Settings.instance.leftHanded ? null : 60,
               child: _RoundButton(
                 icon: Icons.ios_share_rounded,
                 tooltip: context.l10n.shareForParents,
@@ -652,7 +673,8 @@ class _CanvasScreenState extends State<CanvasScreen>
           ],
           Positioned(
             top: 8,
-            right: 8,
+            left: Settings.instance.leftHanded ? 8 : null,
+            right: Settings.instance.leftHanded ? null : 8,
             child: ListenableBuilder(
               listenable: viewport,
               builder: (context, _) {

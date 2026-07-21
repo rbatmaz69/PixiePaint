@@ -7,6 +7,7 @@ import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../photo/photo_lineart_screen.dart';
 import '../trace/trace_picker_screen.dart';
+import 'scene_picker_screen.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
@@ -119,6 +120,22 @@ class _HomeScreenState extends State<HomeScreen>
                             _staggered(
                               3,
                               _BigCard(
+                                emoji: '🏞️',
+                                label: context.l10n.cardScenes,
+                                gradient: PixieGradients.scenes,
+                                width: cardW,
+                                height: cardH,
+                                tiltIndex: 3,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          const ScenePickerScreen()),
+                                ),
+                              ),
+                            ),
+                            _staggered(
+                              4,
+                              _BigCard(
                                 emoji: '📷',
                                 label: context.l10n.cardPhoto,
                                 gradient: PixieGradients.photo,
@@ -129,14 +146,14 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              4,
+                              5,
                               _BigCard(
                                 emoji: '✍️',
                                 label: context.l10n.cardTrace,
                                 gradient: PixieGradients.trace,
                                 width: cardW,
                                 height: cardH,
-                                tiltIndex: 4,
+                                tiltIndex: 5,
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (_) =>
@@ -145,14 +162,14 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              5,
+                              6,
                               _BigCard(
                                 emoji: '🖼️',
                                 label: context.l10n.cardGallery,
                                 gradient: PixieGradients.gallery,
                                 width: cardW,
                                 height: cardH,
-                                tiltIndex: 5,
+                                tiltIndex: 6,
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (_) => const GalleryScreen()),

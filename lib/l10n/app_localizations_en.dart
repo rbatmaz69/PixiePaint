@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardTrace => 'Tracing';
 
   @override
+  String get cardScenes => 'Sticker world';
+
+  @override
+  String get scenePickerTitle => 'Pick a stage!';
+
+  @override
   String get traceTitle => 'Pick something to trace!';
 
   @override
@@ -94,6 +100,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolNeon => 'Neon';
+
+  @override
+  String get toolTrail => 'Charm trail';
+
+  @override
+  String get toolDotted => 'Dotty pen';
+
+  @override
+  String get toolTwin => 'Double line';
 
   @override
   String get toolSticker => 'Sticker';
@@ -291,6 +306,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteGateSubtitle =>
       'Pictures can only be deleted after the parent question.';
+
+  @override
+  String get leftHandedTitle => 'Left-handed mode';
+
+  @override
+  String get leftHandedSubtitle =>
+      'Tools move to the right side so the drawing hand never covers them.';
 
   @override
   String get soundsTitle => 'Sounds & vibration';

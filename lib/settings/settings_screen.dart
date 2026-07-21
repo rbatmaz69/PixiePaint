@@ -54,12 +54,14 @@ class _SettingsScreenState extends State<SettingsScreen>
       {bool? stylusOnly,
       bool? deleteNeedsGate,
       bool? soundsOn,
-      bool? musicOn}) async {
+      bool? musicOn,
+      bool? leftHanded}) async {
     await Settings.instance.update(
         stylusOnly: stylusOnly,
         deleteNeedsGate: deleteNeedsGate,
         soundsOn: soundsOn,
-        musicOn: musicOn);
+        musicOn: musicOn,
+        leftHanded: leftHanded);
     if (musicOn != null) await Music.instance.setOn(musicOn);
     Sfx.instance.tick();
   }
@@ -108,6 +110,14 @@ class _SettingsScreenState extends State<SettingsScreen>
                               subtitle: context.l10n.deleteGateSubtitle,
                               value: settings.deleteNeedsGate,
                               onChanged: (v) => _update(deleteNeedsGate: v),
+                            ),
+                            _KidRow(
+                              emoji: '✋',
+                              tint: PixiePalette.skyLight,
+                              title: context.l10n.leftHandedTitle,
+                              subtitle: context.l10n.leftHandedSubtitle,
+                              value: settings.leftHanded,
+                              onChanged: (v) => _update(leftHanded: v),
                             ),
                           ],
                         ),

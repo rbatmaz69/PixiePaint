@@ -1,3 +1,5 @@
+// Append-only: the replay op log stores tool kinds by name (unknown names
+// fall back to brush), so existing values must never be renamed or removed.
 enum ToolKind {
   brush,
   marker,
@@ -10,6 +12,9 @@ enum ToolKind {
   stamp,
   eyedropper,
   shape,
+  trail,
+  dotted,
+  twin,
 }
 
 /// Drag-to-draw shape motifs for [ToolKind.shape].
