@@ -15,6 +15,10 @@ class Settings extends ChangeNotifier {
   bool stylusOnly = false;
   bool deleteNeedsGate = false;
   bool soundsOn = true;
+  bool musicOn = false;
+
+  /// Which background-music loop plays next (cycled by Music on each start).
+  int musicTrack = 0;
 
   /// Successful shares so far — drives the one-time review prompt.
   int shareCount = 0;
@@ -35,6 +39,8 @@ class Settings extends ChangeNotifier {
         stylusOnly = json['stylusOnly'] as bool? ?? false;
         deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
         soundsOn = json['soundsOn'] as bool? ?? true;
+        musicOn = json['musicOn'] as bool? ?? false;
+        musicTrack = json['musicTrack'] as int? ?? 0;
         shareCount = json['shareCount'] as int? ?? 0;
         reviewRequested = json['reviewRequested'] as bool? ?? false;
         recentColors = (json['recentColors'] as List?)
@@ -48,10 +54,16 @@ class Settings extends ChangeNotifier {
   }
 
   Future<void> update(
-      {bool? stylusOnly, bool? deleteNeedsGate, bool? soundsOn}) async {
+      {bool? stylusOnly,
+      bool? deleteNeedsGate,
+      bool? soundsOn,
+      bool? musicOn,
+      int? musicTrack}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
+    if (musicOn != null) this.musicOn = musicOn;
+    if (musicTrack != null) this.musicTrack = musicTrack;
     notifyListeners();
     await _persist();
   }
@@ -78,6 +90,8 @@ class Settings extends ChangeNotifier {
         'stylusOnly': stylusOnly,
         'deleteNeedsGate': deleteNeedsGate,
         'soundsOn': soundsOn,
+        'musicOn': musicOn,
+        'musicTrack': musicTrack,
         'shareCount': shareCount,
         'reviewRequested': reviewRequested,
         'recentColors': recentColors,

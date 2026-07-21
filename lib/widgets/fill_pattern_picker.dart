@@ -27,6 +27,10 @@ Future<void> showFillPatternPicker(
             (FillPattern.dots, context.l10n.patternDots),
             (FillPattern.stripes, context.l10n.patternStripes),
             (FillPattern.rainbow, context.l10n.patternRainbow),
+            (FillPattern.hearts, context.l10n.patternHearts),
+            (FillPattern.stars, context.l10n.patternStars),
+            (FillPattern.checker, context.l10n.patternChecker),
+            (FillPattern.bubbles, context.l10n.patternBubbles),
           ])
             _PatternTile(
               pattern: pattern,

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- big moon -->
+    <circle cx="512" cy="384" r="230"/>
+    <!-- craters (right half, away from the face) -->
+    <circle cx="614" cy="280" r="36"/>
+    <circle cx="648" cy="430" r="28"/>
+    <circle cx="560" cy="540" r="22"/>
+    <circle cx="540" cy="200" r="18"/>
+    <!-- sleeping face (lower left) -->
+    <path d="M 396 372 C 408 386 428 386 440 372"/>
+    <path d="M 490 372 C 502 386 522 386 534 372"/>
+    <path d="M 436 452 C 452 468 478 468 494 452"/>
+    <!-- stars -->
+    <path d="M 170 180 L 182 212 L 214 224 L 182 236 L 170 268 L 158 236 L 126 224 L 158 212 Z"/>
+    <path d="M 860 200 L 872 232 L 904 244 L 872 256 L 860 288 L 848 256 L 816 244 L 848 232 Z"/>
+    <path d="M 190 560 L 200 586 L 226 596 L 200 606 L 190 632 L 180 606 L 154 596 L 180 586 Z"/>
+    <path d="M 830 560 L 840 586 L 866 596 L 840 606 L 830 632 L 820 606 L 794 596 L 820 586 Z"/>
+    <path d="M 512 84 L 520 104 L 540 112 L 520 120 L 512 140 L 504 120 L 484 112 L 504 104 Z"/>
+    <!-- little cloud, clear of the moon -->
+    <path d="M 96 400 C 96 380 116 368 136 372 C 142 352 166 344 184 352 C 190 336 214 332 228 344 C 248 340 264 356 260 374 C 272 384 270 402 256 408 L 108 408 C 100 408 96 404 96 400 Z"/>
+  </g>
+</svg>

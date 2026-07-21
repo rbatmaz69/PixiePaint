@@ -108,6 +108,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get shapeRainbow => 'Regenbogen';
 
   @override
+  String get symmetryTitle => 'Zauber-Spiegel';
+
+  @override
+  String get symmetryOff => 'Normal';
+
+  @override
+  String get symmetryButterfly => 'Schmetterling';
+
+  @override
+  String get symmetryFlower => 'Blume';
+
+  @override
+  String get symmetrySnowflake => 'Schneeflocke';
+
+  @override
   String get sizeTitle => 'Pinselgröße';
 
   @override
@@ -139,6 +154,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get patternRainbow => 'Regenbogen';
+
+  @override
+  String get patternHearts => 'Herzen';
+
+  @override
+  String get patternStars => 'Sterne';
+
+  @override
+  String get patternChecker => 'Karo';
+
+  @override
+  String get patternBubbles => 'Seifenblasen';
 
   @override
   String get galleryTitle => 'Meine Bilder';
@@ -246,6 +273,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get soundsSubtitle => 'Leise Geräusche beim Malen und Stempeln.';
 
   @override
+  String get musicTitle => 'Hintergrund-Musik';
+
+  @override
+  String get musicSubtitle => 'Sanfte Spieluhr-Musik beim Malen.';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override
@@ -284,6 +317,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get rewardLockedTitle => 'Noch geheim!';
+
+  @override
+  String get packBasics => 'Lieblinge';
+
+  @override
+  String get packAnimals => 'Tiere';
+
+  @override
+  String get packSpace => 'Weltraum';
+
+  @override
+  String get packFood => 'Leckereien';
+
+  @override
+  String get packVehicles => 'Fahrzeuge';
+
+  @override
+  String get packRewards => 'Belohnungs-Sticker';
 
   @override
   String rewardRulePaintings(int n) {

@@ -11,6 +11,7 @@ import 'fill_pattern_picker.dart';
 import 'shape_picker.dart' as shapes;
 import 'size_picker.dart';
 import 'stamp_picker.dart';
+import 'symmetry_picker.dart' as symmetry;
 
 /// Accent color per tool — used for the selected highlight so every tool
 /// feels like its own little character. Harmonized with the PixiePalette.
@@ -148,6 +149,10 @@ class ToolBarRail extends StatelessWidget {
           color: controller.color,
           onTap: () => showSizePicker(context, controller),
         ),
+        _SymmetryButton(
+          controller: controller,
+          onTap: () => symmetry.showSymmetryPicker(context, controller),
+        ),
       ]),
       _group(context, [
         _ActionButton(
@@ -280,6 +285,68 @@ class _ToolButton extends StatelessWidget {
                   ),
                 ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Magic-mirror button: shows the active mode's motif (🦋/🌸/❄️), or a dimmed
+/// butterfly when symmetry is off. Opens the symmetry picker sheet.
+class _SymmetryButton extends StatelessWidget {
+  const _SymmetryButton({required this.controller, required this.onTap});
+
+  final CanvasController controller;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final active = controller.symmetryFolds > 1;
+    const accent = Color(0xFF7C6BF0);
+    return Tooltip(
+      message: context.l10n.symmetryTitle,
+      child: Bouncy(
+        onTap: onTap,
+        playTick: false,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutBack,
+          width: 52,
+          height: 52,
+          margin: const EdgeInsets.all(1),
+          decoration: BoxDecoration(
+            color: active ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(active ? 18 : 26),
+            border: Border.all(
+              color: active ? accent : Colors.transparent,
+              width: 2.5,
+            ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: accent.withValues(alpha: 0.25),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Center(
+            child: AnimatedScale(
+              scale: active ? 1.18 : 1.0,
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutBack,
+              child: Opacity(
+                opacity: active ? 1.0 : 0.4,
+                child: Text(
+                  active
+                      ? symmetry.symmetryEmoji(controller.symmetryFolds)
+                      : '🦋',
+                  style: const TextStyle(fontSize: 24),
+                ),
+              ),
+            ),
           ),
         ),
       ),

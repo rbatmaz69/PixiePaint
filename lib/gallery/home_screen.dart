@@ -12,6 +12,8 @@ import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../util/music.dart';
+import '../util/settings.dart';
 import '../widgets/parental_gate.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
@@ -144,6 +146,33 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   );
                 }),
+              ),
+              Positioned(
+                top: 8,
+                left: 8,
+                child: _staggered(
+                  5,
+                  ListenableBuilder(
+                    listenable: Settings.instance,
+                    builder: (context, _) {
+                      final on = Settings.instance.musicOn;
+                      return StickerCircleButton(
+                        icon: on
+                            ? Icons.music_note_rounded
+                            : Icons.music_off_rounded,
+                        tooltip: context.l10n.musicTitle,
+                        accent: on
+                            ? PixiePalette.bubblegum
+                            : PixiePalette.grape,
+                        onTap: () async {
+                          final next = !Settings.instance.musicOn;
+                          await Settings.instance.update(musicOn: next);
+                          await Music.instance.setOn(next);
+                        },
+                      );
+                    },
+                  ),
+                ),
               ),
               Positioned(
                 top: 8,

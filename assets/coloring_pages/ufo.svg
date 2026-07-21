@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- dome -->
+    <path d="M 402 300 C 402 210 452 160 512 160 C 572 160 622 210 622 300 Z"/>
+    <!-- pilot window -->
+    <circle cx="512" cy="252" r="40"/>
+    <!-- saucer body -->
+    <ellipse cx="512" cy="345" rx="240" ry="80"/>
+    <!-- lights -->
+    <circle cx="360" cy="352" r="22"/>
+    <circle cx="436" cy="378" r="22"/>
+    <circle cx="512" cy="388" r="22"/>
+    <circle cx="588" cy="378" r="22"/>
+    <circle cx="664" cy="352" r="22"/>
+    <!-- beam -->
+    <path d="M 442 424 L 362 660 L 662 660 L 582 424 Z"/>
+    <!-- little planet below -->
+    <circle cx="810" cy="640" r="70"/>
+    <ellipse cx="810" cy="640" rx="105" ry="26"/>
+    <!-- stars -->
+    <path d="M 180 160 L 192 192 L 224 204 L 192 216 L 180 248 L 168 216 L 136 204 L 168 192 Z"/>
+    <path d="M 840 180 L 850 206 L 876 216 L 850 226 L 840 252 L 830 226 L 804 216 L 830 206 Z"/>
+    <path d="M 200 480 L 208 500 L 228 508 L 208 516 L 200 536 L 192 516 L 172 508 L 192 500 Z"/>
+  </g>
+</svg>

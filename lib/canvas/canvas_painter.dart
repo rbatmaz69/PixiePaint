@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/tool.dart';
 import 'canvas_controller.dart';
 import 'shape_renderer.dart';
 import 'stroke_renderer.dart';
+import 'symmetry.dart';
 
 class CanvasPainter extends CustomPainter {
   CanvasPainter(this.controller) : super(repaint: controller.repaint);
@@ -29,13 +32,29 @@ class CanvasPainter extends CustomPainter {
     if (paintLayer != null) {
       canvas.drawImage(paintLayer, Offset.zero, Paint());
     }
-    if (stroke != null) StrokeRenderer.draw(canvas, stroke);
+    if (stroke != null) {
+      for (final copy in symmetryCopies(controller.symmetryFolds)) {
+        canvas.save();
+        applySymmetryTransform(canvas, controller.canvasCenter, copy);
+        StrokeRenderer.draw(canvas, stroke);
+        canvas.restore();
+      }
+    }
     if (erasing) canvas.restore();
+
+    if (controller.symmetryFolds > 1) {
+      _drawSymmetryGuides(canvas, size);
+    }
 
     final pendingStamp = controller.pendingStampPos;
     if (pendingStamp != null) {
-      StrokeRenderer.drawStamp(canvas, controller.stampEmoji, pendingStamp,
-          stampSizeFor(controller.brushSize));
+      for (final copy in symmetryCopies(controller.symmetryFolds)) {
+        StrokeRenderer.drawStamp(
+            canvas,
+            controller.stampEmoji,
+            symmetryPoint(pendingStamp, controller.canvasCenter, copy),
+            stampSizeFor(controller.brushSize));
+      }
     }
 
     // Semi-transparent live preview of the shape being dragged out.
@@ -58,6 +77,26 @@ class CanvasPainter extends CustomPainter {
     final pickPos = controller.pendingPickPos;
     if (pickPos != null) {
       _drawPickLoupe(canvas, pickPos, controller.pickedPreview);
+    }
+  }
+
+  /// Faint spokes through the center showing where the magic-mirror copies
+  /// land: one vertical axis for the butterfly mirror, N spokes otherwise.
+  void _drawSymmetryGuides(Canvas canvas, Size size) {
+    final folds = controller.symmetryFolds;
+    final center = controller.canvasCenter;
+    final paint = Paint()
+      ..color = const Color(0xFF7C6BF0).withValues(alpha: 0.18)
+      ..strokeWidth = 3;
+    final reach = size.longestSide;
+    if (folds == 2) {
+      canvas.drawLine(Offset(center.dx, 0), Offset(center.dx, size.height), paint);
+      return;
+    }
+    for (var k = 0; k < folds; k++) {
+      final a = 2 * pi * k / folds - pi / 2;
+      canvas.drawLine(
+          center, center + Offset(cos(a), sin(a)) * reach, paint);
     }
   }
 

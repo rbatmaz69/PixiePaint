@@ -7,6 +7,7 @@ import '../ui/bouncy.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../util/music.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
@@ -50,11 +51,16 @@ class _SettingsScreenState extends State<SettingsScreen>
   /// Persist and tick — after the update, so switching sounds OFF is
   /// correctly silent and switching ON ticks.
   Future<void> _update(
-      {bool? stylusOnly, bool? deleteNeedsGate, bool? soundsOn}) async {
+      {bool? stylusOnly,
+      bool? deleteNeedsGate,
+      bool? soundsOn,
+      bool? musicOn}) async {
     await Settings.instance.update(
         stylusOnly: stylusOnly,
         deleteNeedsGate: deleteNeedsGate,
-        soundsOn: soundsOn);
+        soundsOn: soundsOn,
+        musicOn: musicOn);
+    if (musicOn != null) await Music.instance.setOn(musicOn);
     Sfx.instance.tick();
   }
 
@@ -122,6 +128,14 @@ class _SettingsScreenState extends State<SettingsScreen>
                               subtitle: context.l10n.soundsSubtitle,
                               value: settings.soundsOn,
                               onChanged: (v) => _update(soundsOn: v),
+                            ),
+                            _KidRow(
+                              emoji: '🎶',
+                              tint: PixiePalette.bubblegumLight,
+                              title: context.l10n.musicTitle,
+                              subtitle: context.l10n.musicSubtitle,
+                              value: settings.musicOn,
+                              onChanged: (v) => _update(musicOn: v),
                             ),
                           ],
                         ),

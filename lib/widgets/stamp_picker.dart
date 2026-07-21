@@ -14,29 +14,39 @@ import '../util/anim_math.dart';
 import '../util/progress.dart';
 import '../util/sfx.dart';
 
-/// Bottom sheet with a grid of emoji stamps; picking one selects the stamp
-/// tool with that motif. Reward stickers appear at the end — locked ones as
-/// mystery boxes that wiggle now and then and explain how to earn them.
+/// Bottom sheet with themed stamp packs; picking a stamp selects the stamp
+/// tool with that motif. Locked packs and the individual reward stickers
+/// appear as mystery boxes that wiggle now and then and explain their goal.
 Future<void> showStampPicker(
     BuildContext context, CanvasController controller) {
   return showKidSheet<void>(
     context: context,
     emoji: controller.stampEmoji,
     title: context.l10n.toolSticker,
-    child: _StampGrid(controller: controller),
+    child: _StampSections(controller: controller),
   );
 }
 
-class _StampGrid extends StatefulWidget {
-  const _StampGrid({required this.controller});
+String stampPackLabel(BuildContext context, StampPack pack) =>
+    switch (pack.id) {
+      'basics' => context.l10n.packBasics,
+      'animals2' => context.l10n.packAnimals,
+      'space' => context.l10n.packSpace,
+      'food' => context.l10n.packFood,
+      'vehicles' => context.l10n.packVehicles,
+      _ => pack.id,
+    };
+
+class _StampSections extends StatefulWidget {
+  const _StampSections({required this.controller});
 
   final CanvasController controller;
 
   @override
-  State<_StampGrid> createState() => _StampGridState();
+  State<_StampSections> createState() => _StampSectionsState();
 }
 
-class _StampGridState extends State<_StampGrid>
+class _StampSectionsState extends State<_StampSections>
     with SingleTickerProviderStateMixin {
   /// One shared ticker for all locked tiles' wiggle. Bound to the sheet's
   /// (short) lifetime — same acceptability class as LoadingPixie.
@@ -50,47 +60,83 @@ class _StampGridState extends State<_StampGrid>
     super.dispose();
   }
 
+  static const _gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: 80,
+    mainAxisSpacing: 6,
+    crossAxisSpacing: 6,
+  );
+
+  Widget _header(BuildContext context, String emoji, String label) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 14, 4, 8),
+      child: Row(
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 18)),
+          const SizedBox(width: 8),
+          Text(label, style: Theme.of(context).textTheme.titleMedium),
+        ],
+      ),
+    );
+  }
+
+  Widget _grid(List<Widget> tiles) {
+    return GridView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: _gridDelegate,
+      children: tiles,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = widget.controller;
-    return GridView.builder(
+    var lockedIndex = 0; // staggers the wiggle across all locked tiles
+
+    Widget stampTile(String emoji) => _StampTile(
+          emoji: emoji,
+          selected: controller.stampEmoji == emoji,
+          onTap: () {
+            controller.selectStamp(emoji);
+            Navigator.of(context).pop();
+          },
+        );
+
+    final children = <Widget>[];
+    for (final pack in kStampPacks) {
+      children.add(_header(
+          context,
+          pack.unlock != null &&
+                  !Progress.instance.isRewardUnlocked(pack.unlock!)
+              ? '🔒'
+              : pack.emoji,
+          stampPackLabel(context, pack)));
+      final unlock = pack.unlock;
+      if (unlock != null && !Progress.instance.isRewardUnlocked(unlock)) {
+        children.add(_grid([
+          _LockedRewardTile(
+              reward: unlock, index: lockedIndex++, wiggle: _wiggle),
+        ]));
+        continue;
+      }
+      children.add(_grid([for (final emoji in pack.stamps) stampTile(emoji)]));
+    }
+
+    // Individual reward stickers, earned one by one.
+    children.add(_header(context, '🎁', context.l10n.packRewards));
+    children.add(_grid([
+      for (final reward in kRewards)
+        if (Progress.instance.isRewardUnlocked(reward))
+          stampTile(reward.emoji)
+        else
+          _LockedRewardTile(
+              reward: reward, index: lockedIndex++, wiggle: _wiggle),
+    ]));
+
+    return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 80,
-        mainAxisSpacing: 6,
-        crossAxisSpacing: 6,
-      ),
-      itemCount: kStamps.length + kRewards.length,
-      itemBuilder: (context, i) {
-        if (i < kStamps.length) {
-          return _StampTile(
-            emoji: kStamps[i],
-            selected: controller.stampEmoji == kStamps[i],
-            onTap: () {
-              controller.selectStamp(kStamps[i]);
-              Navigator.of(context).pop();
-            },
-          );
-        }
-        final rewardIndex = i - kStamps.length;
-        final reward = kRewards[rewardIndex];
-        if (Progress.instance.isRewardUnlocked(reward)) {
-          return _StampTile(
-            emoji: reward.emoji,
-            selected: controller.stampEmoji == reward.emoji,
-            onTap: () {
-              controller.selectStamp(reward.emoji);
-              Navigator.of(context).pop();
-            },
-          );
-        }
-        return _LockedRewardTile(
-          reward: reward,
-          index: rewardIndex,
-          wiggle: _wiggle,
-        );
-      },
+      children: children,
     );
   }
 }
@@ -122,9 +168,9 @@ class _StampTile extends StatelessWidget {
   }
 }
 
-/// Mystery box for a still-locked reward sticker: big ❓ with a lock badge.
-/// Wags gently now and then (shared ticker), shakes "no" when tapped, then
-/// explains the goal in kid terms.
+/// Mystery box for a still-locked reward sticker or stamp pack: big ❓ with a
+/// lock badge. Wags gently now and then (shared ticker), shakes "no" when
+/// tapped, then explains the goal in kid terms.
 class _LockedRewardTile extends StatefulWidget {
   const _LockedRewardTile({
     required this.reward,

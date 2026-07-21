@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- antennae -->
+    <path d="M 452 150 C 440 110 420 96 396 90"/>
+    <circle cx="384" cy="78" r="18"/>
+    <path d="M 572 150 C 584 110 604 96 628 90"/>
+    <circle cx="640" cy="78" r="18"/>
+    <!-- head -->
+    <path d="M 512 130 C 616 130 668 200 668 268 C 668 350 600 404 512 404 C 424 404 356 350 356 268 C 356 200 408 130 512 130 Z"/>
+    <!-- big friendly eyes -->
+    <ellipse cx="458" cy="262" rx="40" ry="52"/>
+    <circle cx="458" cy="276" r="14"/>
+    <ellipse cx="566" cy="262" rx="40" ry="52"/>
+    <circle cx="566" cy="276" r="14"/>
+    <!-- smile -->
+    <path d="M 470 348 C 490 368 534 368 554 348"/>
+    <!-- body -->
+    <path d="M 448 404 C 430 440 424 500 432 552 C 440 596 472 620 512 620 C 552 620 584 596 592 552 C 600 500 594 440 576 404 Z"/>
+    <!-- belly dot -->
+    <circle cx="512" cy="512" r="34"/>
+    <!-- arms -->
+    <path d="M 436 430 C 380 450 350 490 344 540"/>
+    <circle cx="338" cy="560" r="22"/>
+    <path d="M 588 430 C 644 450 674 490 680 540"/>
+    <circle cx="686" cy="560" r="22"/>
+    <!-- feet -->
+    <ellipse cx="470" cy="660" rx="46" ry="24"/>
+    <ellipse cx="554" cy="660" rx="46" ry="24"/>
+    <!-- stars -->
+    <path d="M 170 240 L 180 266 L 206 276 L 180 286 L 170 312 L 160 286 L 134 276 L 160 266 Z"/>
+    <path d="M 856 300 L 866 326 L 892 336 L 866 346 L 856 372 L 846 346 L 820 336 L 846 326 Z"/>
+  </g>
+</svg>

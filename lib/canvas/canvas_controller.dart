@@ -18,6 +18,7 @@ import 'flood_fill.dart' as ff;
 import 'shape_renderer.dart';
 import 'stroke.dart';
 import 'stroke_renderer.dart';
+import 'symmetry.dart';
 import 'undo_stack.dart';
 
 /// Central canvas state: layers, active stroke, tools, undo/redo.
@@ -60,6 +61,10 @@ class CanvasController extends ChangeNotifier {
   String stampEmoji = '⭐';
   FillPattern fillPattern = FillPattern.solid;
   ShapeKind shapeKind = ShapeKind.heart;
+
+  /// Magic-mirror copies per gesture (1 = off, 2/4/6 = butterfly/flower/
+  /// snowflake). Applies to strokes and stamps, not fill/eyedropper/shape.
+  int symmetryFolds = 1;
 
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
@@ -180,6 +185,16 @@ class CanvasController extends ChangeNotifier {
     Sfx.instance.tick();
     notifyListeners();
   }
+
+  void selectSymmetry(int folds) {
+    symmetryFolds = kSymmetryFolds.contains(folds) ? folds : 1;
+    Sfx.instance.tick();
+    _tick(); // guide lines live in the painter
+    notifyListeners();
+  }
+
+  Offset get canvasCenter =>
+      Offset(canvasWidth / 2, canvasHeight / 2);
 
   double get _baseWidth => brushSize;
 
@@ -405,7 +420,11 @@ class CanvasController extends ChangeNotifier {
     if (paintLayer != null) {
       canvas.drawImage(paintLayer!, Offset.zero, Paint());
     }
-    StrokeRenderer.drawStamp(canvas, stampEmoji, pos, stampSizeFor(brushSize));
+    for (final copy in symmetryCopies(symmetryFolds)) {
+      // Transform the position, not the canvas — emoji stay upright.
+      StrokeRenderer.drawStamp(canvas, stampEmoji,
+          symmetryPoint(pos, canvasCenter, copy), stampSizeFor(brushSize));
+    }
     final picture = recorder.endRecording();
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
     picture.dispose();
@@ -462,7 +481,12 @@ class CanvasController extends ChangeNotifier {
     if (paintLayer != null) {
       canvas.drawImage(paintLayer!, Offset.zero, Paint());
     }
-    StrokeRenderer.draw(canvas, stroke);
+    for (final copy in symmetryCopies(symmetryFolds)) {
+      canvas.save();
+      applySymmetryTransform(canvas, canvasCenter, copy);
+      StrokeRenderer.draw(canvas, stroke);
+      canvas.restore();
+    }
     if (erasing) canvas.restore();
     final picture = recorder.endRecording();
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);

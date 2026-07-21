@@ -296,6 +296,36 @@ abstract class AppLocalizations {
   /// **'Regenbogen'**
   String get shapeRainbow;
 
+  /// No description provided for @symmetryTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Zauber-Spiegel'**
+  String get symmetryTitle;
+
+  /// No description provided for @symmetryOff.
+  ///
+  /// In de, this message translates to:
+  /// **'Normal'**
+  String get symmetryOff;
+
+  /// No description provided for @symmetryButterfly.
+  ///
+  /// In de, this message translates to:
+  /// **'Schmetterling'**
+  String get symmetryButterfly;
+
+  /// No description provided for @symmetryFlower.
+  ///
+  /// In de, this message translates to:
+  /// **'Blume'**
+  String get symmetryFlower;
+
+  /// No description provided for @symmetrySnowflake.
+  ///
+  /// In de, this message translates to:
+  /// **'Schneeflocke'**
+  String get symmetrySnowflake;
+
   /// No description provided for @sizeTitle.
   ///
   /// In de, this message translates to:
@@ -361,6 +391,30 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Regenbogen'**
   String get patternRainbow;
+
+  /// No description provided for @patternHearts.
+  ///
+  /// In de, this message translates to:
+  /// **'Herzen'**
+  String get patternHearts;
+
+  /// No description provided for @patternStars.
+  ///
+  /// In de, this message translates to:
+  /// **'Sterne'**
+  String get patternStars;
+
+  /// No description provided for @patternChecker.
+  ///
+  /// In de, this message translates to:
+  /// **'Karo'**
+  String get patternChecker;
+
+  /// No description provided for @patternBubbles.
+  ///
+  /// In de, this message translates to:
+  /// **'Seifenblasen'**
+  String get patternBubbles;
 
   /// No description provided for @galleryTitle.
   ///
@@ -560,6 +614,18 @@ abstract class AppLocalizations {
   /// **'Leise Geräusche beim Malen und Stempeln.'**
   String get soundsSubtitle;
 
+  /// No description provided for @musicTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Hintergrund-Musik'**
+  String get musicTitle;
+
+  /// No description provided for @musicSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sanfte Spieluhr-Musik beim Malen.'**
+  String get musicSubtitle;
+
   /// No description provided for @aboutTitle.
   ///
   /// In de, this message translates to:
@@ -637,6 +703,42 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Noch geheim!'**
   String get rewardLockedTitle;
+
+  /// No description provided for @packBasics.
+  ///
+  /// In de, this message translates to:
+  /// **'Lieblinge'**
+  String get packBasics;
+
+  /// No description provided for @packAnimals.
+  ///
+  /// In de, this message translates to:
+  /// **'Tiere'**
+  String get packAnimals;
+
+  /// No description provided for @packSpace.
+  ///
+  /// In de, this message translates to:
+  /// **'Weltraum'**
+  String get packSpace;
+
+  /// No description provided for @packFood.
+  ///
+  /// In de, this message translates to:
+  /// **'Leckereien'**
+  String get packFood;
+
+  /// No description provided for @packVehicles.
+  ///
+  /// In de, this message translates to:
+  /// **'Fahrzeuge'**
+  String get packVehicles;
+
+  /// No description provided for @packRewards.
+  ///
+  /// In de, this message translates to:
+  /// **'Belohnungs-Sticker'**
+  String get packRewards;
 
   /// No description provided for @rewardRulePaintings.
   ///

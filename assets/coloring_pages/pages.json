@@ -1,34 +1,306 @@
 [
-  {"id": "cat", "title": "Katze", "titleEn": "Cat", "file": "cat.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "dog", "title": "Hund", "titleEn": "Dog", "file": "dog.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "fish", "title": "Fisch", "titleEn": "Fish", "file": "fish.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "turtle", "title": "Schildkröte", "titleEn": "Turtle", "file": "turtle.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "butterfly", "title": "Schmetterling", "titleEn": "Butterfly", "file": "butterfly.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "dino", "title": "Dino", "titleEn": "Dino", "file": "dino.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "elephant", "title": "Elefant", "titleEn": "Elephant", "file": "elephant.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "lion", "title": "Löwe", "titleEn": "Lion", "file": "lion.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "owl", "title": "Eule", "titleEn": "Owl", "file": "owl.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "flower", "title": "Blume", "titleEn": "Flower", "file": "flower.svg", "category": "Natur", "categoryEn": "Nature"},
-  {"id": "house", "title": "Haus", "titleEn": "House", "file": "house.svg", "category": "Natur", "categoryEn": "Nature"},
-  {"id": "car", "title": "Auto", "titleEn": "Car", "file": "car.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "rocket", "title": "Rakete", "titleEn": "Rocket", "file": "rocket.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "sailboat", "title": "Segelboot", "titleEn": "Sailboat", "file": "sailboat.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "balloon", "title": "Heißluftballon", "titleEn": "Hot-air balloon", "file": "balloon.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "tractor", "title": "Traktor", "titleEn": "Tractor", "file": "tractor.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "submarine", "title": "U-Boot", "titleEn": "Submarine", "file": "submarine.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "unicorn", "title": "Einhorn", "titleEn": "Unicorn", "file": "unicorn.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
-  {"id": "castle", "title": "Burg", "titleEn": "Castle", "file": "castle.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
-  {"id": "mushroom_house", "title": "Pilzhaus", "titleEn": "Mushroom house", "file": "mushroom_house.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
-  {"id": "icecream", "title": "Eis", "titleEn": "Ice cream", "file": "icecream.svg", "category": "Leckereien", "categoryEn": "Treats"},
-  {"id": "cupcake", "title": "Törtchen", "titleEn": "Cupcake", "file": "cupcake.svg", "category": "Leckereien", "categoryEn": "Treats"},
-  {"id": "frog", "title": "Frosch", "titleEn": "Frog", "file": "frog.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "bunny", "title": "Hase", "titleEn": "Bunny", "file": "bunny.svg", "category": "Tiere", "categoryEn": "Animals"},
-  {"id": "tree", "title": "Baum", "titleEn": "Tree", "file": "tree.svg", "category": "Natur", "categoryEn": "Nature"},
-  {"id": "sunflower", "title": "Sonnenblume", "titleEn": "Sunflower", "file": "sunflower.svg", "category": "Natur", "categoryEn": "Nature"},
-  {"id": "excavator", "title": "Bagger", "titleEn": "Excavator", "file": "excavator.svg", "category": "Fahrzeuge", "categoryEn": "Vehicles"},
-  {"id": "dragon", "title": "Drache", "titleEn": "Dragon", "file": "dragon.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
-  {"id": "mermaid", "title": "Meerjungfrau", "titleEn": "Mermaid", "file": "mermaid.svg", "category": "Fantasie", "categoryEn": "Fantasy"},
-  {"id": "donut", "title": "Donut", "titleEn": "Donut", "file": "donut.svg", "category": "Leckereien", "categoryEn": "Treats"},
-  {"id": "planet", "title": "Planet", "titleEn": "Planet", "file": "planet.svg", "category": "Weltraum", "categoryEn": "Space"},
-  {"id": "astronaut", "title": "Astronaut", "titleEn": "Astronaut", "file": "astronaut.svg", "category": "Weltraum", "categoryEn": "Space"}
+ {
+  "id": "cat",
+  "title": "Katze",
+  "titleEn": "Cat",
+  "file": "cat.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "dog",
+  "title": "Hund",
+  "titleEn": "Dog",
+  "file": "dog.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "fish",
+  "title": "Fisch",
+  "titleEn": "Fish",
+  "file": "fish.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "turtle",
+  "title": "Schildkröte",
+  "titleEn": "Turtle",
+  "file": "turtle.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "butterfly",
+  "title": "Schmetterling",
+  "titleEn": "Butterfly",
+  "file": "butterfly.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "dino",
+  "title": "Dino",
+  "titleEn": "Dino",
+  "file": "dino.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "elephant",
+  "title": "Elefant",
+  "titleEn": "Elephant",
+  "file": "elephant.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "lion",
+  "title": "Löwe",
+  "titleEn": "Lion",
+  "file": "lion.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "owl",
+  "title": "Eule",
+  "titleEn": "Owl",
+  "file": "owl.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "flower",
+  "title": "Blume",
+  "titleEn": "Flower",
+  "file": "flower.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ },
+ {
+  "id": "house",
+  "title": "Haus",
+  "titleEn": "House",
+  "file": "house.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ },
+ {
+  "id": "car",
+  "title": "Auto",
+  "titleEn": "Car",
+  "file": "car.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "rocket",
+  "title": "Rakete",
+  "titleEn": "Rocket",
+  "file": "rocket.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "sailboat",
+  "title": "Segelboot",
+  "titleEn": "Sailboat",
+  "file": "sailboat.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "balloon",
+  "title": "Heißluftballon",
+  "titleEn": "Hot-air balloon",
+  "file": "balloon.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "tractor",
+  "title": "Traktor",
+  "titleEn": "Tractor",
+  "file": "tractor.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "submarine",
+  "title": "U-Boot",
+  "titleEn": "Submarine",
+  "file": "submarine.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "unicorn",
+  "title": "Einhorn",
+  "titleEn": "Unicorn",
+  "file": "unicorn.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "castle",
+  "title": "Burg",
+  "titleEn": "Castle",
+  "file": "castle.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "mushroom_house",
+  "title": "Pilzhaus",
+  "titleEn": "Mushroom house",
+  "file": "mushroom_house.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "icecream",
+  "title": "Eis",
+  "titleEn": "Ice cream",
+  "file": "icecream.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "cupcake",
+  "title": "Törtchen",
+  "titleEn": "Cupcake",
+  "file": "cupcake.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "frog",
+  "title": "Frosch",
+  "titleEn": "Frog",
+  "file": "frog.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "bunny",
+  "title": "Hase",
+  "titleEn": "Bunny",
+  "file": "bunny.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "tree",
+  "title": "Baum",
+  "titleEn": "Tree",
+  "file": "tree.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ },
+ {
+  "id": "sunflower",
+  "title": "Sonnenblume",
+  "titleEn": "Sunflower",
+  "file": "sunflower.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ },
+ {
+  "id": "excavator",
+  "title": "Bagger",
+  "titleEn": "Excavator",
+  "file": "excavator.svg",
+  "category": "Fahrzeuge",
+  "categoryEn": "Vehicles"
+ },
+ {
+  "id": "dragon",
+  "title": "Drache",
+  "titleEn": "Dragon",
+  "file": "dragon.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "mermaid",
+  "title": "Meerjungfrau",
+  "titleEn": "Mermaid",
+  "file": "mermaid.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "donut",
+  "title": "Donut",
+  "titleEn": "Donut",
+  "file": "donut.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "planet",
+  "title": "Planet",
+  "titleEn": "Planet",
+  "file": "planet.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "astronaut",
+  "title": "Astronaut",
+  "titleEn": "Astronaut",
+  "file": "astronaut.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "ufo",
+  "title": "Ufo",
+  "titleEn": "UFO",
+  "file": "ufo.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "alien",
+  "title": "Alien",
+  "titleEn": "Alien",
+  "file": "alien.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "moon",
+  "title": "Mond",
+  "titleEn": "Moon",
+  "file": "moon.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "pizza",
+  "title": "Pizza",
+  "titleEn": "Pizza",
+  "file": "pizza.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "popsicle",
+  "title": "Eis am Stiel",
+  "titleEn": "Ice pop",
+  "file": "popsicle.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "rainbow_sky",
+  "title": "Regenbogen",
+  "titleEn": "Rainbow",
+  "file": "rainbow.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ }
 ]
