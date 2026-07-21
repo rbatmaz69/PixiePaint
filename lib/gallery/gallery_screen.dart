@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
+import '../replay/replay_screen.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
@@ -174,6 +175,23 @@ class _GalleryScreenState extends State<GalleryScreen>
                 },
               ),
             ),
+            if (artwork.opsFile.existsSync()) ...[
+              const SizedBox(height: 10),
+              Builder(
+                builder: (sheetContext) => KidDialogButton(
+                  emoji: '🎬',
+                  label: context.l10n.replayAction,
+                  gradient: PixieGradients.freeDraw,
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => ReplayScreen(artwork: artwork)),
+                    );
+                  },
+                ),
+              ),
+            ],
             const SizedBox(height: 10),
             Builder(
               builder: (sheetContext) => KidDialogButton(

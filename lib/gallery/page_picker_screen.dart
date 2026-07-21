@@ -23,6 +23,7 @@ Color _categoryTint(String category) => switch (category) {
   'Fantasie' => PixiePalette.grapeLight,
   'Leckereien' => PixiePalette.bubblegumLight,
   'Weltraum' => const Color(0xFFE2E0FF),
+  'Zahlen' => PixiePalette.tangerineLight,
   _ => const Color(0xFFF5F0E8),
 };
 

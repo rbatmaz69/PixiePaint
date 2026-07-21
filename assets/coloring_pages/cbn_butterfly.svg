@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <!-- color-by-number page: butterfly -->
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- upper wings -->
+    <ellipse cx="330" cy="290" rx="140" ry="95" transform="rotate(-25 330 290)"/>
+    <ellipse cx="694" cy="290" rx="140" ry="95" transform="rotate(25 694 290)"/>
+    <!-- lower wings -->
+    <ellipse cx="360" cy="510" rx="110" ry="80" transform="rotate(20 360 510)"/>
+    <ellipse cx="664" cy="510" rx="110" ry="80" transform="rotate(-20 664 510)"/>
+    <!-- wing dots -->
+    <circle cx="330" cy="290" r="34"/>
+    <circle cx="694" cy="290" r="34"/>
+    <circle cx="360" cy="510" r="24"/>
+    <circle cx="664" cy="510" r="24"/>
+    <!-- body -->
+    <ellipse cx="512" cy="400" rx="36" ry="170"/>
+    <!-- head -->
+    <circle cx="512" cy="180" r="46"/>
+    <!-- face -->
+    <circle cx="497" cy="172" r="7"/>
+    <circle cx="527" cy="172" r="7"/>
+    <path d="M 498 196 C 506 204 518 204 526 196"/>
+    <!-- antennae -->
+    <path d="M 488 140 C 470 110 450 96 428 92"/>
+    <circle cx="418" cy="86" r="12"/>
+    <path d="M 536 140 C 554 110 574 96 596 92"/>
+    <circle cx="606" cy="86" r="12"/>
+  </g>
+</svg>

@@ -61,4 +61,10 @@ const List<StampPack> kStampPacks = [
     stamps: ['🚗', '🚒', '🚜', '🚂', '✈️', '🚁', '⛵', '🚲', '🛶', '🚌'],
     unlock: StickerReward('🚗', RewardGoalKind.paintings, 14),
   ),
+  StampPack(
+    id: 'party',
+    emoji: '🎉',
+    stamps: ['🎉', '🎊', '🎂', '🎁', '🪅', '🎪', '🎯', '🏆', '🥳', '🍿'],
+    unlock: StickerReward('🎉', RewardGoalKind.cbn, 3),
+  ),
 ];

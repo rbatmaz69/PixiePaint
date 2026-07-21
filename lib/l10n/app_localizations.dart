@@ -470,6 +470,24 @@ abstract class AppLocalizations {
   /// **'Weitermalen'**
   String get continuePainting;
 
+  /// No description provided for @replayAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Film anschauen'**
+  String get replayAction;
+
+  /// No description provided for @replayAgain.
+  ///
+  /// In de, this message translates to:
+  /// **'Nochmal abspielen'**
+  String get replayAgain;
+
+  /// No description provided for @replaySpeed.
+  ///
+  /// In de, this message translates to:
+  /// **'Geschwindigkeit'**
+  String get replaySpeed;
+
   /// No description provided for @renameAction.
   ///
   /// In de, this message translates to:
@@ -805,6 +823,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Musik'**
   String get packMusic;
+
+  /// No description provided for @packParty.
+  ///
+  /// In de, this message translates to:
+  /// **'Party'**
+  String get packParty;
+
+  /// No description provided for @rewardRuleCbn.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Löse noch 1 Zahlenbild!} other{Löse noch {n} Zahlenbilder!}}'**
+  String rewardRuleCbn(int n);
 
   /// No description provided for @myStickersSection.
   ///

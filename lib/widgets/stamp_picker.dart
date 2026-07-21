@@ -78,6 +78,7 @@ String stampPackLabel(BuildContext context, StampPack pack) =>
       'space' => context.l10n.packSpace,
       'food' => context.l10n.packFood,
       'music' => context.l10n.packMusic,
+      'party' => context.l10n.packParty,
       'vehicles' => context.l10n.packVehicles,
       _ => pack.id,
     };
@@ -425,6 +426,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
       RewardGoalKind.tools => context.l10n.rewardRuleTools(remaining),
       RewardGoalKind.shares => context.l10n.rewardRuleShares,
       RewardGoalKind.tracing => context.l10n.rewardRuleTrace(remaining),
+      RewardGoalKind.cbn => context.l10n.rewardRuleCbn(remaining),
     };
     showKidDialog<void>(
       context: context,

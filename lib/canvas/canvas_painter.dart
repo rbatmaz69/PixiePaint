@@ -86,10 +86,50 @@ class CanvasPainter extends CustomPainter {
       canvas.drawImage(controller.lineArt!, Offset.zero, Paint());
     }
 
+    // Color-by-number chips on top of everything; solved ones disappear.
+    final cbnLabels = controller.cbnLabels;
+    if (cbnLabels != null) {
+      for (final label in cbnLabels) {
+        if (!label.filled) _drawCbnChip(canvas, label.pos, label.number);
+      }
+    }
+
     final pickPos = controller.pendingPickPos;
     if (pickPos != null) {
       _drawPickLoupe(canvas, pickPos, controller.pickedPreview);
     }
+  }
+
+  /// Number chip for color-by-number: white bubble with the region number.
+  void _drawCbnChip(Canvas canvas, Offset pos, int number) {
+    canvas.drawCircle(
+        pos + const Offset(0, 3),
+        36,
+        Paint()
+          ..color = Colors.black26
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6));
+    canvas.drawCircle(pos, 36, Paint()..color = Colors.white);
+    canvas.drawCircle(
+        pos,
+        36,
+        Paint()
+          ..color = const Color(0xFF3A3A3A)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3);
+    final tp = TextPainter(
+      text: TextSpan(
+        text: '$number',
+        style: const TextStyle(
+          fontFamily: 'Fredoka',
+          fontWeight: FontWeight.w700,
+          fontSize: 42,
+          color: Color(0xFF3A3A3A),
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    tp.paint(canvas, pos - Offset(tp.width / 2, tp.height / 2));
+    tp.dispose();
   }
 
   /// Faint spokes through the center showing where the magic-mirror copies

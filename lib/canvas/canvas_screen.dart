@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:typed_data' show Uint16List;
 import 'dart:ui' show ImageByteFormat;
 
 import 'package:flutter/material.dart';
@@ -9,7 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
+import '../models/cbn_spec.dart';
 import '../models/coloring_page.dart';
+import '../models/draw_op.dart';
 import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
@@ -27,6 +31,7 @@ import '../util/review.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
+import '../widgets/cbn_palette.dart';
 import '../widgets/color_palette.dart';
 import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
@@ -34,7 +39,9 @@ import '../widgets/shape_picker.dart' as shapes;
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
 import 'canvas_viewport.dart';
+import 'fill_pattern.dart';
 import 'painting_canvas.dart';
+import 'region_label.dart';
 import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
@@ -75,6 +82,18 @@ class _CanvasScreenState extends State<CanvasScreen>
   String? traceId;
   TraceCoverage? _traceCoverage;
   bool _traceCelebrated = false;
+
+  // Color-by-number state (null/empty outside CbN mode).
+  CbnSpec? _cbnSpec;
+  Uint16List? _regionOf;
+  final Map<int, int> _regionNumber = {};
+  final Set<int> _cbnFilledRegions = {};
+  int? _cbnSelected;
+  int? _cbnHint;
+  int _cbnWrongTries = 0;
+  Timer? _cbnHintTimer;
+  bool _cbnCelebrated = false;
+  bool get _isCbn => _cbnSpec != null;
   late bool hasPhoto;
   late bool hasPhotoLineArt;
   late bool _backgroundSaved;
@@ -121,6 +140,7 @@ class _CanvasScreenState extends State<CanvasScreen>
           kCanvasHeight,
         );
         controller.setLineArt(art);
+        if (page.isColorByNumber) await _loadCbn(page);
       }
     }
     if (widget.photoLineArt != null) {
@@ -147,6 +167,15 @@ class _CanvasScreenState extends State<CanvasScreen>
       final bytes = await resume.paintFile.readAsBytes();
       controller.setPaintLayer(await pngBytesToImage(bytes));
     }
+    if (resume != null) {
+      if (await resume.opsFile.exists()) {
+        controller.loadOps(decodeOps(await resume.opsFile.readAsString()));
+      } else if (controller.paintLayer != null) {
+        // Legacy artwork painted before the op log existed — recording now
+        // would tell a story that misses everything already on the canvas.
+        controller.recordOps = false;
+      }
+    }
     if (mounted) setState(() => loading = false);
   }
 
@@ -171,6 +200,144 @@ class _CanvasScreenState extends State<CanvasScreen>
         TraceCoverage.fromAlpha(alpha, kCanvasWidth, kCanvasHeight);
     _traceCelebrated = Progress.instance.completedTraceIds.contains(id);
     controller.onStrokeCommitted = _onTraceStroke;
+  }
+
+  /// Color-by-number setup: labels the enclosed regions of the rasterized
+  /// line art (isolate), maps each sidecar label to its region id, restores
+  /// already-solved regions and wires the fill guard.
+  Future<void> _loadCbn(ColoringPage page) async {
+    final spec = await CbnSpec.load(page.id);
+    final alpha = controller.barrierAlpha;
+    if (spec == null || alpha == null) return;
+    const w = kCanvasWidth, h = kCanvasHeight;
+    final regionOf = await Isolate.run(() => labelRegions(alpha, w, h));
+    _regionNumber.clear();
+    for (final label in spec.labels) {
+      final x = label.pos.dx.floor().clamp(0, w - 1);
+      final y = label.pos.dy.floor().clamp(0, h - 1);
+      final id = regionOf[y * w + x];
+      // id 0 would mean the label sits on an outline — authoring bug,
+      // tolerated by simply skipping that label.
+      if (id != 0) _regionNumber[id] = label.number;
+    }
+    _cbnSpec = spec;
+    _regionOf = regionOf;
+    _cbnFilledRegions.addAll(widget.resume?.cbnFilled ?? const []);
+    _cbnCelebrated = _cbnComplete ||
+        Progress.instance.completedCbnIds.contains(page.id);
+    controller
+      ..tool = ToolKind.fill
+      ..fillPattern = FillPattern.solid
+      ..fillGuard = _cbnFillGuard
+      ..lastFill.addListener(_onCbnFill);
+    _selectCbnNumber(_firstOpenNumber ?? spec.numbers.first, silent: true);
+    _pushCbnLabels();
+  }
+
+  bool get _cbnComplete =>
+      _regionNumber.isNotEmpty &&
+      _regionNumber.keys.every(_cbnFilledRegions.contains);
+
+  Set<int> get _cbnDoneNumbers {
+    final spec = _cbnSpec;
+    if (spec == null) return const {};
+    final done = <int>{};
+    for (final n in spec.numbers) {
+      final regions = [
+        for (final e in _regionNumber.entries)
+          if (e.value == n) e.key
+      ];
+      if (regions.isNotEmpty && regions.every(_cbnFilledRegions.contains)) {
+        done.add(n);
+      }
+    }
+    return done;
+  }
+
+  int? get _firstOpenNumber {
+    final spec = _cbnSpec;
+    if (spec == null) return null;
+    final done = _cbnDoneNumbers;
+    for (final n in spec.numbers) {
+      if (!done.contains(n)) return n;
+    }
+    return null;
+  }
+
+  void _selectCbnNumber(int n, {bool silent = false}) {
+    final color = _cbnSpec?.colorOf[n];
+    if (color == null) return;
+    setState(() => _cbnSelected = n);
+    controller.selectCbnColor(color);
+    if (!silent) Sfx.instance.tick();
+  }
+
+  void _pushCbnLabels() {
+    final spec = _cbnSpec;
+    final regionOf = _regionOf;
+    if (spec == null || regionOf == null) return;
+    controller.setCbnLabels([
+      for (final label in spec.labels)
+        (
+          pos: label.pos,
+          number: label.number,
+          filled: _cbnFilledRegions.contains(regionOf[
+              label.pos.dy.floor().clamp(0, kCanvasHeight - 1) *
+                      kCanvasWidth +
+                  label.pos.dx.floor().clamp(0, kCanvasWidth - 1)]),
+        ),
+    ]);
+  }
+
+  bool _cbnFillGuard(Offset pos) {
+    final regionOf = _regionOf;
+    if (regionOf == null) return true;
+    final id = regionOf[pos.dy.floor().clamp(0, kCanvasHeight - 1) *
+            kCanvasWidth +
+        pos.dx.floor().clamp(0, kCanvasWidth - 1)];
+    final number = _regionNumber[id];
+    // Unlabeled areas (background etc.) are free to fill — forgiving.
+    if (number == null || number == _cbnSelected) return true;
+    _onCbnWrong(number);
+    return false;
+  }
+
+  /// Never punitive: a soft tick, and after two misses the right swatch
+  /// pulses to show where to look.
+  void _onCbnWrong(int correctNumber) {
+    Sfx.instance.tick();
+    _cbnWrongTries++;
+    if (_cbnWrongTries >= 2) {
+      _cbnHintTimer?.cancel();
+      setState(() => _cbnHint = correctNumber);
+      _cbnHintTimer = Timer(const Duration(milliseconds: 1600), () {
+        if (mounted) setState(() => _cbnHint = null);
+      });
+    }
+  }
+
+  void _onCbnFill() {
+    final pos = controller.lastFill.value;
+    final regionOf = _regionOf;
+    if (pos == null || regionOf == null) return;
+    final id = regionOf[pos.dy.floor().clamp(0, kCanvasHeight - 1) *
+            kCanvasWidth +
+        pos.dx.floor().clamp(0, kCanvasWidth - 1)];
+    if (_regionNumber[id] == null || !_cbnFilledRegions.add(id)) return;
+    _cbnWrongTries = 0;
+    _pushCbnLabels();
+    // Hop to the next open number so the kid always knows what's next.
+    final next = _firstOpenNumber;
+    if (next != null && _cbnDoneNumbers.contains(_cbnSelected)) {
+      _selectCbnNumber(next, silent: true);
+    }
+    setState(() {});
+    if (_cbnComplete && !_cbnCelebrated) {
+      _cbnCelebrated = true;
+      Progress.instance.registerCbnCompleted(pageId!);
+      Sfx.instance.tada();
+      if (mounted) showConfetti(context);
+    }
   }
 
   void _onTraceStroke(Stroke stroke) {
@@ -218,6 +385,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       id: artworkId,
       pageId: pageId,
       traceId: traceId,
+      cbnFilled: _cbnFilledRegions.toList(),
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: kCanvasWidth,
@@ -226,6 +394,9 @@ class _CanvasScreenState extends State<CanvasScreen>
       backgroundPng: backgroundPng,
       lineArtPng: lineArtPng,
       thumbPng: thumbPng,
+      opsJson: controller.recordOps && controller.hasOps
+          ? encodeOps(controller.opsSnapshot)
+          : null,
     );
     if (backgroundPng != null) _backgroundSaved = true;
     if (lineArtPng != null) _lineArtSaved = true;
@@ -285,6 +456,8 @@ class _CanvasScreenState extends State<CanvasScreen>
   @override
   void dispose() {
     _autoSave?.cancel();
+    _cbnHintTimer?.cancel();
+    if (_isCbn) controller.lastFill.removeListener(_onCbnFill);
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     controller.dispose();
@@ -373,6 +546,7 @@ class _CanvasScreenState extends State<CanvasScreen>
               _LeftRail(
                 controller: controller,
                 showFill: traceId == null,
+                fillOnly: _isCbn,
                 onBack: _leave,
                 onShare: _share,
               ),
@@ -380,8 +554,20 @@ class _CanvasScreenState extends State<CanvasScreen>
             ],
           ),
         ),
-        SizedBox(height: 76, child: ColorPalette(controller: controller)),
+        SizedBox(height: 76, child: _palette()),
       ],
+    );
+  }
+
+  Widget _palette() {
+    final spec = _cbnSpec;
+    if (spec == null) return ColorPalette(controller: controller);
+    return CbnPalette(
+      spec: spec,
+      selectedNumber: _cbnSelected,
+      doneNumbers: _cbnDoneNumbers,
+      hintNumber: _cbnHint,
+      onSelect: _selectCbnNumber,
     );
   }
 
@@ -408,10 +594,11 @@ class _CanvasScreenState extends State<CanvasScreen>
               controller: controller,
               direction: Axis.horizontal,
               showFill: traceId == null,
+              fillOnly: _isCbn,
             ),
           ),
         ),
-        SizedBox(height: 76, child: ColorPalette(controller: controller)),
+        SizedBox(height: 76, child: _palette()),
       ],
     );
   }
@@ -649,12 +836,14 @@ class _LeftRail extends StatelessWidget {
     required this.onBack,
     required this.onShare,
     this.showFill = true,
+    this.fillOnly = false,
   });
 
   final CanvasController controller;
   final VoidCallback onBack;
   final VoidCallback onShare;
   final bool showFill;
+  final bool fillOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -687,7 +876,11 @@ class _LeftRail extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ToolBarRail(controller: controller, showFill: showFill),
+            child: ToolBarRail(
+              controller: controller,
+              showFill: showFill,
+              fillOnly: fillOnly,
+            ),
           ),
           Tooltip(
             message: context.l10n.shareForParents,

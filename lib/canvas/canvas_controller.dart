@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../models/draw_op.dart';
 import '../models/tool.dart';
 import '../util/color_utils.dart';
 import '../util/image_io.dart';
@@ -15,9 +16,8 @@ import '../util/sfx.dart';
 import '../util/svg_raster.dart';
 import 'fill_pattern.dart';
 import 'flood_fill.dart' as ff;
-import 'shape_renderer.dart';
+import 'op_apply.dart';
 import 'stroke.dart';
-import 'stroke_renderer.dart';
 import 'symmetry.dart';
 import 'undo_stack.dart';
 
@@ -60,6 +60,18 @@ class CanvasController extends ChangeNotifier {
   /// Fired after each committed stroke (trace mode feeds its coverage).
   void Function(Stroke stroke)? onStrokeCommitted;
 
+  /// Color-by-number veto: called before a fill tap; returning false skips
+  /// the fill (the screen owns region/number matching and feedback).
+  bool Function(Offset pos)? fillGuard;
+
+  /// Number chips the painter draws over the line art in CbN mode.
+  List<({Offset pos, int number, bool filled})>? cbnLabels;
+
+  void setCbnLabels(List<({Offset pos, int number, bool filled})>? labels) {
+    cbnLabels = labels;
+    _tick();
+  }
+
   Uint8List? barrierAlpha;
   Stroke? activeStroke;
 
@@ -96,6 +108,49 @@ class CanvasController extends ChangeNotifier {
   final UndoStack _undoStack = UndoStack();
   bool get canUndo => _undoStack.canUndo;
   bool get canRedo => _undoStack.canRedo;
+
+  // ----------------------------------------------------------------- op log
+
+  /// Whether committed operations are recorded for the time-lapse replay.
+  /// Off for legacy artworks resumed without an op log (their existing
+  /// paint would be missing from the story) and for future multi-controller
+  /// modes.
+  bool recordOps = true;
+
+  static const int kMaxOps = 4000;
+  final List<DrawOp> _ops = [];
+  int _opCursor = 0;
+  bool _opsFrozen = false;
+
+  /// The committed story so far (undo-aware).
+  List<DrawOp> get opsSnapshot =>
+      List.unmodifiable(_ops.sublist(0, _opCursor));
+
+  bool get hasOps => _opCursor > 0;
+
+  void loadOps(List<DrawOp> ops) {
+    _ops
+      ..clear()
+      ..addAll(ops.take(kMaxOps));
+    _opCursor = _ops.length;
+    _opsFrozen = ops.length >= kMaxOps;
+  }
+
+  /// Once the cap is hit the log freezes entirely (no appends, no cursor
+  /// moves) — the replay then tells "the story so far" and can never
+  /// desync from partial recording.
+  void _recordOp(DrawOp op) {
+    if (!recordOps || _opsFrozen) return;
+    if (_ops.length > _opCursor) {
+      _ops.removeRange(_opCursor, _ops.length);
+    }
+    if (_ops.length >= kMaxOps) {
+      _opsFrozen = true;
+      return;
+    }
+    _ops.add(op);
+    _opCursor = _ops.length;
+  }
 
   bool isFilling = false;
   bool dirty = false;
@@ -218,6 +273,14 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Color-by-number: sets the palette color and the fill tool without the
+  /// selection tick (the CbN palette drives its own feedback).
+  void selectCbnColor(Color c) {
+    color = c;
+    tool = ToolKind.fill;
+    notifyListeners();
+  }
+
   void selectSymmetry(int folds) {
     symmetryFolds = kSymmetryFolds.contains(folds) ? folds : 1;
     Sfx.instance.tick();
@@ -264,6 +327,7 @@ class CanvasController extends ChangeNotifier {
 
     final pos = _clamp(e.localPosition);
     if (tool == ToolKind.fill) {
+      if (fillGuard?.call(pos) == false) return;
       tapFill(pos);
       return;
     }
@@ -447,28 +511,27 @@ class CanvasController extends ChangeNotifier {
     _activePointer = null;
     _activeIsStylus = false;
 
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, _bounds);
-    if (paintLayer != null) {
-      canvas.drawImage(paintLayer!, Offset.zero, Paint());
-    }
-    for (final copy in symmetryCopies(symmetryFolds)) {
-      // Transform the position, not the canvas — motifs stay upright.
-      final p = symmetryPoint(pos, canvasCenter, copy);
-      if (stampImage != null) {
-        StrokeRenderer.drawImageStamp(
-            canvas, stampImage!, p, stampSizeFor(brushSize));
-      } else {
-        StrokeRenderer.drawStamp(canvas, stampEmoji, p,
-            stampSizeFor(brushSize));
-      }
-    }
-    final picture = recorder.endRecording();
-    final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
-    picture.dispose();
+    final newLayer = applyStamp(
+      layer: paintLayer,
+      emoji: stampImage == null ? stampEmoji : null,
+      image: stampImage,
+      pos: pos,
+      size: stampSizeFor(brushSize),
+      symmetryFolds: symmetryFolds,
+      width: canvasWidth,
+      height: canvasHeight,
+    );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.stamp);
     _pushUndoAndReplace(newLayer);
+    _recordOp(StampOp(
+      emoji: stampImage == null ? stampEmoji : null,
+      imagePath: stampImagePath,
+      x: pos.dx,
+      y: pos.dy,
+      size: stampSizeFor(brushSize),
+      symmetryFolds: symmetryFolds,
+    ));
     // Reset first so re-stamping the same spot still notifies.
     lastStamp.value = null;
     lastStamp.value = pos;
@@ -491,18 +554,27 @@ class CanvasController extends ChangeNotifier {
     _activePointer = null;
     _activeIsStylus = false;
 
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, _bounds);
-    if (paintLayer != null) {
-      canvas.drawImage(paintLayer!, Offset.zero, Paint());
-    }
-    ShapeRenderer.drawShape(canvas, shapeKind, center, radius, color, brushSize * 0.4);
-    final picture = recorder.endRecording();
-    final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
-    picture.dispose();
+    final newLayer = applyShape(
+      layer: paintLayer,
+      kind: shapeKind,
+      center: center,
+      radius: radius,
+      color: color,
+      strokeWidth: brushSize * 0.4,
+      width: canvasWidth,
+      height: canvasHeight,
+    );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.shape);
     _pushUndoAndReplace(newLayer);
+    _recordOp(ShapeOp(
+      kind: shapeKind,
+      x: center.dx,
+      y: center.dy,
+      radius: radius,
+      color: color.toARGB32(),
+      strokeWidth: brushSize * 0.4,
+    ));
   }
 
   void _commitActiveStroke() {
@@ -512,26 +584,25 @@ class CanvasController extends ChangeNotifier {
     _activePointer = null;
     _activeIsStylus = false;
 
-    final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, _bounds);
-    final erasing = stroke.kind == ToolKind.eraser;
-    if (erasing) canvas.saveLayer(_bounds, Paint());
-    if (paintLayer != null) {
-      canvas.drawImage(paintLayer!, Offset.zero, Paint());
-    }
-    for (final copy in symmetryCopies(symmetryFolds)) {
-      canvas.save();
-      applySymmetryTransform(canvas, canvasCenter, copy);
-      StrokeRenderer.draw(canvas, stroke);
-      canvas.restore();
-    }
-    if (erasing) canvas.restore();
-    final picture = recorder.endRecording();
-    final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
-    picture.dispose();
-
+    final newLayer = applyStroke(
+      layer: paintLayer,
+      stroke: stroke,
+      symmetryFolds: symmetryFolds,
+      width: canvasWidth,
+      height: canvasHeight,
+    );
     Progress.instance.registerToolUsed(stroke.kind);
     _pushUndoAndReplace(newLayer);
+    _recordOp(StrokeOp(
+      toolKind: stroke.kind,
+      color: stroke.color.toARGB32(),
+      baseWidth: stroke.baseWidth,
+      seed: stroke.seed,
+      symmetryFolds: symmetryFolds,
+      points: [
+        for (final p in stroke.points) ...[p.pos.dx, p.pos.dy, p.pressure],
+      ],
+    ));
     onStrokeCommitted?.call(stroke);
   }
 
@@ -585,6 +656,12 @@ class CanvasController extends ChangeNotifier {
         Sfx.instance.pop();
         Progress.instance.registerToolUsed(ToolKind.fill);
         _pushUndoAndReplace(newLayer);
+        _recordOp(FillOp(
+          x: pos.dx,
+          y: pos.dy,
+          color: c.toARGB32(),
+          pattern: pattern,
+        ));
         // Reset first so refilling the same spot still notifies.
         lastFill.value = null;
         lastFill.value = pos;
@@ -600,6 +677,7 @@ class CanvasController extends ChangeNotifier {
   void undo() {
     if (!canUndo) return;
     paintLayer = _undoStack.undo(paintLayer);
+    if (!_opsFrozen && _opCursor > 0) _opCursor--;
     dirty = true;
     _tick();
     notifyListeners();
@@ -608,6 +686,7 @@ class CanvasController extends ChangeNotifier {
   void redo() {
     if (!canRedo) return;
     paintLayer = _undoStack.redo(paintLayer);
+    if (!_opsFrozen && _opCursor < _ops.length) _opCursor++;
     dirty = true;
     _tick();
     notifyListeners();
@@ -616,6 +695,7 @@ class CanvasController extends ChangeNotifier {
   void clearAll() {
     if (paintLayer == null) return;
     _pushUndoAndReplace(null);
+    _recordOp(const ClearOp());
   }
 
   void _tick() => repaint.value++;

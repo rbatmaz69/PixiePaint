@@ -25,6 +25,9 @@ class Progress extends ChangeNotifier {
   /// Tracing templates finished at least once (letter/number/shape ids).
   final Set<String> completedTraceIds = {};
 
+  /// Color-by-number pages fully solved at least once.
+  final Set<String> completedCbnIds = {};
+
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
 
@@ -42,6 +45,8 @@ class Progress extends ChangeNotifier {
             .addAll(((json['toolsUsed'] as List?) ?? []).whereType<String>());
         completedTraceIds.addAll(
             ((json['completedTraceIds'] as List?) ?? []).whereType<String>());
+        completedCbnIds.addAll(
+            ((json['completedCbnIds'] as List?) ?? []).whereType<String>());
         celebratedEmojis.addAll(
             ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
       }
@@ -55,6 +60,7 @@ class Progress extends ChangeNotifier {
         toolsUsed: toolsUsed.length,
         shares: Settings.instance.shareCount,
         tracesDone: completedTraceIds.length,
+        cbnDone: completedCbnIds.length,
       );
 
   void registerArtworkCompleted(String id) {
@@ -69,6 +75,12 @@ class Progress extends ChangeNotifier {
 
   void registerTraceCompleted(String traceId) {
     if (!completedTraceIds.add(traceId)) return;
+    _persist();
+    notifyListeners();
+  }
+
+  void registerCbnCompleted(String pageId) {
+    if (!completedCbnIds.add(pageId)) return;
     _persist();
     notifyListeners();
   }
@@ -100,6 +112,7 @@ class Progress extends ChangeNotifier {
         'completedArtworkIds': completedArtworkIds.toList(),
         'toolsUsed': toolsUsed.toList(),
         'completedTraceIds': completedTraceIds.toList(),
+        'completedCbnIds': completedCbnIds.toList(),
         'celebratedEmojis': celebratedEmojis.toList(),
       }));
     } catch (_) {}

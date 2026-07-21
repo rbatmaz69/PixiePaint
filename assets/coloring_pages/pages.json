@@ -302,5 +302,41 @@
   "file": "rainbow.svg",
   "category": "Natur",
   "categoryEn": "Nature"
+ },
+ {
+  "id": "cbn_balloons",
+  "title": "Luftballons",
+  "titleEn": "Balloons",
+  "file": "cbn_balloons.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_fish",
+  "title": "Fisch",
+  "titleEn": "Fish",
+  "file": "cbn_fish.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_flower",
+  "title": "Blume",
+  "titleEn": "Flower",
+  "file": "cbn_flower.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_butterfly",
+  "title": "Schmetterling",
+  "titleEn": "Butterfly",
+  "file": "cbn_butterfly.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
  }
 ]

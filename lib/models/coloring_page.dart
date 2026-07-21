@@ -12,6 +12,10 @@ class ColoringPage {
   final String category;
   final String? categoryEn;
 
+  /// "cbn" marks a color-by-number page (numbered regions, guided fill);
+  /// null = regular coloring page.
+  final String? mode;
+
   const ColoringPage({
     required this.id,
     required this.title,
@@ -19,7 +23,10 @@ class ColoringPage {
     required this.file,
     required this.category,
     this.categoryEn,
+    this.mode,
   });
+
+  bool get isColorByNumber => mode == 'cbn';
 
   String get assetPath => 'assets/coloring_pages/$file';
 
@@ -42,6 +49,7 @@ class ColoringPage {
               file: e['file'] as String,
               category: e['category'] as String,
               categoryEn: e['categoryEn'] as String?,
+              mode: e['mode'] as String?,
             ))
         .toList();
     _cache = list;

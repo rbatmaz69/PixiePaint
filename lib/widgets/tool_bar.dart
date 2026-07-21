@@ -67,11 +67,16 @@ class ToolBarRail extends StatelessWidget {
     super.key,
     required this.controller,
     this.showFill = true,
+    this.fillOnly = false,
     this.direction = Axis.vertical,
   });
 
   final CanvasController controller;
   final bool showFill;
+
+  /// Color-by-number: only the bucket (plain, no pattern picker) plus
+  /// undo/redo/clear — the numbered palette does the color choosing.
+  final bool fillOnly;
   final Axis direction;
 
   @override
@@ -113,19 +118,21 @@ class ToolBarRail extends StatelessWidget {
   }
 
   List<Widget> _buildGroups(BuildContext context) {
-    final tools = [
-      ToolKind.brush,
-      ToolKind.marker,
-      ToolKind.crayon,
-      ToolKind.rainbow,
-      ToolKind.glitter,
-      ToolKind.neon,
-      ToolKind.stamp,
-      ToolKind.shape,
-      if (showFill) ToolKind.fill,
-      ToolKind.eyedropper,
-      ToolKind.eraser,
-    ];
+    final tools = fillOnly
+        ? [ToolKind.fill]
+        : [
+            ToolKind.brush,
+            ToolKind.marker,
+            ToolKind.crayon,
+            ToolKind.rainbow,
+            ToolKind.glitter,
+            ToolKind.neon,
+            ToolKind.stamp,
+            ToolKind.shape,
+            if (showFill) ToolKind.fill,
+            ToolKind.eyedropper,
+            ToolKind.eraser,
+          ];
     return [
       _group(context, [
         for (final tool in tools)
@@ -138,22 +145,25 @@ class ToolBarRail extends StatelessWidget {
                 context,
                 controller,
               ),
-              ToolKind.fill => () => showFillPatternPicker(context, controller),
+              ToolKind.fill => fillOnly
+                  ? () => controller.selectTool(ToolKind.fill)
+                  : () => showFillPatternPicker(context, controller),
               _ => () => controller.selectTool(tool),
             },
           ),
       ]),
-      _group(context, [
-        _SizeButton(
-          brushSize: controller.brushSize,
-          color: controller.color,
-          onTap: () => showSizePicker(context, controller),
-        ),
-        _SymmetryButton(
-          controller: controller,
-          onTap: () => symmetry.showSymmetryPicker(context, controller),
-        ),
-      ]),
+      if (!fillOnly)
+        _group(context, [
+          _SizeButton(
+            brushSize: controller.brushSize,
+            color: controller.color,
+            onTap: () => showSizePicker(context, controller),
+          ),
+          _SymmetryButton(
+            controller: controller,
+            onTap: () => symmetry.showSymmetryPicker(context, controller),
+          ),
+        ]),
       _group(context, [
         _ActionButton(
           icon: Icons.undo_rounded,

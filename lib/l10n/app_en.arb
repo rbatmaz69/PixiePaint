@@ -62,6 +62,9 @@
   "galleryTitle": "My pictures",
   "galleryEmpty": "No pictures yet –\npaint one!",
   "continuePainting": "Keep painting",
+  "replayAction": "Watch the movie",
+  "replayAgain": "Play again",
+  "replaySpeed": "Speed",
   "renameAction": "Rename",
   "renameTitle": "What's your picture called?",
   "renameSave": "Save",
@@ -139,6 +142,13 @@
     }
   },
   "packMusic": "Music",
+  "packParty": "Party",
+  "rewardRuleCbn": "{n, plural, =1{Solve 1 more color-by-number picture!} other{Solve {n} more color-by-number pictures!}}",
+  "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
   "myStickersSection": "My stickers",
   "stickerCaptureTitle": "Pick a part of your picture!",
   "stickerEmptyTitle": "Paint first!",

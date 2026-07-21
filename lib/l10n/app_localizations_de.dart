@@ -195,6 +195,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get continuePainting => 'Weitermalen';
 
   @override
+  String get replayAction => 'Film anschauen';
+
+  @override
+  String get replayAgain => 'Nochmal abspielen';
+
+  @override
+  String get replaySpeed => 'Geschwindigkeit';
+
+  @override
   String get renameAction => 'Umbenennen';
 
   @override
@@ -392,6 +401,20 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get packMusic => 'Musik';
+
+  @override
+  String get packParty => 'Party';
+
+  @override
+  String rewardRuleCbn(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Löse noch $n Zahlenbilder!',
+      one: 'Löse noch 1 Zahlenbild!',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get myStickersSection => 'Meine Sticker';

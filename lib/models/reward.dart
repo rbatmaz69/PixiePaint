@@ -1,8 +1,9 @@
 import 'dart:math';
 
 /// What a sticker reward counts: finished paintings, distinct tools used,
-/// successful shares, or finished tracing templates.
-enum RewardGoalKind { paintings, tools, shares, tracing }
+/// successful shares, finished tracing templates, or solved
+/// color-by-number pages.
+enum RewardGoalKind { paintings, tools, shares, tracing, cbn }
 
 /// An unlockable stamp motif with a simple, kid-explainable goal.
 class StickerReward {
@@ -34,12 +35,14 @@ class ProgressSnapshot {
   final int toolsUsed;
   final int shares;
   final int tracesDone;
+  final int cbnDone;
 
   const ProgressSnapshot({
     required this.paintings,
     required this.toolsUsed,
     required this.shares,
     this.tracesDone = 0,
+    this.cbnDone = 0,
   });
 }
 
@@ -49,6 +52,7 @@ int progressFor(StickerReward reward, ProgressSnapshot s) =>
       RewardGoalKind.tools => s.toolsUsed,
       RewardGoalKind.shares => s.shares,
       RewardGoalKind.tracing => s.tracesDone,
+      RewardGoalKind.cbn => s.cbnDone,
     };
 
 bool isUnlocked(StickerReward reward, ProgressSnapshot s) =>

@@ -18,6 +18,9 @@ class Artwork {
   /// regenerated from this id on resume.
   final String? traceId;
 
+  /// Color-by-number: region ids already filled correctly (resume state).
+  final List<int> cbnFilled;
+
   const Artwork({
     required this.id,
     required this.pageId,
@@ -30,12 +33,17 @@ class Artwork {
     this.name,
     this.favorite = false,
     this.traceId,
+    this.cbnFilled = const [],
   });
 
   File get paintFile => File('$dirPath/paint.png');
   File get thumbFile => File('$dirPath/thumb.png');
   File get backgroundFile => File('$dirPath/background.png');
   File get lineArtFile => File('$dirPath/lineart.png');
+
+  /// Recorded drawing operations for the time-lapse replay; absent on
+  /// legacy artworks.
+  File get opsFile => File('$dirPath/ops.json');
 
   Artwork copyWith({String? name, bool? favorite}) => Artwork(
         id: id,
@@ -49,6 +57,7 @@ class Artwork {
         name: name ?? this.name,
         favorite: favorite ?? this.favorite,
         traceId: traceId,
+        cbnFilled: cbnFilled,
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +71,7 @@ class Artwork {
         if (name != null) 'name': name,
         'favorite': favorite,
         if (traceId != null) 'traceId': traceId,
+        if (cbnFilled.isNotEmpty) 'cbnFilled': cbnFilled,
       };
 
   static Artwork fromJson(Map<String, dynamic> json, String dirPath) => Artwork(
@@ -77,5 +87,8 @@ class Artwork {
         name: json['name'] as String?,
         favorite: json['favorite'] as bool? ?? false,
         traceId: json['traceId'] as String?,
+        cbnFilled: ((json['cbnFilled'] as List?) ?? const [])
+            .whereType<int>()
+            .toList(),
       );
 }

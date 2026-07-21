@@ -195,6 +195,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continuePainting => 'Keep painting';
 
   @override
+  String get replayAction => 'Watch the movie';
+
+  @override
+  String get replayAgain => 'Play again';
+
+  @override
+  String get replaySpeed => 'Speed';
+
+  @override
   String get renameAction => 'Rename';
 
   @override
@@ -391,6 +400,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get packMusic => 'Music';
+
+  @override
+  String get packParty => 'Party';
+
+  @override
+  String rewardRuleCbn(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Solve $n more color-by-number pictures!',
+      one: 'Solve 1 more color-by-number picture!',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get myStickersSection => 'My stickers';

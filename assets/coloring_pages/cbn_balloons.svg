@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- balloons -->
+    <circle cx="200" cy="260" r="110"/>
+    <circle cx="410" cy="180" r="100"/>
+    <circle cx="620" cy="250" r="105"/>
+    <circle cx="830" cy="190" r="95"/>
+    <circle cx="515" cy="430" r="90"/>
+    <!-- strings -->
+    <path d="M 200 370 C 190 450 220 520 205 600"/>
+    <path d="M 410 280 C 398 380 406 480 396 580"/>
+    <path d="M 620 355 C 610 440 640 520 625 600"/>
+    <path d="M 830 285 C 820 390 850 500 835 600"/>
+    <path d="M 515 520 C 505 560 535 600 520 640"/>
+    <!-- hill -->
+    <path d="M 0 700 Q 512 560 1024 700 L 1024 768 L 0 768 Z"/>
+  </g>
+</svg>

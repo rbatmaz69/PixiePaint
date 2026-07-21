@@ -43,6 +43,7 @@ class ArtworkStore {
     required String id,
     required String? pageId,
     String? traceId,
+    List<int> cbnFilled = const [],
     bool hasPhoto = false,
     bool hasPhotoLineArt = false,
     required int width,
@@ -51,6 +52,7 @@ class ArtworkStore {
     Uint8List? backgroundPng,
     Uint8List? lineArtPng,
     required Uint8List thumbPng,
+    String? opsJson,
   }) async {
     final root = await _root();
     final dir = Directory('${root.path}/$id');
@@ -75,6 +77,7 @@ class ArtworkStore {
       id: id,
       pageId: pageId,
       traceId: traceId,
+      cbnFilled: cbnFilled,
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: width,
@@ -94,6 +97,9 @@ class ArtworkStore {
     }
     if (lineArtPng != null) {
       await artwork.lineArtFile.writeAsBytes(lineArtPng);
+    }
+    if (opsJson != null) {
+      await artwork.opsFile.writeAsString(opsJson);
     }
     await artwork.thumbFile.writeAsBytes(thumbPng);
     await File('${dir.path}/meta.json')
