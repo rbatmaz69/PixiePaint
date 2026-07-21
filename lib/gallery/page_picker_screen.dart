@@ -11,18 +11,20 @@ import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../util/pdf_export.dart';
+import '../widgets/parental_gate.dart';
 
 /// Soft tint per category (keyed by the stable German category name),
 /// derived from the PixiePalette.
 Color _categoryTint(String category) => switch (category) {
-      'Tiere' => PixiePalette.sunshineLight,
-      'Natur' => PixiePalette.mintLight,
-      'Fahrzeuge' => PixiePalette.skyLight,
-      'Fantasie' => PixiePalette.grapeLight,
-      'Leckereien' => PixiePalette.bubblegumLight,
-      'Weltraum' => const Color(0xFFE2E0FF),
-      _ => const Color(0xFFF5F0E8),
-    };
+  'Tiere' => PixiePalette.sunshineLight,
+  'Natur' => PixiePalette.mintLight,
+  'Fahrzeuge' => PixiePalette.skyLight,
+  'Fantasie' => PixiePalette.grapeLight,
+  'Leckereien' => PixiePalette.bubblegumLight,
+  'Weltraum' => const Color(0xFFE2E0FF),
+  _ => const Color(0xFFF5F0E8),
+};
 
 class PagePickerScreen extends StatefulWidget {
   const PagePickerScreen({super.key});
@@ -34,8 +36,9 @@ class PagePickerScreen extends StatefulWidget {
 class _PagePickerScreenState extends State<PagePickerScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _entrance = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 900))
-    ..forward();
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  )..forward();
 
   @override
   void dispose() {
@@ -88,14 +91,13 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                       indicator: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
-                        boxShadow:
-                            PixieTokens.softShadow(PixiePalette.sunshine),
+                        boxShadow: PixieTokens.softShadow(
+                          PixiePalette.sunshine,
+                        ),
                       ),
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicatorPadding:
-                          const EdgeInsets.symmetric(vertical: 6),
-                      labelPadding:
-                          const EdgeInsets.symmetric(horizontal: 16),
+                      indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
+                      labelPadding: const EdgeInsets.symmetric(horizontal: 16),
                       labelColor: scheme.primary,
                       unselectedLabelColor: scheme.onSurfaceVariant,
                       splashBorderRadius: BorderRadius.circular(24),
@@ -113,7 +115,7 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                             _PageGrid(
                               pages: [
                                 for (final p in pages)
-                                  if (p.category == c) p
+                                  if (p.category == c) p,
                               ],
                               entrance: _entrance,
                             ),
@@ -152,43 +154,52 @@ class _PageGrid extends StatelessWidget {
       itemBuilder: (context, i) {
         final page = pages[i];
         final tint = _categoryTint(page.category);
-        Widget card = Bouncy(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => CanvasScreen(page: page)),
-          ),
-          child: StickerCard(
-            color: tint,
-            radius: 24,
-            tiltIndex: i,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: Hero(
-                      tag: page.id,
-                      child: SvgPicture.asset(
-                        page.assetPath,
-                        fit: BoxFit.contain,
+        // Long-press: print the blank page for real-paper coloring
+        // (parent feature, guarded by the gate — deliberately quiet UI).
+        Widget card = GestureDetector(
+          onLongPress: () async {
+            if (!await ParentalGate.show(context)) return;
+            try {
+              await printColoringPage(page);
+            } catch (_) {}
+          },
+          child: Bouncy(
+            onTap: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => CanvasScreen(page: page))),
+            child: StickerCard(
+              color: tint,
+              radius: 24,
+              tiltIndex: i,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Hero(
+                        tag: page.id,
+                        child: SvgPicture.asset(
+                          page.assetPath,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  page.titleFor(lang),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.w700),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    page.titleFor(lang),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -206,8 +217,9 @@ class _PageGrid extends StatelessWidget {
             opacity: anim,
             child: SlideTransition(
               position: Tween<Offset>(
-                      begin: const Offset(0, 0.12), end: Offset.zero)
-                  .animate(anim),
+                begin: const Offset(0, 0.12),
+                end: Offset.zero,
+              ).animate(anim),
               child: card,
             ),
           );

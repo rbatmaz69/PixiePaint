@@ -25,6 +25,14 @@ class CanvasPainter extends CustomPainter {
       canvas.drawImage(background, Offset.zero, Paint());
     }
 
+    // Trace guide under the paint layer and outside the eraser saveLayer —
+    // the kid draws over it, the eraser can't remove it, exports never see
+    // it (compose reads only background/paint/lineArt).
+    final traceGuide = controller.traceGuide;
+    if (traceGuide != null) {
+      canvas.drawPicture(traceGuide);
+    }
+
     final stroke = controller.activeStroke;
     final erasing = stroke?.kind == ToolKind.eraser;
     if (erasing) canvas.saveLayer(rect, Paint());
@@ -49,11 +57,15 @@ class CanvasPainter extends CustomPainter {
     final pendingStamp = controller.pendingStampPos;
     if (pendingStamp != null) {
       for (final copy in symmetryCopies(controller.symmetryFolds)) {
-        StrokeRenderer.drawStamp(
-            canvas,
-            controller.stampEmoji,
-            symmetryPoint(pendingStamp, controller.canvasCenter, copy),
-            stampSizeFor(controller.brushSize));
+        final p = symmetryPoint(pendingStamp, controller.canvasCenter, copy);
+        final stampImage = controller.stampImage;
+        if (stampImage != null) {
+          StrokeRenderer.drawImageStamp(
+              canvas, stampImage, p, stampSizeFor(controller.brushSize));
+        } else {
+          StrokeRenderer.drawStamp(canvas, controller.stampEmoji, p,
+              stampSizeFor(controller.brushSize));
+        }
       }
     }
 

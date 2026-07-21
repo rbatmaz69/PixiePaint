@@ -24,6 +24,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardGallery => 'Meine Bilder';
 
   @override
+  String get cardTrace => 'Nachspuren';
+
+  @override
+  String get traceTitle => 'Such dir eine Vorlage aus!';
+
+  @override
+  String get traceTabLetters => 'ABC';
+
+  @override
+  String get traceTabNumbers => '123';
+
+  @override
+  String get traceTabShapes => 'Formen';
+
+  @override
   String get settingsTooltip => 'Einstellungen (für Eltern)';
 
   @override
@@ -55,6 +70,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get shareForParents => 'Teilen (für Eltern)';
+
+  @override
+  String get printForParents => 'Drucken (für Eltern)';
 
   @override
   String get resetView => 'Ansicht zurücksetzen';
@@ -360,6 +378,43 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get rewardRuleShares => 'Teile ein Bild mit deinen Eltern!';
+
+  @override
+  String rewardRuleTrace(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Spure noch $n Vorlagen nach!',
+      one: 'Spure noch 1 Vorlage nach!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get packMusic => 'Musik';
+
+  @override
+  String get myStickersSection => 'Meine Sticker';
+
+  @override
+  String get stickerCaptureTitle => 'Such dir einen Ausschnitt aus!';
+
+  @override
+  String get stickerEmptyTitle => 'Erst malen!';
+
+  @override
+  String get stickerEmptyBody =>
+      'Mal zuerst etwas Schönes – dann kannst du daraus einen Sticker basteln!';
+
+  @override
+  String get stickerAlbumFullTitle => 'Sticker-Album voll!';
+
+  @override
+  String get stickerAlbumFullBody =>
+      'Wirf zuerst einen alten Sticker weg – halte ihn dafür gedrückt.';
+
+  @override
+  String get stickerDeleteTitle => 'Sticker wegwerfen?';
 
   @override
   String rewardProgress(int done, int target) {

@@ -14,6 +14,10 @@ class Artwork {
   final String? name;
   final bool favorite;
 
+  /// Tracing template this artwork was drawn on (trace mode); the guide is
+  /// regenerated from this id on resume.
+  final String? traceId;
+
   const Artwork({
     required this.id,
     required this.pageId,
@@ -25,6 +29,7 @@ class Artwork {
     required this.dirPath,
     this.name,
     this.favorite = false,
+    this.traceId,
   });
 
   File get paintFile => File('$dirPath/paint.png');
@@ -43,6 +48,7 @@ class Artwork {
         dirPath: dirPath,
         name: name ?? this.name,
         favorite: favorite ?? this.favorite,
+        traceId: traceId,
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +61,7 @@ class Artwork {
         'updatedAt': updatedAt.toIso8601String(),
         if (name != null) 'name': name,
         'favorite': favorite,
+        if (traceId != null) 'traceId': traceId,
       };
 
   static Artwork fromJson(Map<String, dynamic> json, String dirPath) => Artwork(
@@ -69,5 +76,6 @@ class Artwork {
         // Older meta.json files predate these fields.
         name: json['name'] as String?,
         favorite: json['favorite'] as bool? ?? false,
+        traceId: json['traceId'] as String?,
       );
 }

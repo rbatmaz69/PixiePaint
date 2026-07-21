@@ -22,6 +22,9 @@ class Progress extends ChangeNotifier {
   /// ToolKind names that actually painted something (not mere selection).
   final Set<String> toolsUsed = {};
 
+  /// Tracing templates finished at least once (letter/number/shape ids).
+  final Set<String> completedTraceIds = {};
+
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
 
@@ -37,6 +40,8 @@ class Progress extends ChangeNotifier {
             ((json['completedArtworkIds'] as List?) ?? []).whereType<String>());
         toolsUsed
             .addAll(((json['toolsUsed'] as List?) ?? []).whereType<String>());
+        completedTraceIds.addAll(
+            ((json['completedTraceIds'] as List?) ?? []).whereType<String>());
         celebratedEmojis.addAll(
             ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
       }
@@ -49,6 +54,7 @@ class Progress extends ChangeNotifier {
         paintings: completedArtworkIds.length,
         toolsUsed: toolsUsed.length,
         shares: Settings.instance.shareCount,
+        tracesDone: completedTraceIds.length,
       );
 
   void registerArtworkCompleted(String id) {
@@ -57,6 +63,12 @@ class Progress extends ChangeNotifier {
       return;
     }
     completedArtworkIds.add(id);
+    _persist();
+    notifyListeners();
+  }
+
+  void registerTraceCompleted(String traceId) {
+    if (!completedTraceIds.add(traceId)) return;
     _persist();
     notifyListeners();
   }
@@ -87,6 +99,7 @@ class Progress extends ChangeNotifier {
       await _file?.writeAsString(jsonEncode({
         'completedArtworkIds': completedArtworkIds.toList(),
         'toolsUsed': toolsUsed.toList(),
+        'completedTraceIds': completedTraceIds.toList(),
         'celebratedEmojis': celebratedEmojis.toList(),
       }));
     } catch (_) {}

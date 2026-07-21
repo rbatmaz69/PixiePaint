@@ -128,6 +128,36 @@ abstract class AppLocalizations {
   /// **'Meine Bilder'**
   String get cardGallery;
 
+  /// No description provided for @cardTrace.
+  ///
+  /// In de, this message translates to:
+  /// **'Nachspuren'**
+  String get cardTrace;
+
+  /// No description provided for @traceTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Such dir eine Vorlage aus!'**
+  String get traceTitle;
+
+  /// No description provided for @traceTabLetters.
+  ///
+  /// In de, this message translates to:
+  /// **'ABC'**
+  String get traceTabLetters;
+
+  /// No description provided for @traceTabNumbers.
+  ///
+  /// In de, this message translates to:
+  /// **'123'**
+  String get traceTabNumbers;
+
+  /// No description provided for @traceTabShapes.
+  ///
+  /// In de, this message translates to:
+  /// **'Formen'**
+  String get traceTabShapes;
+
   /// No description provided for @settingsTooltip.
   ///
   /// In de, this message translates to:
@@ -193,6 +223,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Teilen (für Eltern)'**
   String get shareForParents;
+
+  /// No description provided for @printForParents.
+  ///
+  /// In de, this message translates to:
+  /// **'Drucken (für Eltern)'**
+  String get printForParents;
 
   /// No description provided for @resetView.
   ///
@@ -757,6 +793,60 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Teile ein Bild mit deinen Eltern!'**
   String get rewardRuleShares;
+
+  /// No description provided for @rewardRuleTrace.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Spure noch 1 Vorlage nach!} other{Spure noch {n} Vorlagen nach!}}'**
+  String rewardRuleTrace(int n);
+
+  /// No description provided for @packMusic.
+  ///
+  /// In de, this message translates to:
+  /// **'Musik'**
+  String get packMusic;
+
+  /// No description provided for @myStickersSection.
+  ///
+  /// In de, this message translates to:
+  /// **'Meine Sticker'**
+  String get myStickersSection;
+
+  /// No description provided for @stickerCaptureTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Such dir einen Ausschnitt aus!'**
+  String get stickerCaptureTitle;
+
+  /// No description provided for @stickerEmptyTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Erst malen!'**
+  String get stickerEmptyTitle;
+
+  /// No description provided for @stickerEmptyBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Mal zuerst etwas Schönes – dann kannst du daraus einen Sticker basteln!'**
+  String get stickerEmptyBody;
+
+  /// No description provided for @stickerAlbumFullTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sticker-Album voll!'**
+  String get stickerAlbumFullTitle;
+
+  /// No description provided for @stickerAlbumFullBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Wirf zuerst einen alten Sticker weg – halte ihn dafür gedrückt.'**
+  String get stickerAlbumFullBody;
+
+  /// No description provided for @stickerDeleteTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sticker wegwerfen?'**
+  String get stickerDeleteTitle;
 
   /// No description provided for @rewardProgress.
   ///

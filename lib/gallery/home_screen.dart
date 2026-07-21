@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../photo/photo_lineart_screen.dart';
+import '../trace/trace_picker_screen.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
@@ -38,11 +39,13 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  /// One-shot staggered entrance: fade + rise, offset per slot.
+  /// One-shot staggered entrance: fade + rise, offset per slot. Clamped so
+  /// late slots never push the interval past 1.0 (debug assert).
   Widget _staggered(int slot, Widget child) {
+    final start = (0.10 * slot).clamp(0.0, 0.45);
     final anim = CurvedAnimation(
       parent: _entrance,
-      curve: Interval(0.10 * slot, 0.10 * slot + 0.55,
+      curve: Interval(start, (start + 0.55).clamp(0.0, 1.0),
           curve: Curves.easeOutCubic),
     );
     return FadeTransition(
@@ -128,12 +131,28 @@ class _HomeScreenState extends State<HomeScreen>
                             _staggered(
                               4,
                               _BigCard(
+                                emoji: '✍️',
+                                label: context.l10n.cardTrace,
+                                gradient: PixieGradients.trace,
+                                width: cardW,
+                                height: cardH,
+                                tiltIndex: 4,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          const TracePickerScreen()),
+                                ),
+                              ),
+                            ),
+                            _staggered(
+                              5,
+                              _BigCard(
                                 emoji: '🖼️',
                                 label: context.l10n.cardGallery,
                                 gradient: PixieGradients.gallery,
                                 width: cardW,
                                 height: cardH,
-                                tiltIndex: 4,
+                                tiltIndex: 5,
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (_) => const GalleryScreen()),

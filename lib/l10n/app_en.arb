@@ -5,6 +5,11 @@
   "cardFreeDraw": "Free drawing",
   "cardPhoto": "Paint a photo",
   "cardGallery": "My pictures",
+  "cardTrace": "Tracing",
+  "traceTitle": "Pick something to trace!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Shapes",
   "settingsTooltip": "Settings (for parents)",
   "photoDialogTitle": "What shall we do with the photo?",
   "photoModePaint": "Paint on the photo",
@@ -16,6 +21,7 @@
   "letsGo": "Let's go!",
   "back": "Back",
   "shareForParents": "Share (for parents)",
+  "printForParents": "Print (for parents)",
   "resetView": "Reset view",
   "toolBrush": "Brush",
   "toolMarker": "Marker",
@@ -126,6 +132,20 @@
     }
   },
   "rewardRuleShares": "Share a picture with your parents!",
+  "rewardRuleTrace": "{n, plural, =1{Trace 1 more template!} other{Trace {n} more templates!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "packMusic": "Music",
+  "myStickersSection": "My stickers",
+  "stickerCaptureTitle": "Pick a part of your picture!",
+  "stickerEmptyTitle": "Paint first!",
+  "stickerEmptyBody": "Paint something lovely first – then you can turn it into a sticker!",
+  "stickerAlbumFullTitle": "Sticker album is full!",
+  "stickerAlbumFullBody": "Throw an old sticker away first – press and hold it to do that.",
+  "stickerDeleteTitle": "Throw the sticker away?",
   "rewardProgress": "{done} of {target}",
   "@rewardProgress": {
     "placeholders": {

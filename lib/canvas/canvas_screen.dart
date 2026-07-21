@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' show ImageByteFormat;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,8 @@ import '../ui/loading_pixie.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../models/reward.dart';
+import '../trace/trace_coverage.dart';
+import '../trace/trace_template.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
 import '../util/progress.dart';
@@ -32,6 +35,7 @@ import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
 import 'canvas_viewport.dart';
 import 'painting_canvas.dart';
+import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
 const int kCanvasHeight = 1536;
@@ -47,11 +51,13 @@ class CanvasScreen extends StatefulWidget {
     this.resume,
     this.photoPath,
     this.photoLineArt,
+    this.traceTemplate,
   });
 
   final ColoringPage? page;
   final Artwork? resume;
   final String? photoPath;
+  final TraceTemplate? traceTemplate;
 
   /// Ownership passes to the canvas controller, which disposes it.
   final RasterizedLineArt? photoLineArt;
@@ -66,6 +72,9 @@ class _CanvasScreenState extends State<CanvasScreen>
   final CanvasViewportController viewport = CanvasViewportController();
   late final String artworkId;
   String? pageId;
+  String? traceId;
+  TraceCoverage? _traceCoverage;
+  bool _traceCelebrated = false;
   late bool hasPhoto;
   late bool hasPhotoLineArt;
   late bool _backgroundSaved;
@@ -84,6 +93,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     );
     artworkId = widget.resume?.id ?? ArtworkStore.newId();
     pageId = widget.resume?.pageId ?? widget.page?.id;
+    traceId = widget.traceTemplate?.id ?? widget.resume?.traceId;
     hasPhoto = widget.photoPath != null || (widget.resume?.hasPhoto ?? false);
     hasPhotoLineArt =
         widget.photoLineArt != null ||
@@ -99,6 +109,9 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   Future<void> _load() async {
+    if (traceId != null) {
+      await _loadTrace(traceId!);
+    }
     if (pageId != null) {
       final page = await ColoringPage.byId(pageId!);
       if (page != null) {
@@ -137,6 +150,45 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (mounted) setState(() => loading = false);
   }
 
+  /// Builds the trace guide + coverage grid and wires the commit hook. The
+  /// guide is regenerated from the template id — nothing rasterized is
+  /// persisted. On resume the coverage restarts, but an already-earned
+  /// completion never fires twice.
+  Future<void> _loadTrace(String id) async {
+    final template = traceTemplateById(id);
+    if (template == null) return;
+    final guide = buildTraceGuide(template, kCanvasWidth, kCanvasHeight);
+    controller.setTraceGuide(guide);
+    final image = await guide.toImage(kCanvasWidth, kCanvasHeight);
+    final data = await image.toByteData(format: ImageByteFormat.rawRgba);
+    image.dispose();
+    final rgba = data!.buffer.asUint8List();
+    final alpha = Uint8List(kCanvasWidth * kCanvasHeight);
+    for (var i = 0; i < alpha.length; i++) {
+      alpha[i] = rgba[i * 4 + 3];
+    }
+    _traceCoverage =
+        TraceCoverage.fromAlpha(alpha, kCanvasWidth, kCanvasHeight);
+    _traceCelebrated = Progress.instance.completedTraceIds.contains(id);
+    controller.onStrokeCommitted = _onTraceStroke;
+  }
+
+  void _onTraceStroke(Stroke stroke) {
+    final coverage = _traceCoverage;
+    if (coverage == null || stroke.kind == ToolKind.eraser) return;
+    coverage.addPoints(
+      stroke.points.map((p) => p.pos),
+      // Generous radius for small hands: at least half a fat finger.
+      stroke.baseWidth < 30 ? 30 : stroke.baseWidth,
+    );
+    if (!_traceCelebrated && coverage.fraction >= 0.6) {
+      _traceCelebrated = true;
+      Progress.instance.registerTraceCompleted(traceId!);
+      Sfx.instance.tada();
+      if (mounted) showConfetti(context);
+    }
+  }
+
   Future<void> _save() async {
     if (!controller.dirty && everSaved) return;
     // Don't create junk artworks for an untouched canvas.
@@ -165,6 +217,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     await ArtworkStore.save(
       id: artworkId,
       pageId: pageId,
+      traceId: traceId,
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: kCanvasWidth,
@@ -319,6 +372,7 @@ class _CanvasScreenState extends State<CanvasScreen>
             children: [
               _LeftRail(
                 controller: controller,
+                showFill: traceId == null,
                 onBack: _leave,
                 onShare: _share,
               ),
@@ -353,6 +407,7 @@ class _CanvasScreenState extends State<CanvasScreen>
             child: ToolBarRail(
               controller: controller,
               direction: Axis.horizontal,
+              showFill: traceId == null,
             ),
           ),
         ),
@@ -593,11 +648,13 @@ class _LeftRail extends StatelessWidget {
     required this.controller,
     required this.onBack,
     required this.onShare,
+    this.showFill = true,
   });
 
   final CanvasController controller;
   final VoidCallback onBack;
   final VoidCallback onShare;
+  final bool showFill;
 
   @override
   Widget build(BuildContext context) {
@@ -629,7 +686,9 @@ class _LeftRail extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: ToolBarRail(controller: controller)),
+          Expanded(
+            child: ToolBarRail(controller: controller, showFill: showFill),
+          ),
           Tooltip(
             message: context.l10n.shareForParents,
             child: Bouncy(

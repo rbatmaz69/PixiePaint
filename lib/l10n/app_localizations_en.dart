@@ -24,6 +24,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardGallery => 'My pictures';
 
   @override
+  String get cardTrace => 'Tracing';
+
+  @override
+  String get traceTitle => 'Pick something to trace!';
+
+  @override
+  String get traceTabLetters => 'ABC';
+
+  @override
+  String get traceTabNumbers => '123';
+
+  @override
+  String get traceTabShapes => 'Shapes';
+
+  @override
   String get settingsTooltip => 'Settings (for parents)';
 
   @override
@@ -55,6 +70,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareForParents => 'Share (for parents)';
+
+  @override
+  String get printForParents => 'Print (for parents)';
 
   @override
   String get resetView => 'Reset view';
@@ -359,6 +377,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rewardRuleShares => 'Share a picture with your parents!';
+
+  @override
+  String rewardRuleTrace(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Trace $n more templates!',
+      one: 'Trace 1 more template!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get packMusic => 'Music';
+
+  @override
+  String get myStickersSection => 'My stickers';
+
+  @override
+  String get stickerCaptureTitle => 'Pick a part of your picture!';
+
+  @override
+  String get stickerEmptyTitle => 'Paint first!';
+
+  @override
+  String get stickerEmptyBody =>
+      'Paint something lovely first – then you can turn it into a sticker!';
+
+  @override
+  String get stickerAlbumFullTitle => 'Sticker album is full!';
+
+  @override
+  String get stickerAlbumFullBody =>
+      'Throw an old sticker away first – press and hold it to do that.';
+
+  @override
+  String get stickerDeleteTitle => 'Throw the sticker away?';
 
   @override
   String rewardProgress(int done, int target) {

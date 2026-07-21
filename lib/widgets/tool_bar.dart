@@ -225,7 +225,8 @@ class _ToolButton extends StatelessWidget {
     // The whole toolbar speaks emoji — the same language as the pickers
     // and the tool chip. Stamp/shape show their selected motif.
     final emoji = switch (tool) {
-      ToolKind.stamp => controller.stampEmoji,
+      ToolKind.stamp =>
+        controller.stampImage != null ? '🖼️' : controller.stampEmoji,
       ToolKind.shape => shapes.shapeEmoji(controller.shapeKind),
       _ => toolEmoji(tool),
     };

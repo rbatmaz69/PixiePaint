@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,24 +7,67 @@ import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/reward.dart';
 import '../models/stamp.dart';
+import '../stickers/sticker_capture.dart';
+import '../stickers/sticker_store.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/sticker.dart';
 import '../util/anim_math.dart';
+import '../util/image_io.dart';
 import '../util/progress.dart';
 import '../util/sfx.dart';
 
-/// Bottom sheet with themed stamp packs; picking a stamp selects the stamp
-/// tool with that motif. Locked packs and the individual reward stickers
-/// appear as mystery boxes that wiggle now and then and explain their goal.
+enum _StampSheetResult { capture }
+
+/// Bottom sheet with the kid's own stickers and themed stamp packs; picking
+/// a stamp selects the stamp tool with that motif. Locked packs and the
+/// individual reward stickers appear as mystery boxes that wiggle now and
+/// then and explain their goal.
 Future<void> showStampPicker(
-    BuildContext context, CanvasController controller) {
-  return showKidSheet<void>(
+    BuildContext context, CanvasController controller) async {
+  final result = await showKidSheet<_StampSheetResult>(
     context: context,
-    emoji: controller.stampEmoji,
+    emoji: controller.stampImage != null ? '🖼️' : controller.stampEmoji,
     title: context.l10n.toolSticker,
     child: _StampSections(controller: controller),
+  );
+  if (result != _StampSheetResult.capture || !context.mounted) return;
+
+  // Capture flow, triggered after the sheet is gone.
+  if (controller.isEmpty &&
+      controller.backgroundImage == null &&
+      controller.lineArt == null) {
+    await _showInfo(context, '🖌️', context.l10n.stickerEmptyTitle,
+        context.l10n.stickerEmptyBody);
+    return;
+  }
+  if ((await StickerStore.list()).length >= StickerStore.maxStickers) {
+    if (!context.mounted) return;
+    await _showInfo(context, '📚', context.l10n.stickerAlbumFullTitle,
+        context.l10n.stickerAlbumFullBody);
+    return;
+  }
+  if (!context.mounted) return;
+  await showStickerCapture(context, controller);
+}
+
+Future<void> _showInfo(
+    BuildContext context, String emoji, String title, String body) {
+  return showKidDialog<void>(
+    context: context,
+    emoji: emoji,
+    title: title,
+    body: Text(body, textAlign: TextAlign.center),
+    actions: [
+      Builder(
+        builder: (dialogContext) => KidDialogButton(
+          label: context.l10n.okAction,
+          emoji: '👍',
+          onTap: () => Navigator.pop(dialogContext),
+        ),
+      ),
+    ],
   );
 }
 
@@ -33,6 +77,7 @@ String stampPackLabel(BuildContext context, StampPack pack) =>
       'animals2' => context.l10n.packAnimals,
       'space' => context.l10n.packSpace,
       'food' => context.l10n.packFood,
+      'music' => context.l10n.packMusic,
       'vehicles' => context.l10n.packVehicles,
       _ => pack.id,
     };
@@ -54,10 +99,48 @@ class _StampSectionsState extends State<_StampSections>
       vsync: this, duration: const Duration(seconds: 3))
     ..repeat();
 
+  Future<List<File>> _myStickers = StickerStore.list();
+
   @override
   void dispose() {
     _wiggle.dispose();
     super.dispose();
+  }
+
+  Future<void> _confirmDeleteSticker(File file) async {
+    final ok = await showKidDialog<bool>(
+      context: context,
+      emoji: '🗑️',
+      title: context.l10n.stickerDeleteTitle,
+      body: Text(context.l10n.deleteBody, textAlign: TextAlign.center),
+      actions: [
+        Builder(
+          builder: (dialogContext) => KidDialogButton(
+            label: context.l10n.deleteKeep,
+            emoji: '🖼️',
+            onTap: () => Navigator.pop(dialogContext, false),
+          ),
+        ),
+        Builder(
+          builder: (dialogContext) => KidDialogTextButton(
+            label: context.l10n.deleteAction,
+            onTap: () => Navigator.pop(dialogContext, true),
+          ),
+        ),
+      ],
+    );
+    if (ok != true) return;
+    await StickerStore.delete(file);
+    if (widget.controller.stampImagePath == file.path) {
+      widget.controller.selectStamp(widget.controller.stampEmoji);
+    }
+    if (mounted) setState(() => _myStickers = StickerStore.list());
+  }
+
+  Future<void> _pickSticker(File file) async {
+    final image = await pngBytesToImage(await file.readAsBytes());
+    widget.controller.selectImageStamp(file.path, image);
+    if (mounted) Navigator.of(context).pop();
   }
 
   static const _gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
@@ -103,6 +186,29 @@ class _StampSectionsState extends State<_StampSections>
         );
 
     final children = <Widget>[];
+
+    // The kid's own stickers, with the "make a sticker" tile first.
+    children.add(_header(context, '🖼️', context.l10n.myStickersSection));
+    children.add(FutureBuilder<List<File>>(
+      future: _myStickers,
+      builder: (context, snapshot) {
+        final files = snapshot.data ?? const <File>[];
+        return _grid([
+          _MakeStickerTile(
+            onTap: () =>
+                Navigator.of(context).pop(_StampSheetResult.capture),
+          ),
+          for (final file in files)
+            _MyStickerTile(
+              file: file,
+              selected: controller.stampImagePath == file.path,
+              onTap: () => _pickSticker(file),
+              onLongPress: () => _confirmDeleteSticker(file),
+            ),
+        ]);
+      },
+    ));
+
     for (final pack in kStampPacks) {
       children.add(_header(
           context,
@@ -137,6 +243,69 @@ class _StampSectionsState extends State<_StampSections>
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
       children: children,
+    );
+  }
+}
+
+/// Dashed-feel "make your own sticker" tile: big plus on a soft tint.
+class _MakeStickerTile extends StatelessWidget {
+  const _MakeStickerTile({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: context.l10n.stickerCaptureTitle,
+      child: Bouncy(
+        playTick: false,
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F0E8),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: const Color(0xFFDBD2C3), width: 2),
+          ),
+          child: const Center(
+            child: Text('➕', style: TextStyle(fontSize: 28)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One of the kid's own stickers; long-press to throw it away.
+class _MyStickerTile extends StatelessWidget {
+  const _MyStickerTile({
+    required this.file,
+    required this.selected,
+    required this.onTap,
+    required this.onLongPress,
+  });
+
+  final File file;
+  final bool selected;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Bouncy(
+        playTick: false,
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.all(6),
+          decoration: stickerSelectionDecoration(
+            selected: selected,
+            accent: const Color(0xFFFFB020),
+          ),
+          child: Image.file(file, fit: BoxFit.contain),
+        ),
+      ),
     );
   }
 }
@@ -255,6 +424,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
         context.l10n.rewardRulePaintings(remaining),
       RewardGoalKind.tools => context.l10n.rewardRuleTools(remaining),
       RewardGoalKind.shares => context.l10n.rewardRuleShares,
+      RewardGoalKind.tracing => context.l10n.rewardRuleTrace(remaining),
     };
     showKidDialog<void>(
       context: context,

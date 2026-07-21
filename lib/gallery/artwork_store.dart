@@ -42,6 +42,7 @@ class ArtworkStore {
   static Future<Artwork> save({
     required String id,
     required String? pageId,
+    String? traceId,
     bool hasPhoto = false,
     bool hasPhotoLineArt = false,
     required int width,
@@ -73,6 +74,7 @@ class ArtworkStore {
     final artwork = Artwork(
       id: id,
       pageId: pageId,
+      traceId: traceId,
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: width,

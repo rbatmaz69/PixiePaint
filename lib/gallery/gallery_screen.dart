@@ -14,6 +14,7 @@ import '../ui/sticker.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
+import '../util/pdf_export.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import 'page_picker_screen.dart';
@@ -209,6 +210,18 @@ class _GalleryScreenState extends State<GalleryScreen>
                 },
               ),
             ),
+            const SizedBox(height: 10),
+            Builder(
+              builder: (sheetContext) => KidDialogButton(
+                emoji: '🖨️',
+                label: context.l10n.printForParents,
+                gradient: PixieGradients.trace,
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _print(artwork);
+                },
+              ),
+            ),
             const SizedBox(height: 6),
             Builder(
               builder: (sheetContext) => KidDialogTextButton(
@@ -231,6 +244,15 @@ class _GalleryScreenState extends State<GalleryScreen>
     await share_util.shareSavedArtwork(artwork);
     if (mounted) showConfetti(context);
     await countShareAndMaybeReview();
+  }
+
+  Future<void> _print(Artwork artwork) async {
+    if (!await ParentalGate.show(context)) return;
+    try {
+      await printSavedArtwork(artwork);
+    } catch (_) {
+      // The native print dialog can fail on odd printers — never crash.
+    }
   }
 
   Future<void> _delete(Artwork artwork) async {

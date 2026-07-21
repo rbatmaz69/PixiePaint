@@ -54,6 +54,11 @@ abstract final class PixieGradients {
     end: Alignment.bottomRight,
     colors: [PixiePalette.mintLight, PixiePalette.mint],
   );
+  static const LinearGradient trace = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [PixiePalette.bubblegumLight, PixiePalette.bubblegum],
+  );
 
   // Screen backgrounds — warm paper fading into a whisper of the feature
   // tint.

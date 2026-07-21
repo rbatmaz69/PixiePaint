@@ -66,6 +66,18 @@ class StrokeRenderer {
     tp.dispose();
   }
 
+  /// Renders a custom image sticker centered at [center], fit into a
+  /// size×size square.
+  static void drawImageStamp(
+      Canvas canvas, ui.Image image, Offset center, double size) {
+    canvas.drawImageRect(
+      image,
+      Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+      Rect.fromCenter(center: center, width: size, height: size),
+      Paint()..filterQuality = FilterQuality.medium,
+    );
+  }
+
   static Paint _paintFor(Stroke stroke) => Paint()
     ..color = stroke.color
     ..strokeCap = StrokeCap.round

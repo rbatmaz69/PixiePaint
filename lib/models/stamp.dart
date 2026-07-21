@@ -50,6 +50,12 @@ const List<StampPack> kStampPacks = [
     unlock: StickerReward('🍩', RewardGoalKind.tools, 7),
   ),
   StampPack(
+    id: 'music',
+    emoji: '🎵',
+    stamps: ['🎵', '🎶', '🥁', '🎸', '🎺', '🎹', '🎻', '🪗', '🎤', '🎧'],
+    unlock: StickerReward('🎵', RewardGoalKind.tracing, 5),
+  ),
+  StampPack(
     id: 'vehicles',
     emoji: '🚗',
     stamps: ['🚗', '🚒', '🚜', '🚂', '✈️', '🚁', '⛵', '🚲', '🛶', '🚌'],

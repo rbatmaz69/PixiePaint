@@ -52,6 +52,14 @@ class CanvasController extends ChangeNotifier {
 
   /// Photo background drawn under the paint layer (photo mode).
   ui.Image? backgroundImage;
+
+  /// Tracing guide drawn under the paint layer (trace mode) — never baked
+  /// into commits, thumbnails or exports.
+  ui.Picture? traceGuide;
+
+  /// Fired after each committed stroke (trace mode feeds its coverage).
+  void Function(Stroke stroke)? onStrokeCommitted;
+
   Uint8List? barrierAlpha;
   Stroke? activeStroke;
 
@@ -59,6 +67,11 @@ class CanvasController extends ChangeNotifier {
   double brushSize = 28;
   Color color = const Color(0xFFE53935);
   String stampEmoji = '⭐';
+
+  /// A custom sticker selected as the stamp motif; when set, it wins over
+  /// [stampEmoji]. At most one decoded image is held at a time.
+  String? stampImagePath;
+  ui.Image? stampImage;
   FillPattern fillPattern = FillPattern.solid;
   ShapeKind shapeKind = ShapeKind.heart;
 
@@ -142,6 +155,12 @@ class CanvasController extends ChangeNotifier {
     _tick();
   }
 
+  void setTraceGuide(ui.Picture? picture) {
+    traceGuide?.dispose();
+    traceGuide = picture;
+    _tick();
+  }
+
   void selectTool(ToolKind t) {
     if (t == ToolKind.eyedropper && tool != ToolKind.eyedropper) {
       _toolBeforePick = tool;
@@ -167,6 +186,19 @@ class CanvasController extends ChangeNotifier {
 
   void selectStamp(String emoji) {
     stampEmoji = emoji;
+    stampImage?.dispose();
+    stampImage = null;
+    stampImagePath = null;
+    tool = ToolKind.stamp;
+    Sfx.instance.tick();
+    notifyListeners();
+  }
+
+  /// Ownership of [image] passes to the controller.
+  void selectImageStamp(String path, ui.Image image) {
+    stampImage?.dispose();
+    stampImage = image;
+    stampImagePath = path;
     tool = ToolKind.stamp;
     Sfx.instance.tick();
     notifyListeners();
@@ -421,9 +453,15 @@ class CanvasController extends ChangeNotifier {
       canvas.drawImage(paintLayer!, Offset.zero, Paint());
     }
     for (final copy in symmetryCopies(symmetryFolds)) {
-      // Transform the position, not the canvas — emoji stay upright.
-      StrokeRenderer.drawStamp(canvas, stampEmoji,
-          symmetryPoint(pos, canvasCenter, copy), stampSizeFor(brushSize));
+      // Transform the position, not the canvas — motifs stay upright.
+      final p = symmetryPoint(pos, canvasCenter, copy);
+      if (stampImage != null) {
+        StrokeRenderer.drawImageStamp(
+            canvas, stampImage!, p, stampSizeFor(brushSize));
+      } else {
+        StrokeRenderer.drawStamp(canvas, stampEmoji, p,
+            stampSizeFor(brushSize));
+      }
     }
     final picture = recorder.endRecording();
     final newLayer = picture.toImageSync(canvasWidth, canvasHeight);
@@ -494,6 +532,7 @@ class CanvasController extends ChangeNotifier {
 
     Progress.instance.registerToolUsed(stroke.kind);
     _pushUndoAndReplace(newLayer);
+    onStrokeCommitted?.call(stroke);
   }
 
   void _pushUndoAndReplace(ui.Image? newLayer) {
@@ -589,6 +628,8 @@ class CanvasController extends ChangeNotifier {
     lineArtPicture?.dispose();
     _lineArtSource?.dispose();
     backgroundImage?.dispose();
+    traceGuide?.dispose();
+    stampImage?.dispose();
     lastFill.dispose();
     lastStamp.dispose();
     repaint.dispose();

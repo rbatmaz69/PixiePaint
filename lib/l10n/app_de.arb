@@ -5,6 +5,11 @@
   "cardFreeDraw": "Frei malen",
   "cardPhoto": "Foto anmalen",
   "cardGallery": "Meine Bilder",
+  "cardTrace": "Nachspuren",
+  "traceTitle": "Such dir eine Vorlage aus!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Formen",
   "settingsTooltip": "Einstellungen (für Eltern)",
   "photoDialogTitle": "Was machen wir mit dem Foto?",
   "photoModePaint": "Foto anmalen",
@@ -16,6 +21,7 @@
   "letsGo": "Los geht's!",
   "back": "Zurück",
   "shareForParents": "Teilen (für Eltern)",
+  "printForParents": "Drucken (für Eltern)",
   "resetView": "Ansicht zurücksetzen",
   "toolBrush": "Pinsel",
   "toolMarker": "Filzstift",
@@ -126,6 +132,20 @@
     }
   },
   "rewardRuleShares": "Teile ein Bild mit deinen Eltern!",
+  "rewardRuleTrace": "{n, plural, =1{Spure noch 1 Vorlage nach!} other{Spure noch {n} Vorlagen nach!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "packMusic": "Musik",
+  "myStickersSection": "Meine Sticker",
+  "stickerCaptureTitle": "Such dir einen Ausschnitt aus!",
+  "stickerEmptyTitle": "Erst malen!",
+  "stickerEmptyBody": "Mal zuerst etwas Schönes – dann kannst du daraus einen Sticker basteln!",
+  "stickerAlbumFullTitle": "Sticker-Album voll!",
+  "stickerAlbumFullBody": "Wirf zuerst einen alten Sticker weg – halte ihn dafür gedrückt.",
+  "stickerDeleteTitle": "Sticker wegwerfen?",
   "rewardProgress": "{done} von {target}",
   "@rewardProgress": {
     "placeholders": {
