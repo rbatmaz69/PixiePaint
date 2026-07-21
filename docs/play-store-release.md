@@ -65,20 +65,22 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 **Vollständige Beschreibung:**
 > 🎨 PixiePaint ist ein liebevolles Malbuch für Kinder ab 3 Jahren.
 >
-> • 22 Ausmalbilder: Tiere, Fahrzeuge, Fantasie und mehr
-> • Flächen füllen per Fingertipp oder frei drübermalen
+> • 32 Ausmalbilder: Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum
+> • Flächen füllen per Fingertipp – einfarbig, Punkte, Streifen oder Regenbogen
 > • Freies Zeichnen auf leerer Leinwand
-> • Eigene Fotos anmalen
+> • Eigene Fotos anmalen oder in ein Ausmalbild verwandeln
 > • Tolle Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon
-> • 20 lustige Sticker-Stempel
+> • Formen aufziehen: Kreis, Quadrat, Herz, Stern, Regenbogen
+> • 20 lustige Sticker-Stempel + 9 Sticker zum Freimalen
+> • Pipette und stufenlose Pinselgröße
 > • Zwei-Finger-Zoom für feine Details
 > • Stift-Unterstützung mit Druckstärke (S Pen & Co.)
-> • Galerie: Bilder speichern, weitermalen und teilen
+> • Galerie: Bilder speichern, benennen, favorisieren, weitermalen und teilen
 >
 > 👨‍👩‍👧 Für Eltern:
-> • Komplett offline – keine Internetverbindung, keine Berechtigungen
-> • Keine Werbung, keine In-App-Käufe, keine Datensammlung
-> • Teilen, Einstellungen und Löschen hinter einer Elternschranke
+> • Komplett offline – keine Internetverbindung, keine Werbung
+> • Keine In-App-Käufe, keine Datensammlung, keine Accounts
+> • Fotos anmalen, Teilen, Einstellungen und Löschen hinter einer Elternschranke
 > • Automatisches Speichern – kein Bild geht verloren
 
 - **Kategorie:** Lernen (oder Kunst & Design)
@@ -112,8 +114,8 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 3.0.0 (versionCode 3) |
+| Version | 6.0.0 (versionCode 8) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
-| Berechtigungen | keine |
+| Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |
 | Internet | nein |
 | Werbung/Tracking | nein |
