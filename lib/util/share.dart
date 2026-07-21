@@ -37,11 +37,13 @@ Future<void> shareArtwork({
   );
 }
 
-/// Composes a saved artwork into full-resolution PNG bytes: loads the paint
-/// layer from disk and re-rasterizes the line art if the artwork is a
-/// coloring page (photo line art is reloaded from its saved PNG instead).
-/// Shared by the share sheet and the save-to-Photos export.
-Future<Uint8List> composeSavedArtworkPng(Artwork artwork) async {
+/// Composes a saved artwork into PNG bytes: loads the paint layer from disk
+/// and re-rasterizes the line art if the artwork is a coloring page (photo
+/// line art is reloaded from its saved PNG instead). Shared by the share
+/// sheet, save-to-Photos, printing and the slideshow — the latter passes
+/// [targetWidth] to get a screen-sized render instead of the full canvas.
+Future<Uint8List> composeSavedArtworkPng(Artwork artwork,
+    {int? targetWidth}) async {
   ui.Image? background;
   ui.Image? paintLayer;
   RasterizedLineArt? raster;
@@ -68,6 +70,7 @@ Future<Uint8List> composeSavedArtworkPng(Artwork artwork) async {
       background: background,
       paintLayer: paintLayer,
       lineArt: raster?.image,
+      targetWidth: targetWidth,
     );
     final png = await imageToPngBytes(composed);
     composed.dispose();

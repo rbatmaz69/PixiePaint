@@ -28,6 +28,11 @@ class Progress extends ChangeNotifier {
   /// Color-by-number pages fully solved at least once.
   final Set<String> completedCbnIds = {};
 
+  /// Daily prompts marked as done (total) and the last day it happened,
+  /// as a `yyyy-MM-dd` key so a day counts exactly once.
+  int tasksDone = 0;
+  String lastTaskDay = '';
+
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
 
@@ -47,6 +52,8 @@ class Progress extends ChangeNotifier {
             ((json['completedTraceIds'] as List?) ?? []).whereType<String>());
         completedCbnIds.addAll(
             ((json['completedCbnIds'] as List?) ?? []).whereType<String>());
+        tasksDone = json['tasksDone'] as int? ?? 0;
+        lastTaskDay = json['lastTaskDay'] as String? ?? '';
         celebratedEmojis.addAll(
             ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
       }
@@ -61,7 +68,19 @@ class Progress extends ChangeNotifier {
         shares: Settings.instance.shareCount,
         tracesDone: completedTraceIds.length,
         cbnDone: completedCbnIds.length,
+        tasksDone: tasksDone,
       );
+
+  bool isTaskDoneOn(String dayKey) => lastTaskDay == dayKey;
+
+  /// Counts today's prompt as done — at most once per calendar day.
+  void registerDailyTaskDone(String dayKey) {
+    if (lastTaskDay == dayKey) return;
+    lastTaskDay = dayKey;
+    tasksDone++;
+    _persist();
+    notifyListeners();
+  }
 
   void registerArtworkCompleted(String id) {
     if (completedArtworkIds.contains(id) ||
@@ -113,6 +132,8 @@ class Progress extends ChangeNotifier {
         'toolsUsed': toolsUsed.toList(),
         'completedTraceIds': completedTraceIds.toList(),
         'completedCbnIds': completedCbnIds.toList(),
+        'tasksDone': tasksDone,
+        'lastTaskDay': lastTaskDay,
         'celebratedEmojis': celebratedEmojis.toList(),
       }));
     } catch (_) {}

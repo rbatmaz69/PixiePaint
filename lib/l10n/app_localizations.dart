@@ -140,6 +140,30 @@ abstract class AppLocalizations {
   /// **'Sticker-Welt'**
   String get cardScenes;
 
+  /// No description provided for @dailyTaskTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufgabe des Tages'**
+  String get dailyTaskTitle;
+
+  /// No description provided for @dailyTaskGo.
+  ///
+  /// In de, this message translates to:
+  /// **'Los geht\'s!'**
+  String get dailyTaskGo;
+
+  /// No description provided for @dailyTaskDone.
+  ///
+  /// In de, this message translates to:
+  /// **'Geschafft!'**
+  String get dailyTaskDone;
+
+  /// No description provided for @dailyTaskAlreadyDone.
+  ///
+  /// In de, this message translates to:
+  /// **'Heute schon geschafft – super gemacht! 🎉'**
+  String get dailyTaskAlreadyDone;
+
   /// No description provided for @scenePickerTitle.
   ///
   /// In de, this message translates to:
@@ -500,6 +524,12 @@ abstract class AppLocalizations {
   /// **'Weitermalen'**
   String get continuePainting;
 
+  /// No description provided for @slideshowTooltip.
+  ///
+  /// In de, this message translates to:
+  /// **'Diashow starten'**
+  String get slideshowTooltip;
+
   /// No description provided for @replayAction.
   ///
   /// In de, this message translates to:
@@ -770,11 +800,41 @@ abstract class AppLocalizations {
   /// **'Spaß'**
   String get settingsSectionFun;
 
+  /// No description provided for @settingsSectionParents.
+  ///
+  /// In de, this message translates to:
+  /// **'Für Eltern'**
+  String get settingsSectionParents;
+
   /// No description provided for @settingsSectionAbout.
   ///
   /// In de, this message translates to:
   /// **'Info'**
   String get settingsSectionAbout;
+
+  /// No description provided for @backupTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Bilder sichern'**
+  String get backupTitle;
+
+  /// No description provided for @backupSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Packt alle Bilder in eine ZIP-Datei zum Teilen oder Aufbewahren.'**
+  String get backupSubtitle;
+
+  /// No description provided for @backupWorking.
+  ///
+  /// In de, this message translates to:
+  /// **'Bilder werden gepackt…'**
+  String get backupWorking;
+
+  /// No description provided for @backupFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Sichern hat leider nicht geklappt.'**
+  String get backupFailed;
 
   /// No description provided for @rewardUnlockedTitle.
   ///
@@ -877,6 +937,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{n, plural, =1{Löse noch 1 Zahlenbild!} other{Löse noch {n} Zahlenbilder!}}'**
   String rewardRuleCbn(int n);
+
+  /// No description provided for @rewardRuleTasks.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Schaffe noch 1 Tagesaufgabe!} other{Schaffe noch {n} Tagesaufgaben!}}'**
+  String rewardRuleTasks(int n);
 
   /// No description provided for @myStickersSection.
   ///

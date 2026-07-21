@@ -30,6 +30,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardScenes => 'Sticker-Welt';
 
   @override
+  String get dailyTaskTitle => 'Aufgabe des Tages';
+
+  @override
+  String get dailyTaskGo => 'Los geht\'s!';
+
+  @override
+  String get dailyTaskDone => 'Geschafft!';
+
+  @override
+  String get dailyTaskAlreadyDone =>
+      'Heute schon geschafft – super gemacht! 🎉';
+
+  @override
   String get scenePickerTitle => 'Such dir eine Bühne aus!';
 
   @override
@@ -210,6 +223,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get continuePainting => 'Weitermalen';
 
   @override
+  String get slideshowTooltip => 'Diashow starten';
+
+  @override
   String get replayAction => 'Film anschauen';
 
   @override
@@ -353,7 +369,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsSectionFun => 'Spaß';
 
   @override
+  String get settingsSectionParents => 'Für Eltern';
+
+  @override
   String get settingsSectionAbout => 'Info';
+
+  @override
+  String get backupTitle => 'Alle Bilder sichern';
+
+  @override
+  String get backupSubtitle =>
+      'Packt alle Bilder in eine ZIP-Datei zum Teilen oder Aufbewahren.';
+
+  @override
+  String get backupWorking => 'Bilder werden gepackt…';
+
+  @override
+  String get backupFailed => 'Das Sichern hat leider nicht geklappt.';
 
   @override
   String get rewardUnlockedTitle => 'Neuer Sticker!';
@@ -434,6 +466,17 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: 'Löse noch $n Zahlenbilder!',
       one: 'Löse noch 1 Zahlenbild!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardRuleTasks(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Schaffe noch $n Tagesaufgaben!',
+      one: 'Schaffe noch 1 Tagesaufgabe!',
     );
     return '$_temp0';
   }

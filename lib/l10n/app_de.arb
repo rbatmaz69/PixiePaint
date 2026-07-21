@@ -7,6 +7,10 @@
   "cardGallery": "Meine Bilder",
   "cardTrace": "Nachspuren",
   "cardScenes": "Sticker-Welt",
+  "dailyTaskTitle": "Aufgabe des Tages",
+  "dailyTaskGo": "Los geht's!",
+  "dailyTaskDone": "Geschafft!",
+  "dailyTaskAlreadyDone": "Heute schon geschafft – super gemacht! 🎉",
   "scenePickerTitle": "Such dir eine Bühne aus!",
   "traceTitle": "Such dir eine Vorlage aus!",
   "traceTabLetters": "ABC",
@@ -67,6 +71,7 @@
   "galleryTitle": "Meine Bilder",
   "galleryEmpty": "Noch keine Bilder –\nmal doch eins!",
   "continuePainting": "Weitermalen",
+  "slideshowTooltip": "Diashow starten",
   "replayAction": "Film anschauen",
   "replayAgain": "Nochmal abspielen",
   "replaySpeed": "Geschwindigkeit",
@@ -118,7 +123,12 @@
   "galleryEmptyCta": "Such dir ein Bild aus!",
   "settingsSectionSafety": "Sicherheit",
   "settingsSectionFun": "Spaß",
+  "settingsSectionParents": "Für Eltern",
   "settingsSectionAbout": "Info",
+  "backupTitle": "Alle Bilder sichern",
+  "backupSubtitle": "Packt alle Bilder in eine ZIP-Datei zum Teilen oder Aufbewahren.",
+  "backupWorking": "Bilder werden gepackt…",
+  "backupFailed": "Das Sichern hat leider nicht geklappt.",
   "rewardUnlockedTitle": "Neuer Sticker!",
   "rewardUnlockedBody": "Du hast einen neuen Sticker freigemalt!",
   "rewardUnlockedOk": "Super!",
@@ -152,6 +162,12 @@
   "packParty": "Party",
   "rewardRuleCbn": "{n, plural, =1{Löse noch 1 Zahlenbild!} other{Löse noch {n} Zahlenbilder!}}",
   "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{Schaffe noch 1 Tagesaufgabe!} other{Schaffe noch {n} Tagesaufgaben!}}",
+  "@rewardRuleTasks": {
     "placeholders": {
       "n": {"type": "int"}
     }

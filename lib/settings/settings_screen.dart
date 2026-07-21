@@ -7,6 +7,7 @@ import '../ui/bouncy.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../util/backup.dart';
 import '../util/music.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
@@ -65,6 +66,30 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (musicOn != null) await Music.instance.setOn(musicOn);
     Sfx.instance.tick();
   }
+
+  /// Zips the gallery and hands it to the share sheet. The whole settings
+  /// screen already sits behind the parental gate.
+  Future<void> _backup() async {
+    if (_backupRunning) return;
+    setState(() => _backupRunning = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final workingLabel = context.l10n.backupWorking;
+    messenger.showSnackBar(SnackBar(content: Text(workingLabel)));
+    try {
+      final zip = await createBackupZip();
+      await shareBackupZip(zip);
+    } catch (_) {
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(context.l10n.backupFailed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _backupRunning = false);
+    }
+  }
+
+  bool _backupRunning = false;
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +178,25 @@ class _SettingsScreenState extends State<SettingsScreen>
                       const SizedBox(height: 18),
                       _staggered(
                         2,
+                        _Section(
+                          title: context.l10n.settingsSectionParents,
+                          emoji: '💾',
+                          accent: PixiePalette.mint,
+                          tiltIndex: 2,
+                          children: [
+                            _KidRow(
+                              emoji: '📦',
+                              tint: PixiePalette.mintLight,
+                              title: context.l10n.backupTitle,
+                              subtitle: context.l10n.backupSubtitle,
+                              onTap: _backup,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      _staggered(
+                        3,
                         _Section(
                           title: context.l10n.settingsSectionAbout,
                           emoji: 'ℹ️',

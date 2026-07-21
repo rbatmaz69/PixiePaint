@@ -16,6 +16,7 @@ import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/music.dart';
 import '../util/settings.dart';
+import '../widgets/daily_task_sheet.dart';
 import '../widgets/parental_gate.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
@@ -80,7 +81,12 @@ class _HomeScreenState extends State<HomeScreen>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _staggered(0, _Header(wave: wave)),
-                        const SizedBox(height: 36),
+                        const SizedBox(height: 20),
+                        _staggered(
+                          1,
+                          DailyTaskBanner(width: cardW * 2 + 20),
+                        ),
+                        const SizedBox(height: 22),
                         Wrap(
                           spacing: 20,
                           runSpacing: 20,

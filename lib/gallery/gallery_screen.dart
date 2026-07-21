@@ -19,6 +19,7 @@ import '../util/pdf_export.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import 'page_picker_screen.dart';
+import 'slideshow_screen.dart';
 import '../util/save_to_photos.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
@@ -318,12 +319,40 @@ class _GalleryScreenState extends State<GalleryScreen>
                 title: context.l10n.galleryTitle,
                 accent: PixiePalette.mint,
                 onBack: () => Navigator.of(context).pop(),
+                trailing: _slideshowButton(context),
               ),
               Expanded(child: _buildBody(context)),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// Play button — only worth showing once there is more than one picture.
+  /// Favorites lead the show, then the rest by date.
+  Widget _slideshowButton(BuildContext context) {
+    return FutureBuilder<List<Artwork>>(
+      future: _future,
+      builder: (context, snapshot) {
+        final artworks = snapshot.data ?? const <Artwork>[];
+        if (artworks.length < 2) return const SizedBox.shrink();
+        return StickerCircleButton(
+          icon: Icons.slideshow_rounded,
+          tooltip: context.l10n.slideshowTooltip,
+          accent: PixiePalette.mint,
+          onTap: () {
+            final ordered = [
+              ...artworks.where((a) => a.favorite),
+              ...artworks.where((a) => !a.favorite),
+            ];
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (_) => SlideshowScreen(artworks: ordered)),
+            );
+          },
+        );
+      },
     );
   }
 

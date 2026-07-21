@@ -7,6 +7,10 @@
   "cardGallery": "My pictures",
   "cardTrace": "Tracing",
   "cardScenes": "Sticker world",
+  "dailyTaskTitle": "Task of the day",
+  "dailyTaskGo": "Let's go!",
+  "dailyTaskDone": "Done!",
+  "dailyTaskAlreadyDone": "Already done today – great job! 🎉",
   "scenePickerTitle": "Pick a stage!",
   "traceTitle": "Pick something to trace!",
   "traceTabLetters": "ABC",
@@ -67,6 +71,7 @@
   "galleryTitle": "My pictures",
   "galleryEmpty": "No pictures yet –\npaint one!",
   "continuePainting": "Keep painting",
+  "slideshowTooltip": "Start slideshow",
   "replayAction": "Watch the movie",
   "replayAgain": "Play again",
   "replaySpeed": "Speed",
@@ -118,7 +123,12 @@
   "galleryEmptyCta": "Pick a picture!",
   "settingsSectionSafety": "Safety",
   "settingsSectionFun": "Fun",
+  "settingsSectionParents": "For parents",
   "settingsSectionAbout": "About",
+  "backupTitle": "Back up all pictures",
+  "backupSubtitle": "Packs every picture into a ZIP file to share or keep.",
+  "backupWorking": "Packing the pictures…",
+  "backupFailed": "The backup didn't work, sorry.",
   "rewardUnlockedTitle": "New sticker!",
   "rewardUnlockedBody": "You painted a new sticker free!",
   "rewardUnlockedOk": "Awesome!",
@@ -152,6 +162,12 @@
   "packParty": "Party",
   "rewardRuleCbn": "{n, plural, =1{Solve 1 more color-by-number picture!} other{Solve {n} more color-by-number pictures!}}",
   "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{Finish 1 more daily task!} other{Finish {n} more daily tasks!}}",
+  "@rewardRuleTasks": {
     "placeholders": {
       "n": {"type": "int"}
     }

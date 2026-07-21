@@ -427,6 +427,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
       RewardGoalKind.shares => context.l10n.rewardRuleShares,
       RewardGoalKind.tracing => context.l10n.rewardRuleTrace(remaining),
       RewardGoalKind.cbn => context.l10n.rewardRuleCbn(remaining),
+      RewardGoalKind.tasks => context.l10n.rewardRuleTasks(remaining),
     };
     showKidDialog<void>(
       context: context,

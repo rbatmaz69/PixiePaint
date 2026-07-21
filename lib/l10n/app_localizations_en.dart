@@ -30,6 +30,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardScenes => 'Sticker world';
 
   @override
+  String get dailyTaskTitle => 'Task of the day';
+
+  @override
+  String get dailyTaskGo => 'Let\'s go!';
+
+  @override
+  String get dailyTaskDone => 'Done!';
+
+  @override
+  String get dailyTaskAlreadyDone => 'Already done today – great job! 🎉';
+
+  @override
   String get scenePickerTitle => 'Pick a stage!';
 
   @override
@@ -210,6 +222,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continuePainting => 'Keep painting';
 
   @override
+  String get slideshowTooltip => 'Start slideshow';
+
+  @override
   String get replayAction => 'Watch the movie';
 
   @override
@@ -352,7 +367,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionFun => 'Fun';
 
   @override
+  String get settingsSectionParents => 'For parents';
+
+  @override
   String get settingsSectionAbout => 'About';
+
+  @override
+  String get backupTitle => 'Back up all pictures';
+
+  @override
+  String get backupSubtitle =>
+      'Packs every picture into a ZIP file to share or keep.';
+
+  @override
+  String get backupWorking => 'Packing the pictures…';
+
+  @override
+  String get backupFailed => 'The backup didn\'t work, sorry.';
 
   @override
   String get rewardUnlockedTitle => 'New sticker!';
@@ -433,6 +464,17 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other: 'Solve $n more color-by-number pictures!',
       one: 'Solve 1 more color-by-number picture!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rewardRuleTasks(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Finish $n more daily tasks!',
+      one: 'Finish 1 more daily task!',
     );
     return '$_temp0';
   }
