@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 6.0.0+8 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 6.7.0+16 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -26,31 +26,50 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 ## Features
 
 **Malen**
-- 32 Ausmalbilder in 6 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum)
+- 42 Ausmalbilder in 7 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Zahlen)
 - Freies Zeichnen auf leerer Leinwand
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
-- 6 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon
-- Füllen mit 4 Mustern (einfarbig, Punkte, Streifen, Regenbogen), läuft in einem Isolate
+- 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
+- Füllen mit 8 Mustern (einfarbig, Punkte, Streifen, Regenbogen, Herzen, Sterne, Karo, Seifenblasen), läuft in einem Isolate
 - Formen aufziehen: Kreis, Quadrat, Herz, Stern, Regenbogen — mit Live-Vorschau
-- 20 Emoji-Sticker + 9 freischaltbare Belohnungs-Sticker
+- Zauber-Spiegel: 2-, 4- und 6-fache Symmetrie
+- 20 Emoji-Sticker in 8 Paketen, davon mehrere freischaltbar, plus eigene Sticker aus eigenen Bildern
 - Pipette: Farbe direkt vom Bild aufnehmen
 - Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung
 
+**Weitere Spielarten**
+- **Malen nach Zahlen** — 4 Bilder mit nummerierten Flächen und eigener Palette
+- **Nachspuren** — 44 Vorlagen (A–Z inkl. Umlaute, 0–9, 5 Formen), komplett ohne Assets aus der Schrift erzeugt
+- **Sticker-Welt** — 6 Szenen als Bühne zum Bekleben
+- **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
+- **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen
+- **Tagesaufgabe** — 30 wechselnde Mal-Impulse, einer pro Tag
+
 **Galerie**
 - Automatisches Speichern (alle 30 s und beim Verlassen)
 - Favoriten, Umbenennen, Filter
-- Teilen oder „In Fotos speichern" (beides hinter der Elternschranke)
+- Diashow über alle Bilder
+- Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
 
 **Belohnungen**
-- Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, ein Bild teilen
+- 12 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
 - Gesperrte Sticker als wackelnde Mystery-Boxen mit kindgerechter Fortschrittsanzeige
 - Rein lokal — keine Käufe, keine Accounts
 
 **Für Eltern**
-- Elternschranke (Rechenaufgabe) vor Foto-Import, Teilen, Einstellungen und optional Löschen
+- Elternschranke (Rechenaufgabe) vor Foto-Import, Teilen, Drucken, Einstellungen, Speicherverwaltung und optional Löschen
+- Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt
+- Backup aller Bilder als ZIP — und Wiederherstellen daraus
+- Speicherplatz einsehen und alte Bilder gezielt aufräumen
+- Linkshänder-Modus, „nur mit Stift malen", Töne und Musik abschaltbar
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
 - Deutsch und Englisch
+
+**Barrierefreiheit**
+- Alle Bedienelemente sind für TalkBack und VoiceOver benannt, inklusive Auswahlzustand der Werkzeuge und Namen aller 16 Malfarben
+- Systemschriftgröße wird bis Faktor 1,3 mitgemacht
+- Mindestgröße aller Tap-Ziele: 48 px
 
 ---
 
@@ -198,7 +217,17 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite (12 Dateien in `test/`) deckt bewusst nur **pure Logik** ab — Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung. UI und Animationen werden am Gerät geprüft; es gibt keine Golden Tests.
+Die Test-Suite umfasst 213 Tests in 30 Dateien:
+
+- `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
+- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen und die Screenreader-Beschriftungen
+
+Golden Tests gibt es nicht; Optik und Animationen werden am Gerät geprüft.
+
+> **Drei Fallstricke bei Widget-Tests in diesem Projekt** (alle im Code kommentiert, siehe `test/widget/harness.dart`):
+> 1. `testWidgets` läuft in einer Fake-Async-Zone — echte Datei-I/O löst dort **nie** ein und der Test hängt, statt zu scheitern. Setup deshalb in `tester.runAsync(...)`.
+> 2. Ein autofokussiertes `TextField` (Elternschranke) lässt seinen Cursor blinken und plant dauerhaft Frames; `pumpAndSettle()` läuft dann ins Timeout. Stattdessen begrenzt pumpen.
+> 3. `Progress` und `ProfileStore` schreiben fire-and-forget. Vor dem Löschen des Temp-Verzeichnisses im `tearDown` immer `await store.flush()`, sonst schlägt das Löschen sporadisch fehl.
 
 ## Übersetzungen (l10n)
 
@@ -217,32 +246,44 @@ Platzhalter und Pluralformen folgen dem ICU-Format — Beispiele stehen bei `gat
 
 ```
 lib/
-├── main.dart              App-Start: System-UI, Settings & Fortschritt laden, Sfx init
-├── app.dart               MaterialApp, Theme, RouteObserver
+├── main.dart              App-Start: System-UI, Settings/Profile/Fortschritt laden, Sfx & Musik init
+├── app.dart               MaterialApp, Theme, RouteObserver, Textskalierungs-Klemme
 ├── canvas/                Der Malbereich
 │   ├── canvas_screen.dart     Bildschirm: Layouts, Autosave, Teilen, Belohnungs-Feier
 │   ├── canvas_controller.dart Zentraler State: Ebenen, Zeiger, Werkzeuge, Undo
 │   ├── canvas_painter.dart    Zeichnet Ebenen + Vorschauen
-│   ├── stroke_renderer.dart   Die 6 Stift-Charaktere
+│   ├── stroke_renderer.dart   Die 9 Stift-Charaktere
 │   ├── shape_renderer.dart    Formen-Geometrie
+│   ├── symmetry.dart          Zauber-Spiegel (2/4/6-fach)
 │   ├── flood_fill.dart        Füll-Algorithmus (läuft im Isolate)
+│   ├── op_apply.dart          Wiedergabe des Op-Logs (Zeitraffer)
+│   ├── cbn_session.dart       Malen nach Zahlen: Zustand einer Sitzung
+│   ├── two_painter_screen.dart Zwei-Maler-Modus (nur Tablet)
 │   └── *_burst.dart           Füll- und Stempel-Effekte
-├── gallery/               Startseite, Ausmalbild-Auswahl, Galerie, Speicher
+├── gallery/               Startseite, Bild-/Szenenauswahl, Galerie, Diashow, Speicher
+├── trace/                 Nachspur-Modus (Vorlagen aus der Schrift, Deckungsprüfung)
+├── replay/                Zeitraffer-Wiedergabe
+├── stickers/              Eigene Sticker: Ausschnitt aufnehmen und ablegen
 ├── photo/                 Foto → Ausmalbild (Kantenerkennung)
-├── settings/              Einstellungen
-├── models/                Werkzeuge, Sticker, Belohnungen, Artwork, Ausmalbilder
+├── settings/              Einstellungen, Speicherplatz-Verwaltung
+├── models/                Werkzeuge, Sticker, Belohnungen, Artwork, Ausmalbilder,
+│                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops
 ├── ui/                    Design-System (siehe unten)
-├── util/                  Settings, Fortschritt, Sfx, Bild-IO, Teilen, Speichern
-├── widgets/               Werkzeugleiste, Farbpalette, Picker, Elternschranke
+├── util/                  Settings, Fortschritt, Profile, Sfx, Musik, Bild-IO,
+│                          Teilen, Speichern, PDF, Backup/Restore, JsonStore
+├── widgets/               Werkzeugleiste, Farbpalette, Picker, Elternschranke, Profil-Sheet
 └── l10n/                  ARB-Dateien + generierte Übersetzungen
 
 assets/
-├── coloring_pages/        32 SVGs + pages.json (Katalog)
+├── coloring_pages/        42 SVGs + pages.json (Katalog)
+│   └── cbn/               Sidecar-JSON für „Malen nach Zahlen"
+├── scenes/                6 Szenen-SVGs + scenes.json
 ├── fonts/                 Fredoka (Medium/SemiBold/Bold)
-├── sounds/                pop, tick, tada
+├── sounds/                pop, tick, tada + music/ (2 Loops)
 └── icon/                  App-Icon & Splash
 
-docs/                      Play-Store-Anleitung, Datenschutzerklärung
+docs/                      Release-Anleitungen (Play Store, App Store),
+                           Gerätetest-Checkliste, Datenschutzerklärung
 ```
 
 ## Architektur-Notizen
@@ -259,9 +300,16 @@ docs/                      Play-Store-Anleitung, Datenschutzerklärung
 **Canvas-Performance:** Der `CanvasController` trennt zwei Signale — `repaint` (ValueNotifier, feuert bei jedem Zeichen-Sample und lässt nur den Painter neu malen) und `notifyListeners()` (nur für Werkzeugleisten-State). Der `CustomPaint` liegt in einer eigenen `RepaintBoundary`. **Neue Effekte im Malbereich gehören als Geschwister-Overlay daneben, niemals hinein** — Vorbild: `fill_burst.dart` und `stamp_burst.dart`.
 
 **Persistenz:** Alles lokal, keine Datenbank.
-- Bilder: ein Ordner je Werk unter `<appDocuments>/artworks/<uuid>/` mit `paint.png`, `thumb.png`, `meta.json` (plus optional Foto-Hintergrund und Linienart)
-- Einstellungen: `settings.json`
-- Belohnungs-Fortschritt: `progress.json`
+- Bilder: ein Ordner je Werk unter `<appDocuments>/artworks/<uuid>/` mit `paint.png`, `thumb.png`, `meta.json` (plus optional Foto-Hintergrund, Linienart und `ops.json` für den Zeitraffer)
+- Eigene Sticker: `<appDocuments>/stickers/*.png` (max. 24)
+- Einstellungen: `settings.json` · Kinder-Profile: `profiles.json` · Belohnungs-Fortschritt: `progress_<profil-id>.json`
+
+**Vier Regeln, die dieses Projekt gelernt hat** — jede steht für einen Fehler, der schon einmal passiert ist:
+
+1. **Neue Persistenz immer über `JsonStore` bzw. `atomicWrite*`** (`lib/util/json_store.dart`), nie über nacktes `writeAsString`. Der Store serialisiert die Schreibvorgänge und ersetzt die Zieldatei atomar per Rename. Wo mehrere Dateien zusammen ein Ganzes bilden (ein Artwork-Ordner), wird die *identifizierende* Datei zuletzt geschrieben — `meta.json` ist der Commit-Marker.
+2. **Neue Effekte im Malbereich gehören als Geschwister-Overlay neben den Painter**, niemals hinein (siehe Canvas-Performance oben).
+3. **`ZipFileEncoder` in `archive` 4.x nur in den Sync-Varianten benutzen** (`addFileSync`, `closeSync`) — die asynchronen Methoden geben Futures zurück, die im Isolate leicht übersehen werden.
+4. **`Curves.easeOutBack` überschwingt über beide Tween-Enden hinaus.** In einer `AnimatedContainer`-Dekoration darf deshalb kein `boxShadow` gegen `null` animiert werden: der Blur-Radius wird dabei negativ und `dart:ui` bricht ab. Stattdessen den Radius konstant lassen und nur die Deckkraft bewegen (`_selectionShadow` in `lib/widgets/tool_bar.dart`).
 
 ## Inhalte erweitern
 
@@ -284,9 +332,19 @@ docs/                      Play-Store-Anleitung, Datenschutzerklärung
 
 **Neuen Sticker** in `lib/models/stamp.dart` (`kStamps`) eintragen, **neue Belohnung** in `lib/models/reward.dart` (`kRewards`). Dort steht auch der Hinweis, welche Emoji plattformübergreifend farbig rendern.
 
+**Neue Szene** (Sticker-Welt): SVG nach `assets/scenes/` plus Eintrag in `scenes.json`.
+
+**Neues Zahlenbild** („Malen nach Zahlen"): SVG wie ein normales Ausmalbild, dazu ein Sidecar `assets/coloring_pages/cbn/<id>.json` mit Palette und Beschriftungen. `test/cbn_pages_test.dart` prüft das Authoring end-to-end — jede Beschriftung muss in einer gültigen, einheitlich nummerierten Fläche liegen; der Test ist die Abnahme, nicht das Auge.
+
+**Neue Tagesaufgabe** in `lib/models/daily_task.dart` (`kDailyTasks`) — die Liste wird zyklisch über das Datum adressiert, neue Einträge verschieben also die Zuordnung für alle folgenden Tage.
+
 ## Veröffentlichen
 
-Die komplette Schritt-für-Schritt-Anleitung für den Play Store (Keystore, App-Bundle, Formulare, Store-Texte) steht in **[`docs/play-store-release.md`](docs/play-store-release.md)**.
+Die kompletten Schritt-für-Schritt-Anleitungen stehen in:
+
+- **[`docs/play-store-release.md`](docs/play-store-release.md)** — Google Play (Keystore, App-Bundle, Formulare, Store-Texte)
+- **[`docs/app-store-release.md`](docs/app-store-release.md)** — Apple App Store (Signing, TestFlight, Datenschutz-Labels, Kids-Kategorie)
+- **[`docs/geraetetest.md`](docs/geraetetest.md)** — Checkliste für die Testsession vor dem Upload
 
 Kurzfassung:
 
@@ -295,7 +353,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 6.0.0+8` bedeutet Versionsname 6.0.0 und versionCode 8. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 6.7.0+16` bedeutet Versionsname 6.7.0 und versionCode 16. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

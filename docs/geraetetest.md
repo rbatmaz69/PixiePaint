@@ -1,0 +1,133 @@
+# Gerätetest-Checkliste
+
+Alles aus v6.1–v6.7 wurde gebaut, aber noch nie auf einem echten Gerät benutzt. Diese Liste ist für genau diese eine große Session gedacht: einmal von oben nach unten, mit einem Handy **und** einem Tablet.
+
+Warum überhaupt eine Liste: Die Test-Suite deckt Logik und Beschriftungen ab, aber nichts von dem, was hier steht — Gesten, Druckstärke, Systemdialoge, Layout auf echten Seitenverhältnissen, Musik, Vibration.
+
+**Vorbereitung**
+
+```bash
+flutter analyze && flutter test          # muss beides sauber sein
+flutter run --release -d <geräte-id>     # Release, nicht Debug — Debug ist spürbar langsamer
+```
+
+Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vorher `adb uninstall dev.rb.pixiepaint`), damit auch der erste Start mitgeprüft wird. Achtung: damit sind vorhandene Bilder weg.
+
+---
+
+## Erster Start
+
+- [ ] Splash erscheint, App startet ohne Ruckler
+- [ ] Startseite zeigt alle Kacheln; auf dem Handy fehlt „Zu zweit malen" (nur ab 600 dp)
+- [ ] Tagesaufgaben-Banner ist da und nennt eine Aufgabe
+- [ ] Es läuft keine Musik (Standard ist aus)
+
+## Malen — Grundlagen
+
+- [ ] Ausmalbild öffnen: Linien scharf, Flächen füllen sich sauber und laufen nicht aus
+- [ ] Alle 9 Stifte durchprobieren — jeder sieht deutlich anders aus
+- [ ] Alle 8 Füllmuster durchprobieren
+- [ ] Formen aufziehen: Live-Vorschau folgt dem Finger, Loslassen setzt die Form
+- [ ] Pinselgröße über den Schieber von ganz klein bis ganz groß
+- [ ] Radierer, Undo, Redo — auch mehrfach hintereinander
+- [ ] Pipette nimmt die Farbe unter dem Finger auf
+- [ ] Zwei-Finger-Zoom und Verschieben; „Ansicht zurücksetzen" stellt wieder her
+- [ ] **Werkzeugwechsel mehrfach hin und her** — in v6.7 wurde hier ein Absturzpfad behoben (negativer Schatten-Blur), das ist die Gegenprobe
+- [ ] Zauber-Spiegel in allen drei Stufen
+
+## Stift und Handballen (nur mit Stylus)
+
+- [ ] Druckstärke ändert die Strichbreite
+- [ ] Mit „nur mit Stift malen" an: Finger malt nicht mehr, Stift schon
+- [ ] Handballen auf dem Display hinterlässt keine Striche
+
+## Speichern und Galerie
+
+- [ ] Bild malen, App über den Home-Button in den Hintergrund schicken, zurückkehren → Bild ist noch da
+- [ ] Bild verlassen, Galerie öffnen → Bild ist gespeichert, Vorschaubild stimmt
+- [ ] Umbenennen, favorisieren, Filter „Favoriten"
+- [ ] Weitermalen an einem gespeicherten Bild
+- [ ] Löschen (mit und ohne die Einstellung „Löschen nur für Eltern")
+- [ ] Diashow läuft und der Bildschirm schaltet sich dabei nicht ab
+
+## Die anderen Spielarten
+
+- [ ] **Malen nach Zahlen:** Palette zeigt die Nummern, richtige Farbe füllt, falsche nicht; fertiges Bild feiert
+- [ ] **Nachspuren:** Buchstabe, Zahl und Form je einmal; Erkennung springt an, wenn genug nachgefahren wurde
+- [ ] **Sticker-Welt:** Szene wählen, Sticker platzieren, weitermalen, speichern
+- [ ] **Zeitraffer:** Bild aus der Galerie als Film abspielen, Geschwindigkeit ändern
+- [ ] **Zu zweit malen** (Tablet): beide Seiten gleichzeitig bemalen, eine Seite drehen, speichern → ein zusammengesetztes Bild in der Galerie
+- [ ] **Foto anmalen:** Foto auswählen und bemalen
+- [ ] **Foto → Ausmalbild:** alle drei Detailstufen ansehen
+
+## Belohnungen und Tagesaufgabe
+
+- [ ] Genug Bilder fertigstellen, bis ein Sticker freigeschaltet wird → Feier erscheint beim Verlassen des Bildes
+- [ ] Gesperrte Sticker wackeln als Mystery-Box und zeigen den Fortschritt
+- [ ] Tagesaufgabe erledigen → sie zählt genau einmal, auch bei mehrfachem Antippen
+
+## Profile
+
+- [ ] Zweites Kind anlegen, Namen und Gesicht setzen
+- [ ] Umschalten: Galerie zeigt nur die Bilder des aktiven Kindes
+- [ ] Belohnungs-Fortschritt ist je Kind getrennt
+- [ ] Kind entfernen — einmal mit „Bilder behalten", einmal mit „Bilder auch löschen"
+
+## Eltern-Bereich
+
+- [ ] Elternschranke: falsche Antwort blockt, dreimal falsch bricht ab, richtige lässt durch
+- [ ] Alle Schalter umlegen und die App neu starten → alle Einstellungen sind noch gesetzt
+- [ ] Linkshänder-Modus: Werkzeuge wandern auf die andere Seite
+- [ ] Töne und Vibration an/aus hörbar bzw. spürbar
+- [ ] Musik an: beide Stücke anspielen; Musik pausiert, wenn die App in den Hintergrund geht
+- [ ] **Sicherung erstellen** → ZIP landet im Share-Sheet, Datei ist nicht leer
+- [ ] **Sicherung zurückholen** (die wichtigste neue Funktion aus v6.7):
+  - [ ] auf einem Gerät ohne Bilder → alle Bilder und Profile sind wieder da
+  - [ ] auf einem Gerät mit Bildern → vorhandene Bilder bleiben unverändert, die Meldung nennt die Zahlen
+  - [ ] eine beliebige andere ZIP-Datei auswählen → freundliche Ablehnung, kein Absturz
+- [ ] **Speicherplatz:** Anzeige plausibel; ein paar Bilder auswählen und löschen; Anzeige schrumpft
+
+## Teilen, Drucken, Fotos
+
+- [ ] Teilen öffnet das System-Share-Sheet, das Bild kommt vollständig an
+- [ ] „In Fotos speichern" landet in der Galerie des Geräts
+- [ ] Drucken zeigt die PDF-Vorschau richtig
+- [ ] Beim ersten Mal erscheinen die Berechtigungsdialoge mit den deutschen Texten aus der Info.plist bzw. dem Manifest
+
+## Barrierefreiheit (neu in v6.7)
+
+- [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
+- [ ] Werkzeugleiste durchwischen: jedes Werkzeug wird benannt, das aktive zusätzlich als „ausgewählt"
+- [ ] Farbpalette durchwischen: die Farben heißen „Rot", „Blau" usw., nicht 16-mal dasselbe
+- [ ] Der Malbereich wird als eine Fläche angesagt, nicht Pixel für Pixel
+- [ ] **Systemschrift auf das Maximum stellen** und durch alle Screens gehen: nichts überlappt, nichts wird abgeschnitten, keine roten Overflow-Streifen
+
+## Layout
+
+- [ ] Handy hoch und quer
+- [ ] Tablet hoch und quer
+- [ ] Gerät mit Notch/Punch-Hole: nichts liegt unter der Aussparung oder der Gestenleiste
+
+## Ausdauer
+
+- [ ] 15–20 Minuten am Stück malen: keine spürbare Verlangsamung, kein Speicherproblem
+- [ ] Ein sehr vollgemaltes Bild (viele Striche, viele Füllungen) bleibt flüssig
+- [ ] App mehrfach in den Hintergrund und zurück; Akkuverbrauch bleibt im Rahmen
+
+---
+
+## Wenn etwas schiefgeht
+
+Log mitlesen, während die App läuft:
+
+```bash
+flutter logs
+```
+
+Für einen Absturz mit vollem Stack ist der Debug-Build aussagekräftiger:
+
+```bash
+flutter run -d <geräte-id>
+```
+
+Bei allem, was reproduzierbar ist, hilft es, die genauen Schritte zu notieren — die meisten Fehler dieser Art lassen sich anschließend als Test festhalten, damit sie nicht zurückkommen.
