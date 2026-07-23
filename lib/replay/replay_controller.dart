@@ -1,16 +1,13 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
-import '../canvas/flood_fill.dart' as ff;
 import '../canvas/op_apply.dart';
 import '../canvas/stroke.dart';
 import '../models/draw_op.dart';
-import '../models/tool.dart';
 import '../util/image_io.dart';
 import '../util/svg_raster.dart';
 
@@ -206,36 +203,22 @@ class ReplayController extends ChangeNotifier {
   }
 
   Future<void> _playFill(FillOp op) async {
-    Uint8List rgba;
-    if (layer != null) {
-      final data = await layer!.toByteData(format: ui.ImageByteFormat.rawRgba);
-      rgba = data!.buffer.asUint8List();
-    } else {
-      rgba = Uint8List(width * height * 4);
+    final newLayer = await applyFill(
+      layer: layer,
+      barrierAlpha: barrierAlpha,
+      pos: ui.Offset(op.x, op.y),
+      color: Color(op.color),
+      pattern: op.pattern,
+      width: width,
+      height: height,
+    );
+    // Checked after the await, not before it: the whole fill (isolate round
+    // trip plus decode) can outlive the screen.
+    if (_cancelled) {
+      newLayer?.dispose();
+      return;
     }
-    final barrier = barrierAlpha;
-    final w = width, h = height;
-    final seedX = op.x.floor().clamp(0, w - 1);
-    final seedY = op.y.floor().clamp(0, h - 1);
-    final color = Color(op.color);
-    final pattern = op.pattern;
-    final result = await Isolate.run(() => ff.floodFill(
-          rgba: rgba,
-          barrierAlpha: barrier,
-          width: w,
-          height: h,
-          seedX: seedX,
-          seedY: seedY,
-          fillR: (color.r * 255).round(),
-          fillG: (color.g * 255).round(),
-          fillB: (color.b * 255).round(),
-          tolerance: kFillTolerance,
-          dilationPasses: barrier == null ? 0 : 3,
-          pattern: pattern,
-        ));
-    if (_cancelled) return;
-    if (result != null) {
-      final newLayer = await rgbaToImage(result, w, h);
+    if (newLayer != null) {
       layer?.dispose();
       layer = newLayer;
       _tick();
@@ -249,11 +232,13 @@ class ReplayController extends ChangeNotifier {
   void dispose() {
     _cancelled = true;
     layer?.dispose();
+    layer = null;
     background?.dispose();
     lineArt?.dispose();
     for (final img in _stickers.values) {
       img?.dispose();
     }
+    _stickers.clear();
     repaint.dispose();
     super.dispose();
   }

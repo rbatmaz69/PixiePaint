@@ -566,6 +566,10 @@ class _PolaroidCardState extends State<_PolaroidCard>
                             // so don't let the image cache serve stale ones.
                             key: ValueKey(artwork.updatedAt),
                             cacheWidth: 560,
+                            // A half-written thumbnail must not take the
+                            // whole gallery down with a decode exception.
+                            errorBuilder: (_, _, _) =>
+                                const Center(child: Icon(Icons.image, size: 48)),
                           )
                         : const Center(child: Icon(Icons.image, size: 48)),
                   ),

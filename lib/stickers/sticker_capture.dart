@@ -105,14 +105,22 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
     final picture = recorder.endRecording();
     final sticker = picture.toImageSync(kStickerSize, kStickerSize);
     picture.dispose();
-    final png = await imageToPngBytes(sticker);
-    sticker.dispose();
+    try {
+      final png = await imageToPngBytes(sticker);
+      sticker.dispose();
 
-    final file = await StickerStore.save(png);
-    final decoded = await pngBytesToImage(png);
-    widget.controller.selectImageStamp(file.path, decoded);
-    Sfx.instance.pop();
-    if (mounted) Navigator.of(context).pop();
+      final file = await StickerStore.save(png);
+      final decoded = await pngBytesToImage(png);
+      // Left the screen while saving — don't hand the image to a controller
+      // that may already be disposed.
+      if (!mounted) return decoded.dispose();
+      widget.controller.selectImageStamp(file.path, decoded);
+      Sfx.instance.pop();
+      Navigator.of(context).pop();
+    } finally {
+      // Without this a failed save would wedge the ✓ button forever.
+      if (mounted) setState(() => _saving = false);
+    }
   }
 
   @override

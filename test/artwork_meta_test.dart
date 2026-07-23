@@ -52,5 +52,41 @@ void main() {
       expect(named.name, 'Hallo');
       expect(named.favorite, isTrue);
     });
+
+    test('mode fields round-trip and survive copyWith', () {
+      final artwork = Artwork(
+        id: 'abc',
+        pageId: 'cbn_fish',
+        traceId: 'letter_A',
+        sceneId: 'meadow',
+        cbnFilled: const [3, 7],
+        width: 2048,
+        height: 1536,
+        updatedAt: DateTime(2026, 1, 1, 12),
+        dirPath: '/tmp/abc',
+      );
+      final back = Artwork.fromJson(artwork.toJson(), artwork.dirPath);
+      expect(back.traceId, 'letter_A');
+      expect(back.sceneId, 'meadow');
+      expect(back.cbnFilled, [3, 7]);
+      // Renaming must not drop the mode a picture belongs to.
+      final renamed = back.copyWith(name: 'Fisch');
+      expect(renamed.traceId, 'letter_A');
+      expect(renamed.sceneId, 'meadow');
+      expect(renamed.cbnFilled, [3, 7]);
+    });
+
+    test('an empty cbnFilled is omitted and reads back as empty', () {
+      final artwork = Artwork(
+        id: 'abc',
+        pageId: null,
+        width: 10,
+        height: 10,
+        updatedAt: DateTime(2026),
+        dirPath: '/tmp/abc',
+      );
+      expect(artwork.toJson().containsKey('cbnFilled'), isFalse);
+      expect(Artwork.fromJson(artwork.toJson(), '/tmp/abc').cbnFilled, isEmpty);
+    });
   });
 }

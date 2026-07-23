@@ -7,9 +7,6 @@ const List<String> kStamps = [
   '🦋', '🐞', '🐢', '🌸', '🌻', '🍄', '🍎', '⚽', '🎈', '👑',
 ];
 
-/// Stamp sizes in canvas px, indexed by the shared sizeIndex (S/M/L).
-const List<double> kStampSizes = [140, 220, 340];
-
 /// A themed group of stamps in the picker. Packs with an [unlock] goal show
 /// as a mystery tile until the goal is reached (no celebration party — they
 /// simply appear, unlike the individual kRewards stickers).

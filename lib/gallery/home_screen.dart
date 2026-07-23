@@ -41,10 +41,16 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  /// One-shot staggered entrance: fade + rise, offset per slot. Clamped so
-  /// late slots never push the interval past 1.0 (debug assert).
+  /// Number of entrance slots: header, daily-task banner, six cards and the
+  /// two chrome buttons. The step is derived from it so adding a card keeps
+  /// the whole cascade inside the controller's run instead of piling up at
+  /// the clamp.
+  static const int _slotCount = 10;
+  static const double _slotStep = 0.45 / (_slotCount - 1);
+
+  /// One-shot staggered entrance: fade + rise, offset per slot.
   Widget _staggered(int slot, Widget child) {
-    final start = (0.10 * slot).clamp(0.0, 0.45);
+    final start = (_slotStep * slot).clamp(0.0, 0.45);
     final anim = CurvedAnimation(
       parent: _entrance,
       curve: Interval(start, (start + 0.55).clamp(0.0, 1.0),
@@ -70,10 +76,14 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               Center(
                 child: LayoutBuilder(builder: (context, constraints) {
-                  // Responsive sticker cards: two per row, clamped so they
-                  // grow a little on tablets instead of floating in space.
-                  final cardW =
-                      ((constraints.maxWidth - 68) / 2).clamp(160.0, 230.0);
+                  // Two cards per row. 48 is the horizontal padding below,
+                  // 20 the Wrap spacing — the row width the cards have to
+                  // share. The lower bound must stay under half of that on
+                  // the narrowest phones (~360 dp), otherwise the clamp
+                  // pushes the second card onto its own line and the grid
+                  // collapses into a six-item list.
+                  final rowW = constraints.maxWidth - 48;
+                  final cardW = ((rowW - 20) / 2).clamp(128.0, 230.0);
                   final cardH = cardW * 0.9;
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(24),
@@ -82,10 +92,7 @@ class _HomeScreenState extends State<HomeScreen>
                       children: [
                         _staggered(0, _Header(wave: wave)),
                         const SizedBox(height: 20),
-                        _staggered(
-                          1,
-                          DailyTaskBanner(width: cardW * 2 + 20),
-                        ),
+                        _staggered(1, DailyTaskBanner(width: rowW)),
                         const SizedBox(height: 22),
                         Wrap(
                           spacing: 20,
@@ -93,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
                           alignment: WrapAlignment.center,
                           children: [
                             _staggered(
-                              1,
+                              2,
                               _BigCard(
                                 emoji: '🖍️',
                                 label: context.l10n.cardColoring,
@@ -109,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              2,
+                              3,
                               _BigCard(
                                 emoji: '✏️',
                                 label: context.l10n.cardFreeDraw,
@@ -124,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              3,
+                              4,
                               _BigCard(
                                 emoji: '🏞️',
                                 label: context.l10n.cardScenes,
@@ -140,19 +147,19 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              4,
+                              5,
                               _BigCard(
                                 emoji: '📷',
                                 label: context.l10n.cardPhoto,
                                 gradient: PixieGradients.photo,
                                 width: cardW,
                                 height: cardH,
-                                tiltIndex: 3,
+                                tiltIndex: 4,
                                 onTap: () => _pickPhoto(context),
                               ),
                             ),
                             _staggered(
-                              5,
+                              6,
                               _BigCard(
                                 emoji: '✍️',
                                 label: context.l10n.cardTrace,
@@ -168,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              6,
+                              7,
                               _BigCard(
                                 emoji: '🖼️',
                                 label: context.l10n.cardGallery,
@@ -193,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 left: 8,
                 child: _staggered(
-                  5,
+                  8,
                   ListenableBuilder(
                     listenable: Settings.instance,
                     builder: (context, _) {
@@ -220,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 right: 8,
                 child: _staggered(
-                  5,
+                  9,
                   StickerCircleButton(
                     icon: Icons.settings_rounded,
                     tooltip: context.l10n.settingsTooltip,

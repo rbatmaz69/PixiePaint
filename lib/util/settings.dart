@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/painting.dart' show Color;
 import 'package:path_provider/path_provider.dart';
 
 import 'color_utils.dart';
+import 'json_store.dart';
 
 /// App settings, persisted as a small JSON file in the documents dir.
 class Settings extends ChangeNotifier {
@@ -32,30 +32,32 @@ class Settings extends ChangeNotifier {
   /// eyedropper — shown as a quick-access row in the picker.
   List<int> recentColors = [];
 
-  File? _file;
+  JsonStore? _store;
 
   Future<void> load() async {
     try {
       final dir = await getApplicationDocumentsDirectory();
-      _file = File('${dir.path}/settings.json');
-      if (await _file!.exists()) {
-        final json = jsonDecode(await _file!.readAsString());
-        stylusOnly = json['stylusOnly'] as bool? ?? false;
-        deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
-        soundsOn = json['soundsOn'] as bool? ?? true;
-        musicOn = json['musicOn'] as bool? ?? false;
-        musicTrack = json['musicTrack'] as int? ?? 0;
-        leftHanded = json['leftHanded'] as bool? ?? false;
-        shareCount = json['shareCount'] as int? ?? 0;
-        reviewRequested = json['reviewRequested'] as bool? ?? false;
-        recentColors = (json['recentColors'] as List?)
-                ?.whereType<int>()
-                .toList() ??
-            [];
-      }
+      await loadFrom(JsonStore(File('${dir.path}/settings.json')));
     } catch (_) {
       // defaults are fine
     }
+  }
+
+  /// Seam for tests: load from any store instead of the documents dir.
+  Future<void> loadFrom(JsonStore store) async {
+    _store = store;
+    final json = await store.read();
+    if (json == null) return;
+    stylusOnly = json['stylusOnly'] as bool? ?? false;
+    deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
+    soundsOn = json['soundsOn'] as bool? ?? true;
+    musicOn = json['musicOn'] as bool? ?? false;
+    musicTrack = json['musicTrack'] as int? ?? 0;
+    leftHanded = json['leftHanded'] as bool? ?? false;
+    shareCount = json['shareCount'] as int? ?? 0;
+    reviewRequested = json['reviewRequested'] as bool? ?? false;
+    recentColors =
+        (json['recentColors'] as List?)?.whereType<int>().toList() ?? [];
   }
 
   Future<void> update(
@@ -83,6 +85,7 @@ class Settings extends ChangeNotifier {
 
   Future<void> registerShare() async {
     shareCount++;
+    notifyListeners();
     await _persist();
   }
 
@@ -91,19 +94,21 @@ class Settings extends ChangeNotifier {
     await _persist();
   }
 
+  /// Queued and atomic — see [JsonStore].
   Future<void> _persist() async {
-    try {
-      await _file?.writeAsString(jsonEncode({
-        'stylusOnly': stylusOnly,
-        'deleteNeedsGate': deleteNeedsGate,
-        'soundsOn': soundsOn,
-        'musicOn': musicOn,
-        'musicTrack': musicTrack,
-        'leftHanded': leftHanded,
-        'shareCount': shareCount,
-        'reviewRequested': reviewRequested,
-        'recentColors': recentColors,
-      }));
-    } catch (_) {}
+    await _store?.write({
+      'stylusOnly': stylusOnly,
+      'deleteNeedsGate': deleteNeedsGate,
+      'soundsOn': soundsOn,
+      'musicOn': musicOn,
+      'musicTrack': musicTrack,
+      'leftHanded': leftHanded,
+      'shareCount': shareCount,
+      'reviewRequested': reviewRequested,
+      'recentColors': recentColors,
+    });
   }
+
+  /// Waits until every queued write reached the disk.
+  Future<void> flush() async => _store?.flush();
 }

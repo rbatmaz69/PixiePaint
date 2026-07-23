@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:typed_data' show Uint16List;
-import 'dart:ui' show ImageByteFormat;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +21,7 @@ import '../ui/loading_pixie.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../models/reward.dart';
-import '../trace/trace_coverage.dart';
+import '../trace/trace_session.dart';
 import '../trace/trace_template.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
@@ -41,6 +39,7 @@ import '../widgets/shape_picker.dart' as shapes;
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
 import 'canvas_viewport.dart';
+import 'cbn_session.dart';
 import 'fill_pattern.dart';
 import 'painting_canvas.dart';
 import 'region_label.dart';
@@ -87,20 +86,16 @@ class _CanvasScreenState extends State<CanvasScreen>
   String? pageId;
   String? traceId;
   String? sceneId;
-  TraceCoverage? _traceCoverage;
-  bool _traceCelebrated = false;
+  TraceSession? _trace;
 
-  // Color-by-number state (null/empty outside CbN mode).
-  CbnSpec? _cbnSpec;
-  Uint16List? _regionOf;
-  final Map<int, int> _regionNumber = {};
-  final Set<int> _cbnFilledRegions = {};
-  int? _cbnSelected;
+  // Color-by-number: all the rules live in the session, the screen only
+  // renders them and owns the transient hint highlight.
+  CbnSession? _cbn;
+  final Set<int> _resumedCbnRegions = {};
   int? _cbnHint;
-  int _cbnWrongTries = 0;
   Timer? _cbnHintTimer;
   bool _cbnCelebrated = false;
-  bool get _isCbn => _cbnSpec != null;
+  bool get _isCbn => _cbn != null;
   late bool hasPhoto;
   late bool hasPhotoLineArt;
   late bool _backgroundSaved;
@@ -108,6 +103,7 @@ class _CanvasScreenState extends State<CanvasScreen>
   bool loading = true;
   bool everSaved = false;
   Timer? _autoSave;
+  Future<void>? _pendingSave;
 
   @override
   void initState() {
@@ -139,81 +135,101 @@ class _CanvasScreenState extends State<CanvasScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
+  /// Loads whatever the chosen mode needs. Every step is guarded twice: a
+  /// `mounted` check after each await (the screen can be left mid-load, and
+  /// handing an image to a disposed controller double-frees it), and a
+  /// try/catch around the whole thing so a damaged file shows an empty
+  /// canvas instead of an eternal loading pixie.
   Future<void> _load() async {
+    try {
+      await _loadLayers();
+    } catch (_) {
+      // Broken or half-written file — start from a blank canvas rather
+      // than leaving the kid stuck on the loading screen.
+    }
+    if (mounted) setState(() => loading = false);
+  }
+
+  Future<void> _loadLayers() async {
     if (traceId != null) {
       await _loadTrace(traceId!);
+      if (!mounted) return;
     }
     if (pageId != null) {
       final page = await ColoringPage.byId(pageId!);
+      if (!mounted) return;
       if (page != null) {
         final art = await rasterizeSvgAsset(
           page.assetPath,
           kCanvasWidth,
           kCanvasHeight,
         );
+        if (!mounted) return art.dispose();
         controller.setLineArt(art);
         if (page.isColorByNumber) await _loadCbn(page);
+        if (!mounted) return;
       }
     }
     if (widget.photoLineArt != null) {
       controller.setLineArt(widget.photoLineArt!);
     } else if ((widget.resume?.hasPhotoLineArt ?? false) &&
         await widget.resume!.lineArtFile.exists()) {
-      controller.setLineArt(
-        await lineArtFromPng(await widget.resume!.lineArtFile.readAsBytes()),
-      );
+      final art =
+          await lineArtFromPng(await widget.resume!.lineArtFile.readAsBytes());
+      if (!mounted) return art.dispose();
+      controller.setLineArt(art);
     }
     final photoPath = widget.photoPath;
     if (widget.scene != null) {
-      controller.setBackground(await rasterizeSvgToImage(
-          widget.scene!.assetPath, kCanvasWidth, kCanvasHeight));
+      final image = await rasterizeSvgToImage(
+          widget.scene!.assetPath, kCanvasWidth, kCanvasHeight);
+      if (!mounted) return image.dispose();
+      controller.setBackground(image);
     } else if (photoPath != null) {
       final bytes = await File(photoPath).readAsBytes();
-      controller.setBackground(
-        await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight),
-      );
+      final image = await normalizePhoto(bytes, kCanvasWidth, kCanvasHeight);
+      if (!mounted) return image.dispose();
+      controller.setBackground(image);
     } else if ((widget.resume?.hasPhoto ?? false) &&
         await widget.resume!.backgroundFile.exists()) {
       final bytes = await widget.resume!.backgroundFile.readAsBytes();
-      controller.setBackground(await pngBytesToImage(bytes));
+      final image = await pngBytesToImage(bytes);
+      if (!mounted) return image.dispose();
+      controller.setBackground(image);
     }
     final resume = widget.resume;
     if (resume != null && await resume.paintFile.exists()) {
       final bytes = await resume.paintFile.readAsBytes();
-      controller.setPaintLayer(await pngBytesToImage(bytes));
+      final image = await pngBytesToImage(bytes);
+      if (!mounted) return image.dispose();
+      controller.setPaintLayer(image);
     }
     if (resume != null) {
       if (await resume.opsFile.exists()) {
-        controller.loadOps(decodeOps(await resume.opsFile.readAsString()));
+        final source = await resume.opsFile.readAsString();
+        if (!mounted) return;
+        controller.loadOps(decodeOps(source));
       } else if (controller.paintLayer != null) {
         // Legacy artwork painted before the op log existed — recording now
         // would tell a story that misses everything already on the canvas.
         controller.recordOps = false;
       }
     }
-    if (mounted) setState(() => loading = false);
   }
 
-  /// Builds the trace guide + coverage grid and wires the commit hook. The
-  /// guide is regenerated from the template id — nothing rasterized is
-  /// persisted. On resume the coverage restarts, but an already-earned
-  /// completion never fires twice.
+  /// Builds the trace guide and wires the commit hook. The guide is
+  /// regenerated from the template id — nothing rasterized is persisted.
   Future<void> _loadTrace(String id) async {
-    final template = traceTemplateById(id);
-    if (template == null) return;
-    final guide = buildTraceGuide(template, kCanvasWidth, kCanvasHeight);
-    controller.setTraceGuide(guide);
-    final image = await guide.toImage(kCanvasWidth, kCanvasHeight);
-    final data = await image.toByteData(format: ImageByteFormat.rawRgba);
-    image.dispose();
-    final rgba = data!.buffer.asUint8List();
-    final alpha = Uint8List(kCanvasWidth * kCanvasHeight);
-    for (var i = 0; i < alpha.length; i++) {
-      alpha[i] = rgba[i * 4 + 3];
-    }
-    _traceCoverage =
-        TraceCoverage.fromAlpha(alpha, kCanvasWidth, kCanvasHeight);
-    _traceCelebrated = Progress.instance.completedTraceIds.contains(id);
+    final session = await TraceSession.create(
+      templateId: id,
+      width: kCanvasWidth,
+      height: kCanvasHeight,
+      alreadyCompleted: Progress.instance.completedTraceIds.contains(id),
+    );
+    if (session == null) return;
+    if (!mounted) return session.guide.dispose();
+    _trace = session;
+    controller.setTraceGuide(session.guide);
     controller.onStrokeCommitted = _onTraceStroke;
   }
 
@@ -221,133 +237,80 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// line art (isolate), maps each sidecar label to its region id, restores
   /// already-solved regions and wires the fill guard.
   Future<void> _loadCbn(ColoringPage page) async {
+    // Restore first, unconditionally: if anything below fails (missing
+    // sidecar, renamed page) the very next autosave would otherwise write
+    // an empty cbnFilled and wipe a half-solved picture for good.
+    _resumedCbnRegions.addAll(widget.resume?.cbnFilled ?? const []);
     final spec = await CbnSpec.load(page.id);
     final alpha = controller.barrierAlpha;
-    if (spec == null || alpha == null) return;
+    if (spec == null || alpha == null || !mounted) return;
     const w = kCanvasWidth, h = kCanvasHeight;
     final regionOf = await Isolate.run(() => labelRegions(alpha, w, h));
-    _regionNumber.clear();
-    for (final label in spec.labels) {
-      final x = label.pos.dx.floor().clamp(0, w - 1);
-      final y = label.pos.dy.floor().clamp(0, h - 1);
-      final id = regionOf[y * w + x];
-      // id 0 would mean the label sits on an outline — authoring bug,
-      // tolerated by simply skipping that label.
-      if (id != 0) _regionNumber[id] = label.number;
-    }
-    _cbnSpec = spec;
-    _regionOf = regionOf;
-    _cbnFilledRegions.addAll(widget.resume?.cbnFilled ?? const []);
-    _cbnCelebrated = _cbnComplete ||
+    if (!mounted) return;
+    final session = CbnSession.fromLabels(
+      spec: spec,
+      regionOf: regionOf,
+      width: w,
+      height: h,
+      alreadyFilled: _resumedCbnRegions,
+    );
+    _cbn = session;
+    _cbnCelebrated = session.isComplete ||
         Progress.instance.completedCbnIds.contains(page.id);
     controller
       ..tool = ToolKind.fill
       ..fillPattern = FillPattern.solid
       ..fillGuard = _cbnFillGuard
       ..lastFill.addListener(_onCbnFill);
-    _selectCbnNumber(_firstOpenNumber ?? spec.numbers.first, silent: true);
-    _pushCbnLabels();
+    controller.selectCbnColor(spec.colorOf[session.selected]!);
+    controller.setCbnLabels(session.labels());
   }
 
-  bool get _cbnComplete =>
-      _regionNumber.isNotEmpty &&
-      _regionNumber.keys.every(_cbnFilledRegions.contains);
+  /// Regions to persist: the live session once it exists, otherwise the
+  /// values we resumed with (so a failed setup never erases them).
+  List<int> get _cbnFilledForSave =>
+      (_cbn?.filledRegions ?? _resumedCbnRegions).toList();
 
-  Set<int> get _cbnDoneNumbers {
-    final spec = _cbnSpec;
-    if (spec == null) return const {};
-    final done = <int>{};
-    for (final n in spec.numbers) {
-      final regions = [
-        for (final e in _regionNumber.entries)
-          if (e.value == n) e.key
-      ];
-      if (regions.isNotEmpty && regions.every(_cbnFilledRegions.contains)) {
-        done.add(n);
-      }
-    }
-    return done;
-  }
-
-  int? get _firstOpenNumber {
-    final spec = _cbnSpec;
-    if (spec == null) return null;
-    final done = _cbnDoneNumbers;
-    for (final n in spec.numbers) {
-      if (!done.contains(n)) return n;
-    }
-    return null;
-  }
-
-  void _selectCbnNumber(int n, {bool silent = false}) {
-    final color = _cbnSpec?.colorOf[n];
-    if (color == null) return;
-    setState(() => _cbnSelected = n);
+  void _selectCbnNumber(int n) {
+    final session = _cbn;
+    final color = session?.spec.colorOf[n];
+    if (session == null || color == null) return;
+    session.select(n);
+    setState(() {});
     controller.selectCbnColor(color);
-    if (!silent) Sfx.instance.tick();
-  }
-
-  void _pushCbnLabels() {
-    final spec = _cbnSpec;
-    final regionOf = _regionOf;
-    if (spec == null || regionOf == null) return;
-    controller.setCbnLabels([
-      for (final label in spec.labels)
-        (
-          pos: label.pos,
-          number: label.number,
-          filled: _cbnFilledRegions.contains(regionOf[
-              label.pos.dy.floor().clamp(0, kCanvasHeight - 1) *
-                      kCanvasWidth +
-                  label.pos.dx.floor().clamp(0, kCanvasWidth - 1)]),
-        ),
-    ]);
+    Sfx.instance.tick();
   }
 
   bool _cbnFillGuard(Offset pos) {
-    final regionOf = _regionOf;
-    if (regionOf == null) return true;
-    final id = regionOf[pos.dy.floor().clamp(0, kCanvasHeight - 1) *
-            kCanvasWidth +
-        pos.dx.floor().clamp(0, kCanvasWidth - 1)];
-    final number = _regionNumber[id];
-    // Unlabeled areas (background etc.) are free to fill — forgiving.
-    if (number == null || number == _cbnSelected) return true;
-    _onCbnWrong(number);
-    return false;
-  }
-
-  /// Never punitive: a soft tick, and after two misses the right swatch
-  /// pulses to show where to look.
-  void _onCbnWrong(int correctNumber) {
+    final session = _cbn;
+    if (session == null) return true;
+    final verdict = session.tapAt(pos);
+    if (verdict.allowed) return true;
+    // Never punitive: a soft tick, and from the second miss on the right
+    // swatch pulses to show where to look.
     Sfx.instance.tick();
-    _cbnWrongTries++;
-    if (_cbnWrongTries >= 2) {
+    if (verdict.showHint) {
       _cbnHintTimer?.cancel();
-      setState(() => _cbnHint = correctNumber);
+      setState(() => _cbnHint = verdict.correctNumber);
       _cbnHintTimer = Timer(const Duration(milliseconds: 1600), () {
         if (mounted) setState(() => _cbnHint = null);
       });
     }
+    return false;
   }
 
   void _onCbnFill() {
     final pos = controller.lastFill.value;
-    final regionOf = _regionOf;
-    if (pos == null || regionOf == null) return;
-    final id = regionOf[pos.dy.floor().clamp(0, kCanvasHeight - 1) *
-            kCanvasWidth +
-        pos.dx.floor().clamp(0, kCanvasWidth - 1)];
-    if (_regionNumber[id] == null || !_cbnFilledRegions.add(id)) return;
-    _cbnWrongTries = 0;
-    _pushCbnLabels();
-    // Hop to the next open number so the kid always knows what's next.
-    final next = _firstOpenNumber;
-    if (next != null && _cbnDoneNumbers.contains(_cbnSelected)) {
-      _selectCbnNumber(next, silent: true);
+    final session = _cbn;
+    if (pos == null || session == null) return;
+    final result = session.registerFill(pos);
+    if (!result.counted) return;
+    controller.setCbnLabels(session.labels());
+    if (result.nextSelection != null) {
+      controller.selectCbnColor(session.spec.colorOf[result.nextSelection]!);
     }
     setState(() {});
-    if (_cbnComplete && !_cbnCelebrated) {
+    if (result.completed && !_cbnCelebrated) {
       _cbnCelebrated = true;
       Progress.instance.registerCbnCompleted(pageId!);
       Sfx.instance.tada();
@@ -356,25 +319,31 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   void _onTraceStroke(Stroke stroke) {
-    final coverage = _traceCoverage;
-    if (coverage == null || stroke.kind == ToolKind.eraser) return;
-    coverage.addPoints(
-      stroke.points.map((p) => p.pos),
-      // Generous radius for small hands: at least half a fat finger.
-      stroke.baseWidth < 30 ? 30 : stroke.baseWidth,
-    );
-    if (!_traceCelebrated && coverage.fraction >= 0.6) {
-      _traceCelebrated = true;
-      Progress.instance.registerTraceCompleted(traceId!);
-      Sfx.instance.tada();
-      if (mounted) showConfetti(context);
-    }
+    if (_trace?.registerStroke(stroke) != true) return;
+    Progress.instance.registerTraceCompleted(traceId!);
+    Sfx.instance.tada();
+    if (mounted) showConfetti(context);
   }
 
-  Future<void> _save() async {
+  /// Serializes every save. Three callers can fire concurrently (the 30 s
+  /// timer, the lifecycle hook and leaving the screen); without this they
+  /// would write the same PNGs and meta.json at the same time.
+  Future<void> _save() {
+    final pending = _pendingSave;
+    final next = pending == null
+        ? _saveNow()
+        : pending.then((_) => _saveNow()).catchError((_) {});
+    _pendingSave = next;
+    return next;
+  }
+
+  Future<void> _saveNow() async {
     if (!controller.dirty && everSaved) return;
     // Don't create junk artworks for an untouched canvas.
     if (controller.isEmpty && !everSaved) return;
+    // Snapshot the revision: strokes committed while we encode below must
+    // not be marked as saved.
+    final revisionAtStart = controller.revision;
     Uint8List? paintPng;
     final layer = controller.paintLayer;
     if (layer != null) paintPng = await imageToPngBytes(layer);
@@ -401,7 +370,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       pageId: pageId,
       traceId: traceId,
       sceneId: sceneId,
-      cbnFilled: _cbnFilledRegions.toList(),
+      cbnFilled: _cbnFilledForSave,
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: kCanvasWidth,
@@ -417,7 +386,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (backgroundPng != null) _backgroundSaved = true;
     if (lineArtPng != null) _lineArtSaved = true;
     everSaved = true;
-    controller.dirty = false;
+    if (controller.revision == revisionAtStart) controller.dirty = false;
     // A real, saved, non-empty picture counts as "finished" for the
     // sticker rewards (autosave makes this equivalent to having painted).
     if (controller.paintLayer != null) {
@@ -473,10 +442,18 @@ class _CanvasScreenState extends State<CanvasScreen>
   void dispose() {
     _autoSave?.cancel();
     _cbnHintTimer?.cancel();
-    if (_isCbn) controller.lastFill.removeListener(_onCbnFill);
+    controller.lastFill.removeListener(_onCbnFill);
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    controller.dispose();
+    // A save in flight still reads the layers — free them only afterwards,
+    // otherwise it encodes disposed images. The controller isn't part of
+    // the element tree, so outliving this State briefly is safe.
+    final pending = _pendingSave;
+    if (pending != null) {
+      pending.whenComplete(controller.dispose);
+    } else {
+      controller.dispose();
+    }
     viewport.dispose();
     super.dispose();
   }
@@ -579,12 +556,12 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   Widget _palette() {
-    final spec = _cbnSpec;
-    if (spec == null) return ColorPalette(controller: controller);
+    final session = _cbn;
+    if (session == null) return ColorPalette(controller: controller);
     return CbnPalette(
-      spec: spec,
-      selectedNumber: _cbnSelected,
-      doneNumbers: _cbnDoneNumbers,
+      spec: session.spec,
+      selectedNumber: session.selected,
+      doneNumbers: session.doneNumbers,
       hintNumber: _cbnHint,
       onSelect: _selectCbnNumber,
     );

@@ -140,8 +140,10 @@ class _StampSectionsState extends State<_StampSections>
 
   Future<void> _pickSticker(File file) async {
     final image = await pngBytesToImage(await file.readAsBytes());
+    // The sheet can be swiped away while the PNG decodes.
+    if (!mounted) return image.dispose();
     widget.controller.selectImageStamp(file.path, image);
-    if (mounted) Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   static const _gridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(

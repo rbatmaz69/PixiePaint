@@ -13,6 +13,18 @@ Future<ui.Image> pngBytesToImage(Uint8List bytes) async {
   return frame.image;
 }
 
+/// The image's alpha channel as one byte per pixel — the shape the flood
+/// fill barrier and the tracing coverage grid both expect.
+Future<Uint8List> alphaChannelOf(ui.Image image) async {
+  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  final rgba = data!.buffer.asUint8List();
+  final alpha = Uint8List(image.width * image.height);
+  for (var i = 0; i < alpha.length; i++) {
+    alpha[i] = rgba[i * 4 + 3];
+  }
+  return alpha;
+}
+
 Future<ui.Image> rgbaToImage(Uint8List rgba, int width, int height) {
   final completer = Completer<ui.Image>();
   ui.decodeImageFromPixels(

@@ -1,4 +1,3 @@
-import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -9,13 +8,11 @@ import 'package:flutter/material.dart';
 import '../models/draw_op.dart';
 import '../models/tool.dart';
 import '../util/color_utils.dart';
-import '../util/image_io.dart';
 import '../util/progress.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../util/svg_raster.dart';
 import 'fill_pattern.dart';
-import 'flood_fill.dart' as ff;
 import 'op_apply.dart';
 import 'stroke.dart';
 import 'symmetry.dart';
@@ -154,7 +151,20 @@ class CanvasController extends ChangeNotifier {
 
   bool isFilling = false;
   bool dirty = false;
+
+  /// Bumped on every change to the paint layer. The save path snapshots it
+  /// before encoding and only clears [dirty] if it is still unchanged —
+  /// otherwise strokes drawn during the (async) encode would be marked
+  /// saved without ever having been written.
+  int revision = 0;
+
   bool get isEmpty => paintLayer == null;
+
+  /// Set in [dispose]. The fill and eyedropper paths await work that can
+  /// outlive the screen (isolate round-trips, image decoding); touching the
+  /// layers or notifiers afterwards would double-dispose an image and fire
+  /// a disposed ValueNotifier.
+  bool _disposed = false;
 
   int? _activePointer;
   bool _activeIsStylus = false;
@@ -473,6 +483,7 @@ class CanvasController extends ChangeNotifier {
     picture.dispose();
     final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
     image.dispose();
+    if (_disposed) return;
     if (pendingPickPos == null) return; // gesture ended while compositing
     _pickBuffer = data?.buffer.asUint8List();
     _samplePick();
@@ -611,6 +622,7 @@ class CanvasController extends ChangeNotifier {
     paintLayer?.dispose();
     paintLayer = newLayer;
     dirty = true;
+    revision++;
     _tick();
     notifyListeners();
   }
@@ -622,37 +634,23 @@ class CanvasController extends ChangeNotifier {
     isFilling = true;
     notifyListeners();
     try {
-      final w = canvasWidth, h = canvasHeight;
-      Uint8List rgba;
-      if (paintLayer != null) {
-        final data =
-            await paintLayer!.toByteData(format: ui.ImageByteFormat.rawRgba);
-        rgba = data!.buffer.asUint8List();
-      } else {
-        rgba = Uint8List(w * h * 4);
-      }
-      final barrier = barrierAlpha;
-      final seedX = pos.dx.floor().clamp(0, w - 1);
-      final seedY = pos.dy.floor().clamp(0, h - 1);
       final c = color;
       final pattern = fillPattern;
-      final result = await Isolate.run(() => ff.floodFill(
-            rgba: rgba,
-            barrierAlpha: barrier,
-            width: w,
-            height: h,
-            seedX: seedX,
-            seedY: seedY,
-            fillR: (c.r * 255).round(),
-            fillG: (c.g * 255).round(),
-            fillB: (c.b * 255).round(),
-            tolerance: kFillTolerance,
-            // Without line art there is nothing to hide the dilation under.
-            dilationPasses: barrier == null ? 0 : 3,
-            pattern: pattern,
-          ));
-      if (result != null) {
-        final newLayer = await rgbaToImage(result, w, h);
+      final newLayer = await applyFill(
+        layer: paintLayer,
+        barrierAlpha: barrierAlpha,
+        pos: pos,
+        color: c,
+        pattern: pattern,
+        width: canvasWidth,
+        height: canvasHeight,
+      );
+      // The screen can be gone by now — the isolate round-trip is slow.
+      if (_disposed) {
+        newLayer?.dispose();
+        return;
+      }
+      if (newLayer != null) {
         Sfx.instance.pop();
         Progress.instance.registerToolUsed(ToolKind.fill);
         _pushUndoAndReplace(newLayer);
@@ -667,8 +665,10 @@ class CanvasController extends ChangeNotifier {
         lastFill.value = pos;
       }
     } finally {
-      isFilling = false;
-      notifyListeners();
+      if (!_disposed) {
+        isFilling = false;
+        notifyListeners();
+      }
     }
   }
 
@@ -679,6 +679,7 @@ class CanvasController extends ChangeNotifier {
     paintLayer = _undoStack.undo(paintLayer);
     if (!_opsFrozen && _opCursor > 0) _opCursor--;
     dirty = true;
+    revision++;
     _tick();
     notifyListeners();
   }
@@ -688,6 +689,7 @@ class CanvasController extends ChangeNotifier {
     paintLayer = _undoStack.redo(paintLayer);
     if (!_opsFrozen && _opCursor < _ops.length) _opCursor++;
     dirty = true;
+    revision++;
     _tick();
     notifyListeners();
   }
@@ -702,6 +704,7 @@ class CanvasController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _undoStack.dispose();
     paintLayer?.dispose();
     lineArt?.dispose();

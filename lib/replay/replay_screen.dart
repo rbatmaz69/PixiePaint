@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../canvas/canvas_screen.dart' show kCanvasWidth, kCanvasHeight;
 import '../canvas/stroke_renderer.dart';
 import '../canvas/symmetry.dart';
 import '../l10n/l10n.dart';
@@ -91,7 +90,10 @@ class _ReplayScreenState extends State<ReplayScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: AspectRatio(
-                          aspectRatio: kCanvasWidth / kCanvasHeight,
+                          // From the artwork's own size, not the current
+                          // canvas constants — older or future works may
+                          // have been saved at other dimensions.
+                          aspectRatio: c.width / c.height,
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.white,

@@ -44,7 +44,7 @@ class ArtworkStore {
     required String? pageId,
     String? traceId,
     String? sceneId,
-    List<int> cbnFilled = const [],
+    List<int>? cbnFilled,
     bool hasPhoto = false,
     bool hasPhotoLineArt = false,
     required int width,
@@ -58,14 +58,17 @@ class ArtworkStore {
     final root = await _root();
     final dir = Directory('${root.path}/$id');
     if (!await dir.exists()) await dir.create();
-    // Carry gallery-managed metadata (name, favorite) across autosaves —
-    // save() otherwise rebuilds meta.json from scratch and would wipe it.
+    // save() rebuilds meta.json from scratch, so anything the caller does
+    // not pass has to be carried over from the previous version — both the
+    // gallery-managed fields (name, favorite) and the mode fields, which a
+    // caller could otherwise silently erase on an autosave.
     String? name;
     var favorite = false;
+    Artwork? old;
     final metaFile = File('${dir.path}/meta.json');
     try {
       if (await metaFile.exists()) {
-        final old = Artwork.fromJson(
+        old = Artwork.fromJson(
             jsonDecode(await metaFile.readAsString()) as Map<String, dynamic>,
             dir.path);
         name = old.name;
@@ -76,10 +79,10 @@ class ArtworkStore {
     }
     final artwork = Artwork(
       id: id,
-      pageId: pageId,
-      traceId: traceId,
-      sceneId: sceneId,
-      cbnFilled: cbnFilled,
+      pageId: pageId ?? old?.pageId,
+      traceId: traceId ?? old?.traceId,
+      sceneId: sceneId ?? old?.sceneId,
+      cbnFilled: cbnFilled ?? old?.cbnFilled ?? const [],
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,
       width: width,
@@ -100,8 +103,12 @@ class ArtworkStore {
     if (lineArtPng != null) {
       await artwork.lineArtFile.writeAsBytes(lineArtPng);
     }
+    // Mirrors the paint.png handling: an artwork undone back to blank must
+    // not keep an old time-lapse that replays strokes it no longer has.
     if (opsJson != null) {
       await artwork.opsFile.writeAsString(opsJson);
+    } else if (await artwork.opsFile.exists()) {
+      await artwork.opsFile.delete();
     }
     await artwork.thumbFile.writeAsBytes(thumbPng);
     await File('${dir.path}/meta.json')

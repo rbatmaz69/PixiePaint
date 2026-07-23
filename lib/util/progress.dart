@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../models/reward.dart';
 import '../models/tool.dart';
+import 'json_store.dart';
 import 'settings.dart';
 
 /// Kid progress towards sticker rewards, persisted as progress.json in the
@@ -36,30 +36,47 @@ class Progress extends ChangeNotifier {
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
 
-  File? _file;
+  JsonStore? _store;
 
   Future<void> load() async {
     try {
       final dir = await getApplicationDocumentsDirectory();
-      _file = File('${dir.path}/progress.json');
-      if (await _file!.exists()) {
-        final json = jsonDecode(await _file!.readAsString());
-        completedArtworkIds.addAll(
-            ((json['completedArtworkIds'] as List?) ?? []).whereType<String>());
-        toolsUsed
-            .addAll(((json['toolsUsed'] as List?) ?? []).whereType<String>());
-        completedTraceIds.addAll(
-            ((json['completedTraceIds'] as List?) ?? []).whereType<String>());
-        completedCbnIds.addAll(
-            ((json['completedCbnIds'] as List?) ?? []).whereType<String>());
-        tasksDone = json['tasksDone'] as int? ?? 0;
-        lastTaskDay = json['lastTaskDay'] as String? ?? '';
-        celebratedEmojis.addAll(
-            ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
-      }
+      await loadFrom(JsonStore(File('${dir.path}/progress.json')));
     } catch (_) {
       // starting from zero is fine
     }
+  }
+
+  /// Seam for tests: load from any store (a temp file) instead of the real
+  /// documents dir.
+  Future<void> loadFrom(JsonStore store) async {
+    _store = store;
+    final json = await store.read();
+    if (json == null) return;
+    completedArtworkIds.addAll(
+        ((json['completedArtworkIds'] as List?) ?? []).whereType<String>());
+    toolsUsed.addAll(((json['toolsUsed'] as List?) ?? []).whereType<String>());
+    completedTraceIds.addAll(
+        ((json['completedTraceIds'] as List?) ?? []).whereType<String>());
+    completedCbnIds.addAll(
+        ((json['completedCbnIds'] as List?) ?? []).whereType<String>());
+    tasksDone = json['tasksDone'] as int? ?? 0;
+    lastTaskDay = json['lastTaskDay'] as String? ?? '';
+    celebratedEmojis.addAll(
+        ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
+  }
+
+  /// Test seam: forget everything loaded so far.
+  @visibleForTesting
+  void resetForTest() {
+    completedArtworkIds.clear();
+    toolsUsed.clear();
+    completedTraceIds.clear();
+    completedCbnIds.clear();
+    celebratedEmojis.clear();
+    tasksDone = 0;
+    lastTaskDay = '';
+    _store = null;
   }
 
   ProgressSnapshot snapshot() => ProgressSnapshot(
@@ -119,23 +136,26 @@ class Progress extends ChangeNotifier {
     if (fresh.isEmpty) return fresh;
     celebratedEmojis.addAll(fresh.map((r) => r.emoji));
     _persist();
+    notifyListeners();
     return fresh;
   }
 
   bool isRewardUnlocked(StickerReward reward) =>
       isUnlocked(reward, snapshot());
 
+  /// Queued and atomic — see [JsonStore]. Callers stay fire-and-forget.
   Future<void> _persist() async {
-    try {
-      await _file?.writeAsString(jsonEncode({
-        'completedArtworkIds': completedArtworkIds.toList(),
-        'toolsUsed': toolsUsed.toList(),
-        'completedTraceIds': completedTraceIds.toList(),
-        'completedCbnIds': completedCbnIds.toList(),
-        'tasksDone': tasksDone,
-        'lastTaskDay': lastTaskDay,
-        'celebratedEmojis': celebratedEmojis.toList(),
-      }));
-    } catch (_) {}
+    await _store?.write({
+      'completedArtworkIds': completedArtworkIds.toList(),
+      'toolsUsed': toolsUsed.toList(),
+      'completedTraceIds': completedTraceIds.toList(),
+      'completedCbnIds': completedCbnIds.toList(),
+      'tasksDone': tasksDone,
+      'lastTaskDay': lastTaskDay,
+      'celebratedEmojis': celebratedEmojis.toList(),
+    });
   }
+
+  /// Waits until every queued write reached the disk.
+  Future<void> flush() async => _store?.flush();
 }

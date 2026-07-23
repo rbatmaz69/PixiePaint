@@ -62,6 +62,39 @@ void main() {
       }
     });
 
+    test('no sticker appears in two places across all packs', () {
+      // A duplicate would show the same motif twice in the picker, or make
+      // an unlocked pack look like it was already available.
+      final seen = <String, String>{};
+      for (final pack in kStampPacks) {
+        for (final emoji in pack.stamps) {
+          final owner = seen[emoji];
+          expect(owner, isNull,
+              reason: '$emoji is in both "$owner" and "${pack.id}"');
+          seen[emoji] = pack.id;
+        }
+      }
+      for (final reward in kRewards) {
+        expect(seen.containsKey(reward.emoji), isFalse,
+            reason:
+                'reward ${reward.emoji} also sits in pack "${seen[reward.emoji]}"');
+      }
+    });
+
+    test('every pack cover emoji comes from its own stamps', () {
+      for (final pack in kStampPacks) {
+        expect(pack.stamps, contains(pack.emoji), reason: pack.id);
+      }
+    });
+
+    test('unlock goals are positive and reachable', () {
+      for (final pack in kStampPacks) {
+        final unlock = pack.unlock;
+        if (unlock == null) continue;
+        expect(unlock.target, greaterThan(0), reason: pack.id);
+      }
+    });
+
     test('all targets are reachable positives', () {
       for (final r in kRewards) {
         expect(r.target, greaterThan(0));

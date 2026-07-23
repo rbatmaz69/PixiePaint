@@ -21,7 +21,8 @@ import '../util/share.dart';
 /// the one on screen and the one being prepared — and each is disposed the
 /// moment it scrolls out.
 class SlideshowScreen extends StatefulWidget {
-  const SlideshowScreen({super.key, required this.artworks});
+  const SlideshowScreen({super.key, required this.artworks})
+      : assert(artworks.length > 0, 'a slideshow needs at least one picture');
 
   final List<Artwork> artworks;
 
@@ -95,7 +96,14 @@ class _SlideshowScreenState extends State<SlideshowScreen>
 
   void _advanceSlide() {
     final upcoming = _next;
-    if (upcoming == null) return; // still rendering — skip a beat
+    if (upcoming == null) {
+      // Still rendering, or the next artwork could not be decoded. Re-arm
+      // the render — otherwise nothing would ever prepare a slide again and
+      // the show would freeze on the current picture with the wakelock on.
+      _index = (_index + 1) % widget.artworks.length;
+      _prepareNext();
+      return;
+    }
     _next = null;
     final old = _current;
     setState(() {

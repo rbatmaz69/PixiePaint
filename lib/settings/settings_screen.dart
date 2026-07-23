@@ -4,6 +4,8 @@ import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/kid_dialog.dart';
+import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -12,6 +14,7 @@ import '../util/music.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
+import '../widgets/parental_gate.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -67,21 +70,47 @@ class _SettingsScreenState extends State<SettingsScreen>
     Sfx.instance.tick();
   }
 
-  /// Zips the gallery and hands it to the share sheet. The whole settings
-  /// screen already sits behind the parental gate.
+  /// Zips the gallery and hands it to the share sheet. Reaching this screen
+  /// already required the parental gate, but the archive leaves the device,
+  /// so it asks again on its own — that way the safety does not depend on
+  /// where the button happens to be mounted.
   Future<void> _backup() async {
     if (_backupRunning) return;
+    if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
     setState(() => _backupRunning = true);
-    final messenger = ScaffoldMessenger.of(context);
-    final workingLabel = context.l10n.backupWorking;
-    messenger.showSnackBar(SnackBar(content: Text(workingLabel)));
+    // A modal progress dialog, dismissed as soon as the zip is ready — the
+    // share sheet takes over from there.
+    var dialogOpen = true;
+    showKidDialog<void>(
+      context: context,
+      emoji: '📦',
+      barrierDismissible: false,
+      title: context.l10n.backupWorking,
+      body: const LoadingPixie(emoji: '📦'),
+    ).then((_) => dialogOpen = false);
     try {
       final zip = await createBackupZip();
+      if (mounted && dialogOpen) Navigator.of(context).pop();
+      dialogOpen = false;
       await shareBackupZip(zip);
     } catch (_) {
+      if (mounted && dialogOpen) Navigator.of(context).pop();
+      dialogOpen = false;
       if (mounted) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(context.l10n.backupFailed)),
+        await showKidDialog<void>(
+          context: context,
+          emoji: '😕',
+          title: context.l10n.backupFailed,
+          actions: [
+            Builder(
+              builder: (dialogContext) => KidDialogButton(
+                label: context.l10n.okAction,
+                emoji: '👍',
+                onTap: () => Navigator.pop(dialogContext),
+              ),
+            ),
+          ],
         );
       }
     } finally {

@@ -18,10 +18,11 @@ Future<T?> showKidDialog<T>({
   required String title,
   Widget? body,
   List<Widget> actions = const [],
+  bool barrierDismissible = true,
 }) {
   return showGeneralDialog<T>(
     context: context,
-    barrierDismissible: true,
+    barrierDismissible: barrierDismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: Colors.black54,
     transitionDuration: const Duration(milliseconds: 340),

@@ -34,6 +34,12 @@ class UndoStack {
 
   ui.Image? redo(ui.Image? current) {
     _undo.add(current);
+    // Same trim as push(): today _redo can never exceed the capacity, but
+    // relying on that invariant would leak 12 MB images the moment it
+    // stops holding.
+    if (_undo.length > capacity) {
+      _undo.removeAt(0)?.dispose();
+    }
     return _redo.removeLast();
   }
 
