@@ -1,0 +1,346 @@
+{
+  "@@locale": "tr",
+  "appTitle": "PixiePaint",
+  "cardColoring": "Boyama",
+  "cardFreeDraw": "Serbest çizim",
+  "cardPhoto": "Fotoğraf boya",
+  "cardGallery": "Resimlerim",
+  "cardTrace": "Üzerinden geç",
+  "cardScenes": "Çıkartma dünyası",
+  "cardTwoPainter": "Birlikte boya",
+  "twoPainterFlip": "Tarafı çevir",
+  "dailyTaskTitle": "Günün görevi",
+  "dailyTaskGo": "Hadi başlayalım!",
+  "dailyTaskDone": "Tamamlandı!",
+  "dailyTaskAlreadyDone": "Bugün çoktan yaptın – harikasın! 🎉",
+  "scenePickerTitle": "Bir sahne seç!",
+  "traceTitle": "Bir şablon seç!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Şekiller",
+  "settingsTooltip": "Ayarlar (yetişkinler için)",
+  "profileTitle": "Kim boyuyor?",
+  "profileDefaultName": "Ben",
+  "profileManage": "Yönet (yetişkinler için)",
+  "profileAdd": "Çocuk ekle",
+  "profileNameHint": "İsim",
+  "profilePrimaryBadge": "Ana profil",
+  "profileRemoveTitle": "{name} kaldırılsın mı?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profileRemoveBody": "Bu çocuğun resimleri ne olsun?",
+  "profileRemoveKeepArt": "Resimleri sakla",
+  "profileRemoveDeleteArt": "Resimleri de sil",
+  "photoDialogTitle": "Fotoğrafla ne yapalım?",
+  "photoModePaint": "Fotoğrafın üstünü boya",
+  "photoModeLineArt": "Sihirli boyama sayfası",
+  "lineArtTitle": "Sihirli boyama sayfası",
+  "detailFew": "Az ayrıntı",
+  "detailMedium": "Orta",
+  "detailMany": "Çok ayrıntı",
+  "letsGo": "Hadi başlayalım!",
+  "back": "Geri",
+  "shareForParents": "Paylaş (yetişkinler için)",
+  "printForParents": "Yazdır (yetişkinler için)",
+  "resetView": "Görünümü sıfırla",
+  "toolBrush": "Fırça",
+  "toolMarker": "Keçeli kalem",
+  "toolCrayon": "Pastel boya",
+  "toolRainbow": "Gökkuşağı",
+  "toolGlitter": "Simli",
+  "toolNeon": "Neon",
+  "toolTrail": "Kalpli iz",
+  "toolDotted": "Noktalı kalem",
+  "toolTwin": "Çift çizgi",
+  "toolSticker": "Çıkartma",
+  "toolFill": "Doldur",
+  "toolEraser": "Silgi",
+  "toolEyedropper": "Renk seçici",
+  "toolShapes": "Şekiller",
+  "shapeCircle": "Daire",
+  "shapeSquare": "Kare",
+  "shapeHeart": "Kalp",
+  "shapeStar": "Yıldız",
+  "shapeRainbow": "Gökkuşağı",
+  "symmetryTitle": "Sihirli ayna",
+  "symmetryOff": "Normal",
+  "symmetryButterfly": "Kelebek",
+  "symmetryFlower": "Çiçek",
+  "symmetrySnowflake": "Kar tanesi",
+  "sizeTitle": "Fırça boyutu",
+  "colorPickerTitle": "Tüm renkler",
+  "colorRecent": "Son kullanılan",
+  "clearTitle": "Her şey silinsin mi?",
+  "clearBody": "Baştan başlamak ister misin?",
+  "clearKeep": "Boyamaya devam!",
+  "clearConfirm": "Baştan başla",
+  "patternSolid": "Düz",
+  "patternDots": "Noktalar",
+  "patternStripes": "Çizgiler",
+  "patternRainbow": "Gökkuşağı",
+  "patternHearts": "Kalpler",
+  "patternStars": "Yıldızlar",
+  "patternChecker": "Damalı",
+  "patternBubbles": "Baloncuklar",
+  "galleryTitle": "Resimlerim",
+  "galleryEmpty": "Henüz resim yok –\nhadi bir tane boya!",
+  "continuePainting": "Boyamaya devam",
+  "slideshowTooltip": "Slayt gösterisini başlat",
+  "replayAction": "Filmi izle",
+  "replayAgain": "Tekrar oynat",
+  "replaySpeed": "Hız",
+  "renameAction": "Yeniden adlandır",
+  "renameTitle": "Resminin adı ne?",
+  "renameSave": "Kaydet",
+  "saveToPhotos": "Fotoğraflara kaydet (yetişkinler için)",
+  "savedToPhotos": "Fotoğraflara kaydedildi!",
+  "saveToPhotosFailedTitle": "Bu olmadı",
+  "saveToPhotosFailed": "Lütfen cihaz ayarlarından fotoğraf erişimine izin ver ve tekrar dene.",
+  "filterAll": "Hepsi",
+  "filterFavorites": "Favoriler",
+  "okAction": "Tamam!",
+  "deleteAction": "At",
+  "deleteTitle": "Resim atılsın mı?",
+  "deleteBody": "Resim sonsuza kadar gidecek.",
+  "deleteKeep": "Kalsın!",
+  "gateTitle": "Anne babana sor!",
+  "gateBody": "Burası yetişkinler için.\nİşlemi çöz:",
+  "gateQuestion": "{a} × {b} = ?",
+  "@gateQuestion": {
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "gateHint": "Cevap",
+  "gateWrong": "Olmadı, tekrar dene.",
+  "gateCancel": "Vazgeç",
+  "gateContinue": "Devam",
+  "pickerTitle": "Bir resim seç!",
+  "categoryAll": "Hepsi",
+  "settingsTitle": "Ayarlar",
+  "stylusOnlyTitle": "Sadece kalemle çiz",
+  "stylusOnlySubtitle": "Parmak dokunuşları çizmez – avuç içi iz bırakmasın diye kullanışlı.",
+  "deleteGateTitle": "Silmek için yetişkin gerekir",
+  "deleteGateSubtitle": "Resimler ancak yetişkin sorusundan sonra silinebilir.",
+  "leftHandedTitle": "Solak modu",
+  "leftHandedSubtitle": "Araçlar sağ tarafa geçer, böylece çizen el onları kapatmaz.",
+  "soundsTitle": "Sesler ve titreşim",
+  "soundsSubtitle": "Boyarken ve damga vururken yumuşak sesler.",
+  "musicTitle": "Arka plan müziği",
+  "musicSubtitle": "Boyarken yumuşak müzik kutusu ezgileri.",
+  "aboutTitle": "PixiePaint",
+  "aboutBody": "Çocuklar için bir boyama kitabı uygulaması. Reklam yok, veri toplama yok – tüm resimler bu cihazda kalır.",
+  "rateApp": "Uygulamayı değerlendir",
+  "rateAppSubtitle": "Play Store'u açar.",
+  "canvasLoading": "Resmin geliyor…",
+  "galleryEmptyCta": "Bir resim seç!",
+  "settingsSectionSafety": "Güvenlik",
+  "settingsSectionFun": "Eğlence",
+  "settingsSectionParents": "Yetişkinler için",
+  "settingsSectionAbout": "Hakkında",
+  "backupTitle": "Tüm resimleri yedekle",
+  "backupSubtitle": "Tüm resimleri paylaşmak veya saklamak için bir ZIP dosyasına koyar.",
+  "backupWorking": "Resimler paketleniyor…",
+  "backupFailed": "Yedekleme olmadı, üzgünüz.",
+  "rewardUnlockedTitle": "Yeni çıkartma!",
+  "rewardUnlockedBody": "Boyayarak yeni bir çıkartma kazandın!",
+  "rewardUnlockedOk": "Süper!",
+  "rewardLockedTitle": "Hâlâ gizli!",
+  "packBasics": "Favoriler",
+  "packAnimals": "Hayvanlar",
+  "packSpace": "Uzay",
+  "packFood": "Tatlılar",
+  "packVehicles": "Araçlar",
+  "packRewards": "Ödül çıkartmaları",
+  "rewardRulePaintings": "{n, plural, =1{1 resim daha bitir!} other{{n} resim daha bitir!}}",
+  "@rewardRulePaintings": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTools": "{n, plural, =1{1 farklı araç daha dene!} other{{n} farklı araç daha dene!}}",
+  "@rewardRuleTools": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleShares": "Anne babanla bir resim paylaş!",
+  "rewardRuleTrace": "{n, plural, =1{1 şablonun daha üzerinden geç!} other{{n} şablonun daha üzerinden geç!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "packMusic": "Müzik",
+  "packParty": "Parti",
+  "rewardRuleCbn": "{n, plural, =1{1 sayı boyama daha çöz!} other{{n} sayı boyama daha çöz!}}",
+  "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{1 günlük görev daha tamamla!} other{{n} günlük görev daha tamamla!}}",
+  "@rewardRuleTasks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myStickersSection": "Çıkartmalarım",
+  "stickerCaptureTitle": "Resminden bir parça seç!",
+  "stickerEmptyTitle": "Önce boya!",
+  "stickerEmptyBody": "Önce güzel bir şey boya – sonra onu çıkartmaya dönüştürebilirsin!",
+  "stickerAlbumFullTitle": "Çıkartma albümü dolu!",
+  "stickerAlbumFullBody": "Önce eski bir çıkartmayı at – bunun için basılı tut.",
+  "stickerDeleteTitle": "Çıkartma atılsın mı?",
+  "pauseTitle": "Mola zamanı!",
+  "pauseBody": "Bir süredir boyuyorsun. Gerin, bir şeyler iç – resmin seni bekleyecek.",
+  "pauseContinue": "Boyamaya devam",
+  "pauseSaved": "Resmin kaydedildi.",
+  "pauseSettingTitle": "Boyama molası",
+  "pauseSettingSubtitle": "Bir süre sonra dostça bir mola hatırlatması göster",
+  "pauseOff": "Kapalı",
+  "pauseMinutes": "{n} dakika",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumTitle": "Başarılarım",
+  "albumStickers": "Ödül çıkartmaları",
+  "albumEarned": "{total} çıkartmadan {earned} tanesi",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreak": "{n, plural, =1{Üst üste 1 gün boyadın} other{Üst üste {n} gün boyadın}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreakNone": "Günün görevini tamamla ve serini başlat!",
+  "albumStickerEarned": "Kazanıldı!",
+  "albumStickerEarnedBody": "Bu çıkartmayı hak ettin. Onu damgaların arasında bulabilirsin.",
+  "canvasArea": "Boyama alanı",
+  "undoAction": "Geri al",
+  "redoAction": "Yinele",
+  "clearAction": "Her şeyi sil",
+  "colorRed": "Kırmızı",
+  "colorOrange": "Turuncu",
+  "colorYellow": "Sarı",
+  "colorLightGreen": "Açık yeşil",
+  "colorGreen": "Yeşil",
+  "colorTurquoise": "Turkuaz",
+  "colorLightBlue": "Açık mavi",
+  "colorBlue": "Mavi",
+  "colorPurple": "Mor",
+  "colorPink": "Pembe",
+  "colorRose": "Gül kurusu",
+  "colorBrown": "Kahverengi",
+  "colorSkin": "Ten rengi",
+  "colorGrey": "Gri",
+  "colorBlack": "Siyah",
+  "colorWhite": "Beyaz",
+  "colorCustom": "Özel renk",
+  "colorMore": "Daha fazla renk",
+  "storageTitle": "Depolama",
+  "storageSubtitle": "PixiePaint ne kadar yer kaplıyor gör – ve temizle",
+  "storageBreakdown": "{count, plural, =0{Henüz resim yok} =1{1 resim · {art}} other{{count} resim · {art}}} · çıkartmalar {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "art": {
+        "type": "String"
+      },
+      "stickers": {
+        "type": "String"
+      }
+    }
+  },
+  "storageCleanupHint": "En eskiler önce. Gidebilecek resimlere dokun.",
+  "storageEmpty": "Burada henüz bir şey boyanmadı.",
+  "storagePictureFallback": "Resim",
+  "storageDeleteSelected": "{n, plural, =1{1 resmi sil} other{{n} resmi sil}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{Bu resim gerçekten silinsin mi?} other{Bu {n} resim gerçekten silinsin mi?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteKeep": "Kalsınlar",
+  "storageDeleteGo": "Sil",
+  "restoreTitle": "Resimleri geri getir",
+  "restoreSubtitle": "Bir yedek dosyası oku — burada olan resimlere dokunulmaz",
+  "restoreWorking": "Resimler geri getiriliyor …",
+  "restoreDone": "{restored, plural, =0{Yeni resim bulunamadı} =1{1 resim geri getirildi} other{{restored} resim geri getirildi}}{skipped, plural, =0{} =1{ — 1 tanesi zaten vardı} other{ — {skipped} tanesi zaten vardı}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreNotABackup": "Bu bir PixiePaint yedeği değil",
+  "restoreTooNew": "Bu yedek PixiePaint'in daha yeni bir sürümünden geliyor",
+  "restoreTooLarge": "Bu dosya okunamayacak kadar büyük",
+  "restoreFailed": "Resimleri geri getirmek olmadı",
+  "saveFailedTitle": "Resim kaydedilemedi",
+  "saveFailedBody": "Depolama alanı büyük ihtimalle dolu. Biraz yer aç ve tekrar dene — yoksa bu resim kaybolacak.",
+  "saveFailedRetry": "Tekrar dene",
+  "saveFailedLeave": "Yine de çık",
+  "rewardProgress": "{target} içinden {done}",
+  "@rewardProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  }
+}

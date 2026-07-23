@@ -95,7 +95,7 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 > 🎨 PixiePaint ist ein liebevolles Malbuch für Kinder ab 3 Jahren.
 >
 > **Malen**
-> • 42 Ausmalbilder: Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum
+> • 54 Ausmalbilder: Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Jahreszeiten
 > • Flächen füllen per Fingertipp – einfarbig, Punkte, Streifen, Regenbogen, Herzen, Sterne, Karo oder Seifenblasen
 > • Freies Zeichnen auf leerer Leinwand
 > • Eigene Fotos anmalen oder in ein Ausmalbild verwandeln
@@ -112,7 +112,9 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 > • Sticker-Welt: sechs Szenen zum Bekleben und Weitermalen
 > • Zu zweit malen: zwei Malflächen nebeneinander auf dem Tablet
 > • Zeitraffer: jedes Bild lässt sich als kleiner Film noch einmal anschauen
-> • Aufgabe des Tages: jeden Tag ein neuer Mal-Impuls
+> • Aufgabe des Tages: jeden Tag ein neuer Mal-Impuls, mit Serien-Zähler
+> • Jahreszeiten: Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween – passend zum Kalender ganz vorne
+> • Erfolge-Album: alle gesammelten Sticker auf einen Blick
 >
 > **Galerie**
 > • Automatisches Speichern – kein Bild geht verloren
@@ -127,8 +129,18 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 > • Alle Bilder als Sicherungsdatei speichern – und wieder zurückholen
 > • Speicherplatz einsehen und alte Bilder gezielt aufräumen
 > • Elternschranke vor Foto-Import, Teilen, Drucken, Einstellungen und Löschen
+> • Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Hinweis
 > • Linkshänder-Modus, „nur mit Stift malen", Töne und Musik abschaltbar
 > • Für Screenreader beschriftet (TalkBack)
+> • In neun Sprachen
+
+### Sprachen im Store-Eintrag
+
+Die App gibt es in neun Sprachen (Deutsch, Englisch, Französisch, Italienisch, Niederländisch, Polnisch, Portugiesisch, Spanisch, Türkisch). Play zeigt Store-Einträge nur in Sprachen an, die dort **einzeln gepflegt** sind — die Übersetzung in der App reicht dafür nicht.
+
+Unter „Store-Eintrag → Übersetzungen verwalten" pro Sprache Kurzbeschreibung und Beschreibung hinterlegen. Die Texte oben sind auf Deutsch; für die übrigen Sprachen genügt eine sinngemäße Übersetzung derselben Punkte. Screenshots dürfen sprachübergreifend dieselben bleiben, solange kein Text darin steht.
+
+Reihenfolge nach Aufwand-Nutzen: zuerst Englisch (Standard-Fallback für alle nicht gepflegten Sprachen), dann Spanisch, Französisch, Türkisch, Portugiesisch, Italienisch, Polnisch, Niederländisch.
 
 - **Kategorie:** Lernen (oder Kunst & Design)
 - **Grafiken:** App-Icon 512×512 (aus `assets/icon/icon.png` herunterskalieren), Feature-Grafik 1024×500, Screenshots siehe unten
@@ -193,10 +205,11 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 6.7.0 (versionCode 16) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.1.0 (versionCode 19) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
 | targetSdk | geerbt aus dem Flutter-SDK, siehe Schritt 3 |
 | Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |
 | Internet | nein |
+| Sprachen | 9 (de, en, es, fr, it, nl, pl, pt, tr) |
 | Werbung/Tracking | nein |
 | In-App-Käufe | nein |

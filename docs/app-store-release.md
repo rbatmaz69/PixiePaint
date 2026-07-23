@@ -93,6 +93,8 @@ Für die Beta-Prüfung wird eine „Beta App Description" und eine Kontakt-E-Mai
 
 **Beschreibung:** Der Text aus [`play-store-release.md`](play-store-release.md) Schritt 6 lässt sich unverändert übernehmen.
 
+**Lokalisierungen.** Die App unterstützt neun Sprachen; App Store Connect verlangt die Store-Texte pro Sprache getrennt („+ Sprache hinzufügen" oben im Versions-Editor). Ohne gepflegten Eintrag zeigt Apple die Sprache der primären Region. Untertitel und Keywords sind pro Sprache eigene Felder und lohnen die meiste Sorgfalt — sie fließen in die Suche ein.
+
 **Keywords (max. 100 Zeichen, kommagetrennt, ohne Leerzeichen):**
 > malen,ausmalen,malbuch,kinder,kritzeln,zeichnen,sticker,kleinkind,offline,lernen
 
@@ -131,7 +133,7 @@ Die Prüfung dauert meist 1–3 Tage; Apps in der Kids Category werden gelegentl
 | | |
 |---|---|
 | Bundle Identifier | `dev.rb.pixiepaint.pixiepaint` |
-| Version | 6.7.0 (Build 16) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.1.0 (Build 19) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | Berechtigungen | Fotobibliothek (Lesen und Sichern), beides hinter der Elternschranke |
 | Netzwerk | keines |
 | Tracking | keines (kein ATT-Dialog nötig) |

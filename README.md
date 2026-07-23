@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.0.0+18 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.1.0+19 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -67,7 +67,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Linkshänder-Modus, „nur mit Stift malen", Töne und Musik abschaltbar
 - Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Vorhang (standardmäßig aus)
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
-- Deutsch und Englisch
+- Neun Sprachen: Deutsch, Englisch, Französisch, Italienisch, Niederländisch, Polnisch, Portugiesisch, Spanisch, Türkisch
 
 **Barrierefreiheit**
 - Alle Bedienelemente sind für TalkBack und VoiceOver benannt, inklusive Auswahlzustand der Werkzeuge und Namen aller 16 Malfarben
@@ -220,7 +220,7 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite umfasst 293 Tests in 34 Dateien:
+Die Test-Suite umfasst 328 Tests in 35 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen und die Screenreader-Beschriftungen
@@ -234,16 +234,21 @@ Golden Tests gibt es nicht; Optik und Animationen werden am Gerät geprüft.
 
 ## Übersetzungen (l10n)
 
-Deutsch ist die Ausgangssprache, Englisch die Übersetzung.
+Neun Sprachen: **Deutsch** (Ausgangssprache und Fallback), Englisch, Französisch, Italienisch, Niederländisch, Polnisch, Portugiesisch, Spanisch, Türkisch.
 
-1. Neuen Text in `lib/l10n/app_de.arb` **und** `lib/l10n/app_en.arb` eintragen (gleicher Key)
+1. Neuen Text in `lib/l10n/app_de.arb` eintragen — und in **allen** anderen `app_*.arb` unter demselben Key
 2. Generieren:
    ```bash
    flutter gen-l10n
    ```
 3. Im Code verwenden: `context.l10n.meinNeuerKey` (Helfer aus `lib/l10n/l10n.dart`)
+4. `flutter test test/l10n_test.dart` — der Test schlägt fehl, sobald einer Sprache ein Key fehlt oder ein Platzhalter verlorengegangen ist
 
 Platzhalter und Pluralformen folgen dem ICU-Format — Beispiele stehen bei `gateQuestion` und `rewardRulePaintings` in den ARB-Dateien.
+
+> **Pluralformen sind nicht überall zwei.** Die zehn Plural-Texte brauchen im Polnischen vier Formen (`=1` / `few` / `many` / `other`), weil sich die Endung zwischen 2–4 und 5+ ändert: mit nur `one`/`other` steht dort „5 obrazek" statt „5 obrazków". Das Türkische kommt umgekehrt mit einer Form aus. `test/l10n_test.dart` prüft, dass die polnischen Formen vorhanden sind.
+
+> **Zum Ton:** Die Übersetzungen stammen nicht von Muttersprachlern. Sie sind idiomatisch und kindgerecht formuliert, aber bevor die App in einem dieser Märkte tatsächlich veröffentlicht wird, lohnt sich ein Blick von jemandem, der die Sprache spricht — gerade bei einer Kinder-App trägt der Ton viel.
 
 ## Projektstruktur
 
@@ -360,7 +365,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.0.0+18` bedeutet Versionsname 7.0.0 und versionCode 18. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.1.0+19` bedeutet Versionsname 7.1.0 und versionCode 19. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

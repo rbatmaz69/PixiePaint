@@ -1,0 +1,346 @@
+{
+  "@@locale": "es",
+  "appTitle": "PixiePaint",
+  "cardColoring": "Colorear",
+  "cardFreeDraw": "Dibujo libre",
+  "cardPhoto": "Pintar una foto",
+  "cardGallery": "Mis dibujos",
+  "cardTrace": "Repasar",
+  "cardScenes": "Mundo de pegatinas",
+  "cardTwoPainter": "Pintar entre dos",
+  "twoPainterFlip": "Girar un lado",
+  "dailyTaskTitle": "Reto del día",
+  "dailyTaskGo": "¡Vamos!",
+  "dailyTaskDone": "¡Hecho!",
+  "dailyTaskAlreadyDone": "Ya lo hiciste hoy, ¡muy bien! 🎉",
+  "scenePickerTitle": "¡Elige un escenario!",
+  "traceTitle": "¡Elige una plantilla!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Formas",
+  "settingsTooltip": "Ajustes (para adultos)",
+  "profileTitle": "¿Quién pinta?",
+  "profileDefaultName": "Yo",
+  "profileManage": "Gestionar (para adultos)",
+  "profileAdd": "Añadir niño",
+  "profileNameHint": "Nombre",
+  "profilePrimaryBadge": "Perfil principal",
+  "profileRemoveTitle": "¿Quitar a {name}?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profileRemoveBody": "¿Qué hacemos con los dibujos de este niño?",
+  "profileRemoveKeepArt": "Guardar los dibujos",
+  "profileRemoveDeleteArt": "Borrar también los dibujos",
+  "photoDialogTitle": "¿Qué hacemos con la foto?",
+  "photoModePaint": "Pintar sobre la foto",
+  "photoModeLineArt": "Dibujo mágico para colorear",
+  "lineArtTitle": "Dibujo mágico para colorear",
+  "detailFew": "Pocos detalles",
+  "detailMedium": "Medio",
+  "detailMany": "Muchos detalles",
+  "letsGo": "¡Vamos!",
+  "back": "Atrás",
+  "shareForParents": "Compartir (para adultos)",
+  "printForParents": "Imprimir (para adultos)",
+  "resetView": "Restablecer la vista",
+  "toolBrush": "Pincel",
+  "toolMarker": "Rotulador",
+  "toolCrayon": "Lápiz de color",
+  "toolRainbow": "Arcoíris",
+  "toolGlitter": "Purpurina",
+  "toolNeon": "Neón",
+  "toolTrail": "Rastro de corazones",
+  "toolDotted": "Boli de puntos",
+  "toolTwin": "Doble línea",
+  "toolSticker": "Pegatina",
+  "toolFill": "Rellenar",
+  "toolEraser": "Goma",
+  "toolEyedropper": "Cuentagotas",
+  "toolShapes": "Formas",
+  "shapeCircle": "Círculo",
+  "shapeSquare": "Cuadrado",
+  "shapeHeart": "Corazón",
+  "shapeStar": "Estrella",
+  "shapeRainbow": "Arcoíris",
+  "symmetryTitle": "Espejo mágico",
+  "symmetryOff": "Normal",
+  "symmetryButterfly": "Mariposa",
+  "symmetryFlower": "Flor",
+  "symmetrySnowflake": "Copo de nieve",
+  "sizeTitle": "Tamaño del pincel",
+  "colorPickerTitle": "Todos los colores",
+  "colorRecent": "Usados hace poco",
+  "clearTitle": "¿Borrar todo?",
+  "clearBody": "¿Quieres empezar de nuevo?",
+  "clearKeep": "¡Seguir pintando!",
+  "clearConfirm": "Empezar de nuevo",
+  "patternSolid": "Liso",
+  "patternDots": "Puntos",
+  "patternStripes": "Rayas",
+  "patternRainbow": "Arcoíris",
+  "patternHearts": "Corazones",
+  "patternStars": "Estrellas",
+  "patternChecker": "Cuadros",
+  "patternBubbles": "Burbujas",
+  "galleryTitle": "Mis dibujos",
+  "galleryEmpty": "Todavía no hay dibujos –\n¡pinta uno!",
+  "continuePainting": "Seguir pintando",
+  "slideshowTooltip": "Empezar el pase de dibujos",
+  "replayAction": "Ver la película",
+  "replayAgain": "Ver otra vez",
+  "replaySpeed": "Velocidad",
+  "renameAction": "Cambiar el nombre",
+  "renameTitle": "¿Cómo se llama tu dibujo?",
+  "renameSave": "Guardar",
+  "saveToPhotos": "Guardar en Fotos (para adultos)",
+  "savedToPhotos": "¡Guardado en Fotos!",
+  "saveToPhotosFailedTitle": "Eso no ha funcionado",
+  "saveToPhotosFailed": "Permite el acceso a las fotos en los ajustes del dispositivo e inténtalo otra vez.",
+  "filterAll": "Todos",
+  "filterFavorites": "Favoritos",
+  "okAction": "¡Vale!",
+  "deleteAction": "Tirar",
+  "deleteTitle": "¿Tirar el dibujo?",
+  "deleteBody": "El dibujo desaparecerá para siempre.",
+  "deleteKeep": "¡Me lo quedo!",
+  "gateTitle": "¡Pregunta a tus padres!",
+  "gateBody": "Esta parte es para mayores.\nResuelve la cuenta:",
+  "gateQuestion": "{a} × {b} = ?",
+  "@gateQuestion": {
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "gateHint": "Respuesta",
+  "gateWrong": "No es correcto, inténtalo otra vez.",
+  "gateCancel": "Cancelar",
+  "gateContinue": "Continuar",
+  "pickerTitle": "¡Elige un dibujo!",
+  "categoryAll": "Todos",
+  "settingsTitle": "Ajustes",
+  "stylusOnlyTitle": "Dibujar solo con lápiz",
+  "stylusOnlySubtitle": "Los dedos no dibujan; así la palma de la mano no deja marcas.",
+  "deleteGateTitle": "Borrar necesita a un adulto",
+  "deleteGateSubtitle": "Los dibujos solo se pueden borrar tras la pregunta para adultos.",
+  "leftHandedTitle": "Modo zurdo",
+  "leftHandedSubtitle": "Las herramientas pasan a la derecha para que la mano que dibuja no las tape.",
+  "soundsTitle": "Sonidos y vibración",
+  "soundsSubtitle": "Sonidos suaves al pintar y al poner sellos.",
+  "musicTitle": "Música de fondo",
+  "musicSubtitle": "Melodías suaves de caja de música mientras pintas.",
+  "aboutTitle": "PixiePaint",
+  "aboutBody": "Una app para colorear para niños. Sin publicidad, sin recogida de datos: todos los dibujos se quedan en este dispositivo.",
+  "rateApp": "Valorar la app",
+  "rateAppSubtitle": "Abre Play Store.",
+  "canvasLoading": "Tu dibujo está llegando…",
+  "galleryEmptyCta": "¡Elige un dibujo!",
+  "settingsSectionSafety": "Seguridad",
+  "settingsSectionFun": "Diversión",
+  "settingsSectionParents": "Para adultos",
+  "settingsSectionAbout": "Información",
+  "backupTitle": "Guardar copia de los dibujos",
+  "backupSubtitle": "Reúne todos los dibujos en un archivo ZIP para compartir o conservar.",
+  "backupWorking": "Preparando los dibujos…",
+  "backupFailed": "La copia no ha funcionado, lo sentimos.",
+  "rewardUnlockedTitle": "¡Pegatina nueva!",
+  "rewardUnlockedBody": "¡Has conseguido una pegatina nueva pintando!",
+  "rewardUnlockedOk": "¡Genial!",
+  "rewardLockedTitle": "¡Todavía es un secreto!",
+  "packBasics": "Favoritas",
+  "packAnimals": "Animales",
+  "packSpace": "Espacio",
+  "packFood": "Golosinas",
+  "packVehicles": "Vehículos",
+  "packRewards": "Pegatinas de premio",
+  "rewardRulePaintings": "{n, plural, =1{¡Termina 1 dibujo más!} other{¡Termina {n} dibujos más!}}",
+  "@rewardRulePaintings": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTools": "{n, plural, =1{¡Prueba 1 herramienta más!} other{¡Prueba {n} herramientas más!}}",
+  "@rewardRuleTools": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleShares": "¡Comparte un dibujo con tus padres!",
+  "rewardRuleTrace": "{n, plural, =1{¡Repasa 1 plantilla más!} other{¡Repasa {n} plantillas más!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "packMusic": "Música",
+  "packParty": "Fiesta",
+  "rewardRuleCbn": "{n, plural, =1{¡Termina 1 dibujo de números más!} other{¡Termina {n} dibujos de números más!}}",
+  "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{¡Consigue 1 reto del día más!} other{¡Consigue {n} retos del día más!}}",
+  "@rewardRuleTasks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myStickersSection": "Mis pegatinas",
+  "stickerCaptureTitle": "¡Elige un trozo de tu dibujo!",
+  "stickerEmptyTitle": "¡Pinta primero!",
+  "stickerEmptyBody": "Pinta algo bonito primero y luego podrás convertirlo en una pegatina.",
+  "stickerAlbumFullTitle": "¡El álbum de pegatinas está lleno!",
+  "stickerAlbumFullBody": "Tira antes una pegatina vieja: mantenla pulsada para hacerlo.",
+  "stickerDeleteTitle": "¿Tirar la pegatina?",
+  "pauseTitle": "¡Hora de descansar!",
+  "pauseBody": "Llevas un buen rato pintando. Estírate, bebe algo: tu dibujo te espera.",
+  "pauseContinue": "Seguir pintando",
+  "pauseSaved": "Tu dibujo está guardado.",
+  "pauseSettingTitle": "Pausa para descansar",
+  "pauseSettingSubtitle": "Mostrar un aviso amable de descanso al cabo de un rato",
+  "pauseOff": "Desactivado",
+  "pauseMinutes": "{n} minutos",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumTitle": "Mis logros",
+  "albumStickers": "Pegatinas de premio",
+  "albumEarned": "{earned} de {total} pegatinas",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreak": "{n, plural, =1{Has pintado 1 día seguido} other{Has pintado {n} días seguidos}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreakNone": "¡Consigue el reto del día y empieza tu racha!",
+  "albumStickerEarned": "¡Conseguida!",
+  "albumStickerEarnedBody": "Te has ganado esta pegatina. La encontrarás con los sellos.",
+  "canvasArea": "Zona de dibujo",
+  "undoAction": "Deshacer",
+  "redoAction": "Rehacer",
+  "clearAction": "Borrar todo",
+  "colorRed": "Rojo",
+  "colorOrange": "Naranja",
+  "colorYellow": "Amarillo",
+  "colorLightGreen": "Verde claro",
+  "colorGreen": "Verde",
+  "colorTurquoise": "Turquesa",
+  "colorLightBlue": "Azul claro",
+  "colorBlue": "Azul",
+  "colorPurple": "Morado",
+  "colorPink": "Rosa fuerte",
+  "colorRose": "Rosa claro",
+  "colorBrown": "Marrón",
+  "colorSkin": "Color piel",
+  "colorGrey": "Gris",
+  "colorBlack": "Negro",
+  "colorWhite": "Blanco",
+  "colorCustom": "Color propio",
+  "colorMore": "Más colores",
+  "storageTitle": "Almacenamiento",
+  "storageSubtitle": "Ver cuánto espacio usa PixiePaint y hacer limpieza",
+  "storageBreakdown": "{count, plural, =0{Todavía no hay dibujos} =1{1 dibujo · {art}} other{{count} dibujos · {art}}} · pegatinas {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "art": {
+        "type": "String"
+      },
+      "stickers": {
+        "type": "String"
+      }
+    }
+  },
+  "storageCleanupHint": "Los más antiguos primero. Toca los dibujos que pueden irse.",
+  "storageEmpty": "Aquí todavía no se ha pintado nada.",
+  "storagePictureFallback": "Dibujo",
+  "storageDeleteSelected": "{n, plural, =1{Borrar 1 dibujo} other{Borrar {n} dibujos}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{¿Seguro que quieres borrar este dibujo?} other{¿Seguro que quieres borrar estos {n} dibujos?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteKeep": "Conservarlos",
+  "storageDeleteGo": "Borrar",
+  "restoreTitle": "Recuperar dibujos",
+  "restoreSubtitle": "Leer un archivo de copia; los dibujos que ya están aquí no se tocan",
+  "restoreWorking": "Recuperando dibujos …",
+  "restoreDone": "{restored, plural, =0{No se han encontrado dibujos nuevos} =1{1 dibujo recuperado} other{{restored} dibujos recuperados}}{skipped, plural, =0{} =1{ — 1 ya estaba aquí} other{ — {skipped} ya estaban aquí}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreNotABackup": "Esto no es una copia de PixiePaint",
+  "restoreTooNew": "Esta copia es de una versión más nueva de PixiePaint",
+  "restoreTooLarge": "Este archivo es demasiado grande para leerlo",
+  "restoreFailed": "No se han podido recuperar los dibujos",
+  "saveFailedTitle": "No se ha podido guardar el dibujo",
+  "saveFailedBody": "Seguramente no queda espacio. Libera algo de sitio e inténtalo otra vez; si no, este dibujo se perderá.",
+  "saveFailedRetry": "Intentar otra vez",
+  "saveFailedLeave": "Salir igualmente",
+  "rewardProgress": "{done} de {target}",
+  "@rewardProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  }
+}

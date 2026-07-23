@@ -14,7 +14,17 @@ class PixiePaintApp extends StatelessWidget {
       onGenerateTitle: (context) => context.l10n.appTitle,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       // German first — it is the fallback for unsupported system languages.
-      supportedLocales: const [Locale('de'), Locale('en')],
+      supportedLocales: const [
+        Locale('de'),
+        Locale('en'),
+        Locale('es'),
+        Locale('fr'),
+        Locale('it'),
+        Locale('nl'),
+        Locale('pl'),
+        Locale('pt'),
+        Locale('tr'),
+      ],
       debugShowCheckedModeBanner: false,
       theme: buildPixieTheme(),
       navigatorObservers: [pixieRouteObserver],

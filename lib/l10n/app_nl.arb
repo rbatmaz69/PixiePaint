@@ -1,0 +1,346 @@
+{
+  "@@locale": "nl",
+  "appTitle": "PixiePaint",
+  "cardColoring": "Kleuren",
+  "cardFreeDraw": "Vrij tekenen",
+  "cardPhoto": "Foto inkleuren",
+  "cardGallery": "Mijn tekeningen",
+  "cardTrace": "Overtrekken",
+  "cardScenes": "Stickerwereld",
+  "cardTwoPainter": "Samen kleuren",
+  "twoPainterFlip": "Kant omdraaien",
+  "dailyTaskTitle": "Opdracht van de dag",
+  "dailyTaskGo": "Daar gaan we!",
+  "dailyTaskDone": "Gelukt!",
+  "dailyTaskAlreadyDone": "Vandaag al gedaan – knap hoor! 🎉",
+  "scenePickerTitle": "Kies een decor!",
+  "traceTitle": "Kies iets om over te trekken!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Vormen",
+  "settingsTooltip": "Instellingen (voor ouders)",
+  "profileTitle": "Wie gaat er kleuren?",
+  "profileDefaultName": "Ik",
+  "profileManage": "Beheren (voor ouders)",
+  "profileAdd": "Kind toevoegen",
+  "profileNameHint": "Naam",
+  "profilePrimaryBadge": "Hoofdprofiel",
+  "profileRemoveTitle": "{name} verwijderen?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profileRemoveBody": "Wat moet er met de tekeningen van dit kind gebeuren?",
+  "profileRemoveKeepArt": "Tekeningen bewaren",
+  "profileRemoveDeleteArt": "Tekeningen ook verwijderen",
+  "photoDialogTitle": "Wat doen we met de foto?",
+  "photoModePaint": "Op de foto kleuren",
+  "photoModeLineArt": "Toverkleurplaat",
+  "lineArtTitle": "Toverkleurplaat",
+  "detailFew": "Weinig details",
+  "detailMedium": "Gemiddeld",
+  "detailMany": "Veel details",
+  "letsGo": "Daar gaan we!",
+  "back": "Terug",
+  "shareForParents": "Delen (voor ouders)",
+  "printForParents": "Afdrukken (voor ouders)",
+  "resetView": "Weergave herstellen",
+  "toolBrush": "Kwast",
+  "toolMarker": "Stift",
+  "toolCrayon": "Kleurpotlood",
+  "toolRainbow": "Regenboog",
+  "toolGlitter": "Glitter",
+  "toolNeon": "Neon",
+  "toolTrail": "Hartjesspoor",
+  "toolDotted": "Stippenpen",
+  "toolTwin": "Dubbele lijn",
+  "toolSticker": "Sticker",
+  "toolFill": "Vullen",
+  "toolEraser": "Gum",
+  "toolEyedropper": "Pipet",
+  "toolShapes": "Vormen",
+  "shapeCircle": "Cirkel",
+  "shapeSquare": "Vierkant",
+  "shapeHeart": "Hart",
+  "shapeStar": "Ster",
+  "shapeRainbow": "Regenboog",
+  "symmetryTitle": "Toverspiegel",
+  "symmetryOff": "Gewoon",
+  "symmetryButterfly": "Vlinder",
+  "symmetryFlower": "Bloem",
+  "symmetrySnowflake": "Sneeuwvlok",
+  "sizeTitle": "Kwastgrootte",
+  "colorPickerTitle": "Alle kleuren",
+  "colorRecent": "Pas gebruikt",
+  "clearTitle": "Alles wissen?",
+  "clearBody": "Wil je opnieuw beginnen?",
+  "clearKeep": "Doorgaan met kleuren!",
+  "clearConfirm": "Opnieuw beginnen",
+  "patternSolid": "Effen",
+  "patternDots": "Stippen",
+  "patternStripes": "Strepen",
+  "patternRainbow": "Regenboog",
+  "patternHearts": "Hartjes",
+  "patternStars": "Sterren",
+  "patternChecker": "Ruitjes",
+  "patternBubbles": "Bellen",
+  "galleryTitle": "Mijn tekeningen",
+  "galleryEmpty": "Nog geen tekeningen –\nmaak er een!",
+  "continuePainting": "Verder kleuren",
+  "slideshowTooltip": "Diavoorstelling starten",
+  "replayAction": "Filmpje bekijken",
+  "replayAgain": "Nog eens afspelen",
+  "replaySpeed": "Snelheid",
+  "renameAction": "Naam wijzigen",
+  "renameTitle": "Hoe heet jouw tekening?",
+  "renameSave": "Opslaan",
+  "saveToPhotos": "Opslaan in Foto's (voor ouders)",
+  "savedToPhotos": "Opgeslagen in Foto's!",
+  "saveToPhotosFailedTitle": "Dat lukte niet",
+  "saveToPhotosFailed": "Geef toegang tot foto's in de instellingen van het apparaat en probeer het opnieuw.",
+  "filterAll": "Alles",
+  "filterFavorites": "Favorieten",
+  "okAction": "Oké!",
+  "deleteAction": "Weggooien",
+  "deleteTitle": "Tekening weggooien?",
+  "deleteBody": "De tekening is dan voorgoed weg.",
+  "deleteKeep": "Bewaren!",
+  "gateTitle": "Vraag het je ouders!",
+  "gateBody": "Dit deel is voor grote mensen.\nLos de som op:",
+  "gateQuestion": "{a} × {b} = ?",
+  "@gateQuestion": {
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "gateHint": "Antwoord",
+  "gateWrong": "Net niet, probeer het nog eens.",
+  "gateCancel": "Annuleren",
+  "gateContinue": "Doorgaan",
+  "pickerTitle": "Kies een tekening!",
+  "categoryAll": "Alles",
+  "settingsTitle": "Instellingen",
+  "stylusOnlyTitle": "Alleen met pen tekenen",
+  "stylusOnlySubtitle": "Vingers tekenen niet – handig zodat je handpalm geen strepen maakt.",
+  "deleteGateTitle": "Verwijderen mag alleen met een ouder",
+  "deleteGateSubtitle": "Tekeningen kunnen pas na de oudervraag worden verwijderd.",
+  "leftHandedTitle": "Linkshandige modus",
+  "leftHandedSubtitle": "Het gereedschap gaat naar rechts, zodat je tekenhand het niet bedekt.",
+  "soundsTitle": "Geluiden en trillen",
+  "soundsSubtitle": "Zachte geluidjes tijdens het kleuren en stempelen.",
+  "musicTitle": "Achtergrondmuziek",
+  "musicSubtitle": "Rustige muziekdoosdeuntjes tijdens het kleuren.",
+  "aboutTitle": "PixiePaint",
+  "aboutBody": "Een kleurboek-app voor kinderen. Geen reclame, geen gegevensverzameling – alle tekeningen blijven op dit apparaat.",
+  "rateApp": "App beoordelen",
+  "rateAppSubtitle": "Opent de Play Store.",
+  "canvasLoading": "Je tekening komt eraan…",
+  "galleryEmptyCta": "Kies een tekening!",
+  "settingsSectionSafety": "Veiligheid",
+  "settingsSectionFun": "Plezier",
+  "settingsSectionParents": "Voor ouders",
+  "settingsSectionAbout": "Over",
+  "backupTitle": "Alle tekeningen veiligstellen",
+  "backupSubtitle": "Zet alle tekeningen in een ZIP-bestand om te delen of te bewaren.",
+  "backupWorking": "Tekeningen inpakken…",
+  "backupFailed": "Het veiligstellen is niet gelukt, sorry.",
+  "rewardUnlockedTitle": "Nieuwe sticker!",
+  "rewardUnlockedBody": "Je hebt met kleuren een nieuwe sticker verdiend!",
+  "rewardUnlockedOk": "Super!",
+  "rewardLockedTitle": "Nog geheim!",
+  "packBasics": "Favorieten",
+  "packAnimals": "Dieren",
+  "packSpace": "Ruimte",
+  "packFood": "Lekkers",
+  "packVehicles": "Voertuigen",
+  "packRewards": "Beloningsstickers",
+  "rewardRulePaintings": "{n, plural, =1{Maak nog 1 tekening af!} other{Maak nog {n} tekeningen af!}}",
+  "@rewardRulePaintings": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTools": "{n, plural, =1{Probeer nog 1 ander gereedschap!} other{Probeer nog {n} andere gereedschappen!}}",
+  "@rewardRuleTools": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleShares": "Deel een tekening met je ouders!",
+  "rewardRuleTrace": "{n, plural, =1{Trek nog 1 voorbeeld over!} other{Trek nog {n} voorbeelden over!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "packMusic": "Muziek",
+  "packParty": "Feest",
+  "rewardRuleCbn": "{n, plural, =1{Maak nog 1 kleuren-op-nummer af!} other{Maak nog {n} kleuren-op-nummer af!}}",
+  "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{Maak nog 1 dagopdracht af!} other{Maak nog {n} dagopdrachten af!}}",
+  "@rewardRuleTasks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myStickersSection": "Mijn stickers",
+  "stickerCaptureTitle": "Kies een stukje van je tekening!",
+  "stickerEmptyTitle": "Eerst kleuren!",
+  "stickerEmptyBody": "Maak eerst iets moois – daarna kun je er een sticker van maken!",
+  "stickerAlbumFullTitle": "Het stickeralbum is vol!",
+  "stickerAlbumFullBody": "Gooi eerst een oude sticker weg – houd hem daarvoor ingedrukt.",
+  "stickerDeleteTitle": "Sticker weggooien?",
+  "pauseTitle": "Tijd voor een pauze!",
+  "pauseBody": "Je bent al een tijdje aan het kleuren. Rek je uit, drink wat – je tekening wacht op je.",
+  "pauseContinue": "Verder kleuren",
+  "pauseSaved": "Je tekening is opgeslagen.",
+  "pauseSettingTitle": "Kleurpauze",
+  "pauseSettingSubtitle": "Na een tijdje een vriendelijke pauzeherinnering tonen",
+  "pauseOff": "Uit",
+  "pauseMinutes": "{n} minuten",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumTitle": "Wat ik al kan",
+  "albumStickers": "Beloningsstickers",
+  "albumEarned": "{earned} van {total} stickers",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreak": "{n, plural, =1{1 dag achter elkaar gekleurd} other{{n} dagen achter elkaar gekleurd}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreakNone": "Maak de opdracht van de dag af en begin je reeks!",
+  "albumStickerEarned": "Verdiend!",
+  "albumStickerEarnedBody": "Deze sticker heb je verdiend. Je vindt hem bij de stempels.",
+  "canvasArea": "Tekenvlak",
+  "undoAction": "Ongedaan maken",
+  "redoAction": "Opnieuw",
+  "clearAction": "Alles wissen",
+  "colorRed": "Rood",
+  "colorOrange": "Oranje",
+  "colorYellow": "Geel",
+  "colorLightGreen": "Lichtgroen",
+  "colorGreen": "Groen",
+  "colorTurquoise": "Turkoois",
+  "colorLightBlue": "Lichtblauw",
+  "colorBlue": "Blauw",
+  "colorPurple": "Paars",
+  "colorPink": "Roze",
+  "colorRose": "Lichtroze",
+  "colorBrown": "Bruin",
+  "colorSkin": "Huidskleur",
+  "colorGrey": "Grijs",
+  "colorBlack": "Zwart",
+  "colorWhite": "Wit",
+  "colorCustom": "Eigen kleur",
+  "colorMore": "Meer kleuren",
+  "storageTitle": "Opslag",
+  "storageSubtitle": "Zie hoeveel ruimte PixiePaint gebruikt – en ruim op",
+  "storageBreakdown": "{count, plural, =0{Nog geen tekeningen} =1{1 tekening · {art}} other{{count} tekeningen · {art}}} · stickers {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "art": {
+        "type": "String"
+      },
+      "stickers": {
+        "type": "String"
+      }
+    }
+  },
+  "storageCleanupHint": "Oudste eerst. Tik de tekeningen aan die weg mogen.",
+  "storageEmpty": "Hier is nog niets gekleurd.",
+  "storagePictureFallback": "Tekening",
+  "storageDeleteSelected": "{n, plural, =1{1 tekening verwijderen} other{{n} tekeningen verwijderen}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{Deze tekening echt verwijderen?} other{Deze {n} tekeningen echt verwijderen?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteKeep": "Toch bewaren",
+  "storageDeleteGo": "Verwijderen",
+  "restoreTitle": "Tekeningen terughalen",
+  "restoreSubtitle": "Een reservekopie inlezen — tekeningen die er al zijn blijven ongemoeid",
+  "restoreWorking": "Tekeningen worden teruggehaald …",
+  "restoreDone": "{restored, plural, =0{Geen nieuwe tekeningen gevonden} =1{1 tekening teruggehaald} other{{restored} tekeningen teruggehaald}}{skipped, plural, =0{} =1{ — 1 was er al} other{ — {skipped} waren er al}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreNotABackup": "Dit is geen PixiePaint-reservekopie",
+  "restoreTooNew": "Deze reservekopie komt van een nieuwere versie van PixiePaint",
+  "restoreTooLarge": "Dit bestand is te groot om in te lezen",
+  "restoreFailed": "Het terughalen van de tekeningen is niet gelukt",
+  "saveFailedTitle": "De tekening kon niet worden opgeslagen",
+  "saveFailedBody": "De opslag is waarschijnlijk vol. Maak wat ruimte vrij en probeer het opnieuw — anders gaat deze tekening verloren.",
+  "saveFailedRetry": "Opnieuw proberen",
+  "saveFailedLeave": "Toch weggaan",
+  "rewardProgress": "{done} van {target}",
+  "@rewardProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  }
+}

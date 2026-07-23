@@ -1,0 +1,346 @@
+{
+  "@@locale": "pl",
+  "appTitle": "PixiePaint",
+  "cardColoring": "Kolorowanie",
+  "cardFreeDraw": "Rysowanie",
+  "cardPhoto": "Pomaluj zdjęcie",
+  "cardGallery": "Moje obrazki",
+  "cardTrace": "Po śladzie",
+  "cardScenes": "Świat naklejek",
+  "cardTwoPainter": "Malujcie razem",
+  "twoPainterFlip": "Obróć stronę",
+  "dailyTaskTitle": "Zadanie dnia",
+  "dailyTaskGo": "Zaczynamy!",
+  "dailyTaskDone": "Gotowe!",
+  "dailyTaskAlreadyDone": "Dziś już zrobione – super! 🎉",
+  "scenePickerTitle": "Wybierz scenę!",
+  "traceTitle": "Wybierz wzór!",
+  "traceTabLetters": "ABC",
+  "traceTabNumbers": "123",
+  "traceTabShapes": "Kształty",
+  "settingsTooltip": "Ustawienia (dla dorosłych)",
+  "profileTitle": "Kto maluje?",
+  "profileDefaultName": "Ja",
+  "profileManage": "Zarządzaj (dla dorosłych)",
+  "profileAdd": "Dodaj dziecko",
+  "profileNameHint": "Imię",
+  "profilePrimaryBadge": "Główny profil",
+  "profileRemoveTitle": "Usunąć profil {name}?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "profileRemoveBody": "Co zrobić z obrazkami tego dziecka?",
+  "profileRemoveKeepArt": "Zachowaj obrazki",
+  "profileRemoveDeleteArt": "Usuń też obrazki",
+  "photoDialogTitle": "Co zrobimy ze zdjęciem?",
+  "photoModePaint": "Maluj po zdjęciu",
+  "photoModeLineArt": "Magiczna kolorowanka",
+  "lineArtTitle": "Magiczna kolorowanka",
+  "detailFew": "Mało szczegółów",
+  "detailMedium": "Średnio",
+  "detailMany": "Dużo szczegółów",
+  "letsGo": "Zaczynamy!",
+  "back": "Wstecz",
+  "shareForParents": "Udostępnij (dla dorosłych)",
+  "printForParents": "Drukuj (dla dorosłych)",
+  "resetView": "Resetuj widok",
+  "toolBrush": "Pędzel",
+  "toolMarker": "Flamaster",
+  "toolCrayon": "Kredka",
+  "toolRainbow": "Tęcza",
+  "toolGlitter": "Brokat",
+  "toolNeon": "Neon",
+  "toolTrail": "Ślad serduszek",
+  "toolDotted": "Kropkowany długopis",
+  "toolTwin": "Podwójna linia",
+  "toolSticker": "Naklejka",
+  "toolFill": "Wypełnij",
+  "toolEraser": "Gumka",
+  "toolEyedropper": "Pipeta",
+  "toolShapes": "Kształty",
+  "shapeCircle": "Koło",
+  "shapeSquare": "Kwadrat",
+  "shapeHeart": "Serce",
+  "shapeStar": "Gwiazda",
+  "shapeRainbow": "Tęcza",
+  "symmetryTitle": "Magiczne lustro",
+  "symmetryOff": "Zwykłe",
+  "symmetryButterfly": "Motyl",
+  "symmetryFlower": "Kwiat",
+  "symmetrySnowflake": "Płatek śniegu",
+  "sizeTitle": "Grubość pędzla",
+  "colorPickerTitle": "Wszystkie kolory",
+  "colorRecent": "Ostatnio używane",
+  "clearTitle": "Wymazać wszystko?",
+  "clearBody": "Chcesz zacząć od nowa?",
+  "clearKeep": "Maluję dalej!",
+  "clearConfirm": "Zacznij od nowa",
+  "patternSolid": "Jednolity",
+  "patternDots": "Kropki",
+  "patternStripes": "Paski",
+  "patternRainbow": "Tęcza",
+  "patternHearts": "Serduszka",
+  "patternStars": "Gwiazdki",
+  "patternChecker": "Kratka",
+  "patternBubbles": "Bąbelki",
+  "galleryTitle": "Moje obrazki",
+  "galleryEmpty": "Nie ma jeszcze obrazków –\nnamaluj jakiś!",
+  "continuePainting": "Maluj dalej",
+  "slideshowTooltip": "Włącz pokaz slajdów",
+  "replayAction": "Obejrzyj film",
+  "replayAgain": "Odtwórz jeszcze raz",
+  "replaySpeed": "Prędkość",
+  "renameAction": "Zmień nazwę",
+  "renameTitle": "Jak nazywa się twój obrazek?",
+  "renameSave": "Zapisz",
+  "saveToPhotos": "Zapisz w Zdjęciach (dla dorosłych)",
+  "savedToPhotos": "Zapisano w Zdjęciach!",
+  "saveToPhotosFailedTitle": "To się nie udało",
+  "saveToPhotosFailed": "Zezwól na dostęp do zdjęć w ustawieniach urządzenia i spróbuj jeszcze raz.",
+  "filterAll": "Wszystkie",
+  "filterFavorites": "Ulubione",
+  "okAction": "Dobrze!",
+  "deleteAction": "Wyrzuć",
+  "deleteTitle": "Wyrzucić obrazek?",
+  "deleteBody": "Obrazek zniknie na zawsze.",
+  "deleteKeep": "Zostawiam!",
+  "gateTitle": "Zapytaj rodziców!",
+  "gateBody": "To miejsce jest dla dorosłych.\nRozwiąż działanie:",
+  "gateQuestion": "{a} × {b} = ?",
+  "@gateQuestion": {
+    "placeholders": {
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
+    }
+  },
+  "gateHint": "Odpowiedź",
+  "gateWrong": "Nie tym razem, spróbuj jeszcze raz.",
+  "gateCancel": "Anuluj",
+  "gateContinue": "Dalej",
+  "pickerTitle": "Wybierz obrazek!",
+  "categoryAll": "Wszystkie",
+  "settingsTitle": "Ustawienia",
+  "stylusOnlyTitle": "Rysuj tylko rysikiem",
+  "stylusOnlySubtitle": "Palce nie rysują – dzięki temu oparta dłoń nie zostawia śladów.",
+  "deleteGateTitle": "Usuwanie tylko z dorosłym",
+  "deleteGateSubtitle": "Obrazki można usunąć dopiero po pytaniu dla dorosłych.",
+  "leftHandedTitle": "Tryb dla leworęcznych",
+  "leftHandedSubtitle": "Narzędzia przechodzą na prawą stronę, żeby rysująca ręka ich nie zasłaniała.",
+  "soundsTitle": "Dźwięki i wibracje",
+  "soundsSubtitle": "Ciche dźwięki podczas malowania i stemplowania.",
+  "musicTitle": "Muzyka w tle",
+  "musicSubtitle": "Delikatne melodie z pozytywki podczas malowania.",
+  "aboutTitle": "PixiePaint",
+  "aboutBody": "Kolorowanka dla dzieci. Bez reklam, bez zbierania danych – wszystkie obrazki zostają na tym urządzeniu.",
+  "rateApp": "Oceń aplikację",
+  "rateAppSubtitle": "Otwiera Sklep Play.",
+  "canvasLoading": "Twój obrazek już się ładuje…",
+  "galleryEmptyCta": "Wybierz obrazek!",
+  "settingsSectionSafety": "Bezpieczeństwo",
+  "settingsSectionFun": "Zabawa",
+  "settingsSectionParents": "Dla dorosłych",
+  "settingsSectionAbout": "Informacje",
+  "backupTitle": "Zabezpiecz wszystkie obrazki",
+  "backupSubtitle": "Pakuje wszystkie obrazki do pliku ZIP, żeby je udostępnić lub zachować.",
+  "backupWorking": "Pakowanie obrazków…",
+  "backupFailed": "Niestety nie udało się zrobić kopii.",
+  "rewardUnlockedTitle": "Nowa naklejka!",
+  "rewardUnlockedBody": "Malowaniem zdobyłeś nową naklejkę!",
+  "rewardUnlockedOk": "Świetnie!",
+  "rewardLockedTitle": "Jeszcze tajemnica!",
+  "packBasics": "Ulubione",
+  "packAnimals": "Zwierzęta",
+  "packSpace": "Kosmos",
+  "packFood": "Smakołyki",
+  "packVehicles": "Pojazdy",
+  "packRewards": "Naklejki-nagrody",
+  "rewardRulePaintings": "{n, plural, =1{Dokończ jeszcze 1 obrazek!} few{Dokończ jeszcze {n} obrazki!} many{Dokończ jeszcze {n} obrazków!} other{Dokończ jeszcze {n} obrazka!}}",
+  "@rewardRulePaintings": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTools": "{n, plural, =1{Wypróbuj jeszcze 1 narzędzie!} few{Wypróbuj jeszcze {n} narzędzia!} many{Wypróbuj jeszcze {n} narzędzi!} other{Wypróbuj jeszcze {n} narzędzia!}}",
+  "@rewardRuleTools": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleShares": "Pokaż rodzicom jeden ze swoich obrazków!",
+  "rewardRuleTrace": "{n, plural, =1{Odrysuj jeszcze 1 wzór!} few{Odrysuj jeszcze {n} wzory!} many{Odrysuj jeszcze {n} wzorów!} other{Odrysuj jeszcze {n} wzoru!}}",
+  "@rewardRuleTrace": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "packMusic": "Muzyka",
+  "packParty": "Impreza",
+  "rewardRuleCbn": "{n, plural, =1{Rozwiąż jeszcze 1 obrazek z liczbami!} few{Rozwiąż jeszcze {n} obrazki z liczbami!} many{Rozwiąż jeszcze {n} obrazków z liczbami!} other{Rozwiąż jeszcze {n} obrazka z liczbami!}}",
+  "@rewardRuleCbn": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardRuleTasks": "{n, plural, =1{Wykonaj jeszcze 1 zadanie dnia!} few{Wykonaj jeszcze {n} zadania dnia!} many{Wykonaj jeszcze {n} zadań dnia!} other{Wykonaj jeszcze {n} zadania dnia!}}",
+  "@rewardRuleTasks": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "myStickersSection": "Moje naklejki",
+  "stickerCaptureTitle": "Wybierz kawałek swojego obrazka!",
+  "stickerEmptyTitle": "Najpierw pomaluj!",
+  "stickerEmptyBody": "Najpierw namaluj coś ładnego – potem zrobisz z tego naklejkę!",
+  "stickerAlbumFullTitle": "Album z naklejkami jest pełny!",
+  "stickerAlbumFullBody": "Najpierw wyrzuć starą naklejkę – przytrzymaj ją palcem.",
+  "stickerDeleteTitle": "Wyrzucić naklejkę?",
+  "pauseTitle": "Czas na przerwę!",
+  "pauseBody": "Malujesz już od dłuższej chwili. Rozprostuj się, napij się czegoś – obrazek na ciebie poczeka.",
+  "pauseContinue": "Maluj dalej",
+  "pauseSaved": "Twój obrazek jest zapisany.",
+  "pauseSettingTitle": "Przerwa w malowaniu",
+  "pauseSettingSubtitle": "Po pewnym czasie pokaż miłe przypomnienie o przerwie",
+  "pauseOff": "Wyłączone",
+  "pauseMinutes": "{n} minut",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumTitle": "Moje osiągnięcia",
+  "albumStickers": "Naklejki-nagrody",
+  "albumEarned": "{earned} z {total} naklejek",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreak": "{n, plural, =1{Malujesz 1 dzień z rzędu} few{Malujesz {n} dni z rzędu} many{Malujesz {n} dni z rzędu} other{Malujesz {n} dnia z rzędu}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "albumStreakNone": "Wykonaj zadanie dnia i zacznij swoją serię!",
+  "albumStickerEarned": "Zdobyta!",
+  "albumStickerEarnedBody": "Zasłużyłeś na tę naklejkę. Znajdziesz ją wśród stempli.",
+  "canvasArea": "Pole do malowania",
+  "undoAction": "Cofnij",
+  "redoAction": "Ponów",
+  "clearAction": "Wymaż wszystko",
+  "colorRed": "Czerwony",
+  "colorOrange": "Pomarańczowy",
+  "colorYellow": "Żółty",
+  "colorLightGreen": "Jasnozielony",
+  "colorGreen": "Zielony",
+  "colorTurquoise": "Turkusowy",
+  "colorLightBlue": "Jasnoniebieski",
+  "colorBlue": "Niebieski",
+  "colorPurple": "Fioletowy",
+  "colorPink": "Różowy",
+  "colorRose": "Jasnoróżowy",
+  "colorBrown": "Brązowy",
+  "colorSkin": "Kolor skóry",
+  "colorGrey": "Szary",
+  "colorBlack": "Czarny",
+  "colorWhite": "Biały",
+  "colorCustom": "Własny kolor",
+  "colorMore": "Więcej kolorów",
+  "storageTitle": "Pamięć",
+  "storageSubtitle": "Zobacz, ile miejsca zajmuje PixiePaint – i zrób porządek",
+  "storageBreakdown": "{count, plural, =0{Nie ma jeszcze obrazków} =1{1 obrazek · {art}} few{{count} obrazki · {art}} many{{count} obrazków · {art}} other{{count} obrazka · {art}}} · naklejki {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "art": {
+        "type": "String"
+      },
+      "stickers": {
+        "type": "String"
+      }
+    }
+  },
+  "storageCleanupHint": "Najstarsze na początku. Dotknij obrazków, które mogą zniknąć.",
+  "storageEmpty": "Tu jeszcze nic nie zostało namalowane.",
+  "storagePictureFallback": "Obrazek",
+  "storageDeleteSelected": "{n, plural, =1{Usuń 1 obrazek} few{Usuń {n} obrazki} many{Usuń {n} obrazków} other{Usuń {n} obrazka}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{Na pewno usunąć ten obrazek?} few{Na pewno usunąć te {n} obrazki?} many{Na pewno usunąć tych {n} obrazków?} other{Na pewno usunąć te {n} obrazka?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storageDeleteKeep": "Zostaw je",
+  "storageDeleteGo": "Usuń",
+  "restoreTitle": "Przywróć obrazki",
+  "restoreSubtitle": "Wczytaj plik kopii — obrazki, które już tu są, pozostaną nietknięte",
+  "restoreWorking": "Przywracanie obrazków …",
+  "restoreDone": "{restored, plural, =0{Nie znaleziono nowych obrazków} =1{Przywrócono 1 obrazek} few{Przywrócono {restored} obrazki} many{Przywrócono {restored} obrazków} other{Przywrócono {restored} obrazka}}{skipped, plural, =0{} =1{ — 1 już tu był} few{ — {skipped} już tu były} many{ — {skipped} już tu było} other{ — {skipped} już tu było}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
+    }
+  },
+  "restoreNotABackup": "To nie jest kopia PixiePaint",
+  "restoreTooNew": "Ta kopia pochodzi z nowszej wersji PixiePaint",
+  "restoreTooLarge": "Ten plik jest za duży, żeby go wczytać",
+  "restoreFailed": "Przywracanie obrazków się nie udało",
+  "saveFailedTitle": "Nie udało się zapisać obrazka",
+  "saveFailedBody": "Prawdopodobnie brakuje miejsca. Zwolnij trochę pamięci i spróbuj jeszcze raz — inaczej ten obrazek przepadnie.",
+  "saveFailedRetry": "Spróbuj jeszcze raz",
+  "saveFailedLeave": "Wyjdź mimo to",
+  "rewardProgress": "{done} z {target}",
+  "@rewardProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  }
+}
