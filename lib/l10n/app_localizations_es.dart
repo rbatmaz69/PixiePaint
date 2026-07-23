@@ -787,4 +787,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'No se ha podido guardar la pegatina';
+
+  @override
+  String get welcomeSkip => 'Saltar';
+
+  @override
+  String get welcomeNext => 'Siguiente';
+
+  @override
+  String get welcomeStart => '¡A pintar!';
+
+  @override
+  String get welcomeHelloTitle => '¡Hola, soy Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Me alegro de que estés aquí. Juntos haremos los dibujos más bonitos.';
+
+  @override
+  String get welcomePaintTitle => 'Elige un dibujo';
+
+  @override
+  String get welcomePaintBody =>
+      'Toca una zona y se llena de color. O dibuja lo que quieras.';
+
+  @override
+  String get welcomeParentsTitle => 'Para adultos';
+
+  @override
+  String get welcomeParentsBody =>
+      'Todo se queda en este dispositivo: sin publicidad, sin compras, sin recogida de datos. Compartir, borrar y los ajustes están detrás de una cuenta sencilla.';
 }

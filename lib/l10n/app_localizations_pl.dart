@@ -808,4 +808,34 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'Nie udało się zapisać naklejki';
+
+  @override
+  String get welcomeSkip => 'Pomiń';
+
+  @override
+  String get welcomeNext => 'Dalej';
+
+  @override
+  String get welcomeStart => 'Malujemy!';
+
+  @override
+  String get welcomeHelloTitle => 'Cześć, jestem Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Dobrze, że jesteś. Razem namalujemy najpiękniejsze obrazki.';
+
+  @override
+  String get welcomePaintTitle => 'Wybierz obrazek';
+
+  @override
+  String get welcomePaintBody =>
+      'Dotknij pola, a zrobi się kolorowe. Albo po prostu rysuj, co chcesz.';
+
+  @override
+  String get welcomeParentsTitle => 'Dla dorosłych';
+
+  @override
+  String get welcomeParentsBody =>
+      'Wszystko zostaje na tym urządzeniu: bez reklam, bez zakupów, bez zbierania danych. Udostępnianie, usuwanie i ustawienia są za prostym działaniem.';
 }

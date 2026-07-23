@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.2.0+20 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.3.0+21 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -44,6 +44,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - **Sticker-Welt** — 6 Szenen als Bühne zum Bekleben
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
 - **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen
+- **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt
 - **Tagesaufgabe** — 30 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
 - **Jahreszeiten** — 12 Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween; die Kategorie rutscht im Picker automatisch nach vorne, wenn ihr Anlass ansteht
 - **Erfolge-Album** — alle Belohnungs-Sticker und die Tagesaufgaben-Serie auf einen Blick
@@ -220,12 +221,19 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite umfasst 357 Tests in 39 Dateien:
+Die Test-Suite umfasst 388 Tests in 41 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
-- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen und die Screenreader-Beschriftungen
+- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
+- `test/golden/renderers_test.dart` — **visuelle Regression** der 10 Stift-Charaktere, 5 Formen und 8 Füllmuster
 
-Golden Tests gibt es nicht; Optik und Animationen werden am Gerät geprüft.
+Zu den Golden Tests: Sie decken bewusst **nur** die Zeichen-Renderer ab. Ganze Bildschirme wären hier zwecklos — die Oberfläche besteht großenteils aus Emoji, und die rendern auf jedem System anders. Die Renderer dagegen sind reine Vektoren ohne Text und aus festen Seeds deterministisch. Nach einer bewussten Designänderung neu erzeugen:
+
+```bash
+flutter test --update-goldens test/golden/
+```
+
+> Schlagen nach einem Flutter-Update **alle** 24 Bilder gleichzeitig fehl, liegt das fast immer an geänderter Kantenglättung im SDK und nicht an der App.
 
 > **Drei Fallstricke bei Widget-Tests in diesem Projekt** (alle im Code kommentiert, siehe `test/widget/harness.dart`):
 > 1. `testWidgets` läuft in einer Fake-Async-Zone — echte Datei-I/O löst dort **nie** ein und der Test hängt, statt zu scheitern. Setup deshalb in `tester.runAsync(...)`.
@@ -369,7 +377,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.2.0+20` bedeutet Versionsname 7.2.0 und versionCode 20. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.3.0+21` bedeutet Versionsname 7.3.0 und versionCode 21. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

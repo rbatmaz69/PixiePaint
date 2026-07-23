@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'gallery/home_screen.dart';
+import 'gallery/welcome_screen.dart';
 import 'l10n/l10n.dart';
 import 'ui/app_theme.dart';
 import 'ui/blob_background.dart';
+import 'util/settings.dart';
 
 class PixiePaintApp extends StatelessWidget {
   const PixiePaintApp({super.key});
@@ -35,7 +37,10 @@ class PixiePaintApp extends StatelessWidget {
         maxScaleFactor: 1.3,
         child: child!,
       ),
-      home: const HomeScreen(),
+      // The welcome runs once, before the home screen is ever seen.
+      home: Settings.instance.welcomeSeen
+          ? const HomeScreen()
+          : const WelcomeScreen(),
     );
   }
 }

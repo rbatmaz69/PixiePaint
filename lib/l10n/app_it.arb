@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "Non è stato possibile salvare l'adesivo"
+  "stickerSaveFailed": "Non è stato possibile salvare l'adesivo",
+  "welcomeSkip": "Salta",
+  "welcomeNext": "Avanti",
+  "welcomeStart": "Si colora!",
+  "welcomeHelloTitle": "Ciao, sono Pixie!",
+  "welcomeHelloBody": "Che bello che tu sia qui. Insieme faremo i disegni più belli.",
+  "welcomePaintTitle": "Scegli un disegno",
+  "welcomePaintBody": "Tocca una zona e si riempie di colore. Oppure disegna quello che vuoi.",
+  "welcomeParentsTitle": "Per i grandi",
+  "welcomeParentsBody": "Tutto resta su questo dispositivo: niente pubblicità, niente acquisti, nessuna raccolta di dati. Condividere, cancellare e le impostazioni stanno dietro un semplice calcolo."
 }

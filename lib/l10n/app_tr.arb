@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "Çıkartma kaydedilemedi"
+  "stickerSaveFailed": "Çıkartma kaydedilemedi",
+  "welcomeSkip": "Atla",
+  "welcomeNext": "Devam",
+  "welcomeStart": "Hadi boyayalım!",
+  "welcomeHelloTitle": "Merhaba, ben Pixie!",
+  "welcomeHelloBody": "Geldiğine sevindim. Birlikte en güzel resimleri yapacağız.",
+  "welcomePaintTitle": "Bir resim seç",
+  "welcomePaintBody": "Bir alana dokun, hemen renklensin. Ya da canının istediği gibi çiz.",
+  "welcomeParentsTitle": "Yetişkinler için",
+  "welcomeParentsBody": "Her şey bu cihazda kalır: reklam yok, satın alma yok, veri toplama yok. Paylaşma, silme ve ayarlar basit bir işlemin arkasında."
 }

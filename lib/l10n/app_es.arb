@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "No se ha podido guardar la pegatina"
+  "stickerSaveFailed": "No se ha podido guardar la pegatina",
+  "welcomeSkip": "Saltar",
+  "welcomeNext": "Siguiente",
+  "welcomeStart": "¡A pintar!",
+  "welcomeHelloTitle": "¡Hola, soy Pixie!",
+  "welcomeHelloBody": "Me alegro de que estés aquí. Juntos haremos los dibujos más bonitos.",
+  "welcomePaintTitle": "Elige un dibujo",
+  "welcomePaintBody": "Toca una zona y se llena de color. O dibuja lo que quieras.",
+  "welcomeParentsTitle": "Para adultos",
+  "welcomeParentsBody": "Todo se queda en este dispositivo: sin publicidad, sin compras, sin recogida de datos. Compartir, borrar y los ajustes están detrás de una cuenta sencilla."
 }

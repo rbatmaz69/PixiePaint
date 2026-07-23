@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "Der Sticker konnte nicht gespeichert werden"
+  "stickerSaveFailed": "Der Sticker konnte nicht gespeichert werden",
+  "welcomeSkip": "Überspringen",
+  "welcomeNext": "Weiter",
+  "welcomeStart": "Los malen!",
+  "welcomeHelloTitle": "Hallo, ich bin Pixie!",
+  "welcomeHelloBody": "Schön, dass du da bist. Zusammen malen wir die schönsten Bilder.",
+  "welcomePaintTitle": "Such dir ein Bild aus",
+  "welcomePaintBody": "Tippe auf eine Fläche – schon ist sie bunt. Oder male einfach frei drauflos.",
+  "welcomeParentsTitle": "Für Eltern",
+  "welcomeParentsBody": "Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe."
 }

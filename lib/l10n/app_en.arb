@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "The sticker could not be saved"
+  "stickerSaveFailed": "The sticker could not be saved",
+  "welcomeSkip": "Skip",
+  "welcomeNext": "Next",
+  "welcomeStart": "Let's paint!",
+  "welcomeHelloTitle": "Hi, I'm Pixie!",
+  "welcomeHelloBody": "So glad you're here. Together we'll make the loveliest pictures.",
+  "welcomePaintTitle": "Pick a picture",
+  "welcomePaintBody": "Tap an area and it fills with color. Or just draw whatever you like.",
+  "welcomeParentsTitle": "For parents",
+  "welcomeParentsBody": "Everything stays on this device: no ads, no purchases, no data collection. Sharing, deleting and the settings sit behind a simple sum."
 }

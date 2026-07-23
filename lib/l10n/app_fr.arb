@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "L'autocollant n'a pas pu être enregistré"
+  "stickerSaveFailed": "L'autocollant n'a pas pu être enregistré",
+  "welcomeSkip": "Passer",
+  "welcomeNext": "Suivant",
+  "welcomeStart": "On colorie !",
+  "welcomeHelloTitle": "Bonjour, je suis Pixie !",
+  "welcomeHelloBody": "Content que tu sois là. Ensemble, on va faire de très jolies images.",
+  "welcomePaintTitle": "Choisis une image",
+  "welcomePaintBody": "Touche une zone et elle se remplit de couleur. Ou dessine simplement ce que tu veux.",
+  "welcomeParentsTitle": "Pour les parents",
+  "welcomeParentsBody": "Tout reste sur cet appareil : pas de publicité, pas d'achats, pas de collecte de données. Le partage, la suppression et les réglages sont protégés par un petit calcul."
 }

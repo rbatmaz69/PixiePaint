@@ -1437,6 +1437,60 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Der Sticker konnte nicht gespeichert werden'**
   String get stickerSaveFailed;
+
+  /// No description provided for @welcomeSkip.
+  ///
+  /// In de, this message translates to:
+  /// **'Überspringen'**
+  String get welcomeSkip;
+
+  /// No description provided for @welcomeNext.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiter'**
+  String get welcomeNext;
+
+  /// No description provided for @welcomeStart.
+  ///
+  /// In de, this message translates to:
+  /// **'Los malen!'**
+  String get welcomeStart;
+
+  /// No description provided for @welcomeHelloTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Hallo, ich bin Pixie!'**
+  String get welcomeHelloTitle;
+
+  /// No description provided for @welcomeHelloBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Schön, dass du da bist. Zusammen malen wir die schönsten Bilder.'**
+  String get welcomeHelloBody;
+
+  /// No description provided for @welcomePaintTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Such dir ein Bild aus'**
+  String get welcomePaintTitle;
+
+  /// No description provided for @welcomePaintBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Tippe auf eine Fläche – schon ist sie bunt. Oder male einfach frei drauflos.'**
+  String get welcomePaintBody;
+
+  /// No description provided for @welcomeParentsTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Für Eltern'**
+  String get welcomeParentsTitle;
+
+  /// No description provided for @welcomeParentsBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe.'**
+  String get welcomeParentsBody;
 }
 
 class _AppLocalizationsDelegate

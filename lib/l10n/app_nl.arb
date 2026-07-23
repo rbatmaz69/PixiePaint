@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "De sticker kon niet worden opgeslagen"
+  "stickerSaveFailed": "De sticker kon niet worden opgeslagen",
+  "welcomeSkip": "Overslaan",
+  "welcomeNext": "Verder",
+  "welcomeStart": "Aan de slag!",
+  "welcomeHelloTitle": "Hoi, ik ben Pixie!",
+  "welcomeHelloBody": "Fijn dat je er bent. Samen maken we de mooiste tekeningen.",
+  "welcomePaintTitle": "Kies een tekening",
+  "welcomePaintBody": "Tik op een vlak en het wordt gekleurd. Of teken gewoon wat je wilt.",
+  "welcomeParentsTitle": "Voor ouders",
+  "welcomeParentsBody": "Alles blijft op dit apparaat: geen reclame, geen aankopen, geen gegevensverzameling. Delen, verwijderen en de instellingen zitten achter een eenvoudige som."
 }

@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "Nie udało się zapisać naklejki"
+  "stickerSaveFailed": "Nie udało się zapisać naklejki",
+  "welcomeSkip": "Pomiń",
+  "welcomeNext": "Dalej",
+  "welcomeStart": "Malujemy!",
+  "welcomeHelloTitle": "Cześć, jestem Pixie!",
+  "welcomeHelloBody": "Dobrze, że jesteś. Razem namalujemy najpiękniejsze obrazki.",
+  "welcomePaintTitle": "Wybierz obrazek",
+  "welcomePaintBody": "Dotknij pola, a zrobi się kolorowe. Albo po prostu rysuj, co chcesz.",
+  "welcomeParentsTitle": "Dla dorosłych",
+  "welcomeParentsBody": "Wszystko zostaje na tym urządzeniu: bez reklam, bez zakupów, bez zbierania danych. Udostępnianie, usuwanie i ustawienia są za prostym działaniem."
 }

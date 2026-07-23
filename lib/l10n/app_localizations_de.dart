@@ -789,4 +789,34 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'Der Sticker konnte nicht gespeichert werden';
+
+  @override
+  String get welcomeSkip => 'Überspringen';
+
+  @override
+  String get welcomeNext => 'Weiter';
+
+  @override
+  String get welcomeStart => 'Los malen!';
+
+  @override
+  String get welcomeHelloTitle => 'Hallo, ich bin Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Schön, dass du da bist. Zusammen malen wir die schönsten Bilder.';
+
+  @override
+  String get welcomePaintTitle => 'Such dir ein Bild aus';
+
+  @override
+  String get welcomePaintBody =>
+      'Tippe auf eine Fläche – schon ist sie bunt. Oder male einfach frei drauflos.';
+
+  @override
+  String get welcomeParentsTitle => 'Für Eltern';
+
+  @override
+  String get welcomeParentsBody =>
+      'Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe.';
 }

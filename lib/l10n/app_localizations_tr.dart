@@ -785,4 +785,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'Çıkartma kaydedilemedi';
+
+  @override
+  String get welcomeSkip => 'Atla';
+
+  @override
+  String get welcomeNext => 'Devam';
+
+  @override
+  String get welcomeStart => 'Hadi boyayalım!';
+
+  @override
+  String get welcomeHelloTitle => 'Merhaba, ben Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Geldiğine sevindim. Birlikte en güzel resimleri yapacağız.';
+
+  @override
+  String get welcomePaintTitle => 'Bir resim seç';
+
+  @override
+  String get welcomePaintBody =>
+      'Bir alana dokun, hemen renklensin. Ya da canının istediği gibi çiz.';
+
+  @override
+  String get welcomeParentsTitle => 'Yetişkinler için';
+
+  @override
+  String get welcomeParentsBody =>
+      'Her şey bu cihazda kalır: reklam yok, satın alma yok, veri toplama yok. Paylaşma, silme ve ayarlar basit bir işlemin arkasında.';
 }

@@ -343,5 +343,14 @@
       }
     }
   },
-  "stickerSaveFailed": "Não foi possível guardar o autocolante"
+  "stickerSaveFailed": "Não foi possível guardar o autocolante",
+  "welcomeSkip": "Saltar",
+  "welcomeNext": "Seguinte",
+  "welcomeStart": "Vamos pintar!",
+  "welcomeHelloTitle": "Olá, sou a Pixie!",
+  "welcomeHelloBody": "Que bom que estás aqui. Juntos vamos fazer os desenhos mais bonitos.",
+  "welcomePaintTitle": "Escolhe um desenho",
+  "welcomePaintBody": "Toca numa zona e ela fica cheia de cor. Ou desenha simplesmente o que quiseres.",
+  "welcomeParentsTitle": "Para adultos",
+  "welcomeParentsBody": "Fica tudo neste dispositivo: sem publicidade, sem compras, sem recolha de dados. Partilhar, apagar e as definições estão atrás de uma conta simples."
 }

@@ -789,4 +789,34 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'De sticker kon niet worden opgeslagen';
+
+  @override
+  String get welcomeSkip => 'Overslaan';
+
+  @override
+  String get welcomeNext => 'Verder';
+
+  @override
+  String get welcomeStart => 'Aan de slag!';
+
+  @override
+  String get welcomeHelloTitle => 'Hoi, ik ben Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Fijn dat je er bent. Samen maken we de mooiste tekeningen.';
+
+  @override
+  String get welcomePaintTitle => 'Kies een tekening';
+
+  @override
+  String get welcomePaintBody =>
+      'Tik op een vlak en het wordt gekleurd. Of teken gewoon wat je wilt.';
+
+  @override
+  String get welcomeParentsTitle => 'Voor ouders';
+
+  @override
+  String get welcomeParentsBody =>
+      'Alles blijft op dit apparaat: geen reclame, geen aankopen, geen gegevensverzameling. Delen, verwijderen en de instellingen zitten achter een eenvoudige som.';
 }

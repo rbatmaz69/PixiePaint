@@ -29,6 +29,10 @@ class Settings extends ChangeNotifier {
   /// Which background-music loop plays next (cycled by Music on each start).
   int musicTrack = 0;
 
+  /// Whether the one-time welcome has been shown. Everything else here is a
+  /// preference; this is a flag the app sets itself.
+  bool welcomeSeen = false;
+
   /// Minutes of painting before the app suggests a break, or 0 for never.
   /// Only the values in [kPauseChoices] are offered.
   int pauseAfterMinutes = 0;
@@ -63,6 +67,7 @@ class Settings extends ChangeNotifier {
     musicOn = json['musicOn'] as bool? ?? false;
     musicTrack = json['musicTrack'] as int? ?? 0;
     pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
+    welcomeSeen = json['welcomeSeen'] as bool? ?? false;
     leftHanded = json['leftHanded'] as bool? ?? false;
     shareCount = json['shareCount'] as int? ?? 0;
     reviewRequested = json['reviewRequested'] as bool? ?? false;
@@ -118,10 +123,20 @@ class Settings extends ChangeNotifier {
       'musicTrack': musicTrack,
       'leftHanded': leftHanded,
       'pauseAfterMinutes': pauseAfterMinutes,
+      'welcomeSeen': welcomeSeen,
       'shareCount': shareCount,
       'reviewRequested': reviewRequested,
       'recentColors': recentColors,
     });
+  }
+
+  /// Remembers that the welcome has run. Its own method because it is the
+  /// app writing about itself, not a parent changing a setting.
+  Future<void> markWelcomeSeen() async {
+    if (welcomeSeen) return;
+    welcomeSeen = true;
+    notifyListeners();
+    await _persist();
   }
 
   /// Waits until every queued write reached the disk.
@@ -139,6 +154,7 @@ class Settings extends ChangeNotifier {
     musicTrack = 0;
     leftHanded = false;
     pauseAfterMinutes = 0;
+    welcomeSeen = false;
     shareCount = 0;
     reviewRequested = false;
     recentColors = [];

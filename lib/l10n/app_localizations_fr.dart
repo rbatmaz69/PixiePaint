@@ -788,4 +788,34 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'L\'autocollant n\'a pas pu être enregistré';
+
+  @override
+  String get welcomeSkip => 'Passer';
+
+  @override
+  String get welcomeNext => 'Suivant';
+
+  @override
+  String get welcomeStart => 'On colorie !';
+
+  @override
+  String get welcomeHelloTitle => 'Bonjour, je suis Pixie !';
+
+  @override
+  String get welcomeHelloBody =>
+      'Content que tu sois là. Ensemble, on va faire de très jolies images.';
+
+  @override
+  String get welcomePaintTitle => 'Choisis une image';
+
+  @override
+  String get welcomePaintBody =>
+      'Touche une zone et elle se remplit de couleur. Ou dessine simplement ce que tu veux.';
+
+  @override
+  String get welcomeParentsTitle => 'Pour les parents';
+
+  @override
+  String get welcomeParentsBody =>
+      'Tout reste sur cet appareil : pas de publicité, pas d\'achats, pas de collecte de données. Le partage, la suppression et les réglages sont protégés par un petit calcul.';
 }

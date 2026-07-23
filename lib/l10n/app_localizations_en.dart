@@ -787,4 +787,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'The sticker could not be saved';
+
+  @override
+  String get welcomeSkip => 'Skip';
+
+  @override
+  String get welcomeNext => 'Next';
+
+  @override
+  String get welcomeStart => 'Let\'s paint!';
+
+  @override
+  String get welcomeHelloTitle => 'Hi, I\'m Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'So glad you\'re here. Together we\'ll make the loveliest pictures.';
+
+  @override
+  String get welcomePaintTitle => 'Pick a picture';
+
+  @override
+  String get welcomePaintBody =>
+      'Tap an area and it fills with color. Or just draw whatever you like.';
+
+  @override
+  String get welcomeParentsTitle => 'For parents';
+
+  @override
+  String get welcomeParentsBody =>
+      'Everything stays on this device: no ads, no purchases, no data collection. Sharing, deleting and the settings sit behind a simple sum.';
 }

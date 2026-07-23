@@ -788,4 +788,34 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'Non è stato possibile salvare l\'adesivo';
+
+  @override
+  String get welcomeSkip => 'Salta';
+
+  @override
+  String get welcomeNext => 'Avanti';
+
+  @override
+  String get welcomeStart => 'Si colora!';
+
+  @override
+  String get welcomeHelloTitle => 'Ciao, sono Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Che bello che tu sia qui. Insieme faremo i disegni più belli.';
+
+  @override
+  String get welcomePaintTitle => 'Scegli un disegno';
+
+  @override
+  String get welcomePaintBody =>
+      'Tocca una zona e si riempie di colore. Oppure disegna quello che vuoi.';
+
+  @override
+  String get welcomeParentsTitle => 'Per i grandi';
+
+  @override
+  String get welcomeParentsBody =>
+      'Tutto resta su questo dispositivo: niente pubblicità, niente acquisti, nessuna raccolta di dati. Condividere, cancellare e le impostazioni stanno dietro un semplice calcolo.';
 }

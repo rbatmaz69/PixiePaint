@@ -1,6 +1,6 @@
 # Gerätetest-Checkliste
 
-Alles aus v6.1–v6.7 wurde gebaut, aber noch nie auf einem echten Gerät benutzt. Diese Liste ist für genau diese eine große Session gedacht: einmal von oben nach unten, mit einem Handy **und** einem Tablet.
+Alles aus v6.1–v7.3 wurde gebaut, aber noch nie auf einem echten Gerät benutzt. Diese Liste ist für genau diese eine große Session gedacht: einmal von oben nach unten, mit einem Handy **und** einem Tablet.
 
 Warum überhaupt eine Liste: Die Test-Suite deckt Logik und Beschriftungen ab, aber nichts von dem, was hier steht — Gesten, Druckstärke, Systemdialoge, Layout auf echten Seitenverhältnissen, Musik, Vibration.
 
@@ -18,6 +18,10 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 ## Erster Start
 
 - [ ] Splash erscheint, App startet ohne Ruckler
+- [ ] **Begrüßung** erscheint (nur beim allerersten Start): drei Karten zum Durchwischen
+- [ ] „Überspringen" ist schon auf der ersten Karte da und führt direkt in die Bildauswahl
+- [ ] „Los malen!" auf der letzten Karte führt ebenfalls in die Bildauswahl
+- [ ] App neu starten → die Begrüßung kommt **nicht** wieder
 - [ ] Startseite zeigt alle Kacheln; auf dem Handy fehlt „Zu zweit malen" (nur ab 600 dp)
 - [ ] Tagesaufgaben-Banner ist da und nennt eine Aufgabe
 - [ ] Es läuft keine Musik (Standard ist aus)
@@ -57,6 +61,7 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] **Sticker-Welt:** Szene wählen, Sticker platzieren, weitermalen, speichern
 - [ ] **Zeitraffer:** Bild aus der Galerie als Film abspielen, Geschwindigkeit ändern
 - [ ] **Zu zweit malen** (Tablet): beide Seiten gleichzeitig bemalen, eine Seite drehen, speichern → ein zusammengesetztes Bild in der Galerie
+  - [ ] Neu in v7.2: einige Minuten malen, dann den Home-Button drücken und zurückkehren → das Bild ist in der Galerie, und zwar **genau einmal**, nicht mehrfach
 - [ ] **Foto anmalen:** Foto auswählen und bemalen
 - [ ] **Foto → Ausmalbild:** alle drei Detailstufen ansehen
 

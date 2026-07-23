@@ -787,4 +787,34 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get stickerSaveFailed => 'Não foi possível guardar o autocolante';
+
+  @override
+  String get welcomeSkip => 'Saltar';
+
+  @override
+  String get welcomeNext => 'Seguinte';
+
+  @override
+  String get welcomeStart => 'Vamos pintar!';
+
+  @override
+  String get welcomeHelloTitle => 'Olá, sou a Pixie!';
+
+  @override
+  String get welcomeHelloBody =>
+      'Que bom que estás aqui. Juntos vamos fazer os desenhos mais bonitos.';
+
+  @override
+  String get welcomePaintTitle => 'Escolhe um desenho';
+
+  @override
+  String get welcomePaintBody =>
+      'Toca numa zona e ela fica cheia de cor. Ou desenha simplesmente o que quiseres.';
+
+  @override
+  String get welcomeParentsTitle => 'Para adultos';
+
+  @override
+  String get welcomeParentsBody =>
+      'Fica tudo neste dispositivo: sem publicidade, sem compras, sem recolha de dados. Partilhar, apagar e as definições estão atrás de uma conta simples.';
 }
