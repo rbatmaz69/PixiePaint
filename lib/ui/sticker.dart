@@ -95,7 +95,12 @@ class StickerCircleButton extends StatelessWidget {
     this.accent,
     this.enabled = true,
     this.playTick = true,
+    this.semanticLabel,
   });
+
+  /// Overrides [tooltip] as the screen-reader name — for the few buttons
+  /// whose tooltip is shorter than what a blind user needs to hear.
+  final String? semanticLabel;
 
   final VoidCallback? onTap;
   final IconData? icon;
@@ -126,6 +131,9 @@ class StickerCircleButton extends StatelessWidget {
     Widget button = Bouncy(
       onTap: enabled ? onTap : null,
       playTick: playTick,
+      // The tooltip is already the human name of this button, so it doubles
+      // as the screen-reader label instead of every caller repeating it.
+      semanticLabel: semanticLabel ?? tooltip,
       child: Container(
         width: size,
         height: size,

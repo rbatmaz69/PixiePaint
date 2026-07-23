@@ -196,6 +196,73 @@
   "stickerAlbumFullTitle": "Sticker-Album voll!",
   "stickerAlbumFullBody": "Wirf zuerst einen alten Sticker weg – halte ihn dafür gedrückt.",
   "stickerDeleteTitle": "Sticker wegwerfen?",
+  "canvasArea": "Malfläche",
+  "undoAction": "Rückgängig",
+  "redoAction": "Wiederholen",
+  "clearAction": "Alles wegwischen",
+  "colorRed": "Rot",
+  "colorOrange": "Orange",
+  "colorYellow": "Gelb",
+  "colorLightGreen": "Hellgrün",
+  "colorGreen": "Grün",
+  "colorTurquoise": "Türkis",
+  "colorLightBlue": "Hellblau",
+  "colorBlue": "Blau",
+  "colorPurple": "Lila",
+  "colorPink": "Pink",
+  "colorRose": "Rosa",
+  "colorBrown": "Braun",
+  "colorSkin": "Hautfarbe",
+  "colorGrey": "Grau",
+  "colorBlack": "Schwarz",
+  "colorWhite": "Weiß",
+  "colorCustom": "Eigene Farbe",
+  "colorMore": "Mehr Farben",
+  "storageTitle": "Speicherplatz",
+  "storageSubtitle": "Sehen, wie viel Platz PixiePaint braucht – und aufräumen",
+  "storageBreakdown": "{count, plural, =0{Noch keine Bilder} =1{1 Bild · {art}} other{{count} Bilder · {art}}} · Sticker {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "art": {"type": "String"},
+      "stickers": {"type": "String"}
+    }
+  },
+  "storageCleanupHint": "Älteste zuerst. Tippe die Bilder an, die weg dürfen.",
+  "storageEmpty": "Hier ist noch nichts gemalt worden.",
+  "storagePictureFallback": "Bild",
+  "storageDeleteSelected": "{n, plural, =1{1 Bild löschen} other{{n} Bilder löschen}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{Dieses Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "storageDeleteKeep": "Doch behalten",
+  "storageDeleteGo": "Löschen",
+  "restoreTitle": "Bilder zurückholen",
+  "restoreSubtitle": "Eine Sicherungs-Datei einlesen – vorhandene Bilder bleiben unangetastet",
+  "restoreWorking": "Bilder werden zurückgeholt …",
+  "restoreDone": "{restored, plural, =0{Keine neuen Bilder gefunden} =1{1 Bild zurückgeholt} other{{restored} Bilder zurückgeholt}}{skipped, plural, =0{} =1{ – 1 war schon da} other{ – {skipped} waren schon da}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {"type": "int"},
+      "skipped": {"type": "int"}
+    }
+  },
+  "restoreNotABackup": "Das ist keine PixiePaint-Sicherung",
+  "restoreTooNew": "Diese Sicherung stammt aus einer neueren PixiePaint-Version",
+  "restoreTooLarge": "Diese Datei ist zu groß zum Einlesen",
+  "restoreFailed": "Das Zurückholen hat nicht geklappt",
+  "saveFailedTitle": "Das Bild konnte nicht gespeichert werden",
+  "saveFailedBody": "Wahrscheinlich ist der Speicher voll. Schaffe etwas Platz und versuche es noch einmal – sonst geht dieses Bild verloren.",
+  "saveFailedRetry": "Nochmal versuchen",
+  "saveFailedLeave": "Trotzdem verlassen",
   "rewardProgress": "{done} von {target}",
   "@rewardProgress": {
     "placeholders": {

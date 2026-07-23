@@ -14,11 +14,25 @@ class Bouncy extends StatefulWidget {
     this.playTick = true,
     this.minSize = 48.0,
     this.pressedScale = 0.9,
+    this.semanticLabel,
+    this.semanticSelected,
   });
+
+  /// Announced alongside [semanticLabel] for controls that are part of a
+  /// choice — which brush is active, which color is picked. Without it a
+  /// screen reader can read the whole toolbar without revealing which of
+  /// the buttons is the current one.
+  final bool? semanticSelected;
 
   final Widget child;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+
+  /// What a screen reader announces. Almost every control in the app is a
+  /// [Bouncy], and a raw [GestureDetector] is invisible to TalkBack and
+  /// VoiceOver — so this is where accessibility enters the app. Leave it
+  /// null only where the child already carries readable text.
+  final String? semanticLabel;
 
   /// Set to false where the tap handler already plays a sound (e.g. the
   /// canvas controller ticks on tool/color selection).
@@ -57,19 +71,29 @@ class _BouncyState extends State<Bouncy> {
         child: Center(child: child),
       );
     }
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTapDown: (_) => _setPressed(true),
-      onTapUp: (_) => _setPressed(false),
-      onTapCancel: () => _setPressed(false),
-      onTap: widget.onTap == null
-          ? null
-          : () {
-              if (widget.playTick) Sfx.instance.tick();
-              widget.onTap!();
-            },
+    return Semantics(
+      button: widget.onTap != null,
+      enabled: widget.onTap != null,
+      label: widget.semanticLabel,
+      selected: widget.semanticSelected,
+      // The gesture below is the real handler; announcing it here is what
+      // makes the control reachable by a screen reader at all.
+      onTap: widget.onTap,
       onLongPress: widget.onLongPress,
-      child: child,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: (_) => _setPressed(true),
+        onTapUp: (_) => _setPressed(false),
+        onTapCancel: () => _setPressed(false),
+        onTap: widget.onTap == null
+            ? null
+            : () {
+                if (widget.playTick) Sfx.instance.tick();
+                widget.onTap!();
+              },
+        onLongPress: widget.onLongPress,
+        child: child,
+      ),
     );
   }
 }

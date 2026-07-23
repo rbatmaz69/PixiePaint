@@ -71,6 +71,23 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
   ToolKind.shape => context.l10n.toolShapes,
 };
 
+/// The glow under a selected toolbar button.
+///
+/// Always a shadow, never null: these buttons animate with
+/// [Curves.easeOutBack], which overshoots past both ends of the tween. A
+/// shadow tweened against *no* shadow has its blur radius pulled below zero
+/// on the undershoot, and `dart:ui` asserts on a negative blur — which is
+/// exactly what deselecting a tool used to do. Keeping the radius fixed and
+/// moving only the alpha (which [Color.lerp] clamps) keeps the same look
+/// with no way to reach an invalid value.
+List<BoxShadow> _selectionShadow(Color accent, bool selected) => [
+      BoxShadow(
+        color: accent.withValues(alpha: selected ? 0.25 : 0.0),
+        blurRadius: 8,
+        offset: const Offset(0, 3),
+      ),
+    ];
+
 class ToolBarRail extends StatelessWidget {
   const ToolBarRail({
     super.key,
@@ -181,17 +198,20 @@ class ToolBarRail extends StatelessWidget {
           icon: Icons.undo_rounded,
           enabled: controller.canUndo,
           filled: true,
+          label: context.l10n.undoAction,
           onTap: controller.undo,
         ),
         _ActionButton(
           icon: Icons.redo_rounded,
           enabled: controller.canRedo,
           filled: true,
+          label: context.l10n.redoAction,
           onTap: controller.redo,
         ),
         _ActionButton(
           icon: Icons.delete_sweep_outlined,
           enabled: !controller.isEmpty,
+          label: context.l10n.clearAction,
           onTap: () => _confirmClear(context),
         ),
       ]),
@@ -255,9 +275,14 @@ class _ToolButton extends StatelessWidget {
 
     return Tooltip(
       message: toolLabel(context, tool),
+      // The label is handed to Bouncy instead, which announces it together
+      // with the selected state; leaving it here too would read it twice.
+      excludeFromSemantics: true,
       child: Bouncy(
         onTap: onTap,
         playTick: false,
+        semanticLabel: toolLabel(context, tool),
+        semanticSelected: selected,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOutBack,
@@ -271,15 +296,7 @@ class _ToolButton extends StatelessWidget {
               color: selected ? accent : Colors.transparent,
               width: 2.5,
             ),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: accent.withValues(alpha: 0.25),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
+            boxShadow: _selectionShadow(accent, selected),
           ),
           child: Stack(
             alignment: Alignment.center,
@@ -329,9 +346,12 @@ class _SymmetryButton extends StatelessWidget {
     const accent = Color(0xFF7C6BF0);
     return Tooltip(
       message: context.l10n.symmetryTitle,
+      excludeFromSemantics: true,
       child: Bouncy(
         onTap: onTap,
         playTick: false,
+        semanticLabel: context.l10n.symmetryTitle,
+        semanticSelected: active,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOutBack,
@@ -345,15 +365,7 @@ class _SymmetryButton extends StatelessWidget {
               color: active ? accent : Colors.transparent,
               width: 2.5,
             ),
-            boxShadow: active
-                ? [
-                    BoxShadow(
-                      color: accent.withValues(alpha: 0.25),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
+            boxShadow: _selectionShadow(accent, active),
           ),
           child: Center(
             child: AnimatedScale(
@@ -399,6 +411,7 @@ class _SizeButton extends StatelessWidget {
     return Bouncy(
       onTap: onTap,
       playTick: false,
+      semanticLabel: context.l10n.sizeTitle,
       child: Container(
         width: 48,
         height: 48,
@@ -444,18 +457,23 @@ class _ActionButton extends StatelessWidget {
     required this.icon,
     required this.enabled,
     required this.onTap,
+    required this.label,
     this.filled = false,
   });
 
   final IconData icon;
   final bool enabled;
   final VoidCallback onTap;
+
+  /// Spoken name — the button is an icon with no text of its own.
+  final String label;
   final bool filled;
 
   @override
   Widget build(BuildContext context) {
     return Bouncy(
       onTap: enabled ? onTap : null,
+      semanticLabel: label,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: 48,

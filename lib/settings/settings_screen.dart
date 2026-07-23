@@ -1,3 +1,4 @@
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
@@ -11,10 +12,13 @@ import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/backup.dart';
 import '../util/music.dart';
+import '../util/profiles.dart';
+import '../util/progress.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../widgets/parental_gate.dart';
+import 'storage_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -120,6 +124,94 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   bool _backupRunning = false;
 
+  /// Deleting pictures lives behind its own gate, like every other door out
+  /// of the kids' world — reaching the settings screen is not consent to
+  /// throwing drawings away.
+  Future<void> _openStorage() async {
+    if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const StorageScreen()),
+    );
+  }
+
+  /// Reads a backup ZIP the parent picks from their own storage. Additive by
+  /// design — pictures already on this device are never touched — so there
+  /// is nothing here a parent can accidentally destroy.
+  Future<void> _restore() async {
+    if (_backupRunning) return;
+    if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
+
+    final path = await FlutterFileDialog.pickFile(
+      params: const OpenFileDialogParams(
+        fileExtensionsFilter: ['zip'],
+        mimeTypesFilter: ['application/zip'],
+        // Copy it into our own sandbox first: the picked file lives in the
+        // parent's storage, where a permission can lapse mid-read.
+        copyFileToCacheDir: true,
+      ),
+    );
+    if (path == null || !mounted) return;
+
+    // Resolved before the unpacking starts, so the outcome can be phrased
+    // without reaching for a context that may be gone by then.
+    final l10n = context.l10n;
+    setState(() => _backupRunning = true);
+    var dialogOpen = true;
+    showKidDialog<void>(
+      context: context,
+      emoji: '📥',
+      barrierDismissible: false,
+      title: l10n.restoreWorking,
+      body: const LoadingPixie(emoji: '📥'),
+    ).then((_) => dialogOpen = false);
+
+    String message;
+    String emoji;
+    try {
+      final result = await restoreBackup(path);
+      // The kids from the backup have to exist before their pictures can be
+      // found, and the active kid's reward progress may have just been
+      // replaced on disk by a file this session has never read.
+      await ProfileStore.instance.mergeRestoredProfiles();
+      await Progress.instance.load(ProfileStore.instance.active.id);
+      message = l10n.restoreDone(result.restored, result.skipped);
+      emoji = '🎉';
+    } on BackupRejected catch (e) {
+      emoji = '😕';
+      message = switch (e.reason) {
+        BackupRejection.tooNew => l10n.restoreTooNew,
+        BackupRejection.tooLarge => l10n.restoreTooLarge,
+        BackupRejection.notABackup ||
+        BackupRejection.unreadable =>
+          l10n.restoreNotABackup,
+      };
+    } catch (_) {
+      emoji = '😕';
+      message = l10n.restoreFailed;
+    } finally {
+      if (mounted) setState(() => _backupRunning = false);
+    }
+
+    if (!mounted) return;
+    if (dialogOpen) Navigator.of(context).pop();
+    await showKidDialog<void>(
+      context: context,
+      emoji: emoji,
+      title: message,
+      actions: [
+        Builder(
+          builder: (dialogContext) => KidDialogButton(
+            label: l10n.okAction,
+            emoji: '👍',
+            onTap: () => Navigator.pop(dialogContext),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = Settings.instance;
@@ -219,6 +311,20 @@ class _SettingsScreenState extends State<SettingsScreen>
                               title: context.l10n.backupTitle,
                               subtitle: context.l10n.backupSubtitle,
                               onTap: _backup,
+                            ),
+                            _KidRow(
+                              emoji: '📥',
+                              tint: PixiePalette.mintLight,
+                              title: context.l10n.restoreTitle,
+                              subtitle: context.l10n.restoreSubtitle,
+                              onTap: _restore,
+                            ),
+                            _KidRow(
+                              emoji: '💽',
+                              tint: PixiePalette.mintLight,
+                              title: context.l10n.storageTitle,
+                              subtitle: context.l10n.storageSubtitle,
+                              onTap: _openStorage,
                             ),
                           ],
                         ),

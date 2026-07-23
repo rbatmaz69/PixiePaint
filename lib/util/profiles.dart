@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:uuid/uuid.dart';
 
 import '../gallery/artwork_store.dart';
 import '../models/profile.dart';
+import 'backup.dart';
 import 'json_store.dart';
 
 /// The kids sharing this device. One is active at a time; the active
@@ -137,6 +139,47 @@ class ProfileStore extends ChangeNotifier {
     } catch (_) {}
     notifyListeners();
     await _persist();
+  }
+
+  /// Folds the kid list left behind by a backup restore into this device's.
+  ///
+  /// Restored artworks are stamped with the *backup's* profile ids, so
+  /// without their kids they would sit on disk invisible to every filter.
+  /// Profiles already known by id are left alone (their name and emoji here
+  /// win — this device is the one being used), and [maxProfiles] still
+  /// caps the list: pictures belonging to a kid that no longer fits stay on
+  /// disk and reappear if a profile is freed up.
+  ///
+  /// Returns how many kids were added. Idempotent — the side file is
+  /// removed once it has been folded in.
+  Future<int> mergeRestoredProfiles() async {
+    final docs = _docsDir;
+    if (docs == null) return 0;
+    final file = File('${docs.path}/$kRestoredProfilesFile');
+    var added = 0;
+    try {
+      if (!await file.exists()) return 0;
+      final json = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+      final known = {for (final p in profiles) p.id};
+      for (final raw in (json['profiles'] as List?) ?? []) {
+        if (!canAddMore) break;
+        final profile = Profile.fromJson((raw as Map).cast<String, dynamic>());
+        if (known.contains(profile.id)) continue;
+        profiles.add(profile);
+        known.add(profile.id);
+        added++;
+      }
+    } catch (_) {
+      // A damaged side file costs the kid list, not the restore.
+    }
+    try {
+      if (await file.exists()) await file.delete();
+    } catch (_) {}
+    if (added > 0) {
+      notifyListeners();
+      await _persist();
+    }
+    return added;
   }
 
   Future<void> _persist() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import 'canvas_controller.dart';
 import 'canvas_painter.dart';
 import 'fill_burst.dart';
@@ -18,6 +19,18 @@ class PaintingCanvas extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = controller.canvasWidth.toDouble();
     final h = controller.canvasHeight.toDouble();
+    // The painting is pixels, not content a screen reader can describe, and
+    // the burst overlays are pure decoration. Announced as one named
+    // surface so it can be found and skipped, never walked through.
+    return Semantics(
+      label: context.l10n.canvasArea,
+      container: true,
+      excludeSemantics: true,
+      child: _surface(w, h),
+    );
+  }
+
+  Widget _surface(double w, double h) {
     return Listener(
       behavior: HitTestBehavior.opaque,
       onPointerDown: controller.pointerDown,

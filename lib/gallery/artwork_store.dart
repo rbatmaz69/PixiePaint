@@ -6,6 +6,20 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/artwork.dart';
+import '../util/json_store.dart';
+
+/// What [ArtworkStore.save] managed to put on disk.
+///
+/// [ok] is false when a file could not be written — full storage is the
+/// realistic cause. The artwork on disk is then still the *previous*
+/// version, never a half-written one, because meta.json is written last
+/// and only after everything else succeeded.
+class SaveResult {
+  const SaveResult(this.artwork, {required this.ok});
+
+  final Artwork artwork;
+  final bool ok;
+}
 
 /// Filesystem-backed store: one directory per artwork containing
 /// paint.png (the paint layer), meta.json and thumb.png.
@@ -39,7 +53,7 @@ class ArtworkStore {
     return artworks;
   }
 
-  static Future<Artwork> save({
+  static Future<SaveResult> save({
     required String id,
     required String? pageId,
     String? traceId,
@@ -94,36 +108,41 @@ class ArtworkStore {
       favorite: favorite,
       profileId: profileId ?? old?.profileId,
     );
+    // Every file goes down atomically and meta.json goes down *last*: it is
+    // the commit marker. list() only accepts a directory that has a readable
+    // meta.json, so a run that dies halfway leaves the previous version of
+    // the picture intact instead of an unreadable one the gallery silently
+    // drops — which, for a kid, means the picture is simply gone.
+    var ok = true;
     if (paintPng != null) {
-      await artwork.paintFile.writeAsBytes(paintPng);
+      ok &= await atomicWriteBytes(artwork.paintFile, paintPng);
     } else if (await artwork.paintFile.exists()) {
       await artwork.paintFile.delete();
     }
     if (backgroundPng != null) {
-      await artwork.backgroundFile.writeAsBytes(backgroundPng);
+      ok &= await atomicWriteBytes(artwork.backgroundFile, backgroundPng);
     }
     if (lineArtPng != null) {
-      await artwork.lineArtFile.writeAsBytes(lineArtPng);
+      ok &= await atomicWriteBytes(artwork.lineArtFile, lineArtPng);
     }
     // Mirrors the paint.png handling: an artwork undone back to blank must
     // not keep an old time-lapse that replays strokes it no longer has.
     if (opsJson != null) {
-      await artwork.opsFile.writeAsString(opsJson);
+      ok &= await atomicWriteString(artwork.opsFile, opsJson);
     } else if (await artwork.opsFile.exists()) {
       await artwork.opsFile.delete();
     }
-    await artwork.thumbFile.writeAsBytes(thumbPng);
-    await File('${dir.path}/meta.json')
-        .writeAsString(jsonEncode(artwork.toJson()));
-    return artwork;
+    ok &= await atomicWriteBytes(artwork.thumbFile, thumbPng);
+    if (!ok) return SaveResult(old ?? artwork, ok: false);
+    ok = await atomicWriteString(
+        File('${dir.path}/meta.json'), jsonEncode(artwork.toJson()));
+    return SaveResult(ok ? artwork : (old ?? artwork), ok: ok);
   }
 
   /// Rewrites only meta.json (rename/favorite) — PNGs and [Artwork.updatedAt]
   /// stay untouched, so thumbnails keep their cache identity.
-  static Future<void> updateMeta(Artwork artwork) async {
-    await File('${artwork.dirPath}/meta.json')
-        .writeAsString(jsonEncode(artwork.toJson()));
-  }
+  static Future<bool> updateMeta(Artwork artwork) => atomicWriteString(
+      File('${artwork.dirPath}/meta.json'), jsonEncode(artwork.toJson()));
 
   static Future<void> delete(Artwork artwork) async {
     final dir = Directory(artwork.dirPath);

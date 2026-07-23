@@ -52,7 +52,7 @@ void main() {
         paintPng: png,
         thumbPng: png,
         opsJson: opsJson,
-      );
+      ).then((r) => r.artwork);
 
   Map<String, dynamic> meta(Artwork a) =>
       jsonDecode(File('${a.dirPath}/meta.json').readAsStringSync())
@@ -118,5 +118,49 @@ void main() {
     final all = await ArtworkStore.list();
     expect(all.map((a) => a.id), contains('f'));
     expect(all.firstWhere((a) => a.id == 'f').traceId, 'letter_B');
+  });
+
+  test('a save that dies mid-write leaves the previous version readable',
+      () async {
+    final a = await save(id: 'g', pageId: 'cat');
+    final metaFile = File('${a.dirPath}/meta.json');
+    final intact = metaFile.readAsStringSync();
+
+    // What a crash or a full disk leaves behind with a plain writeAsString:
+    // a truncated file. The atomic write makes this state unreachable —
+    // meta.json is only ever replaced by a complete file via rename.
+    final tmp = File('${metaFile.path}.tmp');
+    tmp.writeAsStringSync(intact.substring(0, intact.length ~/ 2));
+    expect(metaFile.readAsStringSync(), intact,
+        reason: 'the half-written file must live beside meta.json, not in it');
+
+    final all = await ArtworkStore.list();
+    expect(all.map((a) => a.id), contains('g'));
+  });
+
+  test('save reports failure instead of committing a broken picture',
+      () async {
+    final a = await save(id: 'h', pageId: 'cat');
+    final before = meta(a);
+
+    // A directory where thumb.png belongs makes the write fail the same way
+    // a full disk does: the bytes never land.
+    a.thumbFile.deleteSync();
+    Directory(a.thumbFile.path).createSync();
+
+    final result = await ArtworkStore.save(
+      id: 'h',
+      pageId: 'cat',
+      width: 2048,
+      height: 1536,
+      paintPng: png,
+      thumbPng: png,
+    );
+    expect(result.ok, isFalse);
+    // meta.json is the commit marker and was never reached, so the gallery
+    // still finds the older, complete version.
+    expect(meta(a), before);
+    final all = await ArtworkStore.list();
+    expect(all.map((x) => x.id), contains('h'));
   });
 }

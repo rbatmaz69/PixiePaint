@@ -542,6 +542,184 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stickerDeleteTitle => 'Throw the sticker away?';
 
   @override
+  String get canvasArea => 'Painting area';
+
+  @override
+  String get undoAction => 'Undo';
+
+  @override
+  String get redoAction => 'Redo';
+
+  @override
+  String get clearAction => 'Wipe everything';
+
+  @override
+  String get colorRed => 'Red';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorYellow => 'Yellow';
+
+  @override
+  String get colorLightGreen => 'Light green';
+
+  @override
+  String get colorGreen => 'Green';
+
+  @override
+  String get colorTurquoise => 'Turquoise';
+
+  @override
+  String get colorLightBlue => 'Light blue';
+
+  @override
+  String get colorBlue => 'Blue';
+
+  @override
+  String get colorPurple => 'Purple';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorRose => 'Rose';
+
+  @override
+  String get colorBrown => 'Brown';
+
+  @override
+  String get colorSkin => 'Skin tone';
+
+  @override
+  String get colorGrey => 'Grey';
+
+  @override
+  String get colorBlack => 'Black';
+
+  @override
+  String get colorWhite => 'White';
+
+  @override
+  String get colorCustom => 'Custom color';
+
+  @override
+  String get colorMore => 'More colors';
+
+  @override
+  String get storageTitle => 'Storage';
+
+  @override
+  String get storageSubtitle =>
+      'See how much space PixiePaint uses — and tidy up';
+
+  @override
+  String storageBreakdown(int count, String art, String stickers) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pictures · $art',
+      one: '1 picture · $art',
+      zero: 'No pictures yet',
+    );
+    return '$_temp0 · stickers $stickers';
+  }
+
+  @override
+  String get storageCleanupHint =>
+      'Oldest first. Tap the pictures that may go.';
+
+  @override
+  String get storageEmpty => 'Nothing has been painted here yet.';
+
+  @override
+  String get storagePictureFallback => 'Picture';
+
+  @override
+  String storageDeleteSelected(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Delete $n pictures',
+      one: 'Delete 1 picture',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageDeleteConfirm(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Really delete these $n pictures?',
+      one: 'Really delete this picture?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageDeleteKeep => 'Keep them';
+
+  @override
+  String get storageDeleteGo => 'Delete';
+
+  @override
+  String get restoreTitle => 'Bring pictures back';
+
+  @override
+  String get restoreSubtitle =>
+      'Read a backup file — pictures already here are left untouched';
+
+  @override
+  String get restoreWorking => 'Bringing pictures back …';
+
+  @override
+  String restoreDone(int restored, int skipped) {
+    String _temp0 = intl.Intl.pluralLogic(
+      restored,
+      locale: localeName,
+      other: '$restored pictures brought back',
+      one: '1 picture brought back',
+      zero: 'No new pictures found',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      skipped,
+      locale: localeName,
+      other: ' — $skipped were already here',
+      one: ' — 1 was already here',
+      zero: '',
+    );
+    return '$_temp0$_temp1';
+  }
+
+  @override
+  String get restoreNotABackup => 'That is not a PixiePaint backup';
+
+  @override
+  String get restoreTooNew =>
+      'This backup comes from a newer version of PixiePaint';
+
+  @override
+  String get restoreTooLarge => 'This file is too big to read';
+
+  @override
+  String get restoreFailed => 'Bringing the pictures back did not work';
+
+  @override
+  String get saveFailedTitle => 'The picture could not be saved';
+
+  @override
+  String get saveFailedBody =>
+      'Storage is probably full. Free up some space and try again — otherwise this picture will be lost.';
+
+  @override
+  String get saveFailedRetry => 'Try again';
+
+  @override
+  String get saveFailedLeave => 'Leave anyway';
+
+  @override
   String rewardProgress(int done, int target) {
     return '$done of $target';
   }

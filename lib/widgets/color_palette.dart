@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
+import '../l10n/l10n.dart';
 import '../ui/bouncy.dart';
 import '../util/color_utils.dart';
 import 'color_picker_sheet.dart';
@@ -23,6 +24,36 @@ const List<Color> kPaletteColors = [
   Color(0xFF000000), // schwarz
   Color(0xFFFFFFFF), // weiß
 ];
+
+/// Spoken name for a palette color, in the same order as [kPaletteColors].
+///
+/// A swatch is pure color with no text in it, so without this a screen
+/// reader announces sixteen identical buttons. Colors mixed in the picker
+/// sheet or lifted with the eyedropper fall back to a generic name — there
+/// is no honest word for #7A3B91.
+String paletteColorLabel(BuildContext context, Color color) {
+  final l10n = context.l10n;
+  final names = [
+    l10n.colorRed,
+    l10n.colorOrange,
+    l10n.colorYellow,
+    l10n.colorLightGreen,
+    l10n.colorGreen,
+    l10n.colorTurquoise,
+    l10n.colorLightBlue,
+    l10n.colorBlue,
+    l10n.colorPurple,
+    l10n.colorPink,
+    l10n.colorRose,
+    l10n.colorBrown,
+    l10n.colorSkin,
+    l10n.colorGrey,
+    l10n.colorBlack,
+    l10n.colorWhite,
+  ];
+  final i = kPaletteColors.indexOf(color);
+  return i >= 0 && i < names.length ? names[i] : l10n.colorCustom;
+}
 
 class ColorPalette extends StatelessWidget {
   const ColorPalette({super.key, required this.controller});
@@ -91,6 +122,8 @@ class PixieColorSwatch extends StatelessWidget {
       onTap: onTap,
       playTick: false,
       minSize: 0,
+      semanticLabel: paletteColorLabel(context, color),
+      semanticSelected: selected,
       child: SizedBox(
         width: slotWidth,
         height: slotHeight,
@@ -147,6 +180,7 @@ class _MoreColorsSwatch extends StatelessWidget {
       onTap: onTap,
       playTick: false,
       minSize: 0,
+      semanticLabel: context.l10n.colorMore,
       child: SizedBox(
         width: 56,
         height: 60,

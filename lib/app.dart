@@ -18,6 +18,13 @@ class PixiePaintApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildPixieTheme(),
       navigatorObservers: [pixieRouteObserver],
+      // A parent's phone set to 200% system text would push the painting
+      // toolbars off their fixed heights. Honouring the setting up to a
+      // point beats ignoring it (labels do grow) and beats a broken canvas.
+      builder: (context, child) => MediaQuery.withClampedTextScaling(
+        maxScaleFactor: 1.3,
+        child: child!,
+      ),
       home: const HomeScreen(),
     );
   }

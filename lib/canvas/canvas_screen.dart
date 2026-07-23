@@ -17,6 +17,7 @@ import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
+import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -103,6 +104,10 @@ class _CanvasScreenState extends State<CanvasScreen>
   late bool _lineArtSaved;
   bool loading = true;
   bool everSaved = false;
+
+  /// Set when the last save could not be written (full storage). Surfaced to
+  /// the parent on the way out, never to the child mid-painting.
+  bool _saveFailed = false;
   Timer? _autoSave;
   Future<void>? _pendingSave;
 
@@ -366,7 +371,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     );
     final thumbPng = await imageToPngBytes(thumb);
     thumb.dispose();
-    await ArtworkStore.save(
+    final result = await ArtworkStore.save(
       id: artworkId,
       pageId: pageId,
       traceId: traceId,
@@ -385,6 +390,14 @@ class _CanvasScreenState extends State<CanvasScreen>
           ? encodeOps(controller.opsSnapshot)
           : null,
     );
+    // Leave the canvas dirty so the next autosave retries, and remember the
+    // failure for the way out — a picture that silently fails to save is the
+    // one thing this screen must never do.
+    if (!result.ok) {
+      _saveFailed = true;
+      return;
+    }
+    _saveFailed = false;
     if (backgroundPng != null) _backgroundSaved = true;
     if (lineArtPng != null) _lineArtSaved = true;
     everSaved = true;
@@ -420,12 +433,48 @@ class _CanvasScreenState extends State<CanvasScreen>
 
   Future<void> _leave() async {
     if (controller.dirty) await _save();
+    if (_saveFailed && mounted && !await _confirmLeaveUnsaved()) return;
     // Sticker unlock party — only on the way out, never mid-painting.
     for (final reward in Progress.instance.takeUncelebrated()) {
       if (!mounted) break;
       await _celebrateReward(reward);
     }
     if (mounted) Navigator.of(context).pop();
+  }
+
+  /// The save failed and the picture is only in memory — leaving now loses
+  /// it. Worded for the parent who will be handed the tablet, and offering
+  /// the retry first, because freeing storage in another app and coming back
+  /// is the fix.
+  Future<bool> _confirmLeaveUnsaved() async {
+    while (true) {
+      if (!mounted) return false;
+      final retry = await showKidDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        emoji: '💾',
+        title: context.l10n.saveFailedTitle,
+        body: Text(
+          context.l10n.saveFailedBody,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        actions: [
+          KidDialogButton(
+            label: context.l10n.saveFailedRetry,
+            emoji: '🔄',
+            onTap: () => Navigator.of(context).pop(true),
+          ),
+          KidDialogTextButton(
+            label: context.l10n.saveFailedLeave,
+            onTap: () => Navigator.of(context).pop(false),
+          ),
+        ],
+      );
+      if (retry != true) return true;
+      await _save();
+      if (!_saveFailed) return true;
+    }
   }
 
   Future<void> _celebrateReward(StickerReward reward) async {

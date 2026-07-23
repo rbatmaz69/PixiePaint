@@ -196,6 +196,73 @@
   "stickerAlbumFullTitle": "Sticker album is full!",
   "stickerAlbumFullBody": "Throw an old sticker away first – press and hold it to do that.",
   "stickerDeleteTitle": "Throw the sticker away?",
+  "canvasArea": "Painting area",
+  "undoAction": "Undo",
+  "redoAction": "Redo",
+  "clearAction": "Wipe everything",
+  "colorRed": "Red",
+  "colorOrange": "Orange",
+  "colorYellow": "Yellow",
+  "colorLightGreen": "Light green",
+  "colorGreen": "Green",
+  "colorTurquoise": "Turquoise",
+  "colorLightBlue": "Light blue",
+  "colorBlue": "Blue",
+  "colorPurple": "Purple",
+  "colorPink": "Pink",
+  "colorRose": "Rose",
+  "colorBrown": "Brown",
+  "colorSkin": "Skin tone",
+  "colorGrey": "Grey",
+  "colorBlack": "Black",
+  "colorWhite": "White",
+  "colorCustom": "Custom color",
+  "colorMore": "More colors",
+  "storageTitle": "Storage",
+  "storageSubtitle": "See how much space PixiePaint uses — and tidy up",
+  "storageBreakdown": "{count, plural, =0{No pictures yet} =1{1 picture · {art}} other{{count} pictures · {art}}} · stickers {stickers}",
+  "@storageBreakdown": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "art": {"type": "String"},
+      "stickers": {"type": "String"}
+    }
+  },
+  "storageCleanupHint": "Oldest first. Tap the pictures that may go.",
+  "storageEmpty": "Nothing has been painted here yet.",
+  "storagePictureFallback": "Picture",
+  "storageDeleteSelected": "{n, plural, =1{Delete 1 picture} other{Delete {n} pictures}}",
+  "@storageDeleteSelected": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "storageDeleteConfirm": "{n, plural, =1{Really delete this picture?} other{Really delete these {n} pictures?}}",
+  "@storageDeleteConfirm": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "storageDeleteKeep": "Keep them",
+  "storageDeleteGo": "Delete",
+  "restoreTitle": "Bring pictures back",
+  "restoreSubtitle": "Read a backup file — pictures already here are left untouched",
+  "restoreWorking": "Bringing pictures back …",
+  "restoreDone": "{restored, plural, =0{No new pictures found} =1{1 picture brought back} other{{restored} pictures brought back}}{skipped, plural, =0{} =1{ — 1 was already here} other{ — {skipped} were already here}}",
+  "@restoreDone": {
+    "placeholders": {
+      "restored": {"type": "int"},
+      "skipped": {"type": "int"}
+    }
+  },
+  "restoreNotABackup": "That is not a PixiePaint backup",
+  "restoreTooNew": "This backup comes from a newer version of PixiePaint",
+  "restoreTooLarge": "This file is too big to read",
+  "restoreFailed": "Bringing the pictures back did not work",
+  "saveFailedTitle": "The picture could not be saved",
+  "saveFailedBody": "Storage is probably full. Free up some space and try again — otherwise this picture will be lost.",
+  "saveFailedRetry": "Try again",
+  "saveFailedLeave": "Leave anyway",
   "rewardProgress": "{done} of {target}",
   "@rewardProgress": {
     "placeholders": {

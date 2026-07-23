@@ -544,6 +544,184 @@ class AppLocalizationsDe extends AppLocalizations {
   String get stickerDeleteTitle => 'Sticker wegwerfen?';
 
   @override
+  String get canvasArea => 'Malfläche';
+
+  @override
+  String get undoAction => 'Rückgängig';
+
+  @override
+  String get redoAction => 'Wiederholen';
+
+  @override
+  String get clearAction => 'Alles wegwischen';
+
+  @override
+  String get colorRed => 'Rot';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorYellow => 'Gelb';
+
+  @override
+  String get colorLightGreen => 'Hellgrün';
+
+  @override
+  String get colorGreen => 'Grün';
+
+  @override
+  String get colorTurquoise => 'Türkis';
+
+  @override
+  String get colorLightBlue => 'Hellblau';
+
+  @override
+  String get colorBlue => 'Blau';
+
+  @override
+  String get colorPurple => 'Lila';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorRose => 'Rosa';
+
+  @override
+  String get colorBrown => 'Braun';
+
+  @override
+  String get colorSkin => 'Hautfarbe';
+
+  @override
+  String get colorGrey => 'Grau';
+
+  @override
+  String get colorBlack => 'Schwarz';
+
+  @override
+  String get colorWhite => 'Weiß';
+
+  @override
+  String get colorCustom => 'Eigene Farbe';
+
+  @override
+  String get colorMore => 'Mehr Farben';
+
+  @override
+  String get storageTitle => 'Speicherplatz';
+
+  @override
+  String get storageSubtitle =>
+      'Sehen, wie viel Platz PixiePaint braucht – und aufräumen';
+
+  @override
+  String storageBreakdown(int count, String art, String stickers) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Bilder · $art',
+      one: '1 Bild · $art',
+      zero: 'Noch keine Bilder',
+    );
+    return '$_temp0 · Sticker $stickers';
+  }
+
+  @override
+  String get storageCleanupHint =>
+      'Älteste zuerst. Tippe die Bilder an, die weg dürfen.';
+
+  @override
+  String get storageEmpty => 'Hier ist noch nichts gemalt worden.';
+
+  @override
+  String get storagePictureFallback => 'Bild';
+
+  @override
+  String storageDeleteSelected(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n Bilder löschen',
+      one: '1 Bild löschen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storageDeleteConfirm(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Diese $n Bilder wirklich löschen?',
+      one: 'Dieses Bild wirklich löschen?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storageDeleteKeep => 'Doch behalten';
+
+  @override
+  String get storageDeleteGo => 'Löschen';
+
+  @override
+  String get restoreTitle => 'Bilder zurückholen';
+
+  @override
+  String get restoreSubtitle =>
+      'Eine Sicherungs-Datei einlesen – vorhandene Bilder bleiben unangetastet';
+
+  @override
+  String get restoreWorking => 'Bilder werden zurückgeholt …';
+
+  @override
+  String restoreDone(int restored, int skipped) {
+    String _temp0 = intl.Intl.pluralLogic(
+      restored,
+      locale: localeName,
+      other: '$restored Bilder zurückgeholt',
+      one: '1 Bild zurückgeholt',
+      zero: 'Keine neuen Bilder gefunden',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      skipped,
+      locale: localeName,
+      other: ' – $skipped waren schon da',
+      one: ' – 1 war schon da',
+      zero: '',
+    );
+    return '$_temp0$_temp1';
+  }
+
+  @override
+  String get restoreNotABackup => 'Das ist keine PixiePaint-Sicherung';
+
+  @override
+  String get restoreTooNew =>
+      'Diese Sicherung stammt aus einer neueren PixiePaint-Version';
+
+  @override
+  String get restoreTooLarge => 'Diese Datei ist zu groß zum Einlesen';
+
+  @override
+  String get restoreFailed => 'Das Zurückholen hat nicht geklappt';
+
+  @override
+  String get saveFailedTitle => 'Das Bild konnte nicht gespeichert werden';
+
+  @override
+  String get saveFailedBody =>
+      'Wahrscheinlich ist der Speicher voll. Schaffe etwas Platz und versuche es noch einmal – sonst geht dieses Bild verloren.';
+
+  @override
+  String get saveFailedRetry => 'Nochmal versuchen';
+
+  @override
+  String get saveFailedLeave => 'Trotzdem verlassen';
+
+  @override
   String rewardProgress(int done, int target) {
     return '$done von $target';
   }

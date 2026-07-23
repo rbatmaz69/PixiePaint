@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pixiepaint/util/backup.dart';
 import 'package:pixiepaint/util/json_store.dart';
 import 'package:pixiepaint/util/profiles.dart';
 
@@ -14,7 +15,10 @@ void main() {
     store.resetForTest();
   });
 
-  tearDown(() {
+  tearDown(() async {
+    // switchTo() persists without awaiting, so drain the queue before the
+    // directory goes — otherwise the delete races JsonStore's .tmp file.
+    await store.flush();
     store.resetForTest();
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
@@ -122,6 +126,76 @@ void main() {
       expect(store.active.id, store.primary.id);
       expect(store.profiles, hasLength(1));
       expect(progressFile.existsSync(), isFalse);
+    });
+  });
+
+  group('restored profiles', () {
+    /// What restoreBackupZip leaves behind: the backup's kid list, parked
+    /// beside the device's own.
+    void parkRestored(List<Map<String, String>> kids) {
+      File('${dir.path}/$kRestoredProfilesFile')
+          .writeAsStringSync(jsonEncode({'profiles': kids}));
+    }
+
+    test('kids from the backup are added so their pictures have an owner',
+        () async {
+      await store.loadFrom(file(), dir);
+      parkRestored([
+        {'id': 'backup-kid-1', 'name': 'Mia', 'emoji': '🐸'},
+        {'id': 'backup-kid-2', 'name': 'Tom', 'emoji': '🦖'},
+      ]);
+
+      expect(await store.mergeRestoredProfiles(), 2);
+      expect(store.profiles.map((p) => p.id),
+          containsAll(['backup-kid-1', 'backup-kid-2']));
+      // Restored artworks are stamped with these ids — without the kids,
+      // ownsArtwork would hide every one of them.
+      expect(store.ownsArtwork('backup-kid-1', 'backup-kid-1'), isTrue);
+    });
+
+    test('a kid this device already knows keeps its own name', () async {
+      await store.loadFrom(file(), dir);
+      final mine = store.primary.id;
+      await store.updateProfile(mine, name: 'Lena');
+      parkRestored([
+        {'id': mine, 'name': 'Old Name', 'emoji': '👻'},
+      ]);
+
+      expect(await store.mergeRestoredProfiles(), 0);
+      expect(store.profiles, hasLength(1));
+      expect(store.primary.name, 'Lena');
+    });
+
+    test('the side file is consumed, so a second merge is a no-op', () async {
+      await store.loadFrom(file(), dir);
+      parkRestored([
+        {'id': 'backup-kid-1', 'name': 'Mia', 'emoji': '🐸'},
+      ]);
+
+      expect(await store.mergeRestoredProfiles(), 1);
+      expect(File('${dir.path}/$kRestoredProfilesFile').existsSync(), isFalse);
+      expect(await store.mergeRestoredProfiles(), 0);
+      expect(store.profiles, hasLength(2));
+    });
+
+    test('the four-kid cap still holds', () async {
+      await store.loadFrom(file(), dir);
+      parkRestored([
+        for (var i = 0; i < 6; i++)
+          {'id': 'backup-kid-$i', 'name': 'Kid $i', 'emoji': '🐸'},
+      ]);
+
+      await store.mergeRestoredProfiles();
+      expect(store.profiles, hasLength(ProfileStore.maxProfiles));
+    });
+
+    test('a damaged side file costs the kid list, not the restore', () async {
+      await store.loadFrom(file(), dir);
+      File('${dir.path}/$kRestoredProfilesFile').writeAsStringSync('{ not json');
+
+      expect(await store.mergeRestoredProfiles(), 0);
+      expect(store.profiles, hasLength(1));
+      expect(File('${dir.path}/$kRestoredProfilesFile').existsSync(), isFalse);
     });
   });
 

@@ -111,4 +111,21 @@ class Settings extends ChangeNotifier {
 
   /// Waits until every queued write reached the disk.
   Future<void> flush() async => _store?.flush();
+
+  /// Back to a fresh install. Matches the seam [Progress] and [ProfileStore]
+  /// already have — without it this singleton carries one test's choices
+  /// into the next.
+  @visibleForTesting
+  void resetForTest() {
+    stylusOnly = false;
+    deleteNeedsGate = false;
+    soundsOn = true;
+    musicOn = false;
+    musicTrack = 0;
+    leftHanded = false;
+    shareCount = 0;
+    reviewRequested = false;
+    recentColors = [];
+    _store = null;
+  }
 }

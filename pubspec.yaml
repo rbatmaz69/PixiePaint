@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 6.6.0+15
+version: 6.7.0+16
 
 environment:
   sdk: ^3.12.2
@@ -49,6 +49,13 @@ dependencies:
   printing: ^5.15.0
   wakelock_plus: ^1.7.0
   archive: ^4.0.9
+  # Picks the backup ZIP for a restore. Deliberately not file_picker: that
+  # one still pins win32 ^5, which cannot resolve against share_plus and
+  # wakelock_plus (both on win32 ^6) — and forcing it through makes its
+  # Windows source fail to compile, which takes `flutter test` down with
+  # it. flutter_file_dialog is Android + iOS only, exactly this app's
+  # targets, and pulls in nothing at all.
+  flutter_file_dialog: ^3.3.1
 
 dev_dependencies:
   flutter_test:

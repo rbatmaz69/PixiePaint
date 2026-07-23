@@ -21,7 +21,13 @@ void main() {
     Settings.instance.shareCount = 0;
   });
 
-  tearDown(() {
+  tearDown(() async {
+    // The register* methods persist fire-and-forget, so a write can still
+    // be in flight here. Deleting the directory underneath it makes the
+    // rmdir fail ("Directory not empty") when JsonStore recreates its .tmp
+    // file mid-delete — an intermittent failure in whichever test happened
+    // to be running. Wait for the queue to drain first.
+    await progress.flush();
     progress.resetForTest();
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });

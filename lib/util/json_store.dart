@@ -66,3 +66,36 @@ class JsonStore {
   /// be on disk (tests, backup export).
   Future<void> flush() => _queue;
 }
+
+/// Writes [bytes] to [file] without ever leaving a half-written file behind:
+/// the data goes to `<path>.tmp` and is then renamed over the target, which
+/// the filesystem performs atomically.
+///
+/// Returns false when the write failed (storage full, no permission) — the
+/// previous version of [file] is then still intact and readable. Callers that
+/// write several files as one unit should write the file that *identifies*
+/// the unit last, so a failure leaves the older, consistent state.
+///
+/// This is the free-standing sibling of [JsonStore], for callers that write
+/// many different paths (one directory per artwork) rather than one file
+/// over and over.
+Future<bool> atomicWriteBytes(File file, List<int> bytes) =>
+    _atomic(file, (tmp) => tmp.writeAsBytes(bytes, flush: true));
+
+/// String variant of [atomicWriteBytes].
+Future<bool> atomicWriteString(File file, String contents) =>
+    _atomic(file, (tmp) => tmp.writeAsString(contents, flush: true));
+
+Future<bool> _atomic(File file, Future<void> Function(File tmp) write) async {
+  final tmp = File('${file.path}.tmp');
+  try {
+    await write(tmp);
+    await tmp.rename(file.path);
+    return true;
+  } catch (_) {
+    try {
+      if (await tmp.exists()) await tmp.delete();
+    } catch (_) {}
+    return false;
+  }
+}

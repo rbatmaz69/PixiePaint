@@ -1058,6 +1058,270 @@ abstract class AppLocalizations {
   /// **'Sticker wegwerfen?'**
   String get stickerDeleteTitle;
 
+  /// No description provided for @canvasArea.
+  ///
+  /// In de, this message translates to:
+  /// **'Malfläche'**
+  String get canvasArea;
+
+  /// No description provided for @undoAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Rückgängig'**
+  String get undoAction;
+
+  /// No description provided for @redoAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Wiederholen'**
+  String get redoAction;
+
+  /// No description provided for @clearAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Alles wegwischen'**
+  String get clearAction;
+
+  /// No description provided for @colorRed.
+  ///
+  /// In de, this message translates to:
+  /// **'Rot'**
+  String get colorRed;
+
+  /// No description provided for @colorOrange.
+  ///
+  /// In de, this message translates to:
+  /// **'Orange'**
+  String get colorOrange;
+
+  /// No description provided for @colorYellow.
+  ///
+  /// In de, this message translates to:
+  /// **'Gelb'**
+  String get colorYellow;
+
+  /// No description provided for @colorLightGreen.
+  ///
+  /// In de, this message translates to:
+  /// **'Hellgrün'**
+  String get colorLightGreen;
+
+  /// No description provided for @colorGreen.
+  ///
+  /// In de, this message translates to:
+  /// **'Grün'**
+  String get colorGreen;
+
+  /// No description provided for @colorTurquoise.
+  ///
+  /// In de, this message translates to:
+  /// **'Türkis'**
+  String get colorTurquoise;
+
+  /// No description provided for @colorLightBlue.
+  ///
+  /// In de, this message translates to:
+  /// **'Hellblau'**
+  String get colorLightBlue;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In de, this message translates to:
+  /// **'Blau'**
+  String get colorBlue;
+
+  /// No description provided for @colorPurple.
+  ///
+  /// In de, this message translates to:
+  /// **'Lila'**
+  String get colorPurple;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In de, this message translates to:
+  /// **'Pink'**
+  String get colorPink;
+
+  /// No description provided for @colorRose.
+  ///
+  /// In de, this message translates to:
+  /// **'Rosa'**
+  String get colorRose;
+
+  /// No description provided for @colorBrown.
+  ///
+  /// In de, this message translates to:
+  /// **'Braun'**
+  String get colorBrown;
+
+  /// No description provided for @colorSkin.
+  ///
+  /// In de, this message translates to:
+  /// **'Hautfarbe'**
+  String get colorSkin;
+
+  /// No description provided for @colorGrey.
+  ///
+  /// In de, this message translates to:
+  /// **'Grau'**
+  String get colorGrey;
+
+  /// No description provided for @colorBlack.
+  ///
+  /// In de, this message translates to:
+  /// **'Schwarz'**
+  String get colorBlack;
+
+  /// No description provided for @colorWhite.
+  ///
+  /// In de, this message translates to:
+  /// **'Weiß'**
+  String get colorWhite;
+
+  /// No description provided for @colorCustom.
+  ///
+  /// In de, this message translates to:
+  /// **'Eigene Farbe'**
+  String get colorCustom;
+
+  /// No description provided for @colorMore.
+  ///
+  /// In de, this message translates to:
+  /// **'Mehr Farben'**
+  String get colorMore;
+
+  /// No description provided for @storageTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Speicherplatz'**
+  String get storageTitle;
+
+  /// No description provided for @storageSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sehen, wie viel Platz PixiePaint braucht – und aufräumen'**
+  String get storageSubtitle;
+
+  /// No description provided for @storageBreakdown.
+  ///
+  /// In de, this message translates to:
+  /// **'{count, plural, =0{Noch keine Bilder} =1{1 Bild · {art}} other{{count} Bilder · {art}}} · Sticker {stickers}'**
+  String storageBreakdown(int count, String art, String stickers);
+
+  /// No description provided for @storageCleanupHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Älteste zuerst. Tippe die Bilder an, die weg dürfen.'**
+  String get storageCleanupHint;
+
+  /// No description provided for @storageEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Hier ist noch nichts gemalt worden.'**
+  String get storageEmpty;
+
+  /// No description provided for @storagePictureFallback.
+  ///
+  /// In de, this message translates to:
+  /// **'Bild'**
+  String get storagePictureFallback;
+
+  /// No description provided for @storageDeleteSelected.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{1 Bild löschen} other{{n} Bilder löschen}}'**
+  String storageDeleteSelected(int n);
+
+  /// No description provided for @storageDeleteConfirm.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Dieses Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}'**
+  String storageDeleteConfirm(int n);
+
+  /// No description provided for @storageDeleteKeep.
+  ///
+  /// In de, this message translates to:
+  /// **'Doch behalten'**
+  String get storageDeleteKeep;
+
+  /// No description provided for @storageDeleteGo.
+  ///
+  /// In de, this message translates to:
+  /// **'Löschen'**
+  String get storageDeleteGo;
+
+  /// No description provided for @restoreTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Bilder zurückholen'**
+  String get restoreTitle;
+
+  /// No description provided for @restoreSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Eine Sicherungs-Datei einlesen – vorhandene Bilder bleiben unangetastet'**
+  String get restoreSubtitle;
+
+  /// No description provided for @restoreWorking.
+  ///
+  /// In de, this message translates to:
+  /// **'Bilder werden zurückgeholt …'**
+  String get restoreWorking;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In de, this message translates to:
+  /// **'{restored, plural, =0{Keine neuen Bilder gefunden} =1{1 Bild zurückgeholt} other{{restored} Bilder zurückgeholt}}{skipped, plural, =0{} =1{ – 1 war schon da} other{ – {skipped} waren schon da}}'**
+  String restoreDone(int restored, int skipped);
+
+  /// No description provided for @restoreNotABackup.
+  ///
+  /// In de, this message translates to:
+  /// **'Das ist keine PixiePaint-Sicherung'**
+  String get restoreNotABackup;
+
+  /// No description provided for @restoreTooNew.
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Sicherung stammt aus einer neueren PixiePaint-Version'**
+  String get restoreTooNew;
+
+  /// No description provided for @restoreTooLarge.
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Datei ist zu groß zum Einlesen'**
+  String get restoreTooLarge;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Zurückholen hat nicht geklappt'**
+  String get restoreFailed;
+
+  /// No description provided for @saveFailedTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Bild konnte nicht gespeichert werden'**
+  String get saveFailedTitle;
+
+  /// No description provided for @saveFailedBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Wahrscheinlich ist der Speicher voll. Schaffe etwas Platz und versuche es noch einmal – sonst geht dieses Bild verloren.'**
+  String get saveFailedBody;
+
+  /// No description provided for @saveFailedRetry.
+  ///
+  /// In de, this message translates to:
+  /// **'Nochmal versuchen'**
+  String get saveFailedRetry;
+
+  /// No description provided for @saveFailedLeave.
+  ///
+  /// In de, this message translates to:
+  /// **'Trotzdem verlassen'**
+  String get saveFailedLeave;
+
   /// No description provided for @rewardProgress.
   ///
   /// In de, this message translates to:
