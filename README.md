@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.4.0+22 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.4.1+23 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -329,6 +329,8 @@ docs/                      Release-Anleitungen (Play Store, App Store),
 
    Betroffen war das viermal, jedes Mal mit einem eigenen Weg dorthin: Galerie und Bildauswahl (Lade-Pixie während des Lesens von der Platte), Diashow (erstes Bild wird mit 1400 px gerendert) und der Sticker-Picker (kein einziger gesperrter Sticker mehr, also keine wackelnde Kachel, die den Ticker anfasst). `test/widget/early_exit_test.dart` baut die betroffenen Screens auf und verlässt sie nach einem einzigen Frame wieder — genau das Szenario.
 
+   **Verwandt:** Jedes `setState` nach einem `await` braucht einen `mounted`-Wächter (oder ein eigenes `_disposed`-Flag wie in `slideshow_screen.dart`). Der Analyzer prüft das nur für `BuildContext`, nicht für `setState`.
+
 5. **Ein Dialog besitzt seinen eigenen `TextEditingController`.** Ihn direkt nach `showKidDialog(...)` freizugeben sieht richtig aus, ist es aber nicht: Der Dialog animiert noch heraus und baut das Textfeld dabei mehrfach neu — auf einem freigegebenen Controller wirft jeder dieser Frames. Vorbild: `_RenameField` in `lib/gallery/gallery_screen.dart`.
 
 6. **Der Undo-Stack budgetiert Speicher, nicht Schritte** (`lib/canvas/undo_stack.dart`). Ein Schnappschuss der Malebene ist 12 MB; eine feste Schrittzahl reserviert damit schnell dreistellige Megabyte. Wer dort etwas ändert, prüft `bytesInUse` — `test/undo_stack_test.dart` hält die Obergrenze für beide Canvas-Größen fest.
@@ -379,7 +381,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.0+22` bedeutet Versionsname 7.4.0 und versionCode 22. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.1+23` bedeutet Versionsname 7.4.1 und versionCode 23. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

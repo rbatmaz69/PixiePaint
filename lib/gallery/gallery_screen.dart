@@ -80,7 +80,14 @@ class _GalleryScreenState extends State<GalleryScreen>
     ];
   }
 
-  void _reload() => setState(() => _future = _loadForActiveProfile());
+  /// Re-reads the list. Guarded because every caller reaches it after an
+  /// await — a write, a delete, or a whole trip to the painting screen —
+  /// and a kid who backs out of the gallery meanwhile would otherwise land
+  /// in a setState on a screen that is already gone.
+  void _reload() {
+    if (!mounted) return;
+    setState(() => _future = _loadForActiveProfile());
+  }
 
   Future<void> _toggleFavorite(Artwork artwork) async {
     Sfx.instance.pop();
@@ -89,7 +96,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     );
     // Let the heart pop finish before favorites resort to the top.
     await Future<void>.delayed(const Duration(milliseconds: 350));
-    if (mounted) _reload();
+    _reload();
   }
 
   Future<void> _rename(Artwork artwork) async {

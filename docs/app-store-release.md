@@ -34,7 +34,7 @@ Xcode legt das Provisioning-Profil dann selbst an. Ändert sich der Bundle Ident
 - **Bundle-ID:** die aus Schritt 2
 - **SKU:** frei wählbar, z. B. `pixiepaint-001`
 
-Der App-Name im Store darf von `CFBundleDisplayName` (aktuell „Pixiepaint") abweichen — der Homescreen-Name kommt aus der Info.plist, der Store-Name aus App Store Connect. Wenn beide gleich aussehen sollen, `CFBundleDisplayName` in `ios/Runner/Info.plist` auf `PixiePaint` korrigieren.
+Der App-Name im Store darf von `CFBundleDisplayName` abweichen — der Homescreen-Name kommt aus der Info.plist, der Store-Name aus App Store Connect. Beide stehen seit v7.4 auf `PixiePaint`; vorher schrieb die Info.plist „Pixiepaint" und die App hieß auf dem iPhone anders als auf Android.
 
 ## 4. Build hochladen
 
