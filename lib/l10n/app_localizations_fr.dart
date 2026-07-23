@@ -785,4 +785,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$done sur $target';
   }
+
+  @override
+  String get stickerSaveFailed => 'L\'autocollant n\'a pas pu être enregistré';
 }

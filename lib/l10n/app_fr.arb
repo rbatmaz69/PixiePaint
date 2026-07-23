@@ -342,5 +342,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "stickerSaveFailed": "L'autocollant n'a pas pu être enregistré"
 }

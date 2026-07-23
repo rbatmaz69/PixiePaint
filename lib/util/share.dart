@@ -31,6 +31,9 @@ Future<void> shareArtwork({
   final tmp = await getTemporaryDirectory();
   final file = File(
       '${tmp.path}/pixiepaint_${DateTime.now().millisecondsSinceEpoch}.png');
+  // Deliberately not atomic like the artwork writes: this is a throwaway
+  // file in the temp dir that the share sheet consumes and we delete right
+  // after. There is nothing here a crash could corrupt.
   await file.writeAsBytes(png);
   await SharePlus.instance.share(
     ShareParams(files: [XFile(file.path, mimeType: 'image/png')]),

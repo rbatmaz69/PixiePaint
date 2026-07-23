@@ -342,5 +342,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "stickerSaveFailed": "Nie udało się zapisać naklejki"
 }

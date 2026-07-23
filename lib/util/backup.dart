@@ -185,6 +185,8 @@ RestoreResult restoreBackupZip(String zipPath, String docsPath) {
   // skipped with it, not just the file that happened to come first.
   final skippedIds = <String>{};
   final restoredIds = <String>{};
+  // Written after everything else — see the comment at the deferral below.
+  final deferredMeta = <(File, List<int>)>[];
 
   for (final entry in archive.files) {
     if (!entry.isFile) continue;
@@ -222,14 +224,44 @@ RestoreResult restoreBackupZip(String zipPath, String docsPath) {
 
     final bytes = entry.readBytes();
     if (bytes == null) continue;
-    target.parent.createSync(recursive: true);
-    target.writeAsBytesSync(bytes);
+    // meta.json is what makes an artwork visible to the gallery, so it goes
+    // down last — exactly as ArtworkStore.save does it. A restore that dies
+    // halfway then leaves directories the gallery simply ignores, rather
+    // than half-copied pictures a kid would find broken.
+    if (parts.length >= 3 && parts.last == 'meta.json') {
+      deferredMeta.add((target, bytes));
+      continue;
+    }
+    if (!_writeAtomicSync(target, bytes)) continue;
+  }
+
+  for (final (target, bytes) in deferredMeta) {
+    _writeAtomicSync(target, bytes);
   }
 
   return RestoreResult(
     restored: restoredIds.length,
     skipped: skippedIds.length,
   );
+}
+
+/// Writes [bytes] to [target] via a temp file and a rename, the sync twin
+/// of [atomicWriteBytes] — this runs inside an isolate where the async
+/// helpers cannot be awaited. Returns false when the write failed; a
+/// partially restored file must never be left behind.
+bool _writeAtomicSync(File target, List<int> bytes) {
+  final tmp = File('${target.path}.tmp');
+  try {
+    target.parent.createSync(recursive: true);
+    tmp.writeAsBytesSync(bytes, flush: true);
+    tmp.renameSync(target.path);
+    return true;
+  } catch (_) {
+    try {
+      if (tmp.existsSync()) tmp.deleteSync();
+    } catch (_) {}
+    return false;
+  }
 }
 
 /// Splits an entry name into path segments, or returns null when the entry

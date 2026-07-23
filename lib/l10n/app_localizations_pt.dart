@@ -784,4 +784,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$done de $target';
   }
+
+  @override
+  String get stickerSaveFailed => 'Não foi possível guardar o autocolante';
 }

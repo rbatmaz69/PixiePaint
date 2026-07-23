@@ -213,6 +213,46 @@ void main() {
       );
     });
 
+    test('an artwork only becomes visible once meta.json lands', () {
+      seed();
+      final zip = exportSeeded();
+      restoreBackupZip(zip, target.path);
+
+      // meta.json is written last, so no leftover .tmp files may remain and
+      // every restored directory must be complete.
+      for (final dir
+          in Directory('${target.path}/artworks').listSync().whereType<Directory>()) {
+        expect(File('${dir.path}/meta.json').existsSync(), isTrue,
+            reason: 'a directory without meta.json is invisible to the gallery');
+        expect(
+          dir.listSync().where((e) => e.path.endsWith('.tmp')),
+          isEmpty,
+          reason: 'the atomic write must clean up after itself',
+        );
+      }
+    });
+
+    test('an unwritable target is skipped instead of half-written', () {
+      seed();
+      final zip = exportSeeded();
+      // A directory where paint.png belongs: the write cannot succeed.
+      Directory('${target.path}/artworks/abc-123/paint.png')
+          .createSync(recursive: true);
+
+      restoreBackupZip(zip, target.path);
+
+      // abc-123 already existed as a directory, so it is skipped entirely;
+      // the other artwork still comes through, and nothing is left half done.
+      expect(File('${target.path}/artworks/def-456/meta.json').existsSync(),
+          isTrue);
+      expect(
+        Directory(target.path)
+            .listSync(recursive: true)
+            .where((e) => e.path.endsWith('.tmp')),
+        isEmpty,
+      );
+    });
+
     test('refuses a file that is not a ZIP at all', () {
       final out = '${tmp.path}/photo.png';
       File(out).writeAsBytesSync(List.filled(64, 0x42));

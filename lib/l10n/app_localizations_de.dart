@@ -786,4 +786,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$done von $target';
   }
+
+  @override
+  String get stickerSaveFailed => 'Der Sticker konnte nicht gespeichert werden';
 }

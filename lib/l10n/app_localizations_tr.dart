@@ -782,4 +782,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$target içinden $done';
   }
+
+  @override
+  String get stickerSaveFailed => 'Çıkartma kaydedilemedi';
 }

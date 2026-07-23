@@ -1,16 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
-import '../util/image_io.dart';
-import '../util/profiles.dart';
 import '../widgets/color_palette.dart';
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
+import 'two_painter_save.dart';
 import 'painting_canvas.dart';
 
 /// Two kids, one tablet: the screen splits into two independent painting
@@ -38,7 +38,17 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
   late final CanvasController _left = _makeController();
   late final CanvasController _right = _makeController();
   bool _leftFlipped = true; // start face-to-face across the table
-  bool _saving = false;
+  bool _leaving = false;
+
+  /// All the saving rules live here, testable without a widget tree.
+  late final TwoPainterSaveSession _saves = TwoPainterSaveSession(
+    left: _left,
+    right: _right,
+    paneWidth: TwoPainterScreen.paneWidth,
+    paneHeight: TwoPainterScreen.paneHeight,
+  );
+
+  Timer? _autoSave;
 
   CanvasController _makeController() {
     return CanvasController(
@@ -54,15 +64,22 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (_saves.isDirty) _saves.save();
+    });
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  /// Two canvases mean two undo histories. This mode is tablet-only, but a
-  /// tablet backgrounding two of them at once is exactly the case the
-  /// budget alone does not cover.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.paused) return;
+    // Save first: it reads both paint layers, and releaseMemory() below
+    // throws the undo history away. Twenty minutes of two kids painting
+    // together used to end here whenever someone pressed home.
+    if (_saves.isDirty) _saves.save();
+    // Two canvases mean two undo histories. This mode is tablet-only, but a
+    // tablet backgrounding two of them at once is exactly the case the
+    // budget alone does not cover.
     _left.releaseMemory();
     _right.releaseMemory();
     PaintingBinding.instance.imageCache.clear();
@@ -70,48 +87,30 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
   }
 
   Future<void> _leave() async {
-    if (_saving) return;
-    _saving = true;
-    if (!_left.isEmpty || !_right.isEmpty) {
-      try {
-        final merged = await composeTwoPainterArtwork(
-          left: _left.paintLayer,
-          right: _right.paintLayer,
-          paneWidth: TwoPainterScreen.paneWidth,
-          height: TwoPainterScreen.paneHeight,
-        );
-        final paintPng = await imageToPngBytes(merged);
-        final thumb = await composeArtwork(
-          width: merged.width,
-          height: merged.height,
-          paintLayer: merged,
-          targetWidth: 360,
-        );
-        final thumbPng = await imageToPngBytes(thumb);
-        thumb.dispose();
-        merged.dispose();
-        await ArtworkStore.save(
-          id: ArtworkStore.newId(),
-          pageId: null,
-          profileId: ProfileStore.instance.active.id,
-          width: TwoPainterScreen.paneWidth * 2,
-          height: TwoPainterScreen.paneHeight,
-          paintPng: paintPng,
-          thumbPng: thumbPng,
-        );
-      } catch (_) {
-        // Never trap the kids on the screen because a save failed.
-      }
-    }
+    if (_leaving) return;
+    _leaving = true;
+    await _saves.save();
     if (mounted) Navigator.of(context).pop();
   }
 
   @override
   void dispose() {
+    _autoSave?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    _left.dispose();
-    _right.dispose();
+    // A save in flight still reads both paint layers — free them only
+    // afterwards, or it encodes disposed images. The controllers are not
+    // part of the element tree, so outliving this State briefly is safe.
+    final pending = _saves.pending;
+    if (pending != null) {
+      pending.whenComplete(() {
+        _left.dispose();
+        _right.dispose();
+      });
+    } else {
+      _left.dispose();
+      _right.dispose();
+    }
     super.dispose();
   }
 

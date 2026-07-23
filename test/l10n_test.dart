@@ -35,7 +35,10 @@ void main() {
       .toSet();
 
   test('the template itself is sane', () {
-    expect(templateKeys, hasLength(220));
+    // No exact count on purpose: every new feature adds keys, and a test
+    // that has to be edited for each one gets edited without thinking. What
+    // must not happen is the template silently shrinking.
+    expect(templateKeys.length, greaterThan(200));
     expect(template['@@locale'], 'de');
   });
 

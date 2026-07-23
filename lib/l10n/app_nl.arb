@@ -342,5 +342,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "stickerSaveFailed": "De sticker kon niet worden opgeslagen"
 }

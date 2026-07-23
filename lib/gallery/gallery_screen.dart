@@ -40,10 +40,20 @@ class _GalleryScreenState extends State<GalleryScreen>
   late Future<List<Artwork>> _future;
   bool _favoritesOnly = false;
 
-  late final AnimationController _entrance = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 900),
-  )..forward();
+  /// Created on first use, so the entrance animation starts when the content
+  /// actually appears rather than while the list is still loading.
+  ///
+  /// The nullable backing field is what makes that safe: leaving this screen
+  /// before the load finished means `build` never touched the getter, and a
+  /// plain `late final` would then *create* the controller inside dispose(),
+  /// where the element tree is already deactivated — an outright crash. On a
+  /// device with a big gallery and slow storage that is a very short window
+  /// to hit.
+  AnimationController? _entranceOrNull;
+  AnimationController get _entrance => _entranceOrNull ??= AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 900),
+      )..forward();
 
   @override
   void initState() {
@@ -53,7 +63,7 @@ class _GalleryScreenState extends State<GalleryScreen>
 
   @override
   void dispose() {
-    _entrance.dispose();
+    _entranceOrNull?.dispose();
     super.dispose();
   }
 
@@ -83,26 +93,18 @@ class _GalleryScreenState extends State<GalleryScreen>
   }
 
   Future<void> _rename(Artwork artwork) async {
-    final input = TextEditingController(text: artwork.name ?? '');
     final name = await showKidDialog<String>(
       context: context,
       emoji: '✏️',
       title: context.l10n.renameTitle,
-      body: TextField(
-        controller: input,
-        autofocus: true,
-        maxLength: 20,
-        textCapitalization: TextCapitalization.words,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.titleLarge,
-        decoration: const InputDecoration(counterText: ''),
-      ),
+      body: _RenameField(initial: artwork.name ?? ''),
       actions: [
         Builder(
           builder: (dialogContext) => KidDialogButton(
             label: context.l10n.renameSave,
             emoji: '💾',
-            onTap: () => Navigator.pop(dialogContext, input.text.trim()),
+            onTap: () =>
+                Navigator.pop(dialogContext, _RenameField.currentText.trim()),
           ),
         ),
         Builder(
@@ -113,7 +115,6 @@ class _GalleryScreenState extends State<GalleryScreen>
         ),
       ],
     );
-    input.dispose();
     if (name == null) return;
     await ArtworkStore.updateMeta(artwork.copyWith(name: name));
     _reload();
@@ -714,6 +715,58 @@ class _FilterChip extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The rename dialog's text field.
+///
+/// It owns its [TextEditingController] so that Flutter disposes it when the
+/// dialog route is actually gone. Freeing it right after `showKidDialog`
+/// returns looks equivalent but is not: the dialog is still animating out
+/// and rebuilds the field a few more times, and a disposed controller
+/// throws on every one of those frames.
+class _RenameField extends StatefulWidget {
+  const _RenameField({required this.initial});
+
+  final String initial;
+
+  /// What the field currently holds. A single dialog is on screen at a time,
+  /// so one slot is enough — and it keeps the value reachable from the
+  /// dialog's action buttons, which sit outside this widget.
+  static String currentText = '';
+
+  @override
+  State<_RenameField> createState() => _RenameFieldState();
+}
+
+class _RenameFieldState extends State<_RenameField> {
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initial)
+        ..addListener(() => _RenameField.currentText = _controller.text);
+
+  @override
+  void initState() {
+    super.initState();
+    _RenameField.currentText = widget.initial;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      autofocus: true,
+      maxLength: 20,
+      textCapitalization: TextCapitalization.words,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleLarge,
+      decoration: const InputDecoration(counterText: ''),
     );
   }
 }

@@ -28,7 +28,9 @@
   "profileRemoveTitle": "{name} entfernen?",
   "@profileRemoveTitle": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "profileRemoveBody": "Was soll mit den Bildern von diesem Kind passieren?",
@@ -111,8 +113,12 @@
   "gateQuestion": "{a} × {b} = ?",
   "@gateQuestion": {
     "placeholders": {
-      "a": {"type": "int"},
-      "b": {"type": "int"}
+      "a": {
+        "type": "int"
+      },
+      "b": {
+        "type": "int"
+      }
     }
   },
   "gateHint": "Antwort",
@@ -159,20 +165,26 @@
   "rewardRulePaintings": "{n, plural, =1{Male noch 1 Bild fertig!} other{Male noch {n} Bilder fertig!}}",
   "@rewardRulePaintings": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "rewardRuleTools": "{n, plural, =1{Probiere noch 1 anderes Werkzeug aus!} other{Probiere noch {n} andere Werkzeuge aus!}}",
   "@rewardRuleTools": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "rewardRuleShares": "Teile ein Bild mit deinen Eltern!",
   "rewardRuleTrace": "{n, plural, =1{Spure noch 1 Vorlage nach!} other{Spure noch {n} Vorlagen nach!}}",
   "@rewardRuleTrace": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "packMusic": "Musik",
@@ -180,13 +192,17 @@
   "rewardRuleCbn": "{n, plural, =1{Löse noch 1 Zahlenbild!} other{Löse noch {n} Zahlenbilder!}}",
   "@rewardRuleCbn": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "rewardRuleTasks": "{n, plural, =1{Schaffe noch 1 Tagesaufgabe!} other{Schaffe noch {n} Tagesaufgaben!}}",
   "@rewardRuleTasks": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "myStickersSection": "Meine Sticker",
@@ -206,7 +222,9 @@
   "pauseMinutes": "{n} Minuten",
   "@pauseMinutes": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "albumTitle": "Meine Erfolge",
@@ -214,14 +232,20 @@
   "albumEarned": "{earned} von {total} Stickern",
   "@albumEarned": {
     "placeholders": {
-      "earned": {"type": "int"},
-      "total": {"type": "int"}
+      "earned": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "albumStreak": "{n, plural, =1{1 Tag hintereinander gemalt} other{{n} Tage hintereinander gemalt}}",
   "@albumStreak": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "albumStreakNone": "Schaff die Aufgabe des Tages und starte deine Serie!",
@@ -254,9 +278,15 @@
   "storageBreakdown": "{count, plural, =0{Noch keine Bilder} =1{1 Bild · {art}} other{{count} Bilder · {art}}} · Sticker {stickers}",
   "@storageBreakdown": {
     "placeholders": {
-      "count": {"type": "int"},
-      "art": {"type": "String"},
-      "stickers": {"type": "String"}
+      "count": {
+        "type": "int"
+      },
+      "art": {
+        "type": "String"
+      },
+      "stickers": {
+        "type": "String"
+      }
     }
   },
   "storageCleanupHint": "Älteste zuerst. Tippe die Bilder an, die weg dürfen.",
@@ -265,13 +295,17 @@
   "storageDeleteSelected": "{n, plural, =1{1 Bild löschen} other{{n} Bilder löschen}}",
   "@storageDeleteSelected": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "storageDeleteConfirm": "{n, plural, =1{Dieses Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}",
   "@storageDeleteConfirm": {
     "placeholders": {
-      "n": {"type": "int"}
+      "n": {
+        "type": "int"
+      }
     }
   },
   "storageDeleteKeep": "Doch behalten",
@@ -282,8 +316,12 @@
   "restoreDone": "{restored, plural, =0{Keine neuen Bilder gefunden} =1{1 Bild zurückgeholt} other{{restored} Bilder zurückgeholt}}{skipped, plural, =0{} =1{ – 1 war schon da} other{ – {skipped} waren schon da}}",
   "@restoreDone": {
     "placeholders": {
-      "restored": {"type": "int"},
-      "skipped": {"type": "int"}
+      "restored": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      }
     }
   },
   "restoreNotABackup": "Das ist keine PixiePaint-Sicherung",
@@ -297,8 +335,13 @@
   "rewardProgress": "{done} von {target}",
   "@rewardProgress": {
     "placeholders": {
-      "done": {"type": "int"},
-      "target": {"type": "int"}
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
     }
-  }
+  },
+  "stickerSaveFailed": "Der Sticker konnte nicht gespeichert werden"
 }

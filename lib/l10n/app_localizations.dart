@@ -1431,6 +1431,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{done} von {target}'**
   String rewardProgress(int done, int target);
+
+  /// No description provided for @stickerSaveFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Sticker konnte nicht gespeichert werden'**
+  String get stickerSaveFailed;
 }
 
 class _AppLocalizationsDelegate

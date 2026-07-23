@@ -786,4 +786,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$done van $target';
   }
+
+  @override
+  String get stickerSaveFailed => 'De sticker kon niet worden opgeslagen';
 }

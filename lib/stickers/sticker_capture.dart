@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
+import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/image_io.dart';
@@ -110,6 +111,26 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
       sticker.dispose();
 
       final file = await StickerStore.save(png);
+      if (!mounted) return;
+      if (file == null) {
+        // Storage is full or unwritable. Say so instead of leaving a
+        // sticker that will never decode.
+        await showKidDialog<void>(
+          context: context,
+          emoji: '😕',
+          title: context.l10n.stickerSaveFailed,
+          actions: [
+            Builder(
+              builder: (dialogContext) => KidDialogButton(
+                label: context.l10n.okAction,
+                emoji: '👍',
+                onTap: () => Navigator.pop(dialogContext),
+              ),
+            ),
+          ],
+        );
+        return;
+      }
       final decoded = await pngBytesToImage(png);
       // Left the screen while saving — don't hand the image to a controller
       // that may already be disposed.

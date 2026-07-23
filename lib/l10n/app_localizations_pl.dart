@@ -805,4 +805,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String rewardProgress(int done, int target) {
     return '$done z $target';
   }
+
+  @override
+  String get stickerSaveFailed => 'Nie udało się zapisać naklejki';
 }

@@ -37,14 +37,24 @@ class PagePickerScreen extends StatefulWidget {
 
 class _PagePickerScreenState extends State<PagePickerScreen>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _entrance = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 900),
-  )..forward();
+  /// Created on first use, so the entrance animation starts when the content
+  /// actually appears rather than while the list is still loading.
+  ///
+  /// The nullable backing field is what makes that safe: leaving this screen
+  /// before the load finished means `build` never touched the getter, and a
+  /// plain `late final` would then *create* the controller inside dispose(),
+  /// where the element tree is already deactivated — an outright crash. On a
+  /// device with a big gallery and slow storage that is a very short window
+  /// to hit.
+  AnimationController? _entranceOrNull;
+  AnimationController get _entrance => _entranceOrNull ??= AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 900),
+      )..forward();
 
   @override
   void dispose() {
-    _entrance.dispose();
+    _entranceOrNull?.dispose();
     super.dispose();
   }
 
