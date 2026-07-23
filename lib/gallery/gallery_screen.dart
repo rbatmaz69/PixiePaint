@@ -93,18 +93,23 @@ class _GalleryScreenState extends State<GalleryScreen>
   }
 
   Future<void> _rename(Artwork artwork) async {
+    // The field lives inside the dialog and the buttons sit beside it, so
+    // the two need somewhere to meet. A one-slot holder rather than a
+    // static: two dialogs at once would quietly share a static and hand
+    // back the wrong name.
+    final typed = _TypedName(artwork.name ?? '');
     final name = await showKidDialog<String>(
       context: context,
       emoji: '✏️',
       title: context.l10n.renameTitle,
-      body: _RenameField(initial: artwork.name ?? ''),
+      body: _RenameField(initial: artwork.name ?? '', text: typed),
       actions: [
         Builder(
           builder: (dialogContext) => KidDialogButton(
             label: context.l10n.renameSave,
             emoji: '💾',
             onTap: () =>
-                Navigator.pop(dialogContext, _RenameField.currentText.trim()),
+                Navigator.pop(dialogContext, typed.value.trim()),
           ),
         ),
         Builder(
@@ -726,15 +731,19 @@ class _FilterChip extends StatelessWidget {
 /// returns looks equivalent but is not: the dialog is still animating out
 /// and rebuilds the field a few more times, and a disposed controller
 /// throws on every one of those frames.
+/// Carries the typed name from the field to the dialog's buttons.
+class _TypedName {
+  _TypedName(this.value);
+  String value;
+}
+
 class _RenameField extends StatefulWidget {
-  const _RenameField({required this.initial});
+  const _RenameField({required this.initial, required this.text});
 
   final String initial;
 
-  /// What the field currently holds. A single dialog is on screen at a time,
-  /// so one slot is enough — and it keeps the value reachable from the
-  /// dialog's action buttons, which sit outside this widget.
-  static String currentText = '';
+  /// Updated on every keystroke, read when the save button is pressed.
+  final _TypedName text;
 
   @override
   State<_RenameField> createState() => _RenameFieldState();
@@ -743,13 +752,7 @@ class _RenameField extends StatefulWidget {
 class _RenameFieldState extends State<_RenameField> {
   late final TextEditingController _controller =
       TextEditingController(text: widget.initial)
-        ..addListener(() => _RenameField.currentText = _controller.text);
-
-  @override
-  void initState() {
-    super.initState();
-    _RenameField.currentText = widget.initial;
-  }
+        ..addListener(() => widget.text.value = _controller.text);
 
   @override
   void dispose() {

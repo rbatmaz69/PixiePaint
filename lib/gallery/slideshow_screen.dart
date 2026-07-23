@@ -38,7 +38,16 @@ class _SlideshowScreenState extends State<SlideshowScreen>
   /// Render width per slide — thumbnails (360 px) look soft full screen.
   static const int _renderWidth = 1400;
 
-  late final AnimationController _kenBurns =
+  /// Nullable backing field plus getter, not `late final`: this screen can
+  /// be left before `build` ever touches the controller, and a `late final`
+  /// would then *create* it inside dispose(), in an element tree that is
+  /// already gone. See the architecture notes in the README.
+  ///
+  /// Reachable here by opening the slideshow and going straight back: the
+  /// first slide is rendered at 1400 px from disk, and until it arrives the
+  /// build shows only the loading pixie.
+  AnimationController? _kenBurnsOrNull;
+  AnimationController get _kenBurns => _kenBurnsOrNull ??=
       AnimationController(vsync: this, duration: _slideDuration);
 
   ui.Image? _current;
@@ -135,7 +144,7 @@ class _SlideshowScreenState extends State<SlideshowScreen>
     _disposed = true;
     _advance?.cancel();
     _hideControls?.cancel();
-    _kenBurns.dispose();
+    _kenBurnsOrNull?.dispose();
     _current?.dispose();
     _next?.dispose();
     WakelockPlus.disable();

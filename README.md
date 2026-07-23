@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.3.0+21 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.4.0+22 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -221,7 +221,7 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite umfasst 388 Tests in 41 Dateien:
+Die Test-Suite umfasst 391 Tests in 42 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
@@ -325,7 +325,9 @@ docs/                      Release-Anleitungen (Play Store, App Store),
 1. **Neue Persistenz immer über `JsonStore` bzw. `atomicWrite*`** (`lib/util/json_store.dart`), nie über nacktes `writeAsString`. Der Store serialisiert die Schreibvorgänge und ersetzt die Zieldatei atomar per Rename. Wo mehrere Dateien zusammen ein Ganzes bilden (ein Artwork-Ordner), wird die *identifizierende* Datei zuletzt geschrieben — `meta.json` ist der Commit-Marker.
 2. **Neue Effekte im Malbereich gehören als Geschwister-Overlay neben den Painter**, niemals hinein (siehe Canvas-Performance oben).
 3. **`ZipFileEncoder` in `archive` 4.x nur in den Sync-Varianten benutzen** (`addFileSync`, `closeSync`) — die asynchronen Methoden geben Futures zurück, die im Isolate leicht übersehen werden.
-4. **Ein `late final` AnimationController darf nicht in `dispose()` erstmalig entstehen.** Wird ein Screen verlassen, bevor sein `build` das Feld je gelesen hat — bei der Galerie und der Bildauswahl der Fall, solange nur der Lade-Pixie zu sehen ist —, erzeugt `_entrance.dispose()` den Controller zum ersten Mal, im bereits abgebauten Element-Baum, und die App stürzt ab. Muster dagegen: nullable Backing-Feld plus Getter, `dispose` fasst nur das Feld an (`lib/gallery/gallery_screen.dart`).
+4. **Ein `late final` AnimationController darf nicht in `dispose()` erstmalig entstehen.** Wird ein Screen verlassen, bevor sein `build` das Feld je gelesen hat, erzeugt `dispose()` den Controller zum ersten Mal — im bereits abgebauten Element-Baum — und die App stürzt ab. Muster dagegen: **nullable Backing-Feld plus Getter**, `dispose` fasst nur das Feld an (`lib/gallery/gallery_screen.dart`).
+
+   Betroffen war das viermal, jedes Mal mit einem eigenen Weg dorthin: Galerie und Bildauswahl (Lade-Pixie während des Lesens von der Platte), Diashow (erstes Bild wird mit 1400 px gerendert) und der Sticker-Picker (kein einziger gesperrter Sticker mehr, also keine wackelnde Kachel, die den Ticker anfasst). `test/widget/early_exit_test.dart` baut die betroffenen Screens auf und verlässt sie nach einem einzigen Frame wieder — genau das Szenario.
 
 5. **Ein Dialog besitzt seinen eigenen `TextEditingController`.** Ihn direkt nach `showKidDialog(...)` freizugeben sieht richtig aus, ist es aber nicht: Der Dialog animiert noch heraus und baut das Textfeld dabei mehrfach neu — auf einem freigegebenen Controller wirft jeder dieser Frames. Vorbild: `_RenameField` in `lib/gallery/gallery_screen.dart`.
 
@@ -377,7 +379,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.3.0+21` bedeutet Versionsname 7.3.0 und versionCode 21. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.0+22` bedeutet Versionsname 7.4.0 und versionCode 22. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

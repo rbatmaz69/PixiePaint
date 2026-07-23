@@ -53,6 +53,7 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Weitermalen an einem gespeicherten Bild
 - [ ] Löschen (mit und ohne die Einstellung „Löschen nur für Eltern")
 - [ ] Diashow läuft und der Bildschirm schaltet sich dabei nicht ab
+- [ ] **Diashow sofort wieder verlassen**, bevor das erste Bild da ist — in v7.4 wurde hier ein Absturzpfad behoben, das ist die Gegenprobe
 
 ## Die anderen Spielarten
 
@@ -69,6 +70,7 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 
 - [ ] Genug Bilder fertigstellen, bis ein Sticker freigeschaltet wird → Feier erscheint beim Verlassen des Bildes
 - [ ] Gesperrte Sticker wackeln als Mystery-Box und zeigen den Fortschritt
+- [ ] Sticker-Auswahl öffnen, **wenn alle Sticker freigespielt sind** — auch dann kein Absturz (v7.4)
 - [ ] Tagesaufgabe erledigen → sie zählt genau einmal, auch bei mehrfachem Antippen
 
 ## Profile

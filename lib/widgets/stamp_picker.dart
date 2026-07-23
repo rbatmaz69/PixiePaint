@@ -97,7 +97,15 @@ class _StampSectionsState extends State<_StampSections>
     with SingleTickerProviderStateMixin {
   /// One shared ticker for all locked tiles' wiggle. Bound to the sheet's
   /// (short) lifetime — same acceptability class as LoadingPixie.
-  late final AnimationController _wiggle = AnimationController(
+  /// Nullable backing field plus getter, not `late final`: this screen can
+  /// be left before `build` ever touches the controller, and a `late final`
+  /// would then *create* it inside dispose(), in an element tree that is
+  /// already gone. See the architecture notes in the README.
+  ///
+  /// Reachable here once a kid has unlocked every sticker: there is no
+  /// locked tile left to hand the ticker to, so build never asks for it.
+  AnimationController? _wiggleOrNull;
+  AnimationController get _wiggle => _wiggleOrNull ??= AnimationController(
       vsync: this, duration: const Duration(seconds: 3))
     ..repeat();
 
@@ -105,7 +113,7 @@ class _StampSectionsState extends State<_StampSections>
 
   @override
   void dispose() {
-    _wiggle.dispose();
+    _wiggleOrNull?.dispose();
     super.dispose();
   }
 
