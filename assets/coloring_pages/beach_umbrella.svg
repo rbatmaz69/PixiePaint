@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- canopy, scalloped and closed -->
+    <path d="M 512 90 C 700 90 830 220 850 330 L 790 300 L 730 340 L 670 300 L 610 340 L 550 300 L 512 336 L 474 300 L 414 340 L 354 300 L 294 340 L 234 300 L 174 330 C 194 220 324 90 512 90 Z"/>
+    <!-- panel seams -->
+    <path d="M 512 90 L 512 336"/>
+    <path d="M 512 90 C 420 140 366 230 344 318"/>
+    <path d="M 512 90 C 604 140 658 230 680 318"/>
+    <!-- pole -->
+    <path d="M 500 100 L 524 100 L 524 660 L 500 660 Z"/>
+    <!-- towel -->
+    <path d="M 220 600 L 470 600 L 450 720 L 200 720 Z"/>
+    <path d="M 240 640 L 460 640"/>
+    <path d="M 232 680 L 452 680"/>
+    <!-- ball -->
+    <circle cx="740" cy="640" r="76"/>
+    <path d="M 740 564 C 700 600 700 680 740 716"/>
+    <path d="M 740 564 C 780 600 780 680 740 716"/>
+    <path d="M 664 640 L 816 640"/>
+    <!-- sand line -->
+    <path d="M 60 720 L 964 720"/>
+  </g>
+</svg>

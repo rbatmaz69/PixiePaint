@@ -44,6 +44,7 @@ import 'canvas_viewport.dart';
 import 'cbn_session.dart';
 import 'fill_pattern.dart';
 import 'painting_canvas.dart';
+import 'pause_curtain.dart';
 import 'region_label.dart';
 import 'stroke.dart';
 
@@ -109,6 +110,9 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// the parent on the way out, never to the child mid-painting.
   bool _saveFailed = false;
   Timer? _autoSave;
+
+  /// Fires the painting-break curtain; null when a parent left it off.
+  Timer? _pause;
   Future<void>? _pendingSave;
 
   @override
@@ -138,6 +142,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
       if (controller.dirty) _save();
     });
+    _startPauseTimer();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
@@ -331,6 +336,24 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (mounted) showConfetti(context);
   }
 
+  /// Arms the painting-break curtain, if a parent asked for one.
+  ///
+  /// The picture is saved first, so the break can never cost anything, and
+  /// the timer re-arms afterwards — a session that carries on gets the same
+  /// reminder again rather than one per screen visit.
+  void _startPauseTimer() {
+    _pause?.cancel();
+    final minutes = Settings.instance.pauseAfterMinutes;
+    if (minutes <= 0) return;
+    _pause = Timer(Duration(minutes: minutes), () async {
+      if (!mounted) return;
+      if (controller.dirty) await _save();
+      if (!mounted) return;
+      await showPauseCurtain(context);
+      if (mounted) _startPauseTimer();
+    });
+  }
+
   /// Serializes every save. Three callers can fire concurrently (the 30 s
   /// timer, the lifecycle hook and leaving the screen); without this they
   /// would write the same PNGs and meta.json at the same time.
@@ -492,6 +515,7 @@ class _CanvasScreenState extends State<CanvasScreen>
   @override
   void dispose() {
     _autoSave?.cancel();
+    _pause?.cancel();
     _cbnHintTimer?.cancel();
     controller.lastFill.removeListener(_onCbnFill);
     WidgetsBinding.instance.removeObserver(this);

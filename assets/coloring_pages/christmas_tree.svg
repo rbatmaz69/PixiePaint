@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- star on top -->
+    <path d="M 512 40 L 534 96 L 594 100 L 548 138 L 562 196 L 512 164 L 462 196 L 476 138 L 430 100 L 490 96 Z"/>
+    <!-- tree tiers, each a closed shape -->
+    <path d="M 512 206 L 606 330 L 418 330 Z"/>
+    <path d="M 512 300 L 660 442 L 364 442 Z"/>
+    <path d="M 512 410 L 712 560 L 312 560 Z"/>
+    <!-- trunk -->
+    <path d="M 470 560 L 554 560 L 554 646 L 470 646 Z"/>
+    <!-- pot -->
+    <path d="M 414 646 L 610 646 L 586 726 L 438 726 Z"/>
+    <path d="M 426 682 L 598 682"/>
+    <!-- baubles -->
+    <circle cx="470" cy="300" r="20"/>
+    <circle cx="560" cy="396" r="20"/>
+    <circle cx="440" cy="500" r="20"/>
+    <circle cx="596" cy="512" r="20"/>
+    <!-- snowflakes -->
+    <path d="M 160 180 L 160 250"/>
+    <path d="M 125 215 L 195 215"/>
+    <path d="M 136 191 L 184 239"/>
+    <path d="M 184 191 L 136 239"/>
+    <path d="M 862 300 L 862 360"/>
+    <path d="M 832 330 L 892 330"/>
+    <path d="M 841 309 L 883 351"/>
+    <path d="M 883 309 L 841 351"/>
+    <!-- gifts -->
+    <path d="M 150 620 L 290 620 L 290 726 L 150 726 Z"/>
+    <path d="M 220 620 L 220 726"/>
+    <path d="M 150 668 L 290 668"/>
+    <path d="M 740 650 L 866 650 L 866 726 L 740 726 Z"/>
+    <path d="M 803 650 L 803 726"/>
+  </g>
+</svg>

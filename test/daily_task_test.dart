@@ -48,4 +48,36 @@ void main() {
       expect(task.titleFor('en'), isNot(task.titleFor('de')));
     }
   });
+
+  group('isDayAfter', () {
+    test('recognises the very next day', () {
+      expect(isDayAfter('2026-07-21', '2026-07-22'), isTrue);
+    });
+
+    test('a gap is not a continuation', () {
+      expect(isDayAfter('2026-07-21', '2026-07-23'), isFalse);
+      expect(isDayAfter('2026-07-21', '2026-07-21'), isFalse);
+      expect(isDayAfter('2026-07-22', '2026-07-21'), isFalse);
+    });
+
+    test('crosses month and year boundaries', () {
+      expect(isDayAfter('2026-07-31', '2026-08-01'), isTrue);
+      expect(isDayAfter('2026-12-31', '2027-01-01'), isTrue);
+      expect(isDayAfter('2028-02-28', '2028-02-29'), isTrue,
+          reason: '2028 is a leap year');
+    });
+
+    test('survives a daylight-saving switch', () {
+      // Central European DST ends on 2026-10-25; that local day is 25 hours
+      // long. Local-time arithmetic would drop it to zero days.
+      expect(isDayAfter('2026-10-25', '2026-10-26'), isTrue);
+      expect(isDayAfter('2026-03-29', '2026-03-30'), isTrue);
+    });
+
+    test('a missing or damaged key just means "not yesterday"', () {
+      expect(isDayAfter('', '2026-07-22'), isFalse);
+      expect(isDayAfter('gestern', '2026-07-22'), isFalse);
+      expect(isDayAfter('2026-07', '2026-07-22'), isFalse);
+    });
+  });
 }

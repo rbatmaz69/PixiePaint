@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- big egg -->
+    <path d="M 512 90 C 640 90 720 300 720 450 C 720 600 626 700 512 700 C 398 700 304 600 304 450 C 304 300 384 90 512 90 Z"/>
+    <!-- decorative bands, each spanning the full egg -->
+    <path d="M 336 320 C 420 296 604 296 688 320"/>
+    <path d="M 310 430 C 410 406 614 406 714 430"/>
+    <path d="M 322 540 C 414 566 610 566 702 540"/>
+    <!-- zigzag between the bands -->
+    <path d="M 350 380 L 390 350 L 430 380 L 470 350 L 510 380 L 550 350 L 590 380 L 630 350 L 670 380"/>
+    <!-- dots -->
+    <circle cx="400" cy="490" r="16"/>
+    <circle cx="512" cy="480" r="16"/>
+    <circle cx="624" cy="490" r="16"/>
+    <!-- flowers on the grass -->
+    <path d="M 150 700 L 150 640"/>
+    <circle cx="150" cy="618" r="26"/>
+    <path d="M 874 700 L 874 646"/>
+    <circle cx="874" cy="624" r="26"/>
+    <!-- grass line -->
+    <path d="M 60 700 L 964 700"/>
+    <path d="M 220 700 L 240 660 L 260 700"/>
+    <path d="M 760 700 L 780 660 L 800 700"/>
+  </g>
+</svg>

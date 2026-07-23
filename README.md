@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 6.7.0+16 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 6.9.0+17 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -26,7 +26,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 ## Features
 
 **Malen**
-- 42 Ausmalbilder in 7 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Zahlen)
+- 54 Ausmalbilder in 8 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Zahlen, Jahreszeiten)
 - Freies Zeichnen auf leerer Leinwand
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
 - 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
@@ -44,7 +44,9 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - **Sticker-Welt** — 6 Szenen als Bühne zum Bekleben
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
 - **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen
-- **Tagesaufgabe** — 30 wechselnde Mal-Impulse, einer pro Tag
+- **Tagesaufgabe** — 30 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
+- **Jahreszeiten** — 12 Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween; die Kategorie rutscht im Picker automatisch nach vorne, wenn ihr Anlass ansteht
+- **Erfolge-Album** — alle Belohnungs-Sticker und die Tagesaufgaben-Serie auf einen Blick
 
 **Galerie**
 - Automatisches Speichern (alle 30 s und beim Verlassen)
@@ -63,6 +65,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Backup aller Bilder als ZIP — und Wiederherstellen daraus
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
 - Linkshänder-Modus, „nur mit Stift malen", Töne und Musik abschaltbar
+- Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Vorhang (standardmäßig aus)
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
 - Deutsch und Englisch
 
@@ -217,7 +220,7 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite umfasst 213 Tests in 30 Dateien:
+Die Test-Suite umfasst 244 Tests in 31 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen und die Screenreader-Beschriftungen
@@ -275,7 +278,7 @@ lib/
 └── l10n/                  ARB-Dateien + generierte Übersetzungen
 
 assets/
-├── coloring_pages/        42 SVGs + pages.json (Katalog)
+├── coloring_pages/        54 SVGs + pages.json (Katalog)
 │   └── cbn/               Sidecar-JSON für „Malen nach Zahlen"
 ├── scenes/                6 Szenen-SVGs + scenes.json
 ├── fonts/                 Fredoka (Medium/SemiBold/Bold)
@@ -338,6 +341,8 @@ docs/                      Release-Anleitungen (Play Store, App Store),
 
 **Neue Tagesaufgabe** in `lib/models/daily_task.dart` (`kDailyTasks`) — die Liste wird zyklisch über das Datum adressiert, neue Einträge verschieben also die Zuordnung für alle folgenden Tage.
 
+**Neues Jahreszeiten-Bild:** wie ein normales Ausmalbild, zusätzlich `"season"` im `pages.json`-Eintrag (einer der Schlüssel aus `kSeasonWindows` in `lib/models/coloring_page.dart`). `test/seasonal_pages_test.dart` prüft danach automatisch mit, dass die Datei existiert, rastert und geschlossene, füllbare Flächen hat.
+
 ## Veröffentlichen
 
 Die kompletten Schritt-für-Schritt-Anleitungen stehen in:
@@ -353,7 +358,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 6.7.0+16` bedeutet Versionsname 6.7.0 und versionCode 16. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 6.9.0+17` bedeutet Versionsname 6.9.0 und versionCode 17. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

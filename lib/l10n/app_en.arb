@@ -196,6 +196,37 @@
   "stickerAlbumFullTitle": "Sticker album is full!",
   "stickerAlbumFullBody": "Throw an old sticker away first – press and hold it to do that.",
   "stickerDeleteTitle": "Throw the sticker away?",
+  "pauseTitle": "Time for a break!",
+  "pauseBody": "You have been painting for a while. Stretch, have a drink – your picture will wait for you.",
+  "pauseContinue": "Keep painting",
+  "pauseSaved": "Your picture is saved.",
+  "pauseSettingTitle": "Painting break",
+  "pauseSettingSubtitle": "Show a friendly break reminder after a while",
+  "pauseOff": "Off",
+  "pauseMinutes": "{n} minutes",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "albumTitle": "My achievements",
+  "albumStickers": "Reward stickers",
+  "albumEarned": "{earned} of {total} stickers",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "albumStreak": "{n, plural, =1{Painted 1 day in a row} other{Painted {n} days in a row}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "albumStreakNone": "Finish the task of the day and start your streak!",
+  "albumStickerEarned": "Unlocked!",
+  "albumStickerEarnedBody": "You earned this sticker. You'll find it with the stamps.",
   "canvasArea": "Painting area",
   "undoAction": "Undo",
   "redoAction": "Redo",

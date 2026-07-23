@@ -21,6 +21,7 @@ import '../util/settings.dart';
 import '../widgets/daily_task_sheet.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/profile_sheet.dart';
+import 'album_screen.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
 import '../settings/settings_screen.dart';
@@ -190,6 +191,18 @@ class _HomeScreenState extends State<HomeScreen>
                                   MaterialPageRoute(
                                       builder: (_) => const GalleryScreen()),
                                 ),
+                              ),
+                            ),
+                            _staggered(
+                              7,
+                              _BigCard(
+                                emoji: '🏆',
+                                label: context.l10n.albumTitle,
+                                gradient: PixieGradients.rewards,
+                                width: cardW,
+                                height: cardH,
+                                tiltIndex: 4,
+                                onTap: () => openAlbum(context),
                               ),
                             ),
                             // Two painters need the room of a tablet.

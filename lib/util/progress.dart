@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/daily_task.dart';
 import '../models/reward.dart';
 import '../models/tool.dart';
 import 'json_store.dart';
@@ -32,6 +33,11 @@ class Progress extends ChangeNotifier {
   /// as a `yyyy-MM-dd` key so a day counts exactly once.
   int tasksDone = 0;
   String lastTaskDay = '';
+
+  /// Consecutive days with a finished daily task, including today. A gap of
+  /// even one day starts over at 1 — that is what makes it a streak rather
+  /// than a second total.
+  int taskStreak = 0;
 
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
@@ -67,6 +73,7 @@ class Progress extends ChangeNotifier {
     celebratedEmojis.clear();
     tasksDone = 0;
     lastTaskDay = '';
+    taskStreak = 0;
   }
 
   /// Seam for tests: load from any store (a temp file) instead of the real
@@ -84,6 +91,10 @@ class Progress extends ChangeNotifier {
         ((json['completedCbnIds'] as List?) ?? []).whereType<String>());
     tasksDone = json['tasksDone'] as int? ?? 0;
     lastTaskDay = json['lastTaskDay'] as String? ?? '';
+    // Files written before v6.9 have no streak. Reading 0 rather than
+    // inventing one keeps the album honest on the first launch after the
+    // update; the next finished task starts counting.
+    taskStreak = json['taskStreak'] as int? ?? 0;
     celebratedEmojis.addAll(
         ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
   }
@@ -109,6 +120,7 @@ class Progress extends ChangeNotifier {
   /// Counts today's prompt as done — at most once per calendar day.
   void registerDailyTaskDone(String dayKey) {
     if (lastTaskDay == dayKey) return;
+    taskStreak = isDayAfter(lastTaskDay, dayKey) ? taskStreak + 1 : 1;
     lastTaskDay = dayKey;
     tasksDone++;
     _persist();
@@ -168,6 +180,7 @@ class Progress extends ChangeNotifier {
       'completedCbnIds': completedCbnIds.toList(),
       'tasksDone': tasksDone,
       'lastTaskDay': lastTaskDay,
+      'taskStreak': taskStreak,
       'celebratedEmojis': celebratedEmojis.toList(),
     });
   }

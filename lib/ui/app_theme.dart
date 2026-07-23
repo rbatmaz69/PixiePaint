@@ -64,6 +64,13 @@ abstract final class PixieGradients {
     end: Alignment.bottomRight,
     colors: [PixiePalette.grapeLight, Color(0xFFC5A8F2)],
   );
+  /// Trophy gold. Warmer than [coloring] on purpose — the two sit next to
+  /// each other on the home screen and must not read as the same card.
+  static const LinearGradient rewards = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [PixiePalette.sunshine, PixiePalette.tangerine],
+  );
 
   // Screen backgrounds — warm paper fading into a whisper of the feature
   // tint.

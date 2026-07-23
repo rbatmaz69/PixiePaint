@@ -24,6 +24,7 @@ Color _categoryTint(String category) => switch (category) {
   'Leckereien' => PixiePalette.bubblegumLight,
   'Weltraum' => const Color(0xFFE2E0FF),
   'Zahlen' => PixiePalette.tangerineLight,
+  'Jahreszeiten' => const Color(0xFFFFE0DC),
   _ => const Color(0xFFF5F0E8),
 };
 
@@ -71,9 +72,13 @@ class _PagePickerScreenState extends State<PagePickerScreen>
             categoryLabels[p.category] = p.categoryFor(lang);
           }
         }
+        // Whatever is in season right now comes first — in December the
+        // Christmas tree should be one tap away, not four tabs along.
+        final orderedCats =
+            orderedCategories(categories, pages, DateTime.now());
         final scheme = Theme.of(context).colorScheme;
         return DefaultTabController(
-          length: categories.length + 1,
+          length: orderedCats.length + 1,
           child: Scaffold(
             body: BlobBackground(
               gradient: PixieGradients.pickerBg,
@@ -104,7 +109,7 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                       splashBorderRadius: BorderRadius.circular(24),
                       tabs: [
                         Tab(text: context.l10n.categoryAll),
-                        for (final c in categories)
+                        for (final c in orderedCats)
                           Tab(text: categoryLabels[c]),
                       ],
                     ),
@@ -112,7 +117,7 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                       child: TabBarView(
                         children: [
                           _PageGrid(pages: pages, entrance: _entrance),
-                          for (final c in categories)
+                          for (final c in orderedCats)
                             _PageGrid(
                               pages: [
                                 for (final p in pages)

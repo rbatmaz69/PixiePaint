@@ -1058,6 +1058,96 @@ abstract class AppLocalizations {
   /// **'Sticker wegwerfen?'**
   String get stickerDeleteTitle;
 
+  /// No description provided for @pauseTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Zeit für eine Pause!'**
+  String get pauseTitle;
+
+  /// No description provided for @pauseBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Du malst schon eine ganze Weile. Streck dich, trink etwas – dein Bild wartet auf dich.'**
+  String get pauseBody;
+
+  /// No description provided for @pauseContinue.
+  ///
+  /// In de, this message translates to:
+  /// **'Weitermalen'**
+  String get pauseContinue;
+
+  /// No description provided for @pauseSaved.
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Bild ist gespeichert.'**
+  String get pauseSaved;
+
+  /// No description provided for @pauseSettingTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Malzeit-Pause'**
+  String get pauseSettingTitle;
+
+  /// No description provided for @pauseSettingSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Nach einer Weile einen freundlichen Pausen-Hinweis zeigen'**
+  String get pauseSettingSubtitle;
+
+  /// No description provided for @pauseOff.
+  ///
+  /// In de, this message translates to:
+  /// **'Aus'**
+  String get pauseOff;
+
+  /// No description provided for @pauseMinutes.
+  ///
+  /// In de, this message translates to:
+  /// **'{n} Minuten'**
+  String pauseMinutes(int n);
+
+  /// No description provided for @albumTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Meine Erfolge'**
+  String get albumTitle;
+
+  /// No description provided for @albumStickers.
+  ///
+  /// In de, this message translates to:
+  /// **'Belohnungs-Sticker'**
+  String get albumStickers;
+
+  /// No description provided for @albumEarned.
+  ///
+  /// In de, this message translates to:
+  /// **'{earned} von {total} Stickern'**
+  String albumEarned(int earned, int total);
+
+  /// No description provided for @albumStreak.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{1 Tag hintereinander gemalt} other{{n} Tage hintereinander gemalt}}'**
+  String albumStreak(int n);
+
+  /// No description provided for @albumStreakNone.
+  ///
+  /// In de, this message translates to:
+  /// **'Schaff die Aufgabe des Tages und starte deine Serie!'**
+  String get albumStreakNone;
+
+  /// No description provided for @albumStickerEarned.
+  ///
+  /// In de, this message translates to:
+  /// **'Freigemalt!'**
+  String get albumStickerEarned;
+
+  /// No description provided for @albumStickerEarnedBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Diesen Sticker hast du dir verdient. Du findest ihn beim Stempeln.'**
+  String get albumStickerEarnedBody;
+
   /// No description provided for @canvasArea.
   ///
   /// In de, this message translates to:

@@ -338,5 +338,113 @@
   "category": "Zahlen",
   "categoryEn": "Numbers",
   "mode": "cbn"
+ },
+ {
+  "id": "christmas_tree",
+  "title": "Weihnachtsbaum",
+  "titleEn": "Christmas tree",
+  "file": "christmas_tree.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "winter"
+ },
+ {
+  "id": "snowman",
+  "title": "Schneemann",
+  "titleEn": "Snowman",
+  "file": "snowman.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "winter"
+ },
+ {
+  "id": "gingerbread",
+  "title": "Lebkuchenmann",
+  "titleEn": "Gingerbread man",
+  "file": "gingerbread.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "winter"
+ },
+ {
+  "id": "snow_globe",
+  "title": "Schneekugel",
+  "titleEn": "Snow globe",
+  "file": "snow_globe.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "winter"
+ },
+ {
+  "id": "easter_egg",
+  "title": "Osterei",
+  "titleEn": "Easter egg",
+  "file": "easter_egg.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "easter"
+ },
+ {
+  "id": "easter_basket",
+  "title": "Osterkorb",
+  "titleEn": "Easter basket",
+  "file": "easter_basket.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "easter"
+ },
+ {
+  "id": "sandcastle",
+  "title": "Sandburg",
+  "titleEn": "Sandcastle",
+  "file": "sandcastle.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "summer"
+ },
+ {
+  "id": "beach_umbrella",
+  "title": "Sonnenschirm",
+  "titleEn": "Beach umbrella",
+  "file": "beach_umbrella.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "summer"
+ },
+ {
+  "id": "autumn_leaf",
+  "title": "Herbstblatt",
+  "titleEn": "Autumn leaf",
+  "file": "autumn_leaf.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "autumn"
+ },
+ {
+  "id": "acorn",
+  "title": "Eichel",
+  "titleEn": "Acorn",
+  "file": "acorn.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "autumn"
+ },
+ {
+  "id": "pumpkin",
+  "title": "Kürbis",
+  "titleEn": "Pumpkin",
+  "file": "pumpkin.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "halloween"
+ },
+ {
+  "id": "ghost",
+  "title": "Gespenst",
+  "titleEn": "Ghost",
+  "file": "ghost.svg",
+  "category": "Jahreszeiten",
+  "categoryEn": "Seasons",
+  "season": "halloween"
  }
 ]

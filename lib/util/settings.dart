@@ -7,6 +7,11 @@ import 'package:path_provider/path_provider.dart';
 import 'color_utils.dart';
 import 'json_store.dart';
 
+/// What a parent can pick for the painting-break reminder. 0 = off, which
+/// stays the default: the app should not start policing screen time unless
+/// a parent asks it to.
+const List<int> kPauseChoices = [0, 20, 30, 45];
+
 /// App settings, persisted as a small JSON file in the documents dir.
 class Settings extends ChangeNotifier {
   Settings._();
@@ -23,6 +28,10 @@ class Settings extends ChangeNotifier {
 
   /// Which background-music loop plays next (cycled by Music on each start).
   int musicTrack = 0;
+
+  /// Minutes of painting before the app suggests a break, or 0 for never.
+  /// Only the values in [kPauseChoices] are offered.
+  int pauseAfterMinutes = 0;
 
   /// Successful shares so far — drives the one-time review prompt.
   int shareCount = 0;
@@ -53,6 +62,7 @@ class Settings extends ChangeNotifier {
     soundsOn = json['soundsOn'] as bool? ?? true;
     musicOn = json['musicOn'] as bool? ?? false;
     musicTrack = json['musicTrack'] as int? ?? 0;
+    pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
     leftHanded = json['leftHanded'] as bool? ?? false;
     shareCount = json['shareCount'] as int? ?? 0;
     reviewRequested = json['reviewRequested'] as bool? ?? false;
@@ -66,13 +76,17 @@ class Settings extends ChangeNotifier {
       bool? soundsOn,
       bool? musicOn,
       int? musicTrack,
-      bool? leftHanded}) async {
+      bool? leftHanded,
+      int? pauseAfterMinutes}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
     if (musicOn != null) this.musicOn = musicOn;
     if (musicTrack != null) this.musicTrack = musicTrack;
     if (leftHanded != null) this.leftHanded = leftHanded;
+    if (pauseAfterMinutes != null) {
+      this.pauseAfterMinutes = pauseAfterMinutes;
+    }
     notifyListeners();
     await _persist();
   }
@@ -103,6 +117,7 @@ class Settings extends ChangeNotifier {
       'musicOn': musicOn,
       'musicTrack': musicTrack,
       'leftHanded': leftHanded,
+      'pauseAfterMinutes': pauseAfterMinutes,
       'shareCount': shareCount,
       'reviewRequested': reviewRequested,
       'recentColors': recentColors,
@@ -123,6 +138,7 @@ class Settings extends ChangeNotifier {
     musicOn = false;
     musicTrack = 0;
     leftHanded = false;
+    pauseAfterMinutes = 0;
     shareCount = 0;
     reviewRequested = false;
     recentColors = [];

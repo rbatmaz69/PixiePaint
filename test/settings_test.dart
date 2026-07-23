@@ -91,6 +91,31 @@ void main() {
     expect(File('${file.path}.corrupt.json').existsSync(), isTrue);
   });
 
+  test('the painting break is off until a parent picks a length', () async {
+    await load();
+    expect(settings.pauseAfterMinutes, 0);
+    expect(kPauseChoices.first, 0,
+        reason: '"off" must stay an equal, visible choice');
+
+    await settings.update(pauseAfterMinutes: 30);
+    await settings.flush();
+    await settings.loadFrom(JsonStore(file));
+    expect(settings.pauseAfterMinutes, 30);
+
+    // ...and can be switched off again.
+    await settings.update(pauseAfterMinutes: 0);
+    await settings.flush();
+    await settings.loadFrom(JsonStore(file));
+    expect(settings.pauseAfterMinutes, 0);
+  });
+
+  test('a settings file from before v6.9 has no break configured', () async {
+    file.writeAsStringSync('{"soundsOn": true, "leftHanded": true}');
+    await load();
+    expect(settings.leftHanded, isTrue);
+    expect(settings.pauseAfterMinutes, 0);
+  });
+
   test('recent colors are remembered across restarts', () async {
     await load();
     await settings.registerRecentColor(const Color(0xFFE53935));

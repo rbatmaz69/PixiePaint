@@ -11,6 +11,7 @@ import '../stickers/sticker_capture.dart';
 import '../stickers/sticker_store.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/reward_text.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/sticker.dart';
 import '../util/anim_math.dart';
@@ -421,16 +422,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
     Sfx.instance.tick();
     final reward = widget.reward;
     final snapshot = Progress.instance.snapshot();
-    final remaining = remainingFor(reward, snapshot);
-    final rule = switch (reward.kind) {
-      RewardGoalKind.paintings =>
-        context.l10n.rewardRulePaintings(remaining),
-      RewardGoalKind.tools => context.l10n.rewardRuleTools(remaining),
-      RewardGoalKind.shares => context.l10n.rewardRuleShares,
-      RewardGoalKind.tracing => context.l10n.rewardRuleTrace(remaining),
-      RewardGoalKind.cbn => context.l10n.rewardRuleCbn(remaining),
-      RewardGoalKind.tasks => context.l10n.rewardRuleTasks(remaining),
-    };
+    final rule = rewardRuleText(context, reward, snapshot);
     showKidDialog<void>(
       context: context,
       emoji: '🔒',

@@ -6,6 +6,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -63,13 +64,15 @@ class _SettingsScreenState extends State<SettingsScreen>
       bool? deleteNeedsGate,
       bool? soundsOn,
       bool? musicOn,
-      bool? leftHanded}) async {
+      bool? leftHanded,
+      int? pauseAfterMinutes}) async {
     await Settings.instance.update(
         stylusOnly: stylusOnly,
         deleteNeedsGate: deleteNeedsGate,
         soundsOn: soundsOn,
         musicOn: musicOn,
-        leftHanded: leftHanded);
+        leftHanded: leftHanded,
+        pauseAfterMinutes: pauseAfterMinutes);
     if (musicOn != null) await Music.instance.setOn(musicOn);
     Sfx.instance.tick();
   }
@@ -123,6 +126,40 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   bool _backupRunning = false;
+
+  String _pauseLabel(BuildContext context, int minutes) =>
+      minutes == 0 ? context.l10n.pauseOff : context.l10n.pauseMinutes(minutes);
+
+  /// Lets a parent pick how long a painting session may run before the
+  /// break curtain appears. Off stays an equal choice, not a hidden one —
+  /// how much a child paints is the parent's call, not the app's.
+  Future<void> _pickPause() async {
+    final chosen = await showKidSheet<int>(
+      context: context,
+      emoji: '⏰',
+      title: context.l10n.pauseSettingTitle,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final minutes in kPauseChoices)
+            Builder(
+              builder: (sheetContext) => _KidRow(
+                emoji: minutes == 0 ? '🚫' : '⏱️',
+                tint: PixiePalette.skyLight,
+                title: _pauseLabel(context, minutes),
+                subtitle: minutes == 0
+                    ? context.l10n.pauseSettingSubtitle
+                    : context.l10n.pauseBody,
+                onTap: () => Navigator.of(sheetContext).pop(minutes),
+              ),
+            ),
+        ],
+      ),
+    );
+    if (chosen == null) return;
+    await _update(pauseAfterMinutes: chosen);
+    if (mounted) setState(() {});
+  }
 
   /// Deleting pictures lives behind its own gate, like every other door out
   /// of the kids' world — reaching the settings screen is not consent to
@@ -264,6 +301,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                               subtitle: context.l10n.leftHandedSubtitle,
                               value: settings.leftHanded,
                               onChanged: (v) => _update(leftHanded: v),
+                            ),
+                            _KidRow(
+                              emoji: '⏰',
+                              tint: PixiePalette.skyLight,
+                              title: context.l10n.pauseSettingTitle,
+                              subtitle: context.l10n.pauseSettingSubtitle,
+                              trailingText:
+                                  _pauseLabel(context, settings.pauseAfterMinutes),
+                              onTap: _pickPause,
                             ),
                           ],
                         ),
@@ -426,6 +472,7 @@ class _KidRow extends StatelessWidget {
     this.value,
     this.onChanged,
     this.onTap,
+    this.trailingText,
   });
 
   final String emoji;
@@ -435,6 +482,9 @@ class _KidRow extends StatelessWidget {
   final bool? value;
   final ValueChanged<bool>? onChanged;
   final VoidCallback? onTap;
+
+  /// Current value of a row that opens a chooser instead of toggling.
+  final String? trailingText;
 
   @override
   Widget build(BuildContext context) {
@@ -470,6 +520,19 @@ class _KidRow extends StatelessWidget {
               ],
             ),
           ),
+          if (trailingText != null) ...[
+            const SizedBox(width: 8),
+            Text(
+              trailingText!,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.copyWith(color: PixiePalette.ink),
+            ),
+            const SizedBox(width: 4),
+            Icon(Icons.chevron_right_rounded,
+                color: scheme.onSurfaceVariant),
+          ],
           if (onChanged != null) ...[
             const SizedBox(width: 8),
             Transform.scale(

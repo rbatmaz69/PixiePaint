@@ -93,6 +93,65 @@ void main() {
     });
   });
 
+  group('daily task streak', () {
+    test('consecutive days build a streak', () async {
+      await load();
+      progress.registerDailyTaskDone('2026-07-20');
+      expect(progress.taskStreak, 1);
+      progress.registerDailyTaskDone('2026-07-21');
+      progress.registerDailyTaskDone('2026-07-22');
+      expect(progress.taskStreak, 3);
+    });
+
+    test('a missed day starts over at one', () async {
+      await load();
+      progress.registerDailyTaskDone('2026-07-20');
+      progress.registerDailyTaskDone('2026-07-21');
+      expect(progress.taskStreak, 2);
+
+      // Nothing on the 22nd.
+      progress.registerDailyTaskDone('2026-07-23');
+      expect(progress.taskStreak, 1);
+      // The all-time total keeps counting either way.
+      expect(progress.tasksDone, 3);
+    });
+
+    test('finishing twice on the same day changes nothing', () async {
+      await load();
+      progress.registerDailyTaskDone('2026-07-20');
+      progress.registerDailyTaskDone('2026-07-20');
+      expect(progress.taskStreak, 1);
+      expect(progress.tasksDone, 1);
+    });
+
+    test('the streak survives a restart', () async {
+      await load();
+      progress.registerDailyTaskDone('2026-07-20');
+      progress.registerDailyTaskDone('2026-07-21');
+      await progress.flush();
+
+      progress.resetForTest();
+      await progress.loadFrom(JsonStore(file));
+      expect(progress.taskStreak, 2);
+      // ...and carries on from there.
+      progress.registerDailyTaskDone('2026-07-22');
+      expect(progress.taskStreak, 3);
+    });
+
+    test('a progress file from before v6.9 starts the streak at zero',
+        () async {
+      file.writeAsStringSync('{"tasksDone": 7, "lastTaskDay": "2026-07-20"}');
+      await load();
+      expect(progress.tasksDone, 7);
+      expect(progress.taskStreak, 0);
+
+      // The next finished task picks it up as a continuation, because the
+      // stored day really was yesterday.
+      progress.registerDailyTaskDone('2026-07-21');
+      expect(progress.taskStreak, 1);
+    });
+  });
+
   group('celebrations', () {
     test('each reward parties exactly once', () async {
       await load();

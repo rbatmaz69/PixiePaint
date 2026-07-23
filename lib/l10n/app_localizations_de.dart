@@ -544,6 +544,67 @@ class AppLocalizationsDe extends AppLocalizations {
   String get stickerDeleteTitle => 'Sticker wegwerfen?';
 
   @override
+  String get pauseTitle => 'Zeit für eine Pause!';
+
+  @override
+  String get pauseBody =>
+      'Du malst schon eine ganze Weile. Streck dich, trink etwas – dein Bild wartet auf dich.';
+
+  @override
+  String get pauseContinue => 'Weitermalen';
+
+  @override
+  String get pauseSaved => 'Dein Bild ist gespeichert.';
+
+  @override
+  String get pauseSettingTitle => 'Malzeit-Pause';
+
+  @override
+  String get pauseSettingSubtitle =>
+      'Nach einer Weile einen freundlichen Pausen-Hinweis zeigen';
+
+  @override
+  String get pauseOff => 'Aus';
+
+  @override
+  String pauseMinutes(int n) {
+    return '$n Minuten';
+  }
+
+  @override
+  String get albumTitle => 'Meine Erfolge';
+
+  @override
+  String get albumStickers => 'Belohnungs-Sticker';
+
+  @override
+  String albumEarned(int earned, int total) {
+    return '$earned von $total Stickern';
+  }
+
+  @override
+  String albumStreak(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n Tage hintereinander gemalt',
+      one: '1 Tag hintereinander gemalt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get albumStreakNone =>
+      'Schaff die Aufgabe des Tages und starte deine Serie!';
+
+  @override
+  String get albumStickerEarned => 'Freigemalt!';
+
+  @override
+  String get albumStickerEarnedBody =>
+      'Diesen Sticker hast du dir verdient. Du findest ihn beim Stempeln.';
+
+  @override
   String get canvasArea => 'Malfläche';
 
   @override

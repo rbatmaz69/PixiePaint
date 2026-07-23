@@ -72,6 +72,30 @@ DailyTask taskForDate(DateTime date) {
   return kDailyTasks[n % kDailyTasks.length];
 }
 
+/// Whether [today] is the calendar day right after [previous], with both
+/// given as [dayKey] strings. Drives the daily-task streak.
+///
+/// Same UTC arithmetic as [dayNumber], and for the same reason: comparing
+/// local dates around a daylight-saving switch would count a 23-hour day as
+/// no day at all and silently break a child's streak. An empty or malformed
+/// [previous] is simply "not yesterday" — the streak restarts at 1.
+bool isDayAfter(String previous, String today) {
+  final a = _parseDayKey(previous);
+  final b = _parseDayKey(today);
+  if (a == null || b == null) return false;
+  return b.difference(a).inDays == 1;
+}
+
+DateTime? _parseDayKey(String key) {
+  final parts = key.split('-');
+  if (parts.length != 3) return null;
+  final year = int.tryParse(parts[0]);
+  final month = int.tryParse(parts[1]);
+  final day = int.tryParse(parts[2]);
+  if (year == null || month == null || day == null) return null;
+  return DateTime.utc(year, month, day);
+}
+
 /// `yyyy-MM-dd` key used to remember whether today's task is done.
 String dayKey(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'

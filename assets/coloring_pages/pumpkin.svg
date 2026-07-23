@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- stalk -->
+    <path d="M 490 150 L 534 150 L 540 226 L 484 226 Z"/>
+    <path d="M 534 168 C 590 140 616 168 606 200"/>
+    <!-- pumpkin body -->
+    <path d="M 512 226 C 700 226 800 340 800 470 C 800 600 680 700 512 700 C 344 700 224 600 224 470 C 224 340 324 226 512 226 Z"/>
+    <!-- ribs -->
+    <path d="M 392 240 C 340 320 340 610 392 686"/>
+    <path d="M 632 240 C 684 320 684 610 632 686"/>
+    <!-- face -->
+    <path d="M 372 400 L 442 400 L 407 340 Z"/>
+    <path d="M 582 400 L 652 400 L 617 340 Z"/>
+    <path d="M 512 430 L 556 486 L 468 486 Z"/>
+    <path d="M 372 546 L 420 590 L 468 546 L 512 590 L 556 546 L 604 590 L 652 546 C 636 640 388 640 372 546 Z"/>
+  </g>
+</svg>

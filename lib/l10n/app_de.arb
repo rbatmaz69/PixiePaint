@@ -196,6 +196,37 @@
   "stickerAlbumFullTitle": "Sticker-Album voll!",
   "stickerAlbumFullBody": "Wirf zuerst einen alten Sticker weg – halte ihn dafür gedrückt.",
   "stickerDeleteTitle": "Sticker wegwerfen?",
+  "pauseTitle": "Zeit für eine Pause!",
+  "pauseBody": "Du malst schon eine ganze Weile. Streck dich, trink etwas – dein Bild wartet auf dich.",
+  "pauseContinue": "Weitermalen",
+  "pauseSaved": "Dein Bild ist gespeichert.",
+  "pauseSettingTitle": "Malzeit-Pause",
+  "pauseSettingSubtitle": "Nach einer Weile einen freundlichen Pausen-Hinweis zeigen",
+  "pauseOff": "Aus",
+  "pauseMinutes": "{n} Minuten",
+  "@pauseMinutes": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "albumTitle": "Meine Erfolge",
+  "albumStickers": "Belohnungs-Sticker",
+  "albumEarned": "{earned} von {total} Stickern",
+  "@albumEarned": {
+    "placeholders": {
+      "earned": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "albumStreak": "{n, plural, =1{1 Tag hintereinander gemalt} other{{n} Tage hintereinander gemalt}}",
+  "@albumStreak": {
+    "placeholders": {
+      "n": {"type": "int"}
+    }
+  },
+  "albumStreakNone": "Schaff die Aufgabe des Tages und starte deine Serie!",
+  "albumStickerEarned": "Freigemalt!",
+  "albumStickerEarnedBody": "Diesen Sticker hast du dir verdient. Du findest ihn beim Stempeln.",
   "canvasArea": "Malfläche",
   "undoAction": "Rückgängig",
   "redoAction": "Wiederholen",

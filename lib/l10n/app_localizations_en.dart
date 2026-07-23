@@ -542,6 +542,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stickerDeleteTitle => 'Throw the sticker away?';
 
   @override
+  String get pauseTitle => 'Time for a break!';
+
+  @override
+  String get pauseBody =>
+      'You have been painting for a while. Stretch, have a drink – your picture will wait for you.';
+
+  @override
+  String get pauseContinue => 'Keep painting';
+
+  @override
+  String get pauseSaved => 'Your picture is saved.';
+
+  @override
+  String get pauseSettingTitle => 'Painting break';
+
+  @override
+  String get pauseSettingSubtitle =>
+      'Show a friendly break reminder after a while';
+
+  @override
+  String get pauseOff => 'Off';
+
+  @override
+  String pauseMinutes(int n) {
+    return '$n minutes';
+  }
+
+  @override
+  String get albumTitle => 'My achievements';
+
+  @override
+  String get albumStickers => 'Reward stickers';
+
+  @override
+  String albumEarned(int earned, int total) {
+    return '$earned of $total stickers';
+  }
+
+  @override
+  String albumStreak(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Painted $n days in a row',
+      one: 'Painted 1 day in a row',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get albumStreakNone =>
+      'Finish the task of the day and start your streak!';
+
+  @override
+  String get albumStickerEarned => 'Unlocked!';
+
+  @override
+  String get albumStickerEarnedBody =>
+      'You earned this sticker. You\'ll find it with the stamps.';
+
+  @override
   String get canvasArea => 'Painting area';
 
   @override

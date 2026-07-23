@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- big maple leaf, closed outline -->
+    <path d="M 512 100 L 556 190 L 620 158 L 604 244 L 700 224 L 650 296 L 748 320 L 668 372 L 750 430 L 640 442 L 676 520 L 570 486 L 556 570 L 512 500 L 468 570 L 454 486 L 348 520 L 384 442 L 274 430 L 356 372 L 276 320 L 374 296 L 324 224 L 420 244 L 404 158 L 468 190 Z"/>
+    <!-- veins -->
+    <path d="M 512 500 L 512 190"/>
+    <path d="M 512 330 L 640 260"/>
+    <path d="M 512 330 L 384 260"/>
+    <path d="M 512 410 L 660 400"/>
+    <path d="M 512 410 L 364 400"/>
+    <!-- stem -->
+    <path d="M 500 500 L 524 500 L 524 690 L 500 690 Z"/>
+    <!-- small leaves -->
+    <path d="M 160 600 C 200 560 260 560 280 600 C 260 640 200 640 160 600 Z"/>
+    <path d="M 160 600 L 280 600"/>
+    <path d="M 780 240 C 820 200 880 200 900 240 C 880 280 820 280 780 240 Z"/>
+    <path d="M 780 240 L 900 240"/>
+  </g>
+</svg>

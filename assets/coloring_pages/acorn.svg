@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- stalk -->
+    <path d="M 500 110 C 500 80 524 70 540 90"/>
+    <!-- cap -->
+    <path d="M 340 260 C 340 180 684 180 684 260 Z"/>
+    <path d="M 360 216 L 664 216"/>
+    <path d="M 400 260 L 400 190"/>
+    <path d="M 470 260 L 470 180"/>
+    <path d="M 554 260 L 554 180"/>
+    <path d="M 624 260 L 624 190"/>
+    <!-- nut -->
+    <path d="M 340 260 L 684 260 C 684 470 620 620 512 620 C 404 620 340 470 340 260 Z"/>
+    <!-- shine -->
+    <path d="M 420 330 C 410 400 420 470 448 520"/>
+    <!-- little leaves at the foot -->
+    <path d="M 250 640 C 300 590 380 590 410 640 C 380 690 300 690 250 640 Z"/>
+    <path d="M 250 640 L 410 640"/>
+    <path d="M 620 660 C 660 620 720 620 744 660 C 720 700 660 700 620 660 Z"/>
+    <path d="M 620 660 L 744 660"/>
+  </g>
+</svg>
