@@ -25,6 +25,7 @@ import '../trace/trace_session.dart';
 import '../trace/trace_template.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
+import '../util/profiles.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
@@ -370,6 +371,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       pageId: pageId,
       traceId: traceId,
       sceneId: sceneId,
+      profileId: ProfileStore.instance.active.id,
       cbnFilled: _cbnFilledForSave,
       hasPhoto: hasPhoto,
       hasPhotoLineArt: hasPhotoLineArt,

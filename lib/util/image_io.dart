@@ -13,6 +13,31 @@ Future<ui.Image> pngBytesToImage(Uint8List bytes) async {
   return frame.image;
 }
 
+/// Stitches two side-by-side painter panes into one artwork: the left paint
+/// layer at x=0, the right at x=[paneWidth], on white paper. Used by the
+/// two-painter mode, which saves a single merged picture.
+Future<ui.Image> composeTwoPainterArtwork({
+  required ui.Image? left,
+  required ui.Image? right,
+  int paneWidth = 1024,
+  int height = 1536,
+}) async {
+  final w = paneWidth * 2;
+  final recorder = ui.PictureRecorder();
+  final rect = ui.Rect.fromLTWH(0, 0, w.toDouble(), height.toDouble());
+  final canvas = ui.Canvas(recorder, rect);
+  canvas.drawRect(rect, ui.Paint()..color = const ui.Color(0xFFFFFFFF));
+  final paint = ui.Paint();
+  if (left != null) canvas.drawImage(left, ui.Offset.zero, paint);
+  if (right != null) {
+    canvas.drawImage(right, ui.Offset(paneWidth.toDouble(), 0), paint);
+  }
+  final picture = recorder.endRecording();
+  final image = await picture.toImage(w, height);
+  picture.dispose();
+  return image;
+}
+
 /// The image's alpha channel as one byte per pixel — the shape the flood
 /// fill barrier and the tracing coverage grid both expect.
 Future<Uint8List> alphaChannelOf(ui.Image image) async {

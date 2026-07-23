@@ -13,7 +13,9 @@ import 'package:share_plus/share_plus.dart';
 /// Export only for now — restoring needs a file picker plus merge rules, so
 /// the manifest carries a [kBackupFormat] version to make that possible
 /// later without guessing.
-const int kBackupFormat = 1;
+/// format 1: single progress.json. format 2 (v6.6): per-profile
+/// `progress_<id>.json` plus profiles.json.
+const int kBackupFormat = 2;
 
 /// Device-specific parent preferences (settings.json) are deliberately
 /// excluded — nothing precious, and they should not travel between devices.
@@ -52,9 +54,17 @@ void writeBackupZip(String docsPath, String outPath, String manifest) {
         encoder.addFileSync(entry, rel);
       }
     }
-    final progress = File('$docsPath/progress.json');
-    if (progress.existsSync()) {
-      encoder.addFileSync(progress, 'progress.json');
+    // Profiles and every per-profile progress file, plus the legacy
+    // progress.json if a pre-profiles backup is ever restored onto an old
+    // build. `listSync` on the docs root keeps this to one directory scan.
+    for (final entry in Directory(docsPath).listSync()) {
+      if (entry is! File) continue;
+      final rel = entry.path.substring(docsPath.length + 1);
+      if (rel == 'profiles.json' ||
+          rel == 'progress.json' ||
+          (rel.startsWith('progress_') && rel.endsWith('.json'))) {
+        encoder.addFileSync(entry, rel);
+      }
     }
     final stickers = Directory('$docsPath/stickers');
     if (stickers.existsSync()) {

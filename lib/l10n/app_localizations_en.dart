@@ -30,6 +30,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardScenes => 'Sticker world';
 
   @override
+  String get cardTwoPainter => 'Paint together';
+
+  @override
+  String get twoPainterFlip => 'Flip a side';
+
+  @override
   String get dailyTaskTitle => 'Task of the day';
 
   @override
@@ -58,6 +64,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsTooltip => 'Settings (for parents)';
+
+  @override
+  String get profileTitle => 'Who\'s painting?';
+
+  @override
+  String get profileDefaultName => 'Me';
+
+  @override
+  String get profileManage => 'Manage (for parents)';
+
+  @override
+  String get profileAdd => 'Add a child';
+
+  @override
+  String get profileNameHint => 'Name';
+
+  @override
+  String get profilePrimaryBadge => 'Main profile';
+
+  @override
+  String profileRemoveTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String get profileRemoveBody =>
+      'What should happen to this child\'s pictures?';
+
+  @override
+  String get profileRemoveKeepArt => 'Keep the pictures';
+
+  @override
+  String get profileRemoveDeleteArt => 'Delete the pictures too';
 
   @override
   String get photoDialogTitle => 'What shall we do with the photo?';

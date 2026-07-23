@@ -7,6 +7,8 @@
   "cardGallery": "My pictures",
   "cardTrace": "Tracing",
   "cardScenes": "Sticker world",
+  "cardTwoPainter": "Paint together",
+  "twoPainterFlip": "Flip a side",
   "dailyTaskTitle": "Task of the day",
   "dailyTaskGo": "Let's go!",
   "dailyTaskDone": "Done!",
@@ -17,6 +19,21 @@
   "traceTabNumbers": "123",
   "traceTabShapes": "Shapes",
   "settingsTooltip": "Settings (for parents)",
+  "profileTitle": "Who's painting?",
+  "profileDefaultName": "Me",
+  "profileManage": "Manage (for parents)",
+  "profileAdd": "Add a child",
+  "profileNameHint": "Name",
+  "profilePrimaryBadge": "Main profile",
+  "profileRemoveTitle": "Remove {name}?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "profileRemoveBody": "What should happen to this child's pictures?",
+  "profileRemoveKeepArt": "Keep the pictures",
+  "profileRemoveDeleteArt": "Delete the pictures too",
   "photoDialogTitle": "What shall we do with the photo?",
   "photoModePaint": "Paint on the photo",
   "photoModeLineArt": "Magic coloring page",

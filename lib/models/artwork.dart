@@ -25,6 +25,11 @@ class Artwork {
   /// lives in background.png like a photo).
   final String? sceneId;
 
+  /// Which kid profile owns this picture. Null on artworks made before
+  /// profiles existed — those belong to the first (primary) profile, which
+  /// the gallery filter treats as the eternal fallback.
+  final String? profileId;
+
   const Artwork({
     required this.id,
     required this.pageId,
@@ -39,6 +44,7 @@ class Artwork {
     this.traceId,
     this.cbnFilled = const [],
     this.sceneId,
+    this.profileId,
   });
 
   File get paintFile => File('$dirPath/paint.png');
@@ -50,7 +56,8 @@ class Artwork {
   /// legacy artworks.
   File get opsFile => File('$dirPath/ops.json');
 
-  Artwork copyWith({String? name, bool? favorite}) => Artwork(
+  Artwork copyWith({String? name, bool? favorite, String? profileId}) =>
+      Artwork(
         id: id,
         pageId: pageId,
         hasPhoto: hasPhoto,
@@ -64,6 +71,7 @@ class Artwork {
         traceId: traceId,
         cbnFilled: cbnFilled,
         sceneId: sceneId,
+        profileId: profileId ?? this.profileId,
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +87,7 @@ class Artwork {
         if (traceId != null) 'traceId': traceId,
         if (cbnFilled.isNotEmpty) 'cbnFilled': cbnFilled,
         if (sceneId != null) 'sceneId': sceneId,
+        if (profileId != null) 'profileId': profileId,
       };
 
   static Artwork fromJson(Map<String, dynamic> json, String dirPath) => Artwork(
@@ -98,5 +107,6 @@ class Artwork {
             .whereType<int>()
             .toList(),
         sceneId: json['sceneId'] as String?,
+        profileId: json['profileId'] as String?,
       );
 }

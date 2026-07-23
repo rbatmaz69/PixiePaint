@@ -140,6 +140,18 @@ abstract class AppLocalizations {
   /// **'Sticker-Welt'**
   String get cardScenes;
 
+  /// No description provided for @cardTwoPainter.
+  ///
+  /// In de, this message translates to:
+  /// **'Zu zweit malen'**
+  String get cardTwoPainter;
+
+  /// No description provided for @twoPainterFlip.
+  ///
+  /// In de, this message translates to:
+  /// **'Seite drehen'**
+  String get twoPainterFlip;
+
   /// No description provided for @dailyTaskTitle.
   ///
   /// In de, this message translates to:
@@ -199,6 +211,66 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Einstellungen (für Eltern)'**
   String get settingsTooltip;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Wer malt?'**
+  String get profileTitle;
+
+  /// No description provided for @profileDefaultName.
+  ///
+  /// In de, this message translates to:
+  /// **'Ich'**
+  String get profileDefaultName;
+
+  /// No description provided for @profileManage.
+  ///
+  /// In de, this message translates to:
+  /// **'Verwalten (für Eltern)'**
+  String get profileManage;
+
+  /// No description provided for @profileAdd.
+  ///
+  /// In de, this message translates to:
+  /// **'Kind hinzufügen'**
+  String get profileAdd;
+
+  /// No description provided for @profileNameHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Name'**
+  String get profileNameHint;
+
+  /// No description provided for @profilePrimaryBadge.
+  ///
+  /// In de, this message translates to:
+  /// **'Haupt-Profil'**
+  String get profilePrimaryBadge;
+
+  /// No description provided for @profileRemoveTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'{name} entfernen?'**
+  String profileRemoveTitle(String name);
+
+  /// No description provided for @profileRemoveBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Was soll mit den Bildern von diesem Kind passieren?'**
+  String get profileRemoveBody;
+
+  /// No description provided for @profileRemoveKeepArt.
+  ///
+  /// In de, this message translates to:
+  /// **'Bilder behalten'**
+  String get profileRemoveKeepArt;
+
+  /// No description provided for @profileRemoveDeleteArt.
+  ///
+  /// In de, this message translates to:
+  /// **'Bilder auch löschen'**
+  String get profileRemoveDeleteArt;
 
   /// No description provided for @photoDialogTitle.
   ///

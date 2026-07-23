@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../canvas/canvas_screen.dart';
+import '../canvas/two_painter_screen.dart';
 import '../l10n/l10n.dart';
 import '../photo/photo_lineart_screen.dart';
 import '../trace/trace_picker_screen.dart';
@@ -15,9 +16,11 @@ import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/music.dart';
+import '../util/profiles.dart';
 import '../util/settings.dart';
 import '../widgets/daily_task_sheet.dart';
 import '../widgets/parental_gate.dart';
+import '../widgets/profile_sheet.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
 import '../settings/settings_screen.dart';
@@ -189,6 +192,24 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                               ),
                             ),
+                            // Two painters need the room of a tablet.
+                            if (MediaQuery.sizeOf(context).shortestSide >= 600)
+                              _staggered(
+                                7,
+                                _BigCard(
+                                  emoji: '🤝',
+                                  label: context.l10n.cardTwoPainter,
+                                  gradient: PixieGradients.freeDraw,
+                                  width: cardW,
+                                  height: cardH,
+                                  tiltIndex: 2,
+                                  onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const TwoPainterScreen()),
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ],
@@ -244,9 +265,69 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
               ),
+              Positioned(
+                top: 8,
+                left: 72,
+                right: 72,
+                child: _staggered(0, const _ProfileChip()),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Top-center pill showing the active kid; tapping opens the switcher. Kids
+/// can switch freely — only managing profiles sits behind the gate.
+class _ProfileChip extends StatelessWidget {
+  const _ProfileChip();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListenableBuilder(
+        listenable: ProfileStore.instance,
+        builder: (context, _) {
+          final profile = ProfileStore.instance.active;
+          return Bouncy(
+            onTap: () => showProfileSheet(context),
+            playTick: false,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: PixieTokens.softShadow(PixiePalette.grape),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(profile.emoji, style: const TextStyle(fontSize: 22)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      profile.name.isEmpty
+                          ? context.l10n.profileDefaultName
+                          : profile.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.expand_more_rounded,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

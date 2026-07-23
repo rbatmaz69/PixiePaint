@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/models/tool.dart';
 import 'package:pixiepaint/util/json_store.dart';
 import 'package:pixiepaint/util/progress.dart';
+import 'package:pixiepaint/util/settings.dart';
 
 void main() {
   late Directory dir;
@@ -15,6 +16,9 @@ void main() {
     dir = Directory.systemTemp.createTempSync('pp_progress');
     file = File('${dir.path}/progress.json');
     progress.resetForTest();
+    // snapshot() folds in the global share count for the 💎 reward; pin it
+    // so celebration expectations don't depend on other tests' Settings.
+    Settings.instance.shareCount = 0;
   });
 
   tearDown(() {
@@ -165,6 +169,33 @@ void main() {
       // A leftover temp file from a crash must not be picked up as state.
       File('${file.path}.tmp').writeAsStringSync('{"broken":');
       expect(file.readAsStringSync(), good);
+    });
+  });
+
+  group('per-profile isolation', () {
+    test('loadFrom another file starts fresh — kids do not share rewards',
+        () async {
+      final fileA = File('${dir.path}/progress_a.json');
+      final fileB = File('${dir.path}/progress_b.json');
+
+      await progress.loadFrom(JsonStore(fileA));
+      progress.registerCbnCompleted('cbn_fish');
+      progress.registerTraceCompleted('letter_A');
+      await progress.flush();
+
+      // Switching to a fresh kid must not carry the first kid's progress.
+      progress.resetForTest();
+      await progress.loadFrom(JsonStore(fileB));
+      expect(progress.completedCbnIds, isEmpty);
+      expect(progress.completedTraceIds, isEmpty);
+
+      // ...and switching back restores exactly the first kid's counters.
+      progress.registerCbnCompleted('cbn_flower');
+      await progress.flush();
+      progress.resetForTest();
+      await progress.loadFrom(JsonStore(fileA));
+      expect(progress.completedCbnIds, {'cbn_fish'});
+      expect(progress.completedTraceIds, {'letter_A'});
     });
   });
 }

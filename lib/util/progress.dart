@@ -38,13 +38,35 @@ class Progress extends ChangeNotifier {
 
   JsonStore? _store;
 
-  Future<void> load() async {
+  /// Loads the given profile's progress from `progress_<id>.json`. Each kid
+  /// keeps their own rewards, so switching profiles swaps the whole file.
+  Future<void> load(String profileId) async {
     try {
       final dir = await getApplicationDocumentsDirectory();
-      await loadFrom(JsonStore(File('${dir.path}/progress.json')));
+      await loadFrom(
+          JsonStore(File('${dir.path}/progress_$profileId.json')));
     } catch (_) {
       // starting from zero is fine
     }
+  }
+
+  /// Drops the current kid's counters and loads another profile's file.
+  /// Only ever called from the home screen (never with a canvas open), so
+  /// no commit can land in the wrong profile mid-switch.
+  Future<void> switchProfile(String profileId) async {
+    _clearState();
+    await load(profileId);
+    notifyListeners();
+  }
+
+  void _clearState() {
+    completedArtworkIds.clear();
+    toolsUsed.clear();
+    completedTraceIds.clear();
+    completedCbnIds.clear();
+    celebratedEmojis.clear();
+    tasksDone = 0;
+    lastTaskDay = '';
   }
 
   /// Seam for tests: load from any store (a temp file) instead of the real
@@ -69,13 +91,7 @@ class Progress extends ChangeNotifier {
   /// Test seam: forget everything loaded so far.
   @visibleForTesting
   void resetForTest() {
-    completedArtworkIds.clear();
-    toolsUsed.clear();
-    completedTraceIds.clear();
-    completedCbnIds.clear();
-    celebratedEmojis.clear();
-    tasksDone = 0;
-    lastTaskDay = '';
+    _clearState();
     _store = null;
   }
 

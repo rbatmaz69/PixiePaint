@@ -16,6 +16,7 @@ import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
 import '../util/pdf_export.dart';
+import '../util/profiles.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import 'page_picker_screen.dart';
@@ -47,7 +48,7 @@ class _GalleryScreenState extends State<GalleryScreen>
   @override
   void initState() {
     super.initState();
-    _future = ArtworkStore.list();
+    _future = _loadForActiveProfile();
   }
 
   @override
@@ -56,7 +57,20 @@ class _GalleryScreenState extends State<GalleryScreen>
     super.dispose();
   }
 
-  void _reload() => setState(() => _future = ArtworkStore.list());
+  /// Only the active kid's pictures. Legacy artworks (no profileId) belong
+  /// to the primary profile — [ProfileStore.ownsArtwork] applies that
+  /// fallback so a migration hiccup never hides a picture.
+  Future<List<Artwork>> _loadForActiveProfile() async {
+    final all = await ArtworkStore.list();
+    final store = ProfileStore.instance;
+    final active = store.active.id;
+    return [
+      for (final a in all)
+        if (store.ownsArtwork(a.profileId, active)) a
+    ];
+  }
+
+  void _reload() => setState(() => _future = _loadForActiveProfile());
 
   Future<void> _toggleFavorite(Artwork artwork) async {
     Sfx.instance.pop();

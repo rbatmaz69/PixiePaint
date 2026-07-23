@@ -44,6 +44,7 @@ class ArtworkStore {
     required String? pageId,
     String? traceId,
     String? sceneId,
+    String? profileId,
     List<int>? cbnFilled,
     bool hasPhoto = false,
     bool hasPhotoLineArt = false,
@@ -91,6 +92,7 @@ class ArtworkStore {
       dirPath: dir.path,
       name: name,
       favorite: favorite,
+      profileId: profileId ?? old?.profileId,
     );
     if (paintPng != null) {
       await artwork.paintFile.writeAsBytes(paintPng);

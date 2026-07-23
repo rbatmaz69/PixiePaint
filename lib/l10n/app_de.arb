@@ -7,6 +7,8 @@
   "cardGallery": "Meine Bilder",
   "cardTrace": "Nachspuren",
   "cardScenes": "Sticker-Welt",
+  "cardTwoPainter": "Zu zweit malen",
+  "twoPainterFlip": "Seite drehen",
   "dailyTaskTitle": "Aufgabe des Tages",
   "dailyTaskGo": "Los geht's!",
   "dailyTaskDone": "Geschafft!",
@@ -17,6 +19,21 @@
   "traceTabNumbers": "123",
   "traceTabShapes": "Formen",
   "settingsTooltip": "Einstellungen (für Eltern)",
+  "profileTitle": "Wer malt?",
+  "profileDefaultName": "Ich",
+  "profileManage": "Verwalten (für Eltern)",
+  "profileAdd": "Kind hinzufügen",
+  "profileNameHint": "Name",
+  "profilePrimaryBadge": "Haupt-Profil",
+  "profileRemoveTitle": "{name} entfernen?",
+  "@profileRemoveTitle": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "profileRemoveBody": "Was soll mit den Bildern von diesem Kind passieren?",
+  "profileRemoveKeepArt": "Bilder behalten",
+  "profileRemoveDeleteArt": "Bilder auch löschen",
   "photoDialogTitle": "Was machen wir mit dem Foto?",
   "photoModePaint": "Foto anmalen",
   "photoModeLineArt": "Ausmalbild zaubern",

@@ -30,6 +30,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardScenes => 'Sticker-Welt';
 
   @override
+  String get cardTwoPainter => 'Zu zweit malen';
+
+  @override
+  String get twoPainterFlip => 'Seite drehen';
+
+  @override
   String get dailyTaskTitle => 'Aufgabe des Tages';
 
   @override
@@ -59,6 +65,39 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsTooltip => 'Einstellungen (für Eltern)';
+
+  @override
+  String get profileTitle => 'Wer malt?';
+
+  @override
+  String get profileDefaultName => 'Ich';
+
+  @override
+  String get profileManage => 'Verwalten (für Eltern)';
+
+  @override
+  String get profileAdd => 'Kind hinzufügen';
+
+  @override
+  String get profileNameHint => 'Name';
+
+  @override
+  String get profilePrimaryBadge => 'Haupt-Profil';
+
+  @override
+  String profileRemoveTitle(String name) {
+    return '$name entfernen?';
+  }
+
+  @override
+  String get profileRemoveBody =>
+      'Was soll mit den Bildern von diesem Kind passieren?';
+
+  @override
+  String get profileRemoveKeepArt => 'Bilder behalten';
+
+  @override
+  String get profileRemoveDeleteArt => 'Bilder auch löschen';
 
   @override
   String get photoDialogTitle => 'Was machen wir mit dem Foto?';
