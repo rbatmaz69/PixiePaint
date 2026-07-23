@@ -26,7 +26,6 @@ import '../trace/trace_session.dart';
 import '../trace/trace_template.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
-import '../util/profiles.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
@@ -46,6 +45,7 @@ import 'fill_pattern.dart';
 import 'painting_canvas.dart';
 import 'pause_curtain.dart';
 import 'region_label.dart';
+import 'save_session.dart';
 import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
@@ -101,19 +101,14 @@ class _CanvasScreenState extends State<CanvasScreen>
   bool get _isCbn => _cbn != null;
   late bool hasPhoto;
   late bool hasPhotoLineArt;
-  late bool _backgroundSaved;
-  late bool _lineArtSaved;
   bool loading = true;
-  bool everSaved = false;
 
-  /// Set when the last save could not be written (full storage). Surfaced to
-  /// the parent on the way out, never to the child mid-painting.
-  bool _saveFailed = false;
+  /// Owns the whole save pipeline — see [ArtworkSaveSession].
+  late final ArtworkSaveSession _saves;
   Timer? _autoSave;
 
   /// Fires the painting-break curtain; null when a parent left it off.
   Timer? _pause;
-  Future<void>? _pendingSave;
 
   @override
   void initState() {
@@ -135,12 +130,22 @@ class _CanvasScreenState extends State<CanvasScreen>
     hasPhotoLineArt =
         widget.photoLineArt != null ||
         (widget.resume?.hasPhotoLineArt ?? false);
-    _backgroundSaved = widget.resume?.hasPhoto ?? false;
-    _lineArtSaved = widget.resume?.hasPhotoLineArt ?? false;
-    everSaved = widget.resume != null;
+    _saves = ArtworkSaveSession(
+      controller: controller,
+      artworkId: artworkId,
+      width: kCanvasWidth,
+      height: kCanvasHeight,
+      hasPhoto: hasPhoto,
+      hasPhotoLineArt: hasPhotoLineArt,
+      pageId: pageId,
+      traceId: traceId,
+      sceneId: sceneId,
+      cbnFilled: () => _cbnFilledForSave,
+      resumed: widget.resume != null,
+    );
     _load();
     _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
-      if (controller.dirty) _save();
+      if (controller.dirty) _saves.save();
     });
     _startPauseTimer();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -347,96 +352,27 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (minutes <= 0) return;
     _pause = Timer(Duration(minutes: minutes), () async {
       if (!mounted) return;
-      if (controller.dirty) await _save();
+      if (controller.dirty) await _saves.save();
       if (!mounted) return;
       await showPauseCurtain(context);
       if (mounted) _startPauseTimer();
     });
   }
 
-  /// Serializes every save. Three callers can fire concurrently (the 30 s
-  /// timer, the lifecycle hook and leaving the screen); without this they
-  /// would write the same PNGs and meta.json at the same time.
-  Future<void> _save() {
-    final pending = _pendingSave;
-    final next = pending == null
-        ? _saveNow()
-        : pending.then((_) => _saveNow()).catchError((_) {});
-    _pendingSave = next;
-    return next;
-  }
-
-  Future<void> _saveNow() async {
-    if (!controller.dirty && everSaved) return;
-    // Don't create junk artworks for an untouched canvas.
-    if (controller.isEmpty && !everSaved) return;
-    // Snapshot the revision: strokes committed while we encode below must
-    // not be marked as saved.
-    final revisionAtStart = controller.revision;
-    Uint8List? paintPng;
-    final layer = controller.paintLayer;
-    if (layer != null) paintPng = await imageToPngBytes(layer);
-    Uint8List? backgroundPng;
-    if (hasPhoto && !_backgroundSaved && controller.backgroundImage != null) {
-      backgroundPng = await imageToPngBytes(controller.backgroundImage!);
-    }
-    Uint8List? lineArtPng;
-    if (hasPhotoLineArt && !_lineArtSaved && controller.lineArt != null) {
-      lineArtPng = await imageToPngBytes(controller.lineArt!);
-    }
-    final thumb = await composeArtwork(
-      width: kCanvasWidth,
-      height: kCanvasHeight,
-      background: controller.backgroundImage,
-      paintLayer: controller.paintLayer,
-      lineArt: controller.lineArt,
-      targetWidth: 360,
-    );
-    final thumbPng = await imageToPngBytes(thumb);
-    thumb.dispose();
-    final result = await ArtworkStore.save(
-      id: artworkId,
-      pageId: pageId,
-      traceId: traceId,
-      sceneId: sceneId,
-      profileId: ProfileStore.instance.active.id,
-      cbnFilled: _cbnFilledForSave,
-      hasPhoto: hasPhoto,
-      hasPhotoLineArt: hasPhotoLineArt,
-      width: kCanvasWidth,
-      height: kCanvasHeight,
-      paintPng: paintPng,
-      backgroundPng: backgroundPng,
-      lineArtPng: lineArtPng,
-      thumbPng: thumbPng,
-      opsJson: controller.recordOps && controller.hasOps
-          ? encodeOps(controller.opsSnapshot)
-          : null,
-    );
-    // Leave the canvas dirty so the next autosave retries, and remember the
-    // failure for the way out — a picture that silently fails to save is the
-    // one thing this screen must never do.
-    if (!result.ok) {
-      _saveFailed = true;
-      return;
-    }
-    _saveFailed = false;
-    if (backgroundPng != null) _backgroundSaved = true;
-    if (lineArtPng != null) _lineArtSaved = true;
-    everSaved = true;
-    if (controller.revision == revisionAtStart) controller.dirty = false;
-    // A real, saved, non-empty picture counts as "finished" for the
-    // sticker rewards (autosave makes this equivalent to having painted).
-    if (controller.paintLayer != null) {
-      Progress.instance.registerArtworkCompleted(artworkId);
-    }
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
-      if (controller.dirty) _save();
+      if (controller.dirty) _saves.save();
+    }
+    // `paused` only — `inactive` also fires for a passing notification
+    // shade, and throwing the undo history away because a message arrived
+    // would be its own kind of bug. Ordering matters: the save above is
+    // queued first, so it still reads the layers it needs.
+    if (state == AppLifecycleState.paused) {
+      controller.releaseMemory();
+      PaintingBinding.instance.imageCache.clear();
+      PaintingBinding.instance.imageCache.clearLiveImages();
     }
   }
 
@@ -455,8 +391,8 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   Future<void> _leave() async {
-    if (controller.dirty) await _save();
-    if (_saveFailed && mounted && !await _confirmLeaveUnsaved()) return;
+    if (controller.dirty) await _saves.save();
+    if (_saves.saveFailed && mounted && !await _confirmLeaveUnsaved()) return;
     // Sticker unlock party — only on the way out, never mid-painting.
     for (final reward in Progress.instance.takeUncelebrated()) {
       if (!mounted) break;
@@ -495,8 +431,8 @@ class _CanvasScreenState extends State<CanvasScreen>
         ],
       );
       if (retry != true) return true;
-      await _save();
-      if (!_saveFailed) return true;
+      await _saves.save();
+      if (!_saves.saveFailed) return true;
     }
   }
 
@@ -523,7 +459,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     // A save in flight still reads the layers — free them only afterwards,
     // otherwise it encodes disposed images. The controller isn't part of
     // the element tree, so outliving this State briefly is safe.
-    final pending = _pendingSave;
+    final pending = _saves.pending;
     if (pending != null) {
       pending.whenComplete(controller.dispose);
     } else {

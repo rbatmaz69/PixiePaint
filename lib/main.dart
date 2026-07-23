@@ -10,6 +10,11 @@ import 'util/sfx.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Flutter defaults to 100 MB of decoded images. The gallery already asks
+  // for its thumbnails at display size (`cacheWidth`), so it never needs
+  // that much — and the painting canvas wants the headroom far more, since
+  // its own layers are 12 MB apiece.
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 32 * 1024 * 1024;
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,

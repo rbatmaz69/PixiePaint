@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 6.9.0+17 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.0.0+18 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -220,7 +220,7 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
-Die Test-Suite umfasst 244 Tests in 31 Dateien:
+Die Test-Suite umfasst 293 Tests in 34 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen und die Screenreader-Beschriftungen
@@ -312,7 +312,9 @@ docs/                      Release-Anleitungen (Play Store, App Store),
 1. **Neue Persistenz immer über `JsonStore` bzw. `atomicWrite*`** (`lib/util/json_store.dart`), nie über nacktes `writeAsString`. Der Store serialisiert die Schreibvorgänge und ersetzt die Zieldatei atomar per Rename. Wo mehrere Dateien zusammen ein Ganzes bilden (ein Artwork-Ordner), wird die *identifizierende* Datei zuletzt geschrieben — `meta.json` ist der Commit-Marker.
 2. **Neue Effekte im Malbereich gehören als Geschwister-Overlay neben den Painter**, niemals hinein (siehe Canvas-Performance oben).
 3. **`ZipFileEncoder` in `archive` 4.x nur in den Sync-Varianten benutzen** (`addFileSync`, `closeSync`) — die asynchronen Methoden geben Futures zurück, die im Isolate leicht übersehen werden.
-4. **`Curves.easeOutBack` überschwingt über beide Tween-Enden hinaus.** In einer `AnimatedContainer`-Dekoration darf deshalb kein `boxShadow` gegen `null` animiert werden: der Blur-Radius wird dabei negativ und `dart:ui` bricht ab. Stattdessen den Radius konstant lassen und nur die Deckkraft bewegen (`_selectionShadow` in `lib/widgets/tool_bar.dart`).
+4. **Der Undo-Stack budgetiert Speicher, nicht Schritte** (`lib/canvas/undo_stack.dart`). Ein Schnappschuss der Malebene ist 12 MB; eine feste Schrittzahl reserviert damit schnell dreistellige Megabyte. Wer dort etwas ändert, prüft `bytesInUse` — `test/undo_stack_test.dart` hält die Obergrenze für beide Canvas-Größen fest.
+
+5. **`Curves.easeOutBack` überschwingt über beide Tween-Enden hinaus.** In einer `AnimatedContainer`-Dekoration darf deshalb kein `boxShadow` gegen `null` animiert werden: der Blur-Radius wird dabei negativ und `dart:ui` bricht ab. Stattdessen den Radius konstant lassen und nur die Deckkraft bewegen (`_selectionShadow` in `lib/widgets/tool_bar.dart`).
 
 ## Inhalte erweitern
 
@@ -358,7 +360,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 6.9.0+17` bedeutet Versionsname 6.9.0 und versionCode 17. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.0.0+18` bedeutet Versionsname 7.0.0 und versionCode 18. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

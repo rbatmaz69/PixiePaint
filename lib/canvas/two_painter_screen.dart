@@ -33,7 +33,8 @@ class TwoPainterScreen extends StatefulWidget {
   State<TwoPainterScreen> createState() => _TwoPainterScreenState();
 }
 
-class _TwoPainterScreenState extends State<TwoPainterScreen> {
+class _TwoPainterScreenState extends State<TwoPainterScreen>
+    with WidgetsBindingObserver {
   late final CanvasController _left = _makeController();
   late final CanvasController _right = _makeController();
   bool _leftFlipped = true; // start face-to-face across the table
@@ -52,7 +53,20 @@ class _TwoPainterScreenState extends State<TwoPainterScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  /// Two canvases mean two undo histories. This mode is tablet-only, but a
+  /// tablet backgrounding two of them at once is exactly the case the
+  /// budget alone does not cover.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.paused) return;
+    _left.releaseMemory();
+    _right.releaseMemory();
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
   }
 
   Future<void> _leave() async {
@@ -94,6 +108,7 @@ class _TwoPainterScreenState extends State<TwoPainterScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     _left.dispose();
     _right.dispose();

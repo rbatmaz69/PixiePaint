@@ -700,6 +700,16 @@ class CanvasController extends ChangeNotifier {
     _recordOp(const ClearOp());
   }
 
+  /// Hands the undo history's memory back, keeping one step. Called when the
+  /// app goes to the background: that is when Android decides which process
+  /// to reclaim, and up to 50 MB of history is exactly the kind of thing
+  /// that decides it. The picture is saved by then — only the ability to
+  /// step back through it gets shorter.
+  void releaseMemory() {
+    _undoStack.trimToMinimum();
+    notifyListeners();
+  }
+
   void _tick() => repaint.value++;
 
   @override
