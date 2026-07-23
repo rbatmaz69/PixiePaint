@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../canvas/stroke_renderer.dart';
@@ -66,7 +67,7 @@ class _ReplayScreenState extends State<ReplayScreen> {
       lineArt: lineArt,
     );
     setState(() => controller = c);
-    c.play();
+    unawaited(c.play());
   }
 
   @override

@@ -75,8 +75,8 @@ class _SlideshowScreenState extends State<SlideshowScreen>
       return;
     }
     setState(() => _current = first);
-    _kenBurns.forward(from: 0);
-    _prepareNext();
+    unawaited(_kenBurns.forward(from: 0));
+    unawaited(_prepareNext());
     _advance = Timer.periodic(_slideDuration, (_) => _advanceSlide());
   }
 

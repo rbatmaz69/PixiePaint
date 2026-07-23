@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart';
 
@@ -41,7 +42,8 @@ class Music with WidgetsBindingObserver {
     try {
       await _player.play(AssetSource(tracks[index]));
       _playing = true;
-      Settings.instance.update(musicTrack: (index + 1) % tracks.length);
+      unawaited(
+          Settings.instance.update(musicTrack: (index + 1) % tracks.length));
     } catch (_) {}
   }
 

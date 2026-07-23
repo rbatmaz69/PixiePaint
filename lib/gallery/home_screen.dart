@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -269,10 +270,10 @@ class _HomeScreenState extends State<HomeScreen>
                     onTap: () async {
                       if (await ParentalGate.show(context) &&
                           context.mounted) {
-                        Navigator.of(context).push(
+                        unawaited(Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (_) => const SettingsScreen()),
-                        );
+                        ));
                       }
                     },
                   ),
@@ -458,11 +459,11 @@ Future<void> _pickPhoto(BuildContext context) async {
     ],
   );
   if (mode == null || !context.mounted) return;
-  Navigator.of(context).push(
+  unawaited(Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => mode == _PhotoMode.paintOver
           ? CanvasScreen(photoPath: file.path)
           : PhotoLineArtScreen(photoPath: file.path),
     ),
-  );
+  ));
 }

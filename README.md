@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.4.1+23 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.4.2+24 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -216,10 +216,12 @@ Nützlich im laufenden `flutter run`:
 ## Tests & Codequalität
 
 ```bash
-flutter analyze     # Linter (flutter_lints) — muss fehlerfrei sein
+flutter analyze     # Linter — muss fehlerfrei sein
 flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
+
+Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
 Die Test-Suite umfasst 391 Tests in 42 Dateien:
 
@@ -381,7 +383,7 @@ flutter build appbundle --release
 # → build/app/outputs/bundle/release/app-release.aab
 ```
 
-Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.1+23` bedeutet Versionsname 7.4.1 und versionCode 23. Beide müssen bei jedem Store-Upload erhöht werden.
+Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.2+24` bedeutet Versionsname 7.4.2 und versionCode 24. Beide müssen bei jedem Store-Upload erhöht werden.
 
 ## Datenschutz
 

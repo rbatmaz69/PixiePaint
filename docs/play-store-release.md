@@ -59,6 +59,16 @@ Ein `2**14` (= 16384) in der Ausrichtung ist gut. Bei Treffern mit `2**12` hilft
 
 **c) Flutter aktuell halten.** `flutter --version` und `flutter doctor -v` prüfen; ein veraltetes SDK ist die häufigste Ursache für beide Punkte oben.
 
+**d) Kotlin-Gradle-Plugin (offener Punkt, Stand v7.4.2).** Der Release-Build meldet:
+
+> WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): flutter_file_dialog, in_app_review
+> Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Heute ist das nur eine Warnung — das Bundle entsteht normal. **Beide Plugins sind bereits auf ihrer neuesten Version** (`flutter_file_dialog` 3.3.1, `in_app_review` 2.0.12), es lässt sich also nicht durch ein Update beheben. Vor einem größeren Flutter-Upgrade deshalb nachsehen, ob die Pakete inzwischen auf „Built-in Kotlin" migriert sind; falls nicht, sind das die Ausweichwege:
+
+- `flutter_file_dialog` wird nur für das Zurückholen einer Sicherung gebraucht (`lib/settings/settings_screen.dart`). Ersetzbar, sobald `file_picker` seinen win32-Konflikt mit `share_plus`/`wakelock_plus` los ist — der Grund für die Wahl steht in der `pubspec.yaml`.
+- `in_app_review` treibt nur „App bewerten" in den Einstellungen. Im Notfall verzichtbar bzw. durch einen Store-Link ersetzbar.
+
 ## 4. App-Bundle bauen
 
 ```bash

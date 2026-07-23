@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -83,9 +84,9 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
       art.dispose();
       return;
     }
-    Navigator.of(context).pushReplacement(
+    unawaited(Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => CanvasScreen(photoLineArt: art)),
-    );
+    ));
   }
 
   @override

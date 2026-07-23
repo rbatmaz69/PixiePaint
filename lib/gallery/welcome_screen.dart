@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
@@ -44,9 +45,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<void> _finish() async {
     await Settings.instance.markWelcomeSeen();
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
+    unawaited(Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(builder: (_) => const PagePickerScreen()),
-    );
+    ));
   }
 
   void _next() {

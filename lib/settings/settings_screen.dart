@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -89,13 +91,15 @@ class _SettingsScreenState extends State<SettingsScreen>
     // A modal progress dialog, dismissed as soon as the zip is ready — the
     // share sheet takes over from there.
     var dialogOpen = true;
-    showKidDialog<void>(
+    // Deliberately not awaited: the dialog stays up while the work below
+    // runs, and the flag tells us whether it still needs popping.
+    unawaited(showKidDialog<void>(
       context: context,
       emoji: '📦',
       barrierDismissible: false,
       title: context.l10n.backupWorking,
       body: const LoadingPixie(emoji: '📦'),
-    ).then((_) => dialogOpen = false);
+    ).then((_) => dialogOpen = false));
     try {
       final zip = await createBackupZip();
       if (mounted && dialogOpen) Navigator.of(context).pop();
@@ -196,13 +200,15 @@ class _SettingsScreenState extends State<SettingsScreen>
     final l10n = context.l10n;
     setState(() => _backupRunning = true);
     var dialogOpen = true;
-    showKidDialog<void>(
+    // Deliberately not awaited: the dialog stays up while the work below
+    // runs, and the flag tells us whether it still needs popping.
+    unawaited(showKidDialog<void>(
       context: context,
       emoji: '📥',
       barrierDismissible: false,
       title: l10n.restoreWorking,
       body: const LoadingPixie(emoji: '📥'),
-    ).then((_) => dialogOpen = false);
+    ).then((_) => dialogOpen = false));
 
     String message;
     String emoji;
