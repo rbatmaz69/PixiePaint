@@ -360,19 +360,15 @@ Future<void> _confirmClear(
     emoji: '🧽',
     title: context.l10n.clearTitle,
     body: Text(context.l10n.clearBody, textAlign: TextAlign.center),
-    actions: [
-      Builder(
-        builder: (context) => KidDialogButton(
-          label: context.l10n.clearKeep,
-          emoji: '🖌️',
-          onTap: () => Navigator.pop(context, false),
-        ),
+    actions: (pop) => [
+      KidDialogButton(
+        label: context.l10n.clearKeep,
+        emoji: '🖌️',
+        onTap: () => Navigator.pop(pop, false),
       ),
-      Builder(
-        builder: (context) => KidDialogTextButton(
-          label: context.l10n.clearConfirm,
-          onTap: () => Navigator.pop(context, true),
-        ),
+      KidDialogTextButton(
+        label: context.l10n.clearConfirm,
+        onTap: () => Navigator.pop(pop, true),
       ),
     ],
   );

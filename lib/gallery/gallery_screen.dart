@@ -99,20 +99,15 @@ class _GalleryScreenState extends State<GalleryScreen>
       emoji: '✏️',
       title: context.l10n.renameTitle,
       body: _RenameField(initial: artwork.name ?? '', text: typed),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: context.l10n.renameSave,
-            emoji: '💾',
-            onTap: () =>
-                Navigator.pop(dialogContext, typed.value.trim()),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: context.l10n.renameSave,
+          emoji: '💾',
+          onTap: () => Navigator.pop(pop, typed.value.trim()),
         ),
-        Builder(
-          builder: (dialogContext) => KidDialogTextButton(
-            label: context.l10n.gateCancel,
-            onTap: () => Navigator.pop(dialogContext),
-          ),
+        KidDialogTextButton(
+          label: context.l10n.gateCancel,
+          onTap: () => Navigator.pop(pop),
         ),
       ],
     );
@@ -128,37 +123,20 @@ class _GalleryScreenState extends State<GalleryScreen>
     if (ok) {
       Sfx.instance.tada();
       showConfetti(context, scale: ConfettiScale.small);
-      await showKidDialog<void>(
-        context: context,
+      await showKidNotice(
+        context,
         emoji: '📷',
         title: context.l10n.savedToPhotos,
-        actions: [
-          Builder(
-            builder: (dialogContext) => KidDialogButton(
-              label: context.l10n.okAction,
-              emoji: '🎉',
-              onTap: () => Navigator.pop(dialogContext),
-            ),
-          ),
-        ],
+        okLabel: context.l10n.okAction,
+        okEmoji: '🎉',
       );
     } else {
-      await showKidDialog<void>(
-        context: context,
+      await showKidNotice(
+        context,
         emoji: '😕',
         title: context.l10n.saveToPhotosFailedTitle,
-        body: Text(
-          context.l10n.saveToPhotosFailed,
-          textAlign: TextAlign.center,
-        ),
-        actions: [
-          Builder(
-            builder: (dialogContext) => KidDialogButton(
-              label: context.l10n.okAction,
-              onTap: () => Navigator.pop(dialogContext),
-            ),
-          ),
-        ],
+        body: context.l10n.saveToPhotosFailed,
+        okLabel: context.l10n.okAction,
       );
     }
   }
@@ -171,105 +149,76 @@ class _GalleryScreenState extends State<GalleryScreen>
   }
 
   Future<void> _showItemMenu(Artwork artwork) async {
+    final l10n = context.l10n;
     await showKidSheet<void>(
       context: context,
       emoji: '🖼️',
-      title: context.l10n.galleryTitle,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 4, 24, 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '🖌️',
-                label: context.l10n.continuePainting,
-                gradient: PixieGradients.coloring,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _open(artwork);
-                },
-              ),
-            ),
-            if (artwork.opsFile.existsSync()) ...[
-              const SizedBox(height: 10),
-              Builder(
-                builder: (sheetContext) => KidDialogButton(
-                  emoji: '🎬',
-                  label: context.l10n.replayAction,
-                  gradient: PixieGradients.freeDraw,
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => ReplayScreen(artwork: artwork)),
-                    );
-                  },
+      title: l10n.galleryTitle,
+      builder: (sheetContext) {
+        // Every entry here does the same two things: close the menu, then
+        // start the thing that was tapped. Written out per button that was
+        // six copies of the closing half.
+        Widget entry(String emoji, String label, Gradient gradient,
+            VoidCallback go) {
+          return KidDialogButton(
+            emoji: emoji,
+            label: label,
+            gradient: gradient,
+            onTap: () {
+              Navigator.pop(sheetContext);
+              go();
+            },
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 4, 24, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              entry('🖌️', l10n.continuePainting, PixieGradients.coloring,
+                  () => _open(artwork)),
+              // Only for pictures painted since the op log exists — there is
+              // no story to play back for the older ones.
+              if (artwork.opsFile.existsSync()) ...[
+                const SizedBox(height: 10),
+                entry(
+                  '🎬',
+                  l10n.replayAction,
+                  PixieGradients.freeDraw,
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => ReplayScreen(artwork: artwork)),
+                  ),
                 ),
-              ),
-            ],
-            const SizedBox(height: 10),
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '✏️',
-                label: context.l10n.renameAction,
-                gradient: PixieGradients.freeDraw,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _rename(artwork);
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '📷',
-                label: context.l10n.saveToPhotos,
-                gradient: PixieGradients.gallery,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _saveToPhotos(artwork);
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '💌',
-                label: context.l10n.shareForParents,
-                gradient: PixieGradients.photo,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _share(artwork);
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '🖨️',
-                label: context.l10n.printForParents,
-                gradient: PixieGradients.trace,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _print(artwork);
-                },
-              ),
-            ),
-            const SizedBox(height: 6),
-            Builder(
-              builder: (sheetContext) => KidDialogTextButton(
-                label: context.l10n.deleteAction,
+              ],
+              const SizedBox(height: 10),
+              entry('✏️', l10n.renameAction, PixieGradients.freeDraw,
+                  () => _rename(artwork)),
+              const SizedBox(height: 10),
+              entry('📷', l10n.saveToPhotos, PixieGradients.gallery,
+                  () => _saveToPhotos(artwork)),
+              const SizedBox(height: 10),
+              entry('💌', l10n.shareForParents, PixieGradients.photo,
+                  () => _share(artwork)),
+              const SizedBox(height: 10),
+              entry('🖨️', l10n.printForParents, PixieGradients.trace,
+                  () => _print(artwork)),
+              const SizedBox(height: 6),
+              // Small and quiet, not one of the colorful cards — deleting a
+              // picture should never be the easiest thing on this sheet.
+              KidDialogTextButton(
+                label: l10n.deleteAction,
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _delete(artwork);
                 },
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -300,19 +249,15 @@ class _GalleryScreenState extends State<GalleryScreen>
       emoji: '🗑️',
       title: context.l10n.deleteTitle,
       body: Text(context.l10n.deleteBody, textAlign: TextAlign.center),
-      actions: [
-        Builder(
-          builder: (context) => KidDialogButton(
-            label: context.l10n.deleteKeep,
-            emoji: '💚',
-            onTap: () => Navigator.pop(context, false),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: context.l10n.deleteKeep,
+          emoji: '💚',
+          onTap: () => Navigator.pop(pop, false),
         ),
-        Builder(
-          builder: (context) => KidDialogTextButton(
-            label: context.l10n.deleteAction,
-            onTap: () => Navigator.pop(context, true),
-          ),
+        KidDialogTextButton(
+          label: context.l10n.deleteAction,
+          onTap: () => Navigator.pop(pop, true),
         ),
       ],
     );
@@ -707,6 +652,12 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
+/// Carries the typed name from the field to the dialog's buttons.
+class _TypedName {
+  _TypedName(this.value);
+  String value;
+}
+
 /// The rename dialog's text field.
 ///
 /// It owns its [TextEditingController] so that Flutter disposes it when the
@@ -714,12 +665,6 @@ class _FilterChip extends StatelessWidget {
 /// returns looks equivalent but is not: the dialog is still animating out
 /// and rebuilds the field a few more times, and a disposed controller
 /// throws on every one of those frames.
-/// Carries the typed name from the field to the dialog's buttons.
-class _TypedName {
-  _TypedName(this.value);
-  String value;
-}
-
 class _RenameField extends StatefulWidget {
   const _RenameField({required this.initial, required this.text});
 

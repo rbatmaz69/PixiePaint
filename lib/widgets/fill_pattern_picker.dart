@@ -15,7 +15,7 @@ Future<void> showFillPatternPicker(
     context: context,
     emoji: '🪣',
     title: context.l10n.toolFill,
-    child: Padding(
+    builder: (sheetContext) => Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
       child: Wrap(
         spacing: 14,
@@ -39,7 +39,7 @@ Future<void> showFillPatternPicker(
               selected: controller.fillPattern == pattern,
               onTap: () {
                 controller.selectFillPattern(pattern);
-                Navigator.of(context).pop();
+                Navigator.pop(sheetContext);
               },
             ),
         ],

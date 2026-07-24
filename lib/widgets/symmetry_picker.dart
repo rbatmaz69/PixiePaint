@@ -29,7 +29,7 @@ Future<void> showSymmetryPicker(
     context: context,
     emoji: symmetryEmoji(controller.symmetryFolds),
     title: context.l10n.symmetryTitle,
-    child: GridView.builder(
+    builder: (sheetContext) => GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -45,7 +45,7 @@ Future<void> showSymmetryPicker(
           playTick: false,
           onTap: () {
             controller.selectSymmetry(folds);
-            Navigator.of(context).pop();
+            Navigator.pop(sheetContext);
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),

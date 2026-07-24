@@ -429,22 +429,18 @@ Future<void> _pickPhoto(BuildContext context) async {
     context: context,
     emoji: '📷',
     title: context.l10n.photoDialogTitle,
-    actions: [
-      Builder(
-        builder: (context) => KidDialogButton(
-          emoji: '🖌️',
-          label: context.l10n.photoModePaint,
-          gradient: PixieGradients.photo,
-          onTap: () => Navigator.of(context).pop(_PhotoMode.paintOver),
-        ),
+    actions: (pop) => [
+      KidDialogButton(
+        emoji: '🖌️',
+        label: context.l10n.photoModePaint,
+        gradient: PixieGradients.photo,
+        onTap: () => Navigator.pop(pop, _PhotoMode.paintOver),
       ),
-      Builder(
-        builder: (context) => KidDialogButton(
-          emoji: '✨',
-          label: context.l10n.photoModeLineArt,
-          gradient: PixieGradients.freeDraw,
-          onTap: () => Navigator.of(context).pop(_PhotoMode.lineArt),
-        ),
+      KidDialogButton(
+        emoji: '✨',
+        label: context.l10n.photoModeLineArt,
+        gradient: PixieGradients.freeDraw,
+        onTap: () => Navigator.pop(pop, _PhotoMode.lineArt),
       ),
     ],
   );

@@ -24,7 +24,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
     context: context,
     emoji: task.emoji,
     title: context.l10n.dailyTaskTitle,
-    child: Padding(
+    builder: (sheetContext) => Padding(
       padding: const EdgeInsets.fromLTRB(24, 4, 24, 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -39,28 +39,24 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
                 ?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 20),
-          Builder(
-            builder: (sheetContext) => KidDialogButton(
-              emoji: '🖌️',
-              label: context.l10n.dailyTaskGo,
-              gradient: PixieGradients.freeDraw,
-              onTap: () {
-                Navigator.pop(sheetContext, false);
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const CanvasScreen()),
-                );
-              },
-            ),
+          KidDialogButton(
+            emoji: '🖌️',
+            label: context.l10n.dailyTaskGo,
+            gradient: PixieGradients.freeDraw,
+            onTap: () {
+              Navigator.pop(sheetContext, false);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CanvasScreen()),
+              );
+            },
           ),
           const SizedBox(height: 10),
           if (!alreadyDone)
-            Builder(
-              builder: (sheetContext) => KidDialogButton(
-                emoji: '✅',
-                label: context.l10n.dailyTaskDone,
-                gradient: PixieGradients.gallery,
-                onTap: () => Navigator.pop(sheetContext, true),
-              ),
+            KidDialogButton(
+              emoji: '✅',
+              label: context.l10n.dailyTaskDone,
+              gradient: PixieGradients.gallery,
+              onTap: () => Navigator.pop(sheetContext, true),
             )
           else
             Text(

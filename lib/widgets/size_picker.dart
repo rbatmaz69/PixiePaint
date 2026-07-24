@@ -18,7 +18,7 @@ Future<void> showSizePicker(BuildContext context, CanvasController controller) {
     context: context,
     emoji: '🐘',
     title: context.l10n.sizeTitle,
-    child: _SizePickerBody(controller: controller),
+    builder: (_) => _SizePickerBody(controller: controller),
   );
 }
 

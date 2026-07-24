@@ -20,7 +20,7 @@ Future<void> showProfileSheet(BuildContext context) {
     context: context,
     emoji: '👋',
     title: context.l10n.profileTitle,
-    child: const _ProfileSheetBody(),
+    builder: (_) => const _ProfileSheetBody(),
   );
 }
 
@@ -187,25 +187,19 @@ class _ManageProfilesState extends State<_ManageProfiles> {
       title: context.l10n.profileRemoveTitle(
           profile.name.isEmpty ? context.l10n.profileDefaultName : profile.name),
       body: Text(context.l10n.profileRemoveBody, textAlign: TextAlign.center),
-      actions: [
-        Builder(
-          builder: (c) => KidDialogButton(
-            emoji: '📥',
-            label: context.l10n.profileRemoveKeepArt,
-            onTap: () => Navigator.pop(c, 'keep'),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          emoji: '📥',
+          label: context.l10n.profileRemoveKeepArt,
+          onTap: () => Navigator.pop(pop, 'keep'),
         ),
-        Builder(
-          builder: (c) => KidDialogTextButton(
-            label: context.l10n.profileRemoveDeleteArt,
-            onTap: () => Navigator.pop(c, 'delete'),
-          ),
+        KidDialogTextButton(
+          label: context.l10n.profileRemoveDeleteArt,
+          onTap: () => Navigator.pop(pop, 'delete'),
         ),
-        Builder(
-          builder: (c) => KidDialogTextButton(
-            label: context.l10n.gateCancel,
-            onTap: () => Navigator.pop(c),
-          ),
+        KidDialogTextButton(
+          label: context.l10n.gateCancel,
+          onTap: () => Navigator.pop(pop),
         ),
       ],
     );

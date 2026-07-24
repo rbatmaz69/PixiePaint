@@ -31,7 +31,7 @@ Future<void> showStampPicker(
     context: context,
     emoji: controller.stampImage != null ? '🖼️' : controller.stampEmoji,
     title: context.l10n.toolSticker,
-    child: _StampSections(controller: controller),
+    builder: (_) => _StampSections(controller: controller),
   );
   if (result != _StampSheetResult.capture || !context.mounted) return;
 
@@ -54,23 +54,15 @@ Future<void> showStampPicker(
 }
 
 Future<void> _showInfo(
-    BuildContext context, String emoji, String title, String body) {
-  return showKidDialog<void>(
-    context: context,
-    emoji: emoji,
-    title: title,
-    body: Text(body, textAlign: TextAlign.center),
-    actions: [
-      Builder(
-        builder: (dialogContext) => KidDialogButton(
-          label: context.l10n.okAction,
-          emoji: '👍',
-          onTap: () => Navigator.pop(dialogContext),
-        ),
-      ),
-    ],
-  );
-}
+        BuildContext context, String emoji, String title, String body) =>
+    showKidNotice(
+      context,
+      emoji: emoji,
+      title: title,
+      body: body,
+      okLabel: context.l10n.okAction,
+      okEmoji: '👍',
+    );
 
 String stampPackLabel(BuildContext context, StampPack pack) =>
     switch (pack.id) {
@@ -123,19 +115,15 @@ class _StampSectionsState extends State<_StampSections>
       emoji: '🗑️',
       title: context.l10n.stickerDeleteTitle,
       body: Text(context.l10n.deleteBody, textAlign: TextAlign.center),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: context.l10n.deleteKeep,
-            emoji: '🖼️',
-            onTap: () => Navigator.pop(dialogContext, false),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: context.l10n.deleteKeep,
+          emoji: '🖼️',
+          onTap: () => Navigator.pop(pop, false),
         ),
-        Builder(
-          builder: (dialogContext) => KidDialogTextButton(
-            label: context.l10n.deleteAction,
-            onTap: () => Navigator.pop(dialogContext, true),
-          ),
+        KidDialogTextButton(
+          label: context.l10n.deleteAction,
+          onTap: () => Navigator.pop(pop, true),
         ),
       ],
     );
@@ -448,13 +436,11 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
           ),
         ],
       ),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: context.l10n.okAction,
-            emoji: '💪',
-            onTap: () => Navigator.pop(dialogContext),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: context.l10n.okAction,
+          emoji: '💪',
+          onTap: () => Navigator.pop(pop),
         ),
       ],
     );

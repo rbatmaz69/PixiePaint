@@ -116,19 +116,12 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
       if (file == null) {
         // Storage is full or unwritable. Say so instead of leaving a
         // sticker that will never decode.
-        await showKidDialog<void>(
-          context: context,
+        await showKidNotice(
+          context,
           emoji: '😕',
           title: context.l10n.stickerSaveFailed,
-          actions: [
-            Builder(
-              builder: (dialogContext) => KidDialogButton(
-                label: context.l10n.okAction,
-                emoji: '👍',
-                onTap: () => Navigator.pop(dialogContext),
-              ),
-            ),
-          ],
+          okLabel: context.l10n.okAction,
+          okEmoji: '👍',
         );
         return;
       }

@@ -63,19 +63,15 @@ class _StorageScreenState extends State<StorageScreen> {
       context: context,
       emoji: '🗑️',
       title: l10n.storageDeleteConfirm(_selected.length),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: l10n.storageDeleteKeep,
-            emoji: '💚',
-            onTap: () => Navigator.pop(dialogContext, false),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: l10n.storageDeleteKeep,
+          emoji: '💚',
+          onTap: () => Navigator.pop(pop, false),
         ),
-        Builder(
-          builder: (dialogContext) => KidDialogTextButton(
-            label: l10n.storageDeleteGo,
-            onTap: () => Navigator.pop(dialogContext, true),
-          ),
+        KidDialogTextButton(
+          label: l10n.storageDeleteGo,
+          onTap: () => Navigator.pop(pop, true),
         ),
       ],
     );

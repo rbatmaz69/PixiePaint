@@ -12,12 +12,19 @@ import 'pop_in.dart';
 /// Enters with a springy scale-in (easeOutBack) and a bouncing emoji —
 /// [showGeneralDialog] under the hood, behaviorally identical to
 /// [showDialog] otherwise.
+///
+/// [actions] is handed the dialog route's own context, which is what
+/// `Navigator.pop` needs to close *this* dialog and hand back a result. It
+/// is a builder rather than a plain list for exactly that reason: the
+/// caller's context sits above the route and cannot be popped safely, so
+/// every call site used to wrap each button in its own `Builder` to reach
+/// down for one. `showKidSheet` works the same way.
 Future<T?> showKidDialog<T>({
   required BuildContext context,
   required String emoji,
   required String title,
   Widget? body,
-  List<Widget> actions = const [],
+  List<Widget> Function(BuildContext dialogContext)? actions,
   bool barrierDismissible = true,
 }) {
   return showGeneralDialog<T>(
@@ -63,7 +70,8 @@ Future<T?> showKidDialog<T>({
                 body,
               ],
               const SizedBox(height: 20),
-              for (final (i, action) in actions.indexed) ...[
+              for (final (i, action)
+                  in (actions?.call(context) ?? const <Widget>[]).indexed) ...[
                 if (i > 0) const SizedBox(height: 10),
                 action,
               ],
@@ -72,6 +80,38 @@ Future<T?> showKidDialog<T>({
         ),
       ),
     ),
+  );
+}
+
+/// Says one thing and offers one way out — the shape most of this app's
+/// dialogs actually have ("saved to photos", "that didn't work", "here is
+/// what this sticker pack is").
+///
+/// Nothing a [showKidDialog] call could not spell out; it just spells it out
+/// eight times otherwise, and the interesting part (the sentence a child or
+/// parent reads) drowns in the button plumbing. [body] takes plain text
+/// because that is all any of those places pass — reach for [showKidDialog]
+/// directly the moment a dialog needs a widget or a second choice.
+Future<void> showKidNotice(
+  BuildContext context, {
+  required String emoji,
+  required String title,
+  required String okLabel,
+  String? body,
+  String? okEmoji,
+}) {
+  return showKidDialog<void>(
+    context: context,
+    emoji: emoji,
+    title: title,
+    body: body == null ? null : Text(body, textAlign: TextAlign.center),
+    actions: (pop) => [
+      KidDialogButton(
+        label: okLabel,
+        emoji: okEmoji,
+        onTap: () => Navigator.pop(pop),
+      ),
+    ],
   );
 }
 

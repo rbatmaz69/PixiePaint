@@ -4,11 +4,15 @@ import 'pop_in.dart';
 
 /// Kid-friendly bottom sheet shell: rounded top (via theme), drag handle,
 /// emoji title row (the emoji pops in), then the content.
+///
+/// [builder] is handed the sheet route's own context — the one
+/// `Navigator.pop` needs to close this sheet and return a result. See
+/// `showKidDialog` for why it is a builder and not a plain widget.
 Future<T?> showKidSheet<T>({
   required BuildContext context,
   required String emoji,
   required String title,
-  required Widget child,
+  required Widget Function(BuildContext sheetContext) builder,
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -34,7 +38,7 @@ Future<T?> showKidSheet<T>({
               ],
             ),
           ),
-          Flexible(child: child),
+          Flexible(child: builder(context)),
         ],
       ),
     ),

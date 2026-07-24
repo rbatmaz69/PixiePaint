@@ -437,15 +437,15 @@ class _CanvasScreenState extends State<CanvasScreen>
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        actions: [
+        actions: (pop) => [
           KidDialogButton(
             label: context.l10n.saveFailedRetry,
             emoji: '🔄',
-            onTap: () => Navigator.of(context).pop(true),
+            onTap: () => Navigator.pop(pop, true),
           ),
           KidDialogTextButton(
             label: context.l10n.saveFailedLeave,
-            onTap: () => Navigator.of(context).pop(false),
+            onTap: () => Navigator.pop(pop, false),
           ),
         ],
       );

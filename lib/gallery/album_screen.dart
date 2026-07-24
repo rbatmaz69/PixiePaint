@@ -235,13 +235,11 @@ class _RewardTile extends StatelessWidget {
           ],
         ],
       ),
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: l10n.okAction,
-            emoji: unlocked ? '🎉' : '💪',
-            onTap: () => Navigator.pop(dialogContext),
-          ),
+      actions: (pop) => [
+        KidDialogButton(
+          label: l10n.okAction,
+          emoji: unlocked ? '🎉' : '💪',
+          onTap: () => Navigator.pop(pop),
         ),
       ],
     );

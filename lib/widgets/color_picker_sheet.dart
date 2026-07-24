@@ -15,7 +15,7 @@ Future<void> showColorPickerSheet(
     context: context,
     emoji: '🎨',
     title: context.l10n.colorPickerTitle,
-    child: _ColorPickerBody(controller: controller),
+    builder: (_) => _ColorPickerBody(controller: controller),
   );
 }
 

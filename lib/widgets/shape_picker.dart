@@ -32,7 +32,7 @@ Future<void> showShapePicker(
     context: context,
     emoji: shapeEmoji(controller.shapeKind),
     title: context.l10n.toolShapes,
-    child: GridView.builder(
+    builder: (sheetContext) => GridView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -49,7 +49,7 @@ Future<void> showShapePicker(
           playTick: false,
           onTap: () {
             controller.selectShape(kind);
-            Navigator.of(context).pop();
+            Navigator.pop(sheetContext);
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),

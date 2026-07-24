@@ -91,19 +91,12 @@ class _SettingsScreenState extends State<SettingsScreen>
       if (mounted && dialogOpen) Navigator.of(context).pop();
       dialogOpen = false;
       if (mounted) {
-        await showKidDialog<void>(
-          context: context,
+        await showKidNotice(
+          context,
           emoji: '😕',
           title: context.l10n.backupFailed,
-          actions: [
-            Builder(
-              builder: (dialogContext) => KidDialogButton(
-                label: context.l10n.okAction,
-                emoji: '👍',
-                onTap: () => Navigator.pop(dialogContext),
-              ),
-            ),
-          ],
+          okLabel: context.l10n.okAction,
+          okEmoji: '👍',
         );
       }
     } finally {
@@ -124,20 +117,18 @@ class _SettingsScreenState extends State<SettingsScreen>
       context: context,
       emoji: '⏰',
       title: context.l10n.pauseSettingTitle,
-      child: Column(
+      builder: (sheetContext) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final minutes in kPauseChoices)
-            Builder(
-              builder: (sheetContext) => _KidRow(
-                emoji: minutes == 0 ? '🚫' : '⏱️',
-                tint: PixiePalette.skyLight,
-                title: _pauseLabel(context, minutes),
-                subtitle: minutes == 0
-                    ? context.l10n.pauseSettingSubtitle
-                    : context.l10n.pauseBody,
-                onTap: () => Navigator.of(sheetContext).pop(minutes),
-              ),
+            _KidRow(
+              emoji: minutes == 0 ? '🚫' : '⏱️',
+              tint: PixiePalette.skyLight,
+              title: _pauseLabel(context, minutes),
+              subtitle: minutes == 0
+                  ? context.l10n.pauseSettingSubtitle
+                  : context.l10n.pauseBody,
+              onTap: () => Navigator.pop(sheetContext, minutes),
             ),
         ],
       ),
@@ -231,19 +222,12 @@ class _SettingsScreenState extends State<SettingsScreen>
 
     if (!mounted) return;
     if (dialogOpen) Navigator.of(context).pop();
-    await showKidDialog<void>(
-      context: context,
+    await showKidNotice(
+      context,
       emoji: emoji,
       title: message,
-      actions: [
-        Builder(
-          builder: (dialogContext) => KidDialogButton(
-            label: l10n.okAction,
-            emoji: '👍',
-            onTap: () => Navigator.pop(dialogContext),
-          ),
-        ),
-      ],
+      okLabel: l10n.okAction,
+      okEmoji: '👍',
     );
   }
 
