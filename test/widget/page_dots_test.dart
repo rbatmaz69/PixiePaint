@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pixiepaint/gallery/slideshow_screen.dart';
+import 'package:pixiepaint/ui/page_dots.dart';
 
-/// The dot row under the slideshow (v8.4).
+/// The dot row — under the slideshow, and under the welcome cards.
 ///
-/// It says which picture of how many without asking anyone to read a
-/// number — but a gallery can hold forty pictures, and forty dots on a
-/// phone in landscape is a dotted line, not a count. So the row is a window
-/// of seven, and the window is the part that can be wrong.
+/// It says which of how many without asking anyone to read a number — but
+/// a gallery can hold forty pictures, and forty dots on a phone in
+/// landscape is a dotted line, not a count. So the row is a window of
+/// seven, and the window is the part that can be wrong.
 void main() {
   Future<void> pump(WidgetTester tester,
           {required int count, required int index}) =>
       tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Center(child: SlideDots(count: count, index: index)),
+            body: Center(child: PageDots(count: count, index: index)),
           ),
         ),
       );

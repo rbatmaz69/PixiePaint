@@ -9,6 +9,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/page_dots.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/image_io.dart';
@@ -210,60 +211,18 @@ class _SlideshowScreenState extends State<SlideshowScreen>
                   opacity: _showControls ? 1 : 0,
                   duration: const Duration(milliseconds: 300),
                   child: Center(
-                    child: SlideDots(
+                    child: PageDots(
                       count: widget.artworks.length,
                       index: _index,
+                      // White on the dark frame; ink would vanish here.
+                      activeColor: Colors.white.withValues(alpha: 0.95),
+                      restColor: Colors.white.withValues(alpha: 0.4),
                     ),
                   ),
                 ),
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Where we are in the show, as dots — readable across a room and without
-/// reading at all, which a "4 / 17" would not be.
-///
-/// Long shows collapse to a window of seven around the current picture:
-/// forty dots on a phone in landscape would be a dotted line, not a count.
-class SlideDots extends StatelessWidget {
-  const SlideDots({super.key, required this.count, required this.index});
-
-  final int count;
-  final int index;
-
-  static const int _maxDots = 7;
-
-  @override
-  Widget build(BuildContext context) {
-    final shown = count < _maxDots ? count : _maxDots;
-    // Slide the window so the active dot stays in the middle where it can,
-    // and sticks to an end where it cannot.
-    final first = count <= _maxDots
-        ? 0
-        : (index - _maxDots ~/ 2).clamp(0, count - _maxDots);
-    return Semantics(
-      // A dot row says nothing out loud; this is the sentence for it.
-      label: '${index + 1} / $count',
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = first; i < first + shown; i++)
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: i == index ? 22 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: i == index ? 0.95 : 0.4),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-        ],
       ),
     );
   }

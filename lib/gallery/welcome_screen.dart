@@ -6,6 +6,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/page_dots.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/pop_in.dart';
 import '../ui/sticker.dart';
@@ -113,24 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < _cardCount; i++)
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 220),
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: i == _index ? 22 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: i == _index
-                            ? PixiePalette.grape
-                            : PixiePalette.ink.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                ],
-              ),
+              PageDots(count: _cardCount, index: _index),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
                 child: KidDialogButton(

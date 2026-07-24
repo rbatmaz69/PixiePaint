@@ -354,6 +354,7 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 - `blob_background.dart` + `paper_doodles.dart` — driftende Blobs + Doodles auf **einem** 28-s-Ticker, der sich automatisch pausiert, sobald die Route verdeckt oder die App im Hintergrund ist. Der Malbildschirm nimmt denselben Doodle-Painter, aber ohne Ticker und blasser
 - `hero_tags.dart` — die Tags der Flüge in die Leinwand, an einer Stelle vergeben
 - `paper_sheet.dart` — das Blatt Papier, auf dem ein Bild liegt (Leinwand, Zeitraffer, Zwei-Maler)
+- `page_dots.dart` — die Punktreihe „das wievielte von wie vielen" (Erststart, Diashow)
 - `kid_dialog.dart`, `kid_sheet.dart`, `reward_reveal.dart` — Dialoge, Sheets, Belohnungs-Moment
 
 **Erreichbarkeit der Werkzeugleiste** (seit v8.0): `ToolBarRail` scrollt, `ToolActionCluster` nicht. Rückgängig und Wiederholen lagen bis dahin am Ende eines rund 1000 px breiten Streifens — auf einem 360-dp-Telefon außerhalb des Bildes, hinter einer Wischgeste, die nichts ankündigte. Die beiden Knöpfe platziert seither der Bildschirm selbst (in `_buildPortrait` und `_LeftRail`), gespiegelt für Linkshänder. Der Streifen daneben blendet seine Ränder weich aus, sobald dort wirklich mehr steht, und holt ein über ein Auswahl-Blatt gewähltes Werkzeug per `Scrollable.ensureVisible` zurück in den Blick. **Was neu in die Leiste kommt, gehört in den scrollenden Teil** — der feste Cluster ist für das reserviert, was ein Kind im Zweifel *sofort* braucht.
