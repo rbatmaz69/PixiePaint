@@ -8,6 +8,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
+import '../ui/hero_tags.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -74,9 +75,12 @@ class ScenePickerScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(16),
                                     child: SizedBox(
                                       width: double.infinity,
-                                      child: SvgPicture.asset(
-                                        scene.assetPath,
-                                        fit: BoxFit.cover,
+                                      child: Hero(
+                                        tag: sceneHeroTag(scene.id),
+                                        child: SvgPicture.asset(
+                                          scene.assetPath,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ),

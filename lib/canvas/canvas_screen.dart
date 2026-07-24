@@ -17,6 +17,7 @@ import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
+import '../ui/hero_tags.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_palette.dart';
@@ -522,11 +523,43 @@ class _CanvasScreenState extends State<CanvasScreen>
     );
   }
 
-  /// While rasterizing a bundled page, show it as a sheet of paper — the
-  /// Hero flight from the picker tile lands here, hiding the load time.
+  /// While the picture is being prepared, show it as a sheet of paper — the
+  /// Hero flight from the tile that was tapped lands here, hiding the load
+  /// time.
+  ///
+  /// All three ways in that *have* a picture to fly get one: a bundled
+  /// coloring page, a saved picture being resumed, a scene. Free drawing,
+  /// photos and tracing start from a tile with nothing to carry over, so
+  /// they get the hopping brush instead.
   Widget _buildLoading() {
     final page = widget.page;
-    if (page == null) {
+    final resume = widget.resume;
+    final scene = widget.scene;
+
+    final Widget? preview = switch ((page, resume, scene)) {
+      (final ColoringPage p, _, _) => Hero(
+          tag: pageHeroTag(p.id),
+          child: SvgPicture.asset(p.assetPath, fit: BoxFit.contain),
+        ),
+      (_, final Artwork a, _) when a.thumbFile.existsSync() => Hero(
+          tag: artworkHeroTag(a.id),
+          child: Image.file(
+            a.thumbFile,
+            fit: BoxFit.cover,
+            // Same reason as in the gallery tile: thumbnails change on disk
+            // under the same path, so a cached one would be stale.
+            key: ValueKey(a.updatedAt),
+            cacheWidth: 560,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          ),
+        ),
+      (_, _, final Scene s) => Hero(
+          tag: sceneHeroTag(s.id),
+          child: SvgPicture.asset(s.assetPath, fit: BoxFit.cover),
+        ),
+      _ => null,
+    };
+    if (preview == null) {
       return Center(child: LoadingPixie(label: context.l10n.canvasLoading));
     }
     return Center(
@@ -547,9 +580,9 @@ class _CanvasScreenState extends State<CanvasScreen>
               ],
             ),
             padding: const EdgeInsets.all(16),
-            child: Hero(
-              tag: page.id,
-              child: SvgPicture.asset(page.assetPath, fit: BoxFit.contain),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: preview,
             ),
           ),
         ),

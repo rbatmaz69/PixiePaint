@@ -6,6 +6,7 @@ import '../models/artwork.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/hero_tags.dart';
 import '../ui/pixie_palette.dart';
 import '../util/profiles.dart';
 import 'artwork_store.dart';
@@ -102,16 +103,22 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
               // words next to it are for whoever reads over their shoulder.
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.file(
-                  artwork.thumbFile,
-                  width: 64,
-                  height: 48,
-                  fit: BoxFit.cover,
-                  cacheWidth: 128,
-                  errorBuilder: (_, _, _) => const SizedBox(
+                child: Hero(
+                  // The same picture as the gallery tile, so the same tag:
+                  // whichever one the child taps, the thumbnail flies into
+                  // the paper sheet on the canvas.
+                  tag: artworkHeroTag(artwork.id),
+                  child: Image.file(
+                    artwork.thumbFile,
                     width: 64,
                     height: 48,
-                    child: Center(child: Text('🎨')),
+                    fit: BoxFit.cover,
+                    cacheWidth: 128,
+                    errorBuilder: (_, _, _) => const SizedBox(
+                      width: 64,
+                      height: 48,
+                      child: Center(child: Text('🎨')),
+                    ),
                   ),
                 ),
               ),

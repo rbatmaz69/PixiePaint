@@ -8,6 +8,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
+import '../ui/hero_tags.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -217,7 +218,7 @@ class _PageGrid extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(8),
                       child: Hero(
-                        tag: page.id,
+                        tag: pageHeroTag(page.id),
                         child: SvgPicture.asset(
                           page.assetPath,
                           fit: BoxFit.contain,

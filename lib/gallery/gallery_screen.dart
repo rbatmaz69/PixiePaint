@@ -10,6 +10,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
+import '../ui/hero_tags.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -545,19 +546,25 @@ class _PolaroidCardState extends State<_PolaroidCard>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: artwork.thumbFile.existsSync()
-                        ? Image.file(
-                            artwork.thumbFile,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                            // Thumbnails change on disk under the same path,
-                            // so don't let the image cache serve stale ones.
-                            key: ValueKey(artwork.updatedAt),
-                            cacheWidth: 560,
-                            // A half-written thumbnail must not take the
-                            // whole gallery down with a decode exception.
-                            errorBuilder: (_, _, _) =>
-                                const Center(child: Icon(Icons.image, size: 48)),
+                        ? Hero(
+                            // Flies into the paper sheet on the canvas while
+                            // the picture is being loaded back.
+                            tag: artworkHeroTag(artwork.id),
+                            child: Image.file(
+                              artwork.thumbFile,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              // Thumbnails change on disk under the same
+                              // path, so don't let the image cache serve
+                              // stale ones.
+                              key: ValueKey(artwork.updatedAt),
+                              cacheWidth: 560,
+                              // A half-written thumbnail must not take the
+                              // whole gallery down with a decode exception.
+                              errorBuilder: (_, _, _) => const Center(
+                                  child: Icon(Icons.image, size: 48)),
+                            ),
                           )
                         : const Center(child: Icon(Icons.image, size: 48)),
                   ),
