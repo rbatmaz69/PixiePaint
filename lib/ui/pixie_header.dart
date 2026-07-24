@@ -43,12 +43,32 @@ class PixieHeader extends StatelessWidget {
               size: 26, tiltIndex: 1, shadowColor: accent),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: PixiePalette.ink),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(color: PixiePalette.ink),
+                ),
+                // A short crayon underline in the screen's own color. It is
+                // the one mark that says "you are here" without any reading
+                // — and it sits under the title's start, not centered, so
+                // it reads as underlined rather than as a divider.
+                const SizedBox(height: 3),
+                Container(
+                  width: 46,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: (accent ?? PixiePalette.grape)
+                        .withValues(alpha: 0.75),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
             ),
           ),
           ?trailing,

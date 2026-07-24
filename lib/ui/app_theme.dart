@@ -22,9 +22,23 @@ abstract final class PixieTokens {
       (((index * 7) % 5) - 2) * 0.8 * math.pi / 180;
 
   /// Soft, colored shadow — softer and friendlier than plain black.
+  ///
+  /// Two layers since v8.4: a tight contact shadow right under the edge,
+  /// and the wide soft one that was always here. One alone reads as
+  /// floating; together the sticker sits *on* the paper.
+  ///
+  /// Both radii are fixed on purpose. These shadows get tweened by
+  /// [AnimatedContainer] with overshooting curves (see the toolbar), and a
+  /// blur radius pulled below zero is an assertion in `dart:ui` — so only
+  /// the alpha, which [Color.lerp] clamps, is ever allowed to vary.
   static List<BoxShadow> softShadow(Color color) => [
         BoxShadow(
-          color: color.withValues(alpha: 0.25),
+          color: color.withValues(alpha: 0.18),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+        BoxShadow(
+          color: color.withValues(alpha: 0.22),
           blurRadius: 16,
           offset: const Offset(0, 6),
         ),
@@ -148,16 +162,25 @@ ThemeData buildPixieTheme() {
         color: PixiePalette.ink,
       );
 
+  // Fredoka runs wide at display sizes — a touch of negative tracking on
+  // the big grades keeps a headline reading as one word rather than a row
+  // of letters. The body sizes keep their default spacing; they are already
+  // comfortable and children read them slowly.
   final text = base.textTheme;
   final textTheme = text.copyWith(
-    displayLarge: style(text.displayLarge, FontWeight.w700),
-    displayMedium: style(text.displayMedium, FontWeight.w700),
-    displaySmall: style(text.displaySmall, FontWeight.w700, size: 40),
-    headlineLarge: style(text.headlineLarge, FontWeight.w700),
-    headlineMedium: style(text.headlineMedium, FontWeight.w700, size: 30),
-    headlineSmall: style(text.headlineSmall, FontWeight.w700, size: 26),
-    titleLarge: style(text.titleLarge, FontWeight.w600, size: 22),
-    titleMedium: style(text.titleMedium, FontWeight.w600, size: 18),
+    displayLarge: style(text.displayLarge, FontWeight.w700, spacing: -0.8),
+    displayMedium: style(text.displayMedium, FontWeight.w700, spacing: -0.6),
+    displaySmall:
+        style(text.displaySmall, FontWeight.w700, size: 40, spacing: -0.5),
+    headlineLarge: style(text.headlineLarge, FontWeight.w700, spacing: -0.5),
+    headlineMedium:
+        style(text.headlineMedium, FontWeight.w700, size: 30, spacing: -0.4),
+    headlineSmall:
+        style(text.headlineSmall, FontWeight.w700, size: 26, spacing: -0.3),
+    // Card labels wrap to two lines; without the extra leading they touch.
+    titleLarge: style(text.titleLarge, FontWeight.w600, size: 22, height: 1.25),
+    titleMedium:
+        style(text.titleMedium, FontWeight.w600, size: 18, height: 1.25),
     titleSmall: style(text.titleSmall, FontWeight.w600, size: 16),
     bodyLarge: style(text.bodyLarge, FontWeight.w500, size: 17, height: 1.3),
     bodyMedium: style(text.bodyMedium, FontWeight.w500, size: 15),

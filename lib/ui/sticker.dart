@@ -19,6 +19,7 @@ class StickerCard extends StatelessWidget {
     this.padding,
     this.width,
     this.height,
+    this.sheen = true,
   });
 
   final Widget child;
@@ -33,6 +34,11 @@ class StickerCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? width;
   final double? height;
+
+  /// The gloss a real sticker has: a very flat white wash across the top
+  /// left corner, fading out by a third of the way down. Turn it off where
+  /// the card is mostly a photograph and the wash would read as a smudge.
+  final bool sheen;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +57,21 @@ class StickerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         boxShadow: PixieTokens.softShadow(shadow),
       ),
+      // The gloss goes *over* the content but never eats a tap.
+      foregroundDecoration: sheen
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withValues(alpha: 0.18),
+                  Colors.white.withValues(alpha: 0.0),
+                ],
+                stops: const [0.0, 0.35],
+              ),
+            )
+          : null,
       child: child,
     );
     final tilt = tiltIndex;
