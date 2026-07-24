@@ -9,6 +9,7 @@ import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -28,7 +29,8 @@ class PhotoLineArtScreen extends StatefulWidget {
   State<PhotoLineArtScreen> createState() => _PhotoLineArtScreenState();
 }
 
-class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
+class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
+    with SingleTickerProviderStateMixin, EntranceMixin {
   PhotoEdgeSource? _source;
   LineArtDetail _detail = LineArtDetail.medium;
   final Map<LineArtDetail, Uint8List> _masks = {};
@@ -116,7 +118,9 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ConstrainedBox(
+                        entrance(
+                          0,
+                          ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 480),
                           child: StickerCard(
                             color: Colors.white,
@@ -146,8 +150,11 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                             ),
                           ),
                         ),
+                        ),
                         const SizedBox(height: 18),
-                        Wrap(
+                        entrance(
+                          2,
+                          Wrap(
                           spacing: 10,
                           runSpacing: 10,
                           alignment: WrapAlignment.center,
@@ -164,8 +171,11 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                               ),
                           ],
                         ),
+                        ),
                         const SizedBox(height: 22),
-                        Bouncy(
+                        entrance(
+                          4,
+                          Bouncy(
                           onTap: _masks[_detail] == null || _starting
                               ? null
                               : _start,
@@ -214,6 +224,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen> {
                               ],
                             ),
                           ),
+                        ),
                         ),
                       ],
                     ),

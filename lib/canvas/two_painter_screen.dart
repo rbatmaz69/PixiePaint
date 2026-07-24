@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
+import '../ui/paper_doodles.dart';
+import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/profiles.dart';
@@ -124,15 +126,33 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
         if (!didPop) _leave();
       },
       child: Scaffold(
-        body: Container(
+        body: DecoratedBox(
           decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
-          child: SafeArea(
+          // The same still, faint paper as the single canvas.
+          child: CustomPaint(
+            painter: const DoodlePainter(0.12, alpha: 0.04),
+            child: SafeArea(
             child: Stack(
               children: [
                 Row(
                   children: [
                     Expanded(child: _pane(_left, flipped: _leftFlipped)),
-                    Container(width: 3, color: PixiePalette.grape.withValues(alpha: 0.2)),
+                    // A drawn fold rather than a flat rule: this is one
+                    // sheet of paper being shared, not two screens.
+                    Container(
+                      width: 3,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            PixiePalette.grape.withValues(alpha: 0.05),
+                            PixiePalette.grape.withValues(alpha: 0.28),
+                            PixiePalette.grape.withValues(alpha: 0.05),
+                          ],
+                        ),
+                      ),
+                    ),
                     Expanded(child: _pane(_right, flipped: false)),
                   ],
                 ),
@@ -164,6 +184,7 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
                 ),
               ],
             ),
+            ),
           ),
         ),
       ),
@@ -171,34 +192,16 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
   }
 
   Widget _pane(CanvasController controller, {required bool flipped}) {
-    final canvas = Center(
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: AspectRatio(
-          aspectRatio:
-              TwoPainterScreen.paneWidth / TwoPainterScreen.paneHeight,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: PixiePalette.ink.withValues(alpha: 0.12),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: SizedBox(
-                width: TwoPainterScreen.paneWidth.toDouble(),
-                height: TwoPainterScreen.paneHeight.toDouble(),
-                child: PaintingCanvas(controller: controller),
-              ),
-            ),
-          ),
+    final canvas = PaperSheet(
+      aspectRatio: TwoPainterScreen.paneWidth / TwoPainterScreen.paneHeight,
+      padding: EdgeInsets.zero,
+      margin: const EdgeInsets.all(6),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: SizedBox(
+          width: TwoPainterScreen.paneWidth.toDouble(),
+          height: TwoPainterScreen.paneHeight.toDouble(),
+          child: PaintingCanvas(controller: controller),
         ),
       ),
     );

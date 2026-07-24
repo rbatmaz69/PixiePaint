@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/loading_pixie.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/image_io.dart';
@@ -173,12 +174,28 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                     ),
                   ),
                   StickerCircleButton(
-                    icon: _saving
-                        ? Icons.hourglass_top_rounded
-                        : Icons.check_rounded,
                     tooltip: context.l10n.okAction,
                     accent: PixiePalette.mint,
                     onTap: _confirm,
+                    // Cutting out a sticker takes a moment on a big photo.
+                    // The icon used to swap hard from tick to hourglass,
+                    // which reads as a different button rather than as the
+                    // same one working.
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: _saving
+                          ? const LoadingPixie(
+                              key: ValueKey('saving'),
+                              emoji: '✂️',
+                              size: 20,
+                            )
+                          : Icon(
+                              Icons.check_rounded,
+                              key: const ValueKey('idle'),
+                              size: 24,
+                              color: PixiePalette.ink.withValues(alpha: 0.7),
+                            ),
+                    ),
                   ),
                 ],
               ),
