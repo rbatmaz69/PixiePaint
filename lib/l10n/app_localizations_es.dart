@@ -866,4 +866,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get errorLogShareNote =>
       'Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito.';
+
+  @override
+  String get rotateHint => 'Gírame de lado y tendrás más sitio para pintar';
 }

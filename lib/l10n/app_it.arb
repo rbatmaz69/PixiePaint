@@ -378,5 +378,6 @@
   "errorLogShare": "Condividi la segnalazione",
   "errorLogClear": "Svuota l'elenco",
   "errorLogClearConfirm": "Eliminare tutte le voci?",
-  "errorLogShareNote": "Registrato da PixiePaint: resta sul dispositivo finché non viene condiviso di proposito."
+  "errorLogShareNote": "Registrato da PixiePaint: resta sul dispositivo finché non viene condiviso di proposito.",
+  "rotateHint": "Girami di lato: avrai più spazio per dipingere"
 }

@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 7.9.1+30 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.0.0+31 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -37,7 +37,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Zauber-Spiegel: 2-, 4- und 6-fache Symmetrie
 - 20 Emoji-Sticker in 8 Paketen, davon mehrere freischaltbar, plus eigene Sticker aus eigenen Bildern
 - Pipette: Farbe direkt vom Bild aufnehmen
-- Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo
+- Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo — **Rückgängig und Wiederholen stehen fest neben der Werkzeugleiste** und scrollen nie mit weg
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung
 
 **Weitere Spielarten**
@@ -236,10 +236,10 @@ Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Pl
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 518 Tests in 49 Dateien:
+Die Test-Suite umfasst 525 Tests in 50 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
-- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
+- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht. Dazu seit v8.0 `canvas_reach_test.dart` — die Frage, ob ein Kind die Knöpfe überhaupt *erreicht*: Rückgängig muss auf einem 360-dp-Telefon ohne Wischen auf dem Schirm stehen.
 - `test/golden/renderers_test.dart` — **visuelle Regression** der 10 Stift-Charaktere, 5 Formen und 8 Füllmuster
 
 Zu den Golden Tests: Sie decken bewusst **nur** die Zeichen-Renderer ab. Ganze Bildschirme wären hier zwecklos — die Oberfläche besteht großenteils aus Emoji, und die rendern auf jedem System anders. Die Renderer dagegen sind reine Vektoren ohne Text und aus festen Seeds deterministisch. Nach einer bewussten Designänderung neu erzeugen:
@@ -345,6 +345,8 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 - `bouncy.dart`, `pop_in.dart` — Bewegungs-Primitive (Press-Feder, Entrance-Pop, Puls)
 - `blob_background.dart` — driftende Blobs + Doodles auf **einem** 28-s-Ticker, der sich automatisch pausiert, sobald die Route verdeckt oder die App im Hintergrund ist
 - `kid_dialog.dart`, `kid_sheet.dart`, `reward_reveal.dart` — Dialoge, Sheets, Belohnungs-Moment
+
+**Erreichbarkeit der Werkzeugleiste** (seit v8.0): `ToolBarRail` scrollt, `ToolActionCluster` nicht. Rückgängig und Wiederholen lagen bis dahin am Ende eines rund 1000 px breiten Streifens — auf einem 360-dp-Telefon außerhalb des Bildes, hinter einer Wischgeste, die nichts ankündigte. Die beiden Knöpfe platziert seither der Bildschirm selbst (in `_buildPortrait` und `_LeftRail`), gespiegelt für Linkshänder. Der Streifen daneben blendet seine Ränder weich aus, sobald dort wirklich mehr steht, und holt ein über ein Auswahl-Blatt gewähltes Werkzeug per `Scrollable.ensureVisible` zurück in den Blick. **Was neu in die Leiste kommt, gehört in den scrollenden Teil** — der feste Cluster ist für das reserviert, was ein Kind im Zweifel *sofort* braucht.
 
 **Canvas-Performance:** Der `CanvasController` trennt zwei Signale — `repaint` (ValueNotifier, feuert bei jedem Zeichen-Sample und lässt nur den Painter neu malen) und `notifyListeners()` (nur für Werkzeugleisten-State). Der `CustomPaint` liegt in einer eigenen `RepaintBoundary`. **Neue Effekte im Malbereich gehören als Geschwister-Overlay daneben, niemals hinein** — Vorbild: `fill_burst.dart` und `stamp_burst.dart`.
 

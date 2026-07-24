@@ -49,6 +49,16 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] **Werkzeugwechsel mehrfach hin und her** — in v6.7 wurde hier ein Absturzpfad behoben (negativer Schatten-Blur), das ist die Gegenprobe
 - [ ] Zauber-Spiegel in allen drei Stufen
 
+**Erreichbarkeit der Leiste** (neu in v8.0 — das Handy im Hochformat ist hier der Prüfstein)
+
+- [ ] Rückgängig und Wiederholen sind **ohne zu wischen** sichtbar, direkt nach dem Öffnen eines Bildes
+- [ ] Die Werkzeuge daneben lassen sich wischen; die weiche Kante zeigt, dass es weitergeht
+- [ ] Sticker oder Form über das Auswahl-Blatt wählen → das gewählte Werkzeug rutscht von selbst in den sichtbaren Bereich
+- [ ] Linkshänder-Modus an: Rückgängig/Wiederholen wechseln die Seite
+- [ ] „Alles weg" (Besen) sitzt am Ende der Werkzeuge und fragt weiterhin nach
+- [ ] Beim allerersten Bild auf einem **Handy** erscheint einmalig der Hinweis „Quer hast du mehr Platz" — antippen lässt ihn verschwinden, nach ein paar Sekunden geht er von selbst
+- [ ] Nächstes Bild öffnen: der Hinweis kommt **nicht** wieder; auf dem Tablet erscheint er gar nicht
+
 ## Stift und Handballen (nur mit Stylus)
 
 - [ ] Druckstärke ändert die Strichbreite

@@ -88,112 +88,54 @@ List<BoxShadow> _selectionShadow(Color accent, bool selected) => [
       ),
     ];
 
-class ToolBarRail extends StatelessWidget {
-  const ToolBarRail({
+/// Rounded pill container around one group of buttons.
+Widget _pill(List<Widget> children, Axis direction) {
+  return Container(
+    margin: const EdgeInsets.all(4),
+    padding: const EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      color: Colors.white.withValues(alpha: 0.85),
+      borderRadius: BorderRadius.circular(24),
+      boxShadow: [
+        BoxShadow(
+          color: PixiePalette.grape.withValues(alpha: 0.12),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
+    child: direction == Axis.vertical
+        ? Column(mainAxisSize: MainAxisSize.min, children: children)
+        : Row(mainAxisSize: MainAxisSize.min, children: children),
+  );
+}
+
+/// Undo and redo, and nothing else.
+///
+/// These two live *outside* [ToolBarRail] on purpose. The rail scrolls — on
+/// a 360 dp phone it shows about six of its nineteen buttons — and undo used
+/// to sit at the very end of it, which put the single most important control
+/// in a painting app behind a scroll gesture that nothing announced. The
+/// cluster is placed by the screen and never moves.
+///
+/// "Clear everything" deliberately stayed *in* the rail: it is the one
+/// destructive action here, it asks for confirmation anyway, and being a
+/// little harder to reach suits it.
+class ToolActionCluster extends StatelessWidget {
+  const ToolActionCluster({
     super.key,
     required this.controller,
-    this.showFill = true,
-    this.fillOnly = false,
     this.direction = Axis.vertical,
   });
 
   final CanvasController controller;
-  final bool showFill;
-
-  /// Color-by-number: only the bucket (plain, no pattern picker) plus
-  /// undo/redo/clear — the numbered palette does the color choosing.
-  final bool fillOnly;
   final Axis direction;
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: controller,
-      builder: (context, _) {
-        final children = _buildGroups(context);
-        return SingleChildScrollView(
-          scrollDirection: direction,
-          child: direction == Axis.vertical
-              ? Column(mainAxisSize: MainAxisSize.min, children: children)
-              : Row(mainAxisSize: MainAxisSize.min, children: children),
-        );
-      },
-    );
-  }
-
-  /// Rounded pill container around one group of buttons.
-  Widget _group(BuildContext context, List<Widget> children) {
-    return Container(
-      margin: const EdgeInsets.all(4),
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: PixiePalette.grape.withValues(alpha: 0.12),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: direction == Axis.vertical
-          ? Column(mainAxisSize: MainAxisSize.min, children: children)
-          : Row(mainAxisSize: MainAxisSize.min, children: children),
-    );
-  }
-
-  List<Widget> _buildGroups(BuildContext context) {
-    final tools = fillOnly
-        ? [ToolKind.fill]
-        : [
-            ToolKind.brush,
-            ToolKind.marker,
-            ToolKind.crayon,
-            ToolKind.rainbow,
-            ToolKind.glitter,
-            ToolKind.neon,
-            ToolKind.trail,
-            ToolKind.dotted,
-            ToolKind.twin,
-            ToolKind.stamp,
-            ToolKind.shape,
-            if (showFill) ToolKind.fill,
-            ToolKind.eyedropper,
-            ToolKind.eraser,
-          ];
-    return [
-      _group(context, [
-        for (final tool in tools)
-          _ToolButton(
-            tool: tool,
-            controller: controller,
-            onTap: switch (tool) {
-              ToolKind.stamp => () => showStampPicker(context, controller),
-              ToolKind.shape => () => shapes.showShapePicker(
-                context,
-                controller,
-              ),
-              ToolKind.fill => fillOnly
-                  ? () => controller.selectTool(ToolKind.fill)
-                  : () => showFillPatternPicker(context, controller),
-              _ => () => controller.selectTool(tool),
-            },
-          ),
-      ]),
-      if (!fillOnly)
-        _group(context, [
-          _SizeButton(
-            brushSize: controller.brushSize,
-            color: controller.color,
-            onTap: () => showSizePicker(context, controller),
-          ),
-          _SymmetryButton(
-            controller: controller,
-            onTap: () => symmetry.showSymmetryPicker(context, controller),
-          ),
-        ]),
-      _group(context, [
+      builder: (context, _) => _pill([
         _ActionButton(
           icon: Icons.undo_rounded,
           enabled: controller.canUndo,
@@ -208,52 +150,279 @@ class ToolBarRail extends StatelessWidget {
           label: context.l10n.redoAction,
           onTap: controller.redo,
         ),
+      ], direction),
+    );
+  }
+}
+
+class ToolBarRail extends StatefulWidget {
+  const ToolBarRail({
+    super.key,
+    required this.controller,
+    this.showFill = true,
+    this.fillOnly = false,
+    this.direction = Axis.vertical,
+    this.buttonSize = 52,
+  });
+
+  final CanvasController controller;
+  final bool showFill;
+
+  /// Color-by-number: only the bucket (plain, no pattern picker) plus
+  /// clear — the numbered palette does the color choosing.
+  final bool fillOnly;
+  final Axis direction;
+
+  /// Edge length of one tool button. Portrait shaves a little off to give
+  /// the paper more room; [Bouncy.minSize] keeps the tap target at 48.
+  final double buttonSize;
+
+  @override
+  State<ToolBarRail> createState() => _ToolBarRailState();
+}
+
+class _ToolBarRailState extends State<ToolBarRail> {
+  final ScrollController _scroll = ScrollController();
+
+  /// One key per tool so a selection made in a sheet (stickers, shapes) can
+  /// scroll its button back into view.
+  final Map<ToolKind, GlobalKey> _keys = {};
+
+  late ToolKind _lastTool = widget.controller.tool;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onToolChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onToolChanged);
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  /// Brings the freshly selected tool into view. Deferred by a frame: the
+  /// selection often arrives while a bottom sheet is still closing, and the
+  /// button's context is only good once this build has run.
+  void _onToolChanged() {
+    final tool = widget.controller.tool;
+    if (tool == _lastTool) return;
+    _lastTool = tool;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final ctx = _keys[tool]?.currentContext;
+      if (ctx == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.5,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: widget.controller,
+      builder: (context, _) {
+        final children = _buildGroups(context);
+        return _FadeEdges(
+          scroll: _scroll,
+          direction: widget.direction,
+          child: SingleChildScrollView(
+            controller: _scroll,
+            scrollDirection: widget.direction,
+            child: widget.direction == Axis.vertical
+                ? Column(mainAxisSize: MainAxisSize.min, children: children)
+                : Row(mainAxisSize: MainAxisSize.min, children: children),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildGroups(BuildContext context) {
+    final controller = widget.controller;
+    final tools = widget.fillOnly
+        ? [ToolKind.fill]
+        : [
+            ToolKind.brush,
+            ToolKind.marker,
+            ToolKind.crayon,
+            ToolKind.rainbow,
+            ToolKind.glitter,
+            ToolKind.neon,
+            ToolKind.trail,
+            ToolKind.dotted,
+            ToolKind.twin,
+            ToolKind.stamp,
+            ToolKind.shape,
+            if (widget.showFill) ToolKind.fill,
+            ToolKind.eyedropper,
+            ToolKind.eraser,
+          ];
+    return [
+      _pill([
+        for (final tool in tools)
+          _ToolButton(
+            key: _keys.putIfAbsent(tool, GlobalKey.new),
+            tool: tool,
+            controller: controller,
+            size: widget.buttonSize,
+            onTap: switch (tool) {
+              ToolKind.stamp => () => showStampPicker(context, controller),
+              ToolKind.shape => () => shapes.showShapePicker(
+                context,
+                controller,
+              ),
+              ToolKind.fill => widget.fillOnly
+                  ? () => controller.selectTool(ToolKind.fill)
+                  : () => showFillPatternPicker(context, controller),
+              _ => () => controller.selectTool(tool),
+            },
+          ),
+      ], widget.direction),
+      if (!widget.fillOnly)
+        _pill([
+          _SizeButton(
+            brushSize: controller.brushSize,
+            color: controller.color,
+            onTap: () => showSizePicker(context, controller),
+          ),
+          _SymmetryButton(
+            controller: controller,
+            onTap: () => symmetry.showSymmetryPicker(context, controller),
+          ),
+        ], widget.direction),
+      _pill([
         _ActionButton(
           icon: Icons.delete_sweep_outlined,
           enabled: !controller.isEmpty,
           label: context.l10n.clearAction,
-          onTap: () => _confirmClear(context),
+          onTap: () => _confirmClear(context, controller),
         ),
-      ]),
+      ], widget.direction),
     ];
   }
+}
 
-  Future<void> _confirmClear(BuildContext context) async {
-    final ok = await showKidDialog<bool>(
-      context: context,
-      emoji: '🧽',
-      title: context.l10n.clearTitle,
-      body: Text(context.l10n.clearBody, textAlign: TextAlign.center),
-      actions: [
-        Builder(
-          builder: (context) => KidDialogButton(
-            label: context.l10n.clearKeep,
-            emoji: '🖌️',
-            onTap: () => Navigator.pop(context, false),
-          ),
+Future<void> _confirmClear(
+    BuildContext context, CanvasController controller) async {
+  final ok = await showKidDialog<bool>(
+    context: context,
+    emoji: '🧽',
+    title: context.l10n.clearTitle,
+    body: Text(context.l10n.clearBody, textAlign: TextAlign.center),
+    actions: [
+      Builder(
+        builder: (context) => KidDialogButton(
+          label: context.l10n.clearKeep,
+          emoji: '🖌️',
+          onTap: () => Navigator.pop(context, false),
         ),
-        Builder(
-          builder: (context) => KidDialogTextButton(
-            label: context.l10n.clearConfirm,
-            onTap: () => Navigator.pop(context, true),
-          ),
+      ),
+      Builder(
+        builder: (context) => KidDialogTextButton(
+          label: context.l10n.clearConfirm,
+          onTap: () => Navigator.pop(context, true),
         ),
-      ],
+      ),
+    ],
+  );
+  if (ok == true) controller.clearAll();
+}
+
+/// Softens the two ends of a scrolling strip, but only on the side that
+/// actually has more content — a strip that fits keeps hard edges.
+///
+/// This is the missing half of the scroll fix: the toolbar could always be
+/// scrolled, it just never said so.
+class _FadeEdges extends StatefulWidget {
+  const _FadeEdges({
+    required this.scroll,
+    required this.direction,
+    required this.child,
+  });
+
+  final ScrollController scroll;
+  final Axis direction;
+  final Widget child;
+
+  @override
+  State<_FadeEdges> createState() => _FadeEdgesState();
+}
+
+class _FadeEdgesState extends State<_FadeEdges> {
+  bool _before = false;
+  bool _after = false;
+
+  /// Always deferred a frame: metrics notifications are dispatched during
+  /// layout, and calling setState there is an error.
+  void _schedule() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final position =
+          widget.scroll.hasClients ? widget.scroll.position : null;
+      final before = position != null && position.extentBefore > 0.5;
+      final after = position != null && position.extentAfter > 0.5;
+      if (before != _before || after != _after) {
+        setState(() {
+          _before = before;
+          _after = after;
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final horizontal = widget.direction == Axis.horizontal;
+    return NotificationListener<ScrollMetricsNotification>(
+      onNotification: (_) {
+        _schedule();
+        return false;
+      },
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (_) {
+          _schedule();
+          return false;
+        },
+        child: ShaderMask(
+          blendMode: BlendMode.dstIn,
+          shaderCallback: (rect) => LinearGradient(
+            begin: horizontal ? Alignment.centerLeft : Alignment.topCenter,
+            end: horizontal ? Alignment.centerRight : Alignment.bottomCenter,
+            colors: [
+              Colors.white.withValues(alpha: _before ? 0 : 1),
+              Colors.white,
+              Colors.white,
+              Colors.white.withValues(alpha: _after ? 0 : 1),
+            ],
+            stops: const [0.0, 0.07, 0.93, 1.0],
+          ).createShader(rect),
+          child: widget.child,
+        ),
+      ),
     );
-    if (ok == true) controller.clearAll();
   }
 }
 
 class _ToolButton extends StatelessWidget {
   const _ToolButton({
+    super.key,
     required this.tool,
     required this.controller,
     required this.onTap,
+    this.size = 52,
   });
 
   final ToolKind tool;
   final CanvasController controller;
   final VoidCallback onTap;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -286,12 +455,12 @@ class _ToolButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOutBack,
-          width: 52,
-          height: 52,
+          width: size,
+          height: size,
           margin: const EdgeInsets.all(1),
           decoration: BoxDecoration(
             color: selected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(selected ? 18 : 26),
+            borderRadius: BorderRadius.circular(selected ? 18 : size / 2),
             border: Border.all(
               color: selected ? accent : Colors.transparent,
               width: 2.5,
@@ -307,7 +476,8 @@ class _ToolButton extends StatelessWidget {
                 curve: Curves.easeOutBack,
                 child: Opacity(
                   opacity: selected ? 1.0 : 0.75,
-                  child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                  child: Text(emoji,
+                      style: TextStyle(fontSize: size * 0.46)),
                 ),
               ),
               if (showColorBadge)

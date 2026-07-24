@@ -18,11 +18,21 @@ void main() {
       CanvasController(canvasWidth: 2048, canvasHeight: 1536));
   tearDown(() => controller.dispose());
 
+  /// The rail and the fixed action cluster, side by side — the way every
+  /// screen in the app puts them together since v8.0.
   Future<void> pumpToolBar(WidgetTester tester, {double textScale = 1.0}) =>
       pumpPixie(
         tester,
         Scaffold(
-          body: Center(child: ToolBarRail(controller: controller)),
+          body: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ToolBarRail(controller: controller),
+                ToolActionCluster(controller: controller),
+              ],
+            ),
+          ),
         ),
         size: const Size(900, 1800),
         textScale: textScale,

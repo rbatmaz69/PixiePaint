@@ -378,5 +378,6 @@
   "errorLogShare": "Udostępnij raport",
   "errorLogClear": "Wyczyść listę",
   "errorLogClearConfirm": "Usunąć wszystkie wpisy?",
-  "errorLogShareNote": "Zapis z PixiePaint — zostaje na urządzeniu, dopóki nie zostanie świadomie udostępniony."
+  "errorLogShareNote": "Zapis z PixiePaint — zostaje na urządzeniu, dopóki nie zostanie świadomie udostępniony.",
+  "rotateHint": "Obróć mnie na bok — będzie więcej miejsca do malowania"
 }

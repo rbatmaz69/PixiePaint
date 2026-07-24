@@ -868,4 +868,7 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get errorLogShareNote =>
       'Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt.';
+
+  @override
+  String get rotateHint => 'Draai me om, dan heb je meer ruimte om te tekenen';
 }

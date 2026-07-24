@@ -33,6 +33,11 @@ class Settings extends ChangeNotifier {
   /// preference; this is a flag the app sets itself.
   bool welcomeSeen = false;
 
+  /// Whether the one-time "turn me sideways" nudge has been shown on the
+  /// canvas. Same kind of flag as [welcomeSeen] — the app writing about
+  /// itself, not a parent choosing something.
+  bool rotateHintSeen = false;
+
   /// Minutes of painting before the app suggests a break, or 0 for never.
   /// Only the values in [kPauseChoices] are offered.
   int pauseAfterMinutes = 0;
@@ -68,6 +73,7 @@ class Settings extends ChangeNotifier {
     musicTrack = json['musicTrack'] as int? ?? 0;
     pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
     welcomeSeen = json['welcomeSeen'] as bool? ?? false;
+    rotateHintSeen = json['rotateHintSeen'] as bool? ?? false;
     leftHanded = json['leftHanded'] as bool? ?? false;
     shareCount = json['shareCount'] as int? ?? 0;
     reviewRequested = json['reviewRequested'] as bool? ?? false;
@@ -124,6 +130,7 @@ class Settings extends ChangeNotifier {
       'leftHanded': leftHanded,
       'pauseAfterMinutes': pauseAfterMinutes,
       'welcomeSeen': welcomeSeen,
+      'rotateHintSeen': rotateHintSeen,
       'shareCount': shareCount,
       'reviewRequested': reviewRequested,
       'recentColors': recentColors,
@@ -135,6 +142,16 @@ class Settings extends ChangeNotifier {
   Future<void> markWelcomeSeen() async {
     if (welcomeSeen) return;
     welcomeSeen = true;
+    notifyListeners();
+    await _persist();
+  }
+
+  /// Remembers that the rotate nudge has run. Written the moment it appears,
+  /// not when it is dismissed: a hint the app was killed underneath is still
+  /// a hint that was shown.
+  Future<void> markRotateHintSeen() async {
+    if (rotateHintSeen) return;
+    rotateHintSeen = true;
     notifyListeners();
     await _persist();
   }
@@ -155,6 +172,7 @@ class Settings extends ChangeNotifier {
     leftHanded = false;
     pauseAfterMinutes = 0;
     welcomeSeen = false;
+    rotateHintSeen = false;
     shareCount = 0;
     reviewRequested = false;
     recentColors = [];

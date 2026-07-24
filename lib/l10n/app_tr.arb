@@ -378,5 +378,6 @@
   "errorLogShare": "Raporu paylaş",
   "errorLogClear": "Listeyi temizle",
   "errorLogClearConfirm": "Bütün kayıtlar silinsin mi?",
-  "errorLogShareNote": "PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır."
+  "errorLogShareNote": "PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır.",
+  "rotateHint": "Beni yan çevir, boyamak için daha çok yer olsun"
 }

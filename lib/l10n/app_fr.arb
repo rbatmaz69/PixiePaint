@@ -378,5 +378,6 @@
   "errorLogShare": "Partager le rapport",
   "errorLogClear": "Vider la liste",
   "errorLogClearConfirm": "Supprimer toutes les entrées ?",
-  "errorLogShareNote": "Enregistré par PixiePaint — reste sur l'appareil jusqu'à un partage volontaire."
+  "errorLogShareNote": "Enregistré par PixiePaint — reste sur l'appareil jusqu'à un partage volontaire.",
+  "rotateHint": "Tourne-moi sur le côté pour peindre plus grand"
 }

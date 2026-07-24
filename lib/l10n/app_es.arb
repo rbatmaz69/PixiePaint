@@ -378,5 +378,6 @@
   "errorLogShare": "Compartir informe",
   "errorLogClear": "Vaciar la lista",
   "errorLogClearConfirm": "¿Borrar todas las entradas?",
-  "errorLogShareNote": "Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito."
+  "errorLogShareNote": "Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito.",
+  "rotateHint": "Gírame de lado y tendrás más sitio para pintar"
 }

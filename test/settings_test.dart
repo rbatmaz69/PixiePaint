@@ -116,6 +116,26 @@ void main() {
     expect(settings.pauseAfterMinutes, 0);
   });
 
+  test('the rotate nudge is shown once and never again', () async {
+    await load();
+    expect(settings.rotateHintSeen, isFalse);
+
+    await settings.markRotateHintSeen();
+    await settings.flush();
+    expect(onDisk()['rotateHintSeen'], isTrue);
+
+    // The next app start must not greet the child with it a second time.
+    await settings.loadFrom(JsonStore(file));
+    expect(settings.rotateHintSeen, isTrue);
+  });
+
+  test('a settings file from before v8.0 has not seen the rotate nudge',
+      () async {
+    file.writeAsStringSync('{"soundsOn": true}');
+    await load();
+    expect(settings.rotateHintSeen, isFalse);
+  });
+
   test('recent colors are remembered across restarts', () async {
     await load();
     await settings.registerRecentColor(const Color(0xFFE53935));

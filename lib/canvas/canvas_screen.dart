@@ -110,6 +110,11 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// Fires the painting-break curtain; null when a parent left it off.
   Timer? _pause;
 
+  /// Decided once, at entry: the nudge marks itself as seen the moment it
+  /// appears, so re-reading the setting on the next build would yank it off
+  /// the screen again.
+  late bool _rotateHintPending = !Settings.instance.rotateHintSeen;
+
   @override
   void initState() {
     super.initState();
@@ -561,7 +566,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                 leftHanded ? [canvasArea, rail] : [rail, canvasArea],
           ),
         ),
-        SizedBox(height: 76, child: _palette()),
+        SizedBox(height: kPaletteHeight, child: _palette()),
       ],
     );
   }
@@ -578,12 +583,30 @@ class _CanvasScreenState extends State<CanvasScreen>
     );
   }
 
+  /// Portrait toolbar: the tools scroll, undo and redo do not.
+  ///
+  /// The cluster sits on the side the drawing hand is *not* on, mirroring
+  /// the floating buttons above the canvas.
   Widget _buildPortrait() {
+    final leftHanded = Settings.instance.leftHanded;
+    final tools = Expanded(
+      child: ToolBarRail(
+        controller: controller,
+        direction: Axis.horizontal,
+        showFill: traceId == null,
+        fillOnly: _isCbn,
+        buttonSize: 50,
+      ),
+    );
+    final actions = ToolActionCluster(
+      controller: controller,
+      direction: Axis.horizontal,
+    );
     return Column(
       children: [
         Expanded(child: _canvasArea(portrait: true)),
         Container(
-          height: 64,
+          height: 56,
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -596,16 +619,11 @@ class _CanvasScreenState extends State<CanvasScreen>
               ),
             ],
           ),
-          child: Center(
-            child: ToolBarRail(
-              controller: controller,
-              direction: Axis.horizontal,
-              showFill: traceId == null,
-              fillOnly: _isCbn,
-            ),
+          child: Row(
+            children: leftHanded ? [actions, tools] : [tools, actions],
           ),
         ),
-        SizedBox(height: 76, child: _palette()),
+        SizedBox(height: kPaletteHeight, child: _palette()),
       ],
     );
   }
@@ -637,6 +655,23 @@ class _CanvasScreenState extends State<CanvasScreen>
               ),
             ),
           ),
+          // Phones only: the pictures are 4:3 across, so upright the paper
+          // uses barely half the height. Tablets are wide enough either way.
+          if (portrait &&
+              _rotateHintPending &&
+              MediaQuery.sizeOf(context).shortestSide < 600)
+            Positioned(
+              bottom: 12,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _RotateHint(
+                  onDone: () {
+                    if (mounted) setState(() => _rotateHintPending = false);
+                  },
+                ),
+              ),
+            ),
           if (portrait) ...[
             Positioned(
               top: 8,
@@ -724,6 +759,88 @@ class _CanvasScreenState extends State<CanvasScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The one-time "turn me sideways" nudge.
+///
+/// Shown once ever, on a phone, in portrait. It writes its own seen-flag the
+/// moment it appears — a hint the app was killed underneath still counts as
+/// shown — waits six seconds and fades away; a tap ends it sooner. Nothing
+/// here blocks painting: the pill sits below the paper's centre and hands
+/// its touches on once it is gone.
+class _RotateHint extends StatefulWidget {
+  const _RotateHint({required this.onDone});
+
+  final VoidCallback onDone;
+
+  @override
+  State<_RotateHint> createState() => _RotateHintState();
+}
+
+class _RotateHintState extends State<_RotateHint> {
+  bool _visible = true;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Deferred: the setting notifies its listeners synchronously, and this
+    // runs while the canvas is still building.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(Settings.instance.markRotateHintSeen());
+    });
+    _timer = Timer(const Duration(seconds: 6), _dismiss);
+  }
+
+  void _dismiss() {
+    if (!mounted || !_visible) return;
+    setState(() => _visible = false);
+    _timer?.cancel();
+    _timer = Timer(const Duration(milliseconds: 300), () {
+      if (mounted) widget.onDone();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _visible ? 1 : 0,
+      duration: const Duration(milliseconds: 300),
+      child: Bouncy(
+        onTap: _dismiss,
+        playTick: false,
+        semanticLabel: context.l10n.rotateHint,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: PixieTokens.softShadow(PixiePalette.grape),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('🔄', style: TextStyle(fontSize: 22)),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Text(
+                  context.l10n.rotateHint,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -892,6 +1009,8 @@ class _LeftRail extends StatelessWidget {
               fillOnly: fillOnly,
             ),
           ),
+          // Outside the scrolling rail above — see [ToolActionCluster].
+          ToolActionCluster(controller: controller),
           Tooltip(
             message: context.l10n.shareForParents,
             child: Bouncy(

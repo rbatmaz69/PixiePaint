@@ -1563,6 +1563,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird.'**
   String get errorLogShareNote;
+
+  /// One-time nudge on the canvas: landscape gives more drawing room (phones only)
+  ///
+  /// In de, this message translates to:
+  /// **'Quer hast du mehr Platz zum Malen'**
+  String get rotateHint;
 }
 
 class _AppLocalizationsDelegate

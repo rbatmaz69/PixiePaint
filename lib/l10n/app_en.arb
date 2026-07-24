@@ -378,5 +378,6 @@
   "errorLogShare": "Share report",
   "errorLogClear": "Clear the list",
   "errorLogClearConfirm": "Delete all entries?",
-  "errorLogShareNote": "Recorded by PixiePaint — stays on the device until it is deliberately shared."
+  "errorLogShareNote": "Recorded by PixiePaint — stays on the device until it is deliberately shared.",
+  "rotateHint": "Turn me sideways for more room to paint"
 }

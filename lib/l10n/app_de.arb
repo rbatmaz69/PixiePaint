@@ -378,5 +378,9 @@
   "errorLogShare": "Bericht teilen",
   "errorLogClear": "Liste leeren",
   "errorLogClearConfirm": "Alle Einträge löschen?",
-  "errorLogShareNote": "Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird."
+  "errorLogShareNote": "Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird.",
+  "rotateHint": "Quer hast du mehr Platz zum Malen",
+  "@rotateHint": {
+    "description": "One-time nudge on the canvas: landscape gives more drawing room (phones only)"
+  }
 }

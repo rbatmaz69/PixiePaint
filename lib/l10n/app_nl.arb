@@ -378,5 +378,6 @@
   "errorLogShare": "Rapport delen",
   "errorLogClear": "Lijst leegmaken",
   "errorLogClearConfirm": "Alle meldingen verwijderen?",
-  "errorLogShareNote": "Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt."
+  "errorLogShareNote": "Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt.",
+  "rotateHint": "Draai me om, dan heb je meer ruimte om te tekenen"
 }

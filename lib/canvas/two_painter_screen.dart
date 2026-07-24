@@ -208,15 +208,29 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
           child: RotatedBox(quarterTurns: flipped ? 2 : 0, child: canvas),
         ),
         SizedBox(
-          height: 60,
-          child: Center(
-            child: ToolBarRail(
-              controller: controller,
-              direction: Axis.horizontal,
-            ),
+          height: 56,
+          child: Row(
+            children: [
+              Expanded(
+                child: ToolBarRail(
+                  controller: controller,
+                  direction: Axis.horizontal,
+                  buttonSize: 50,
+                ),
+              ),
+              // Half a tablet is narrow: without this, undo would be the
+              // nineteenth button of a scrolling strip.
+              ToolActionCluster(
+                controller: controller,
+                direction: Axis.horizontal,
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 64, child: ColorPalette(controller: controller)),
+        SizedBox(
+          height: kPaletteHeight,
+          child: ColorPalette(controller: controller),
+        ),
       ],
     );
   }

@@ -25,6 +25,11 @@ const List<Color> kPaletteColors = [
   Color(0xFFFFFFFF), // weiß
 ];
 
+/// Height the palette row asks for. Trimmed from 76 in v8.0: on a phone in
+/// portrait every dp the two bars give back goes to the paper, and the
+/// swatch itself (42, 51 when selected) never needed the rest.
+const double kPaletteHeight = 66;
+
 /// Spoken name for a palette color, in the same order as [kPaletteColors].
 ///
 /// A swatch is pure color with no text in it, so without this a screen
@@ -106,7 +111,7 @@ class PixieColorSwatch extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.slotWidth = 56,
-    this.slotHeight = 60,
+    this.slotHeight = 54,
   });
 
   final Color color;

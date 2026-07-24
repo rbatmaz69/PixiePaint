@@ -864,4 +864,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get errorLogShareNote =>
       'PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır.';
+
+  @override
+  String get rotateHint => 'Beni yan çevir, boyamak için daha çok yer olsun';
 }
