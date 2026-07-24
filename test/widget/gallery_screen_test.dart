@@ -69,9 +69,35 @@ void main() {
   }
 
   /// For steps that write to disk: run the real work, then repaint.
+  ///
+  /// A fixed pause is only honest where the assertion afterwards is that
+  /// *nothing* happened (see the "keep it" test) — there is no condition to
+  /// wait for, only a window in which the wrong thing could still occur.
   Future<void> flush(WidgetTester tester) async {
     await tester.runAsync(
         () => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pump();
+  }
+
+  /// Waits until [done] holds — for real file I/O started inside the
+  /// fake-async zone.
+  ///
+  /// This replaces a fixed 100 ms pause that had been in the delete test for
+  /// several releases. It passed every time until a loaded machine (three
+  /// test runs back to back) made the deletion take longer than the guess,
+  /// and then it failed in about half of all runs. A delay is a guess; a
+  /// condition is the thing actually being waited for.
+  Future<void> waitUntil(
+    WidgetTester tester,
+    bool Function() done, {
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    await tester.runAsync(() async {
+      final deadline = DateTime.now().add(timeout);
+      while (!done() && DateTime.now().isBefore(deadline)) {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+      }
+    });
     await tester.pump();
   }
 
@@ -149,9 +175,18 @@ void main() {
     // The destructive choice is the quiet text button, not the big one.
     await tester.tap(find.widgetWithText(TextButton, 'Wegwerfen'));
     await settle(tester);
-    await flush(tester);
+    await waitUntil(tester, () => !dirOf('a').existsSync());
 
-    expect(dirOf('a').existsSync(), isFalse);
+    // The listing is in the message on purpose: this assertion has flaked
+    // under load, and "isFalse is not isTrue" says nothing about why. What
+    // is left in the directory does — a stray .tmp file would point at a
+    // write that was still in flight, an empty directory at a delete that
+    // got half-way.
+    final leftovers = dirOf('a').existsSync()
+        ? dirOf('a').listSync().map((e) => e.path.split('/').last).toList()
+        : const <String>[];
+    expect(dirOf('a').existsSync(), isFalse,
+        reason: 'the picture directory is still there, containing: $leftovers');
   });
 
   testWidgets('with the parent setting on, deleting hits the gate first',
