@@ -7,6 +7,7 @@ import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
+import '../ui/pop_in.dart';
 import 'fill_pattern_picker.dart';
 import 'shape_picker.dart' as shapes;
 import 'size_picker.dart';
@@ -135,20 +136,29 @@ class ToolActionCluster extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: controller,
+      // Undoing a small stroke barely changes the picture, and a child who
+      // sees nothing happen taps again. The pulse is the receipt: it fires
+      // on the undo depth, so every accepted tap answers.
       builder: (context, _) => _pill([
-        _ActionButton(
-          icon: Icons.undo_rounded,
-          enabled: controller.canUndo,
-          filled: true,
-          label: context.l10n.undoAction,
-          onTap: controller.undo,
+        Pulse(
+          trigger: controller.undoDepth,
+          child: _ActionButton(
+            icon: Icons.undo_rounded,
+            enabled: controller.canUndo,
+            filled: true,
+            label: context.l10n.undoAction,
+            onTap: controller.undo,
+          ),
         ),
-        _ActionButton(
-          icon: Icons.redo_rounded,
-          enabled: controller.canRedo,
-          filled: true,
-          label: context.l10n.redoAction,
-          onTap: controller.redo,
+        Pulse(
+          trigger: controller.redoDepth,
+          child: _ActionButton(
+            icon: Icons.redo_rounded,
+            enabled: controller.canRedo,
+            filled: true,
+            label: context.l10n.redoAction,
+            onTap: controller.redo,
+          ),
         ),
       ], direction),
     );
@@ -487,27 +497,44 @@ class _ToolButton extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              AnimatedScale(
-                scale: selected ? 1.18 : 1.0,
-                duration: const Duration(milliseconds: 220),
-                curve: Curves.easeOutBack,
-                child: Opacity(
-                  opacity: selected ? 1.0 : 0.75,
-                  child: Text(emoji,
-                      style: TextStyle(fontSize: size * 0.46)),
+              // Two motions on purpose: the scale is the *state* (this one
+              // is picked, and stays bigger), the pulse is the *answer*
+              // (you just picked it). Without the second one, tapping the
+              // tool you already had selected looks like nothing happened.
+              Pulse(
+                trigger: selected,
+                peak: 1.2,
+                child: AnimatedScale(
+                  scale: selected ? 1.18 : 1.0,
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutBack,
+                  child: Opacity(
+                    opacity: selected ? 1.0 : 0.75,
+                    child: Text(emoji,
+                        style: TextStyle(fontSize: size * 0.46)),
+                  ),
                 ),
               ),
               if (showColorBadge)
                 Positioned(
                   right: 6,
                   bottom: 6,
-                  child: Container(
-                    width: 11,
-                    height: 11,
-                    decoration: BoxDecoration(
-                      color: controller.color,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 1.5),
+                  // The color is chosen at the *other* end of the screen —
+                  // this badge is where a child sees that their tap landed
+                  // on the tool they are about to draw with.
+                  child: Pulse(
+                    trigger: controller.color,
+                    peak: 1.35,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOut,
+                      width: 11,
+                      height: 11,
+                      decoration: BoxDecoration(
+                        color: controller.color,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 1.5),
+                      ),
                     ),
                   ),
                 ),

@@ -20,6 +20,7 @@ import '../ui/bouncy.dart';
 import '../ui/hero_tags.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/paper_doodles.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../models/reward.dart';
@@ -494,9 +495,16 @@ class _CanvasScreenState extends State<CanvasScreen>
         if (!didPop) _leave();
       },
       child: Scaffold(
-        body: Container(
+        body: DecoratedBox(
           decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
-          child: SafeArea(
+          // The same doodled paper as every other screen — but standing
+          // still and fainter. A drifting mark behind a drawing hand is
+          // exactly what a child painting a line does not need, so this
+          // painter has no ticker at all: one fixed phase, painted once,
+          // behind everything.
+          child: CustomPaint(
+            painter: const DoodlePainter(0.12, alpha: 0.04),
+            child: SafeArea(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: loading
@@ -516,6 +524,7 @@ class _CanvasScreenState extends State<CanvasScreen>
                         },
                       ),
                     ),
+            ),
             ),
           ),
         ),
