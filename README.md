@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.4.2+24 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.5.0+25 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -65,6 +65,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt
 - Backup aller Bilder als ZIP — und Wiederherstellen daraus
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
+- Problembericht: was die App zuletzt an Fehlern mitbekommen hat — lesbar, teilbar, löschbar, und bis dahin nur auf dem Gerät
 - Linkshänder-Modus, „nur mit Stift malen", Töne und Musik abschaltbar
 - Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Vorhang (standardmäßig aus)
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
@@ -223,10 +224,10 @@ flutter test test/shape_renderer_test.dart   # einzelne Datei
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 391 Tests in 42 Dateien:
+Die Test-Suite umfasst 417 Tests in 46 Dateien:
 
-- `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung
-- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
+- `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
+- `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
 - `test/golden/renderers_test.dart` — **visuelle Regression** der 10 Stift-Charaktere, 5 Formen und 8 Füllmuster
 
 Zu den Golden Tests: Sie decken bewusst **nur** die Zeichen-Renderer ab. Ganze Bildschirme wären hier zwecklos — die Oberfläche besteht großenteils aus Emoji, und die rendern auf jedem System anders. Die Renderer dagegen sind reine Vektoren ohne Text und aus festen Seeds deterministisch. Nach einer bewussten Designänderung neu erzeugen:
@@ -283,12 +284,13 @@ lib/
 ├── replay/                Zeitraffer-Wiedergabe
 ├── stickers/              Eigene Sticker: Ausschnitt aufnehmen und ablegen
 ├── photo/                 Foto → Ausmalbild (Kantenerkennung)
-├── settings/              Einstellungen, Speicherplatz-Verwaltung
+├── settings/              Einstellungen, Speicherplatz-Verwaltung, Problembericht
 ├── models/                Werkzeuge, Sticker, Belohnungen, Artwork, Ausmalbilder,
 │                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops
 ├── ui/                    Design-System (siehe unten)
 ├── util/                  Settings, Fortschritt, Profile, Sfx, Musik, Bild-IO,
-│                          Teilen, Speichern, PDF, Backup/Restore, JsonStore
+│                          Teilen, Speichern, PDF, Backup/Restore, JsonStore,
+│                          Fehlerlog
 ├── widgets/               Werkzeugleiste, Farbpalette, Picker, Elternschranke, Profil-Sheet
 └── l10n/                  ARB-Dateien + generierte Übersetzungen
 
@@ -321,6 +323,15 @@ docs/                      Release-Anleitungen (Play Store, App Store),
 - Bilder: ein Ordner je Werk unter `<appDocuments>/artworks/<uuid>/` mit `paint.png`, `thumb.png`, `meta.json` (plus optional Foto-Hintergrund, Linienart und `ops.json` für den Zeitraffer)
 - Eigene Sticker: `<appDocuments>/stickers/*.png` (max. 24)
 - Einstellungen: `settings.json` · Kinder-Profile: `profiles.json` · Belohnungs-Fortschritt: `progress_<profil-id>.json`
+
+**Wenn etwas schiefgeht** (seit v7.5) — die App hat kein Analytics und keinen Crash-Reporter, und das bleibt so. Sie hatte aber auch keinen Ersatz dafür: ein Absturz auf einem echten Gerät hinterließ nichts, was man später noch ansehen konnte. Genau das füllt `lib/util/error_log.dart`:
+
+- **Aufgezeichnet wird:** Zeitpunkt, App-Version, Betriebssystem, wo der Fehler gefangen wurde (`flutter` / `platform` / `zone` / `save`), die erste Zeile der Meldung und ein auf 12 Frames gekürzter Stack.
+- **Nicht aufgezeichnet wird:** keine Geräte-IDs, keine Bildinhalte, keine Kindernamen, keine absoluten Pfade — das Dokumentenverzeichnis wird durch `<docs>` ersetzt, weil es auf iOS eine Installations-UUID enthält und darunter die Artwork-IDs stehen.
+- **Deckel:** 30 Einträge *und* 32 KB, der jeweils älteste fällt heraus. Eine identische Meldung innerhalb von 60 s erhöht einen Zähler statt einen Eintrag anzuhängen — ein Fehler im Painter feuert sonst pro Frame.
+- **Wo es sichtbar wird:** Einstellungen → „Problembericht" (hinter der Elternschranke, `lib/settings/error_log_screen.dart`). Teilen fragt die Rechenaufgabe noch einmal, weil dabei eine Datei das Gerät verlässt. Die Datenschutz-Antworten in beiden Stores bleiben unverändert: erhoben wird weiterhin nichts.
+- **Der wichtigste Eintragstyp ist `save`.** `atomicWrite*` und `JsonStore` schlucken jeden Schreibfehler absichtlich (die alte Datei bleibt dadurch intakt) — sie melden ihn jetzt über den Hook `onPersistFailure` in `json_store.dart`. „Speicher voll" ist damit belegbar, statt nur als „ein Bild war weg" erinnerbar.
+- Ein fehlgeschlagener Build zeigt in Release die `OopsCard` statt des grauen Kastens (`lib/ui/oops_card.dart`); in Debug bleiben die roten Streifen. Aufgezeichnet wird nur einmal — `FlutterError.onError` sieht die Ausnahme schon, `ErrorWidget.builder` schreibt bewusst nichts mehr dazu.
 
 **Vier Regeln, die dieses Projekt gelernt hat** — jede steht für einen Fehler, der schon einmal passiert ist:
 

@@ -6,6 +6,7 @@ import 'package:pixiepaint/gallery/gallery_screen.dart';
 import 'package:pixiepaint/gallery/page_picker_screen.dart';
 import 'package:pixiepaint/gallery/slideshow_screen.dart';
 import 'package:pixiepaint/models/artwork.dart';
+import 'package:pixiepaint/settings/error_log_screen.dart';
 
 import 'harness.dart';
 
@@ -48,6 +49,14 @@ void main() {
   testWidgets('the picture picker survives being left while it loads',
       (tester) async {
     await openAndLeave(tester, const PagePickerScreen());
+  });
+
+  testWidgets('the problem report survives being left right away',
+      (tester) async {
+    // It owns no AnimationController at all — which is the point of listing
+    // it here: the next person to add an entrance animation to this screen
+    // meets the pattern and this test in the same place.
+    await openAndLeave(tester, const ErrorLogScreen());
   });
 
   testWidgets('the slideshow survives being left while it loads',

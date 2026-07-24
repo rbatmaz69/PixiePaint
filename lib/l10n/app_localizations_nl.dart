@@ -819,4 +819,53 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Alles blijft op dit apparaat: geen reclame, geen aankopen, geen gegevensverzameling. Delen, verwijderen en de instellingen zitten achter een eenvoudige som.';
+
+  @override
+  String get oopsTitle => 'Oeps — hier is iets door de war geraakt.';
+
+  @override
+  String get oopsBody => 'Ga een stapje terug en probeer het opnieuw.';
+
+  @override
+  String get errorLogTitle => 'Probleemrapport';
+
+  @override
+  String get errorLogSubtitle => 'Wat er het laatst misging.';
+
+  @override
+  String get errorLogEmpty => 'Alles in orde — niets te melden.';
+
+  @override
+  String get errorLogHint =>
+      'Deze lijst blijft op het apparaat. Er staan tijdstippen en technische meldingen in — geen tekeningen, geen namen.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n meldingen',
+      one: '1 melding',
+      zero: 'Geen meldingen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Rapport delen';
+
+  @override
+  String get errorLogClear => 'Lijst leegmaken';
+
+  @override
+  String get errorLogClearConfirm => 'Alle meldingen verwijderen?';
+
+  @override
+  String get errorLogShareNote =>
+      'Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt.';
 }

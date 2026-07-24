@@ -76,6 +76,8 @@ Für die Beta-Prüfung wird eine „Beta App Description" und eine Kontakt-E-Mai
 
 **App-Datenschutz („Nutrition Label").** App Store Connect → App-Datenschutz → „Daten werden nicht erfasst" auswählen. Das ist für PixiePaint korrekt und die einzige Antwort, die zur App passt: keine Analytics, keine IDs, keine Accounts, keine Netzwerkaufrufe. Fotos werden ausschließlich lokal verarbeitet, und die Sicherungsdatei erzeugt der Nutzer selbst und teilt sie über das System-Share-Sheet.
 
+Das gilt auch für den **Problembericht** aus v7.5 (Einstellungen → „Problembericht"): Die App schreibt gefangene Fehler in eine lokale Datei `errors.log` — ohne Geräte-IDs, ohne absolute Pfade, ohne Bildinhalte — und teilt sie nur, wenn ein Elternteil das hinter der Rechenaufgabe bewusst auslöst. Es ist kein Crash-Reporting-SDK im Sinne des Formulars („Diagnosedaten" bleibt also auf *nicht erfasst*), weil nichts übertragen wird.
+
 **Berechtigungstexte.** Apple prüft, ob die Begründungen zum tatsächlichen Verhalten passen. In `ios/Runner/Info.plist` stehen:
 
 | Schlüssel | Text | Wann er erscheint |
@@ -133,7 +135,7 @@ Die Prüfung dauert meist 1–3 Tage; Apps in der Kids Category werden gelegentl
 | | |
 |---|---|
 | Bundle Identifier | `dev.rb.pixiepaint.pixiepaint` |
-| Version | 7.1.0 (Build 19) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.5.0 (Build 25) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | Berechtigungen | Fotobibliothek (Lesen und Sichern), beides hinter der Elternschranke |
 | Netzwerk | keines |
 | Tracking | keines (kein ATT-Dialog nötig) |

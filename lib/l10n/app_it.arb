@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Scegli un disegno",
   "welcomePaintBody": "Tocca una zona e si riempie di colore. Oppure disegna quello che vuoi.",
   "welcomeParentsTitle": "Per i grandi",
-  "welcomeParentsBody": "Tutto resta su questo dispositivo: niente pubblicità, niente acquisti, nessuna raccolta di dati. Condividere, cancellare e le impostazioni stanno dietro un semplice calcolo."
+  "welcomeParentsBody": "Tutto resta su questo dispositivo: niente pubblicità, niente acquisti, nessuna raccolta di dati. Condividere, cancellare e le impostazioni stanno dietro un semplice calcolo.",
+  "oopsTitle": "Ops — qui si è ingarbugliato qualcosa.",
+  "oopsBody": "Torna indietro di un passo e riprova.",
+  "errorLogTitle": "Segnalazione problemi",
+  "errorLogSubtitle": "L'ultima cosa che non ha funzionato.",
+  "errorLogEmpty": "Tutto a posto — niente da segnalare.",
+  "errorLogHint": "Questo elenco resta sul dispositivo. Contiene orari e messaggi tecnici, nessun disegno e nessun nome.",
+  "errorLogCount": "{n, plural, =0{Nessuna voce} =1{1 voce} other{{n} voci}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Condividi la segnalazione",
+  "errorLogClear": "Svuota l'elenco",
+  "errorLogClearConfirm": "Eliminare tutte le voci?",
+  "errorLogShareNote": "Registrato da PixiePaint: resta sul dispositivo finché non viene condiviso di proposito."
 }

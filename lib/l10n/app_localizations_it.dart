@@ -818,4 +818,53 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Tutto resta su questo dispositivo: niente pubblicità, niente acquisti, nessuna raccolta di dati. Condividere, cancellare e le impostazioni stanno dietro un semplice calcolo.';
+
+  @override
+  String get oopsTitle => 'Ops — qui si è ingarbugliato qualcosa.';
+
+  @override
+  String get oopsBody => 'Torna indietro di un passo e riprova.';
+
+  @override
+  String get errorLogTitle => 'Segnalazione problemi';
+
+  @override
+  String get errorLogSubtitle => 'L\'ultima cosa che non ha funzionato.';
+
+  @override
+  String get errorLogEmpty => 'Tutto a posto — niente da segnalare.';
+
+  @override
+  String get errorLogHint =>
+      'Questo elenco resta sul dispositivo. Contiene orari e messaggi tecnici, nessun disegno e nessun nome.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n voci',
+      one: '1 voce',
+      zero: 'Nessuna voce',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Condividi la segnalazione';
+
+  @override
+  String get errorLogClear => 'Svuota l\'elenco';
+
+  @override
+  String get errorLogClearConfirm => 'Eliminare tutte le voci?';
+
+  @override
+  String get errorLogShareNote =>
+      'Registrato da PixiePaint: resta sul dispositivo finché non viene condiviso di proposito.';
 }

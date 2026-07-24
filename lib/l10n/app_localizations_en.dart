@@ -817,4 +817,53 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Everything stays on this device: no ads, no purchases, no data collection. Sharing, deleting and the settings sit behind a simple sum.';
+
+  @override
+  String get oopsTitle => 'Oops — something got muddled up here.';
+
+  @override
+  String get oopsBody => 'Go back a step and try again.';
+
+  @override
+  String get errorLogTitle => 'Problem report';
+
+  @override
+  String get errorLogSubtitle => 'What went wrong most recently.';
+
+  @override
+  String get errorLogEmpty => 'All good — nothing to report.';
+
+  @override
+  String get errorLogHint =>
+      'This list stays on the device. It holds timestamps and technical messages — no pictures, no names.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n entries',
+      one: '1 entry',
+      zero: 'No entries',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Share report';
+
+  @override
+  String get errorLogClear => 'Clear the list';
+
+  @override
+  String get errorLogClearConfirm => 'Delete all entries?';
+
+  @override
+  String get errorLogShareNote =>
+      'Recorded by PixiePaint — stays on the device until it is deliberately shared.';
 }

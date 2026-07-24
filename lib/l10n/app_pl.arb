@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Wybierz obrazek",
   "welcomePaintBody": "Dotknij pola, a zrobi się kolorowe. Albo po prostu rysuj, co chcesz.",
   "welcomeParentsTitle": "Dla dorosłych",
-  "welcomeParentsBody": "Wszystko zostaje na tym urządzeniu: bez reklam, bez zakupów, bez zbierania danych. Udostępnianie, usuwanie i ustawienia są za prostym działaniem."
+  "welcomeParentsBody": "Wszystko zostaje na tym urządzeniu: bez reklam, bez zakupów, bez zbierania danych. Udostępnianie, usuwanie i ustawienia są za prostym działaniem.",
+  "oopsTitle": "Ups — coś się tu pomieszało.",
+  "oopsBody": "Wróć o krok i spróbuj jeszcze raz.",
+  "errorLogTitle": "Raport problemów",
+  "errorLogSubtitle": "Co ostatnio się nie udało.",
+  "errorLogEmpty": "Wszystko w porządku — nie ma nic do zgłoszenia.",
+  "errorLogHint": "Ta lista zostaje na urządzeniu. Zawiera godziny i komunikaty techniczne — żadnych obrazków ani imion.",
+  "errorLogCount": "{n, plural, =0{Brak wpisów} =1{1 wpis} few{{n} wpisy} many{{n} wpisów} other{{n} wpisu}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Udostępnij raport",
+  "errorLogClear": "Wyczyść listę",
+  "errorLogClearConfirm": "Usunąć wszystkie wpisy?",
+  "errorLogShareNote": "Zapis z PixiePaint — zostaje na urządzeniu, dopóki nie zostanie świadomie udostępniony."
 }

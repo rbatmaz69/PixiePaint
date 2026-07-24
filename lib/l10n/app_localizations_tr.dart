@@ -815,4 +815,53 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Her şey bu cihazda kalır: reklam yok, satın alma yok, veri toplama yok. Paylaşma, silme ve ayarlar basit bir işlemin arkasında.';
+
+  @override
+  String get oopsTitle => 'Hoppa — burada bir şey karıştı.';
+
+  @override
+  String get oopsBody => 'Bir adım geri dön ve yeniden dene.';
+
+  @override
+  String get errorLogTitle => 'Sorun raporu';
+
+  @override
+  String get errorLogSubtitle => 'En son ne ters gitti.';
+
+  @override
+  String get errorLogEmpty => 'Her şey yolunda — bildirilecek bir şey yok.';
+
+  @override
+  String get errorLogHint =>
+      'Bu liste cihazda kalır. İçinde saatler ve teknik iletiler var — resim yok, isim yok.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n kayıt',
+      one: '1 kayıt',
+      zero: 'Kayıt yok',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Raporu paylaş';
+
+  @override
+  String get errorLogClear => 'Listeyi temizle';
+
+  @override
+  String get errorLogClearConfirm => 'Bütün kayıtlar silinsin mi?';
+
+  @override
+  String get errorLogShareNote =>
+      'PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır.';
 }

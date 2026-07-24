@@ -819,4 +819,53 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe.';
+
+  @override
+  String get oopsTitle => 'Ups – hier ist etwas durcheinandergeraten.';
+
+  @override
+  String get oopsBody => 'Geh einen Schritt zurück und probier es nochmal.';
+
+  @override
+  String get errorLogTitle => 'Problembericht';
+
+  @override
+  String get errorLogSubtitle => 'Was zuletzt schiefgegangen ist.';
+
+  @override
+  String get errorLogEmpty => 'Alles in Ordnung – nichts zu berichten.';
+
+  @override
+  String get errorLogHint =>
+      'Diese Liste bleibt auf dem Gerät. Sie enthält Zeitpunkte und technische Meldungen – keine Bilder, keine Namen.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n Einträge',
+      one: '1 Eintrag',
+      zero: 'Keine Einträge',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Bericht teilen';
+
+  @override
+  String get errorLogClear => 'Liste leeren';
+
+  @override
+  String get errorLogClearConfirm => 'Alle Einträge löschen?';
+
+  @override
+  String get errorLogShareNote =>
+      'Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird.';
 }

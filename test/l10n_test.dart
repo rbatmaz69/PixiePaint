@@ -86,7 +86,7 @@ void main() {
         .where((k) => (template[k] as String).contains('plural'))
         .toList();
 
-    expect(pluralKeys, hasLength(10));
+    expect(pluralKeys, hasLength(11));
     for (final key in pluralKeys) {
       final message = pl[key] as String;
       expect(message, contains('few{'), reason: '$key has no "few" form');

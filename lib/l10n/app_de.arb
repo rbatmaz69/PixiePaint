@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Such dir ein Bild aus",
   "welcomePaintBody": "Tippe auf eine Fläche – schon ist sie bunt. Oder male einfach frei drauflos.",
   "welcomeParentsTitle": "Für Eltern",
-  "welcomeParentsBody": "Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe."
+  "welcomeParentsBody": "Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe.",
+  "oopsTitle": "Ups – hier ist etwas durcheinandergeraten.",
+  "oopsBody": "Geh einen Schritt zurück und probier es nochmal.",
+  "errorLogTitle": "Problembericht",
+  "errorLogSubtitle": "Was zuletzt schiefgegangen ist.",
+  "errorLogEmpty": "Alles in Ordnung – nichts zu berichten.",
+  "errorLogHint": "Diese Liste bleibt auf dem Gerät. Sie enthält Zeitpunkte und technische Meldungen – keine Bilder, keine Namen.",
+  "errorLogCount": "{n, plural, =0{Keine Einträge} =1{1 Eintrag} other{{n} Einträge}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Bericht teilen",
+  "errorLogClear": "Liste leeren",
+  "errorLogClearConfirm": "Alle Einträge löschen?",
+  "errorLogShareNote": "Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird."
 }

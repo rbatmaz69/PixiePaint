@@ -93,6 +93,7 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
   - [ ] auf einem Gerät mit Bildern → vorhandene Bilder bleiben unverändert, die Meldung nennt die Zahlen
   - [ ] eine beliebige andere ZIP-Datei auswählen → freundliche Ablehnung, kein Absturz
 - [ ] **Speicherplatz:** Anzeige plausibel; ein paar Bilder auswählen und löschen; Anzeige schrumpft
+- [ ] **Problembericht** (neu in v7.5): Einstellungen → „Problembericht". Erwartung nach einem sauberen Durchlauf: „Alles in Ordnung". Steht dort etwas, ist das ein Befund — Eintrag antippen (zeigt den Stack), dann „Bericht teilen" und die Datei aufbewahren. Ein Eintrag mit `save` heißt: etwas wurde nicht gespeichert, und das ist der wichtigste Fund, den diese Session machen kann.
 
 ## Teilen, Drucken, Fotos
 
@@ -125,7 +126,9 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 
 ## Wenn etwas schiefgeht
 
-Log mitlesen, während die App läuft:
+**Zuerst der Problembericht in der App** (Einstellungen → „Problembericht", hinter der Elternschranke). Seit v7.5 schreibt die App jeden gefangenen Fehler dort hin — mit Zeitpunkt, Herkunft und gekürztem Stack. Das überlebt den App-Neustart und ist damit oft genau die Information, die nach „irgendwas war komisch" fehlt. „Bericht teilen" legt die Datei ins Share-Sheet.
+
+Live mitlesen, während die App läuft:
 
 ```bash
 flutter logs

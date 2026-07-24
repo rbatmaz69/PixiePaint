@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Elige un dibujo",
   "welcomePaintBody": "Toca una zona y se llena de color. O dibuja lo que quieras.",
   "welcomeParentsTitle": "Para adultos",
-  "welcomeParentsBody": "Todo se queda en este dispositivo: sin publicidad, sin compras, sin recogida de datos. Compartir, borrar y los ajustes están detrás de una cuenta sencilla."
+  "welcomeParentsBody": "Todo se queda en este dispositivo: sin publicidad, sin compras, sin recogida de datos. Compartir, borrar y los ajustes están detrás de una cuenta sencilla.",
+  "oopsTitle": "Uy, aquí se ha liado algo.",
+  "oopsBody": "Vuelve un paso atrás e inténtalo otra vez.",
+  "errorLogTitle": "Informe de problemas",
+  "errorLogSubtitle": "Lo último que ha fallado.",
+  "errorLogEmpty": "Todo en orden: nada que informar.",
+  "errorLogHint": "Esta lista se queda en el dispositivo. Contiene fechas y mensajes técnicos, ni dibujos ni nombres.",
+  "errorLogCount": "{n, plural, =0{Sin entradas} =1{1 entrada} other{{n} entradas}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Compartir informe",
+  "errorLogClear": "Vaciar la lista",
+  "errorLogClearConfirm": "¿Borrar todas las entradas?",
+  "errorLogShareNote": "Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito."
 }

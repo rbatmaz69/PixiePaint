@@ -838,4 +838,55 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Wszystko zostaje na tym urządzeniu: bez reklam, bez zakupów, bez zbierania danych. Udostępnianie, usuwanie i ustawienia są za prostym działaniem.';
+
+  @override
+  String get oopsTitle => 'Ups — coś się tu pomieszało.';
+
+  @override
+  String get oopsBody => 'Wróć o krok i spróbuj jeszcze raz.';
+
+  @override
+  String get errorLogTitle => 'Raport problemów';
+
+  @override
+  String get errorLogSubtitle => 'Co ostatnio się nie udało.';
+
+  @override
+  String get errorLogEmpty => 'Wszystko w porządku — nie ma nic do zgłoszenia.';
+
+  @override
+  String get errorLogHint =>
+      'Ta lista zostaje na urządzeniu. Zawiera godziny i komunikaty techniczne — żadnych obrazków ani imion.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n wpisu',
+      many: '$n wpisów',
+      few: '$n wpisy',
+      one: '1 wpis',
+      zero: 'Brak wpisów',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Udostępnij raport';
+
+  @override
+  String get errorLogClear => 'Wyczyść listę';
+
+  @override
+  String get errorLogClearConfirm => 'Usunąć wszystkie wpisy?';
+
+  @override
+  String get errorLogShareNote =>
+      'Zapis z PixiePaint — zostaje na urządzeniu, dopóki nie zostanie świadomie udostępniony.';
 }

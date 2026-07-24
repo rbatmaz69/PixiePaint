@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Kies een tekening",
   "welcomePaintBody": "Tik op een vlak en het wordt gekleurd. Of teken gewoon wat je wilt.",
   "welcomeParentsTitle": "Voor ouders",
-  "welcomeParentsBody": "Alles blijft op dit apparaat: geen reclame, geen aankopen, geen gegevensverzameling. Delen, verwijderen en de instellingen zitten achter een eenvoudige som."
+  "welcomeParentsBody": "Alles blijft op dit apparaat: geen reclame, geen aankopen, geen gegevensverzameling. Delen, verwijderen en de instellingen zitten achter een eenvoudige som.",
+  "oopsTitle": "Oeps — hier is iets door de war geraakt.",
+  "oopsBody": "Ga een stapje terug en probeer het opnieuw.",
+  "errorLogTitle": "Probleemrapport",
+  "errorLogSubtitle": "Wat er het laatst misging.",
+  "errorLogEmpty": "Alles in orde — niets te melden.",
+  "errorLogHint": "Deze lijst blijft op het apparaat. Er staan tijdstippen en technische meldingen in — geen tekeningen, geen namen.",
+  "errorLogCount": "{n, plural, =0{Geen meldingen} =1{1 melding} other{{n} meldingen}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Rapport delen",
+  "errorLogClear": "Lijst leegmaken",
+  "errorLogClearConfirm": "Alle meldingen verwijderen?",
+  "errorLogShareNote": "Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt."
 }

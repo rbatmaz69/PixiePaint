@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Bir resim seç",
   "welcomePaintBody": "Bir alana dokun, hemen renklensin. Ya da canının istediği gibi çiz.",
   "welcomeParentsTitle": "Yetişkinler için",
-  "welcomeParentsBody": "Her şey bu cihazda kalır: reklam yok, satın alma yok, veri toplama yok. Paylaşma, silme ve ayarlar basit bir işlemin arkasında."
+  "welcomeParentsBody": "Her şey bu cihazda kalır: reklam yok, satın alma yok, veri toplama yok. Paylaşma, silme ve ayarlar basit bir işlemin arkasında.",
+  "oopsTitle": "Hoppa — burada bir şey karıştı.",
+  "oopsBody": "Bir adım geri dön ve yeniden dene.",
+  "errorLogTitle": "Sorun raporu",
+  "errorLogSubtitle": "En son ne ters gitti.",
+  "errorLogEmpty": "Her şey yolunda — bildirilecek bir şey yok.",
+  "errorLogHint": "Bu liste cihazda kalır. İçinde saatler ve teknik iletiler var — resim yok, isim yok.",
+  "errorLogCount": "{n, plural, =0{Kayıt yok} =1{1 kayıt} other{{n} kayıt}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Raporu paylaş",
+  "errorLogClear": "Listeyi temizle",
+  "errorLogClearConfirm": "Bütün kayıtlar silinsin mi?",
+  "errorLogShareNote": "PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır."
 }

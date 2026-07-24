@@ -817,4 +817,53 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get welcomeParentsBody =>
       'Todo se queda en este dispositivo: sin publicidad, sin compras, sin recogida de datos. Compartir, borrar y los ajustes están detrás de una cuenta sencilla.';
+
+  @override
+  String get oopsTitle => 'Uy, aquí se ha liado algo.';
+
+  @override
+  String get oopsBody => 'Vuelve un paso atrás e inténtalo otra vez.';
+
+  @override
+  String get errorLogTitle => 'Informe de problemas';
+
+  @override
+  String get errorLogSubtitle => 'Lo último que ha fallado.';
+
+  @override
+  String get errorLogEmpty => 'Todo en orden: nada que informar.';
+
+  @override
+  String get errorLogHint =>
+      'Esta lista se queda en el dispositivo. Contiene fechas y mensajes técnicos, ni dibujos ni nombres.';
+
+  @override
+  String errorLogCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n entradas',
+      one: '1 entrada',
+      zero: 'Sin entradas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String errorLogRepeat(int n) {
+    return '$n×';
+  }
+
+  @override
+  String get errorLogShare => 'Compartir informe';
+
+  @override
+  String get errorLogClear => 'Vaciar la lista';
+
+  @override
+  String get errorLogClearConfirm => '¿Borrar todas las entradas?';
+
+  @override
+  String get errorLogShareNote =>
+      'Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito.';
 }

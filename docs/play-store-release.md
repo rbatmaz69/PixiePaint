@@ -186,7 +186,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
   - *Elternschranke.* Alles, was die App verlässt (Teilen, Drucken, In Fotos speichern, Foto-Import) oder etwas löscht, liegt hinter einer Multiplikationsaufgabe. Google akzeptiert das als „age screen" für solche Aktionen.
   - *Foto-Zugriff.* Der Import läuft über den System-Picker; die App fordert keine dauerhafte Galerie-Berechtigung an.
 
-- **Datensicherheit-Formular:** „Es werden keine Nutzerdaten erhoben" und „keine Daten weitergegeben". Das stimmt: alles bleibt auf dem Gerät, Fotos werden nur lokal verarbeitet. Die Sicherungsdatei erzeugt der Nutzer selbst und teilt sie über das System-Share-Sheet — die App lädt nichts hoch.
+- **Datensicherheit-Formular:** „Es werden keine Nutzerdaten erhoben" und „keine Daten weitergegeben". Das stimmt: alles bleibt auf dem Gerät, Fotos werden nur lokal verarbeitet. Die Sicherungsdatei erzeugt der Nutzer selbst und teilt sie über das System-Share-Sheet — die App lädt nichts hoch. Dasselbe gilt für den Problembericht aus v7.5: er wird lokal in `errors.log` geschrieben, enthält keine Geräte-IDs und keine Pfade, und verlässt das Gerät nur, wenn ein Elternteil ihn hinter der Rechenaufgabe bewusst teilt. Es gibt weiterhin kein Analytics- und kein Crash-SDK.
 
 - **Content-Rating-Fragebogen:** keine Gewalt, keine Sexualität, keine Schimpfwörter, keine Drogen, keine Nutzerinteraktion, keine Standortweitergabe → erwartetes Ergebnis: USK 0 / PEGI 3
 
@@ -215,7 +215,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 7.1.0 (versionCode 19) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.5.0 (versionCode 25) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
 | targetSdk | geerbt aus dem Flutter-SDK, siehe Schritt 3 |
 | Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |

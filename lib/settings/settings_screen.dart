@@ -21,6 +21,7 @@ import '../util/review.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../widgets/parental_gate.dart';
+import 'error_log_screen.dart';
 import 'storage_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -163,6 +164,16 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (chosen == null) return;
     await _update(pauseAfterMinutes: chosen);
     if (mounted) setState(() {});
+  }
+
+  /// The problem report. Gated like the storage screen: it is a parents'
+  /// tool, and its share button sends a file off the device.
+  Future<void> _openErrorLog() async {
+    if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const ErrorLogScreen()),
+    );
   }
 
   /// Deleting pictures lives behind its own gate, like every other door out
@@ -377,6 +388,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                               title: context.l10n.storageTitle,
                               subtitle: context.l10n.storageSubtitle,
                               onTap: _openStorage,
+                            ),
+                            _KidRow(
+                              emoji: '🧾',
+                              tint: PixiePalette.mintLight,
+                              title: context.l10n.errorLogTitle,
+                              subtitle: context.l10n.errorLogSubtitle,
+                              onTap: _openErrorLog,
                             ),
                           ],
                         ),

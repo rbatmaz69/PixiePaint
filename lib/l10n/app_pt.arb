@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Escolhe um desenho",
   "welcomePaintBody": "Toca numa zona e ela fica cheia de cor. Ou desenha simplesmente o que quiseres.",
   "welcomeParentsTitle": "Para adultos",
-  "welcomeParentsBody": "Fica tudo neste dispositivo: sem publicidade, sem compras, sem recolha de dados. Partilhar, apagar e as definições estão atrás de uma conta simples."
+  "welcomeParentsBody": "Fica tudo neste dispositivo: sem publicidade, sem compras, sem recolha de dados. Partilhar, apagar e as definições estão atrás de uma conta simples.",
+  "oopsTitle": "Ups — aqui alguma coisa ficou trocada.",
+  "oopsBody": "Volta um passo atrás e tenta outra vez.",
+  "errorLogTitle": "Relatório de problemas",
+  "errorLogSubtitle": "O que correu mal mais recentemente.",
+  "errorLogEmpty": "Tudo em ordem — nada a relatar.",
+  "errorLogHint": "Esta lista fica no dispositivo. Tem horas e mensagens técnicas — nenhum desenho, nenhum nome.",
+  "errorLogCount": "{n, plural, =0{Sem entradas} =1{1 entrada} other{{n} entradas}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Partilhar relatório",
+  "errorLogClear": "Limpar a lista",
+  "errorLogClearConfirm": "Apagar todas as entradas?",
+  "errorLogShareNote": "Registo do PixiePaint — fica no dispositivo até ser partilhado de propósito."
 }

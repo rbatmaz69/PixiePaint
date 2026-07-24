@@ -1491,6 +1491,78 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Alles bleibt auf diesem Gerät: keine Werbung, keine Käufe, keine Datensammlung. Teilen, Löschen und die Einstellungen liegen hinter einer Rechenaufgabe.'**
   String get welcomeParentsBody;
+
+  /// No description provided for @oopsTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Ups – hier ist etwas durcheinandergeraten.'**
+  String get oopsTitle;
+
+  /// No description provided for @oopsBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Geh einen Schritt zurück und probier es nochmal.'**
+  String get oopsBody;
+
+  /// No description provided for @errorLogTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Problembericht'**
+  String get errorLogTitle;
+
+  /// No description provided for @errorLogSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Was zuletzt schiefgegangen ist.'**
+  String get errorLogSubtitle;
+
+  /// No description provided for @errorLogEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Alles in Ordnung – nichts zu berichten.'**
+  String get errorLogEmpty;
+
+  /// No description provided for @errorLogHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Liste bleibt auf dem Gerät. Sie enthält Zeitpunkte und technische Meldungen – keine Bilder, keine Namen.'**
+  String get errorLogHint;
+
+  /// No description provided for @errorLogCount.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =0{Keine Einträge} =1{1 Eintrag} other{{n} Einträge}}'**
+  String errorLogCount(int n);
+
+  /// No description provided for @errorLogRepeat.
+  ///
+  /// In de, this message translates to:
+  /// **'{n}×'**
+  String errorLogRepeat(int n);
+
+  /// No description provided for @errorLogShare.
+  ///
+  /// In de, this message translates to:
+  /// **'Bericht teilen'**
+  String get errorLogShare;
+
+  /// No description provided for @errorLogClear.
+  ///
+  /// In de, this message translates to:
+  /// **'Liste leeren'**
+  String get errorLogClear;
+
+  /// No description provided for @errorLogClearConfirm.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Einträge löschen?'**
+  String get errorLogClearConfirm;
+
+  /// No description provided for @errorLogShareNote.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufzeichnung aus PixiePaint – bleibt auf dem Gerät, bis sie bewusst geteilt wird.'**
+  String get errorLogShareNote;
 }
 
 class _AppLocalizationsDelegate

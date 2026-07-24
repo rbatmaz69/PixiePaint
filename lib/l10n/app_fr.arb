@@ -352,5 +352,31 @@
   "welcomePaintTitle": "Choisis une image",
   "welcomePaintBody": "Touche une zone et elle se remplit de couleur. Ou dessine simplement ce que tu veux.",
   "welcomeParentsTitle": "Pour les parents",
-  "welcomeParentsBody": "Tout reste sur cet appareil : pas de publicité, pas d'achats, pas de collecte de données. Le partage, la suppression et les réglages sont protégés par un petit calcul."
+  "welcomeParentsBody": "Tout reste sur cet appareil : pas de publicité, pas d'achats, pas de collecte de données. Le partage, la suppression et les réglages sont protégés par un petit calcul.",
+  "oopsTitle": "Oups — quelque chose s'est emmêlé ici.",
+  "oopsBody": "Reviens en arrière et réessaie.",
+  "errorLogTitle": "Rapport de problème",
+  "errorLogSubtitle": "Ce qui a échoué le plus récemment.",
+  "errorLogEmpty": "Tout va bien — rien à signaler.",
+  "errorLogHint": "Cette liste reste sur l'appareil. Elle contient des horodatages et des messages techniques — aucun dessin, aucun nom.",
+  "errorLogCount": "{n, plural, =0{Aucune entrée} =1{1 entrée} other{{n} entrées}}",
+  "@errorLogCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogRepeat": "{n}×",
+  "@errorLogRepeat": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "errorLogShare": "Partager le rapport",
+  "errorLogClear": "Vider la liste",
+  "errorLogClearConfirm": "Supprimer toutes les entrées ?",
+  "errorLogShareNote": "Enregistré par PixiePaint — reste sur l'appareil jusqu'à un partage volontaire."
 }
