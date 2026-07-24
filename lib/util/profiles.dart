@@ -101,8 +101,17 @@ class ProfileStore extends ChangeNotifier {
     return artworkProfileId == null && profileId == primary.id;
   }
 
-  Future<Profile> addProfile({required String name, required String emoji}) async {
-    final profile = Profile(id: const Uuid().v4(), name: name, emoji: emoji);
+  Future<Profile> addProfile({
+    required String name,
+    required String emoji,
+    bool simpleTools = false,
+  }) async {
+    final profile = Profile(
+      id: const Uuid().v4(),
+      name: name,
+      emoji: emoji,
+      simpleTools: simpleTools,
+    );
     profiles.add(profile);
     _activeId = profile.id;
     notifyListeners();
@@ -110,10 +119,12 @@ class ProfileStore extends ChangeNotifier {
     return profile;
   }
 
-  Future<void> updateProfile(String id, {String? name, String? emoji}) async {
+  Future<void> updateProfile(String id,
+      {String? name, String? emoji, bool? simpleTools}) async {
     final i = profiles.indexWhere((p) => p.id == id);
     if (i < 0) return;
-    profiles[i] = profiles[i].copyWith(name: name, emoji: emoji);
+    profiles[i] = profiles[i]
+        .copyWith(name: name, emoji: emoji, simpleTools: simpleTools);
     notifyListeners();
     await _persist();
   }

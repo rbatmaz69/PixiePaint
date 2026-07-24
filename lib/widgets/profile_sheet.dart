@@ -164,11 +164,16 @@ class _ManageProfilesState extends State<_ManageProfiles> {
     );
     if (result == null) return;
     if (existing == null) {
-      await _store.addProfile(name: result.name, emoji: result.emoji);
+      await _store.addProfile(
+          name: result.name,
+          emoji: result.emoji,
+          simpleTools: result.simpleTools);
       await Progress.instance.switchProfile(_store.active.id);
     } else {
       await _store.updateProfile(existing.id,
-          name: result.name, emoji: result.emoji);
+          name: result.name,
+          emoji: result.emoji,
+          simpleTools: result.simpleTools);
     }
     if (mounted) setState(() {});
   }
@@ -283,9 +288,10 @@ class _ManageProfilesState extends State<_ManageProfiles> {
 }
 
 class _ProfileDraft {
-  const _ProfileDraft(this.name, this.emoji);
+  const _ProfileDraft(this.name, this.emoji, this.simpleTools);
   final String name;
   final String emoji;
+  final bool simpleTools;
 }
 
 /// Name field + a grid of animal faces.
@@ -302,6 +308,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
   late final TextEditingController _name =
       TextEditingController(text: widget.existing?.name ?? '');
   late String _emoji = widget.existing?.emoji ?? kProfileEmojis.first;
+  late bool _simpleTools = widget.existing?.simpleTools ?? false;
 
   @override
   void dispose() {
@@ -318,69 +325,85 @@ class _ProfileEditorState extends State<_ProfileEditor> {
         top: 16,
         bottom: MediaQuery.viewInsetsOf(context).bottom + 16,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            widget.existing == null
-                ? context.l10n.profileAdd
-                : context.l10n.renameAction,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _name,
-            autofocus: true,
-            maxLength: 14,
-            textCapitalization: TextCapitalization.words,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
-            decoration: InputDecoration(
-              counterText: '',
-              hintText: context.l10n.profileNameHint,
+      // Scrollable, not just tall: the name field autofocuses, so the
+      // keyboard is up the whole time this sheet is open and takes half the
+      // height with it. Sixteen faces plus the toolbar switch do not fit in
+      // what is left, and a Column simply overflows.
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.existing == null
+                  ? context.l10n.profileAdd
+                  : context.l10n.renameAction,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              for (final emoji in kProfileEmojis)
-                Bouncy(
-                  playTick: false,
-                  onTap: () => setState(() => _emoji = emoji),
-                  child: Container(
-                    width: 52,
-                    height: 52,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: _emoji == emoji
-                          ? PixiePalette.grapeLight
-                          : const Color(0xFFF5F0E8),
-                      shape: BoxShape.circle,
-                      border: Border.all(
+            const SizedBox(height: 12),
+            TextField(
+              controller: _name,
+              autofocus: true,
+              maxLength: 14,
+              textCapitalization: TextCapitalization.words,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+              decoration: InputDecoration(
+                counterText: '',
+                hintText: context.l10n.profileNameHint,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final emoji in kProfileEmojis)
+                  Bouncy(
+                    playTick: false,
+                    onTap: () => setState(() => _emoji = emoji),
+                    child: Container(
+                      width: 52,
+                      height: 52,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
                         color: _emoji == emoji
-                            ? PixiePalette.grape
-                            : Colors.transparent,
-                        width: 3,
+                            ? PixiePalette.grapeLight
+                            : const Color(0xFFF5F0E8),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: _emoji == emoji
+                              ? PixiePalette.grape
+                              : Colors.transparent,
+                          width: 3,
+                        ),
                       ),
+                      child: Text(emoji, style: const TextStyle(fontSize: 26)),
                     ),
-                    child: Text(emoji, style: const TextStyle(fontSize: 26)),
                   ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          KidDialogButton(
-            emoji: '💾',
-            label: context.l10n.renameSave,
-            onTap: () => Navigator.pop(
-                context, _ProfileDraft(_name.text.trim(), _emoji)),
-          ),
-        ],
+              ],
+            ),
+            const SizedBox(height: 8),
+            // A parent decision, and it already sits behind the gate: this
+            // editor is only reachable from "manage children".
+            SwitchListTile.adaptive(
+              value: _simpleTools,
+              onChanged: (v) => setState(() => _simpleTools = v),
+              title: Text(context.l10n.simpleToolsTitle),
+              subtitle: Text(context.l10n.simpleToolsSubtitle),
+              contentPadding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 8),
+            KidDialogButton(
+              emoji: '💾',
+              label: context.l10n.renameSave,
+              onTap: () => Navigator.pop(
+                  context, _ProfileDraft(_name.text.trim(), _emoji, _simpleTools)),
+            ),
+          ],
+        ),
       ),
     );
   }

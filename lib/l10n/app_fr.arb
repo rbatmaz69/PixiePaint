@@ -379,5 +379,7 @@
   "errorLogClear": "Vider la liste",
   "errorLogClearConfirm": "Supprimer toutes les entrées ?",
   "errorLogShareNote": "Enregistré par PixiePaint — reste sur l'appareil jusqu'à un partage volontaire.",
-  "rotateHint": "Tourne-moi sur le côté pour peindre plus grand"
+  "rotateHint": "Tourne-moi sur le côté pour peindre plus grand",
+  "simpleToolsTitle": "Outils simples",
+  "simpleToolsSubtitle": "Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits"
 }

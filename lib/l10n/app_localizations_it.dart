@@ -870,4 +870,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get rotateHint => 'Girami di lato: avrai più spazio per dipingere';
+
+  @override
+  String get simpleToolsTitle => 'Strumenti semplici';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Solo pennello, riempimento, adesivi e gomma: per i più piccoli';
 }

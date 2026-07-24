@@ -869,4 +869,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get rotateHint => 'Vira-me de lado para teres mais espaço para pintar';
+
+  @override
+  String get simpleToolsTitle => 'Ferramentas simples';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Só pincel, balde, autocolantes e borracha – para os mais pequenos';
 }

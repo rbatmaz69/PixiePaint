@@ -26,6 +26,7 @@ import '../trace/trace_session.dart';
 import '../trace/trace_template.dart';
 import '../ui/reward_reveal.dart';
 import '../util/image_io.dart';
+import '../util/profiles.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
@@ -115,6 +116,11 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// the screen again.
   late bool _rotateHintPending = !Settings.instance.rotateHintSeen;
 
+  /// The active child's toolbar size, read once when the picture opens —
+  /// swapping the toolbar under a drawing hand would be worse than waiting
+  /// for the next picture.
+  late final bool _simpleTools = ProfileStore.instance.active.simpleTools;
+
   @override
   void initState() {
     super.initState();
@@ -148,6 +154,11 @@ class _CanvasScreenState extends State<CanvasScreen>
       cbnFilled: () => _cbnFilledForSave,
       resumed: widget.resume != null,
     );
+    // A tool the simple toolbar does not show would be unselectable and
+    // unchangeable — the child would be stuck with it.
+    if (_simpleTools && !kSimpleTools.contains(controller.tool)) {
+      controller.selectTool(ToolKind.brush);
+    }
     _load();
     _autoSave = Timer.periodic(const Duration(seconds: 30), (_) {
       if (controller.dirty) _saves.save();
@@ -551,6 +562,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       controller: controller,
       showFill: traceId == null,
       fillOnly: _isCbn,
+      simple: _simpleTools,
       onBack: _leave,
       onShare: _share,
     );
@@ -596,6 +608,7 @@ class _CanvasScreenState extends State<CanvasScreen>
         showFill: traceId == null,
         fillOnly: _isCbn,
         buttonSize: 50,
+        simple: _simpleTools,
       ),
     );
     final actions = ToolActionCluster(
@@ -964,6 +977,7 @@ class _LeftRail extends StatelessWidget {
     required this.onShare,
     this.showFill = true,
     this.fillOnly = false,
+    this.simple = false,
   });
 
   final CanvasController controller;
@@ -971,6 +985,7 @@ class _LeftRail extends StatelessWidget {
   final VoidCallback onShare;
   final bool showFill;
   final bool fillOnly;
+  final bool simple;
 
   @override
   Widget build(BuildContext context) {
@@ -1007,6 +1022,7 @@ class _LeftRail extends StatelessWidget {
               controller: controller,
               showFill: showFill,
               fillOnly: fillOnly,
+              simple: simple,
             ),
           ),
           // Outside the scrolling rail above — see [ToolActionCluster].

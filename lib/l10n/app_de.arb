@@ -382,5 +382,10 @@
   "rotateHint": "Quer hast du mehr Platz zum Malen",
   "@rotateHint": {
     "description": "One-time nudge on the canvas: landscape gives more drawing room (phones only)"
+  },
+  "simpleToolsTitle": "Einfache Werkzeuge",
+  "simpleToolsSubtitle": "Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten",
+  "@simpleToolsTitle": {
+    "description": "Per-profile switch: cut the toolbar down to four tools"
   }
 }

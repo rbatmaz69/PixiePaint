@@ -135,6 +135,37 @@ void main() {
         reason: 'the primary owns the legacy pictures and must always exist');
   });
 
+  testWidgets('a parent can hand one child the simple toolbar', (tester) async {
+    await start(tester);
+    await openManage(tester);
+
+    await tester.tap(find.byIcon(Icons.edit_rounded).first);
+    await settle(tester);
+    expect(find.text('Einfache Werkzeuge'), findsOneWidget);
+
+    // The editor scrolls (it has to: the keyboard is up the whole time),
+    // so reach the switch and the save button the way a thumb would.
+    await tester.ensureVisible(find.byType(SwitchListTile));
+    await settle(tester);
+    await tester.tap(find.byType(SwitchListTile));
+    await settle(tester);
+    await tester.ensureVisible(find.text('Speichern'));
+    await settle(tester);
+    await tester.tap(find.text('Speichern'));
+    await settle(tester);
+
+    expect(ProfileStore.instance.primary.simpleTools, isTrue);
+
+    // Reopening shows the switch the way it was left — a parent must be
+    // able to see what this child is set to.
+    await tester.tap(find.byIcon(Icons.edit_rounded).first);
+    await settle(tester);
+    await tester.ensureVisible(find.byType(SwitchListTile));
+    await settle(tester);
+    expect(tester.widget<SwitchListTile>(find.byType(SwitchListTile)).value,
+        isTrue);
+  });
+
   testWidgets('the manage list is behind the parental gate', (tester) async {
     await start(tester);
 

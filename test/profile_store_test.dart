@@ -107,6 +107,55 @@ void main() {
       expect(updated.emoji, '🐼');
     });
 
+    test('the simple toolbar is a per-kid setting that survives a restart',
+        () async {
+      await store.loadFrom(file(), dir);
+      // Default: everyone gets the full box of tools.
+      expect(store.primary.simpleTools, isFalse);
+
+      final little = await store.addProfile(
+          name: 'Nils', emoji: '🐧', simpleTools: true);
+      await store.updateProfile(store.primary.id, name: 'Emma');
+      await store.flush();
+
+      final reopened = ProfileStore.instance..resetForTest();
+      await reopened.loadFrom(
+          JsonStore(File('${dir.path}/profiles.json')), dir);
+      expect(
+          reopened.profiles.firstWhere((p) => p.id == little.id).simpleTools,
+          isTrue);
+      expect(reopened.primary.simpleTools, isFalse,
+          reason: 'the big sibling keeps all fourteen tools');
+    });
+
+    test('the switch can be turned back off as a child grows into it',
+        () async {
+      await store.loadFrom(file(), dir);
+      final p =
+          await store.addProfile(name: 'Nils', emoji: '🐧', simpleTools: true);
+      await store.updateProfile(p.id, simpleTools: false);
+      expect(store.profiles.firstWhere((e) => e.id == p.id).simpleTools,
+          isFalse);
+      // ...and renaming must not silently reset it.
+      await store.updateProfile(p.id, simpleTools: true);
+      await store.updateProfile(p.id, name: 'Nils B.');
+      final updated = store.profiles.firstWhere((e) => e.id == p.id);
+      expect(updated.name, 'Nils B.');
+      expect(updated.simpleTools, isTrue);
+    });
+
+    test('a profiles.json from before v8.1 reads as the full toolbar',
+        () async {
+      File('${dir.path}/profiles.json').writeAsStringSync(jsonEncode({
+        'profiles': [
+          {'id': 'kid-1', 'name': 'Mia', 'emoji': '🐸'},
+        ],
+        'activeProfileId': 'kid-1',
+      }));
+      await store.loadFrom(file(), dir);
+      expect(store.primary.simpleTools, isFalse);
+    });
+
     test('the primary profile can never be removed', () async {
       await store.loadFrom(file(), dir);
       await store.removeProfile(store.primary.id);
@@ -151,6 +200,26 @@ void main() {
       // Restored artworks are stamped with these ids — without the kids,
       // ownsArtwork would hide every one of them.
       expect(store.ownsArtwork('backup-kid-1', 'backup-kid-1'), isTrue);
+    });
+
+    test('a restored kid brings their simple toolbar along', () async {
+      await store.loadFrom(file(), dir);
+      File('${dir.path}/$kRestoredProfilesFile').writeAsStringSync(jsonEncode({
+        'profiles': [
+          {
+            'id': 'backup-kid-1',
+            'name': 'Nils',
+            'emoji': '🐧',
+            'simpleTools': true,
+          },
+        ],
+      }));
+
+      expect(await store.mergeRestoredProfiles(), 1);
+      expect(
+          store.profiles.firstWhere((p) => p.id == 'backup-kid-1').simpleTools,
+          isTrue,
+          reason: 'a restore that hands a toddler fourteen tools is a bug');
     });
 
     test('a kid this device already knows keeps its own name', () async {

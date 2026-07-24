@@ -59,6 +59,14 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Beim allerersten Bild auf einem **Handy** erscheint einmalig der Hinweis „Quer hast du mehr Platz" — antippen lässt ihn verschwinden, nach ein paar Sekunden geht er von selbst
 - [ ] Nächstes Bild öffnen: der Hinweis kommt **nicht** wieder; auf dem Tablet erscheint er gar nicht
 
+**Einfache Werkzeuge** (neu in v8.1)
+
+- [ ] Einstellungen des Kinderprofils (Profil-Chip → Verwalten → Stift-Symbol): der Schalter „Einfache Werkzeuge" ist da; das Blatt lässt sich scrollen, auch wenn die Tastatur offen ist
+- [ ] Mit Schalter an: nur Pinsel, Füllen, Sticker, Radierer — sichtbar größer; kein Zauber-Spiegel, Pinselgröße bleibt
+- [ ] Der Farbeimer malt sofort (kein Muster-Blatt dazwischen)
+- [ ] Rückgängig ist weiterhin da
+- [ ] Zweites Kind ohne den Schalter anlegen und wechseln → dort sind wieder alle 14 Werkzeuge da
+
 ## Stift und Handballen (nur mit Stylus)
 
 - [ ] Druckstärke ändert die Strichbreite

@@ -120,6 +120,85 @@ void main() {
     handle.dispose();
   });
 
+  group('simple mode', () {
+    Future<void> pumpSimple(WidgetTester tester) => pumpPixie(
+          tester,
+          Scaffold(
+            body: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ToolBarRail(controller: controller, simple: true),
+                  ToolActionCluster(controller: controller),
+                ],
+              ),
+            ),
+          ),
+          size: const Size(900, 1800),
+        );
+
+    testWidgets('shows four tools instead of fourteen', (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(root));
+      final handle = tester.ensureSemantics();
+
+      await pumpSimple(tester);
+
+      for (final label in ['Pinsel', 'Füllen', 'Sticker', 'Radierer']) {
+        expect(find.bySemanticsLabel(label), findsOneWidget, reason: label);
+      }
+      for (final label in ['Regenbogen', 'Glitzer', 'Neon', 'Pipette',
+        'Formen', 'Zauber-Spiegel']) {
+        expect(find.bySemanticsLabel(label), findsNothing, reason: label);
+      }
+
+      // What must not disappear: undoing a mistake, and thick vs. thin.
+      expect(find.bySemanticsLabel('Rückgängig'), findsOneWidget);
+      expect(find.bySemanticsLabel('Pinselgröße'), findsOneWidget);
+
+      handle.dispose();
+    });
+
+    testWidgets('the bucket paints straight away, with no sheet in the way',
+        (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(root));
+      final handle = tester.ensureSemantics();
+
+      await pumpSimple(tester);
+      await tester.tap(find.bySemanticsLabel('Füllen'));
+      await tester.pumpAndSettle();
+
+      expect(controller.tool, ToolKind.fill);
+      // The pattern sheet lists the eight fills by name; none of them may
+      // stand between a three-year-old and a tap that paints.
+      expect(find.text('Punkte'), findsNothing,
+          reason: 'a three-year-old should get paint from one tap');
+
+      handle.dispose();
+    });
+
+    testWidgets('its buttons are bigger than the full toolbar\'s',
+        (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(root));
+      final handle = tester.ensureSemantics();
+
+      await pumpToolBar(tester);
+      final full = tester.getSize(find.bySemanticsLabel('Pinsel'));
+      await pumpSimple(tester);
+      // The button size is animated, and pumping the second tree reuses the
+      // first one's elements — without letting the tween finish, this would
+      // measure the old size and pass for the wrong reason.
+      await tester.pumpAndSettle();
+      final simple = tester.getSize(find.bySemanticsLabel('Pinsel'));
+
+      expect(simple.width, greaterThan(full.width));
+
+      handle.dispose();
+    });
+  });
+
   testWidgets('the toolbar survives the largest text scale the app allows',
       (tester) async {
     final root = await setUpPixieStorage(tester);

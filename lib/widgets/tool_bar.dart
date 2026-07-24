@@ -163,6 +163,7 @@ class ToolBarRail extends StatefulWidget {
     this.fillOnly = false,
     this.direction = Axis.vertical,
     this.buttonSize = 52,
+    this.simple = false,
   });
 
   final CanvasController controller;
@@ -172,6 +173,11 @@ class ToolBarRail extends StatefulWidget {
   /// clear — the numbered palette does the color choosing.
   final bool fillOnly;
   final Axis direction;
+
+  /// The [Profile.simpleTools] toolbar: four tools, bigger, no sheets in the
+  /// way. The bucket fills plainly here instead of opening the pattern
+  /// picker — a child this mode is for should get paint from one tap.
+  final bool simple;
 
   /// Edge length of one tool button. Portrait shaves a little off to give
   /// the paper more room; [Bouncy.minSize] keeps the tap target at 48.
@@ -246,8 +252,15 @@ class _ToolBarRailState extends State<ToolBarRail> {
 
   List<Widget> _buildGroups(BuildContext context) {
     final controller = widget.controller;
+    final plainFill = widget.fillOnly || widget.simple;
+    final size = widget.simple ? widget.buttonSize + 12 : widget.buttonSize;
     final tools = widget.fillOnly
         ? [ToolKind.fill]
+        : widget.simple
+        ? [
+            for (final tool in kSimpleTools)
+              if (tool != ToolKind.fill || widget.showFill) tool,
+          ]
         : [
             ToolKind.brush,
             ToolKind.marker,
@@ -271,14 +284,14 @@ class _ToolBarRailState extends State<ToolBarRail> {
             key: _keys.putIfAbsent(tool, GlobalKey.new),
             tool: tool,
             controller: controller,
-            size: widget.buttonSize,
+            size: size,
             onTap: switch (tool) {
               ToolKind.stamp => () => showStampPicker(context, controller),
               ToolKind.shape => () => shapes.showShapePicker(
                 context,
                 controller,
               ),
-              ToolKind.fill => widget.fillOnly
+              ToolKind.fill => plainFill
                   ? () => controller.selectTool(ToolKind.fill)
                   : () => showFillPatternPicker(context, controller),
               _ => () => controller.selectTool(tool),
@@ -292,10 +305,14 @@ class _ToolBarRailState extends State<ToolBarRail> {
             color: controller.color,
             onTap: () => showSizePicker(context, controller),
           ),
-          _SymmetryButton(
-            controller: controller,
-            onTap: () => symmetry.showSymmetryPicker(context, controller),
-          ),
+          // Thick or thin is half the fun and needs no reading, so the size
+          // button stays. The magic mirror does not: it is a rule to grasp
+          // before it is a pleasure.
+          if (!widget.simple)
+            _SymmetryButton(
+              controller: controller,
+              onTap: () => symmetry.showSymmetryPicker(context, controller),
+            ),
         ], widget.direction),
       _pill([
         _ActionButton(

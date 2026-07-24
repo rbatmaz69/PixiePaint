@@ -379,5 +379,7 @@
   "errorLogClear": "Clear the list",
   "errorLogClearConfirm": "Delete all entries?",
   "errorLogShareNote": "Recorded by PixiePaint — stays on the device until it is deliberately shared.",
-  "rotateHint": "Turn me sideways for more room to paint"
+  "rotateHint": "Turn me sideways for more room to paint",
+  "simpleToolsTitle": "Simple tools",
+  "simpleToolsSubtitle": "Just brush, fill, stickers and eraser – for the littlest ones"
 }

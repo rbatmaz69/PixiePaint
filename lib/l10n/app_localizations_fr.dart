@@ -870,4 +870,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get rotateHint => 'Tourne-moi sur le côté pour peindre plus grand';
+
+  @override
+  String get simpleToolsTitle => 'Outils simples';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits';
 }

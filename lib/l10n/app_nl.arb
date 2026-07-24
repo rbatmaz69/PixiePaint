@@ -379,5 +379,7 @@
   "errorLogClear": "Lijst leegmaken",
   "errorLogClearConfirm": "Alle meldingen verwijderen?",
   "errorLogShareNote": "Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt.",
-  "rotateHint": "Draai me om, dan heb je meer ruimte om te tekenen"
+  "rotateHint": "Draai me om, dan heb je meer ruimte om te tekenen",
+  "simpleToolsTitle": "Eenvoudige gereedschappen",
+  "simpleToolsSubtitle": "Alleen kwast, vullen, stickers en gum – voor de allerkleinsten"
 }

@@ -17,6 +17,16 @@ enum ToolKind {
   twin,
 }
 
+/// The four tools a profile in simple mode is offered — paint, fill,
+/// stickers, undo-by-hand. Everything else is still *in* the app; this is
+/// about what a three-year-old is shown at once.
+const List<ToolKind> kSimpleTools = [
+  ToolKind.brush,
+  ToolKind.fill,
+  ToolKind.stamp,
+  ToolKind.eraser,
+];
+
 /// Drag-to-draw shape motifs for [ToolKind.shape].
 enum ShapeKind { circle, square, heart, star, rainbow }
 

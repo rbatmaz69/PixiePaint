@@ -867,4 +867,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get rotateHint => 'Beni yan çevir, boyamak için daha çok yer olsun';
+
+  @override
+  String get simpleToolsTitle => 'Basit araçlar';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için';
 }

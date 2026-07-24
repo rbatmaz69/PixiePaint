@@ -379,5 +379,7 @@
   "errorLogClear": "Vaciar la lista",
   "errorLogClearConfirm": "¿Borrar todas las entradas?",
   "errorLogShareNote": "Registro de PixiePaint: se queda en el dispositivo hasta que se comparte a propósito.",
-  "rotateHint": "Gírame de lado y tendrás más sitio para pintar"
+  "rotateHint": "Gírame de lado y tendrás más sitio para pintar",
+  "simpleToolsTitle": "Herramientas sencillas",
+  "simpleToolsSubtitle": "Solo pincel, relleno, pegatinas y goma: para los más pequeños"
 }

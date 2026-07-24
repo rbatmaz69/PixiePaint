@@ -1569,6 +1569,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Quer hast du mehr Platz zum Malen'**
   String get rotateHint;
+
+  /// Per-profile switch: cut the toolbar down to four tools
+  ///
+  /// In de, this message translates to:
+  /// **'Einfache Werkzeuge'**
+  String get simpleToolsTitle;
+
+  /// No description provided for @simpleToolsSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten'**
+  String get simpleToolsSubtitle;
 }
 
 class _AppLocalizationsDelegate

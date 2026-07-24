@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.0.0+31 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.1.0+32 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -64,7 +64,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 **Für Eltern**
 - Elternschranke (Rechenaufgabe) vor Foto-Import, Teilen, Drucken, Einstellungen, Speicherverwaltung und optional Löschen
-- Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt
+- Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt — je Kind umschaltbar auf **einfache Werkzeuge** (nur Pinsel, Füllen, Sticker, Radierer, dafür größer)
 - Backup aller Bilder als ZIP — und Wiederherstellen daraus
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
 - Problembericht: was die App zuletzt an Fehlern mitbekommen hat — lesbar, teilbar, löschbar, und bis dahin nur auf dem Gerät
@@ -236,7 +236,7 @@ Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Pl
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 525 Tests in 50 Dateien:
+Die Test-Suite umfasst 533 Tests in 50 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht. Dazu seit v8.0 `canvas_reach_test.dart` — die Frage, ob ein Kind die Knöpfe überhaupt *erreicht*: Rückgängig muss auf einem 360-dp-Telefon ohne Wischen auf dem Schirm stehen.

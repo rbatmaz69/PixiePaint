@@ -7,6 +7,7 @@ import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../util/profiles.dart';
 import '../widgets/color_palette.dart';
 import '../widgets/tool_bar.dart';
 import 'canvas_controller.dart';
@@ -39,6 +40,7 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
   late final CanvasController _right = _makeController();
   bool _leftFlipped = true; // start face-to-face across the table
   bool _leaving = false;
+  late final bool _simpleTools = ProfileStore.instance.active.simpleTools;
 
   /// All the saving rules live here, testable without a widget tree.
   late final TwoPainterSaveSession _saves = TwoPainterSaveSession(
@@ -216,6 +218,9 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
                   controller: controller,
                   direction: Axis.horizontal,
                   buttonSize: 50,
+                  // Both panes follow the active child's profile — one of
+                  // the two is holding the tablet.
+                  simple: _simpleTools,
                 ),
               ),
               // Half a tablet is narrow: without this, undo would be the

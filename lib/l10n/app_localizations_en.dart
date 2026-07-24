@@ -869,4 +869,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rotateHint => 'Turn me sideways for more room to paint';
+
+  @override
+  String get simpleToolsTitle => 'Simple tools';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Just brush, fill, stickers and eraser – for the littlest ones';
 }

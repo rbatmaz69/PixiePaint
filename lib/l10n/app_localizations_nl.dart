@@ -871,4 +871,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get rotateHint => 'Draai me om, dan heb je meer ruimte om te tekenen';
+
+  @override
+  String get simpleToolsTitle => 'Eenvoudige gereedschappen';
+
+  @override
+  String get simpleToolsSubtitle =>
+      'Alleen kwast, vullen, stickers en gum – voor de allerkleinsten';
 }
