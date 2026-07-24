@@ -64,11 +64,10 @@ class Progress extends ChangeNotifier {
     }
   }
 
-  /// Drops the current kid's counters and loads another profile's file.
-  /// Only ever called from the home screen (never with a canvas open), so
-  /// no commit can land in the wrong profile mid-switch.
+  /// Loads another profile's file. Only ever called from the home screen
+  /// (never with a canvas open), so no commit can land in the wrong profile
+  /// mid-switch. Dropping the current kid's counters is [loadFrom]'s job.
   Future<void> switchProfile(String profileId) async {
-    _clearState();
     await load(profileId);
     notifyListeners();
   }
@@ -87,9 +86,22 @@ class Progress extends ChangeNotifier {
 
   /// Seam for tests: load from any store (a temp file) instead of the real
   /// documents dir.
+  ///
+  /// Loading *replaces* what is in memory — it never merges. That has to be
+  /// stated, because the sets below are filled with `addAll`: this is not
+  /// only the first read after launch. Switching profiles goes through here,
+  /// and so does restoring a backup ([SettingsScreen] reloads the active
+  /// kid once the ZIP is unpacked), on a store that has been in use for the
+  /// whole session. Merging there would union two children's rewards — the
+  /// counters would read too high, and every sticker the previous kid had
+  /// already celebrated would count as celebrated for the restored one, who
+  /// would then never see that unlock party.
   Future<void> loadFrom(JsonStore store) async {
     _store = store;
+    _clearState();
     final json = await store.read();
+    // No file for this kid (a fresh profile, a backup that carried none):
+    // zero is the answer, and _clearState has already given it.
     if (json == null) return;
     completedArtworkIds.addAll(
         ((json['completedArtworkIds'] as List?) ?? []).whereType<String>());

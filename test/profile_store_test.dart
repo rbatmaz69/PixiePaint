@@ -57,6 +57,18 @@ void main() {
       expect(reopened.primary.id, id);
       expect(reopened.profiles, hasLength(1));
     });
+
+    test('loading twice does not give every kid a twin', () async {
+      await store.loadFrom(file(), dir);
+      await store.addProfile(name: 'Ada', emoji: '🐧');
+      await store.flush();
+
+      // Deliberately no resetForTest in between: loading replaces the kid
+      // list, it never adds to it.
+      await store.loadFrom(file(), dir);
+      expect(store.profiles, hasLength(2));
+      expect(store.profiles.map((p) => p.name), ['', 'Ada']);
+    });
   });
 
   group('ownership fallback', () {

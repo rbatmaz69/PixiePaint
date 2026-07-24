@@ -274,7 +274,6 @@ void main() {
       progress.toggleFavoritePage('cat');
       await progress.flush();
 
-      progress.resetForTest();
       await progress.loadFrom(JsonStore(fileB));
       expect(progress.favoritePageIds, isEmpty);
     });
@@ -292,7 +291,9 @@ void main() {
       await progress.flush();
 
       // Switching to a fresh kid must not carry the first kid's progress.
-      progress.resetForTest();
+      // Deliberately without resetForTest(): loading is what has to clear
+      // the state, and this used to be exactly the hole — the test reset
+      // first and so never checked what its own name promises.
       await progress.loadFrom(JsonStore(fileB));
       expect(progress.completedCbnIds, isEmpty);
       expect(progress.completedTraceIds, isEmpty);
@@ -300,10 +301,62 @@ void main() {
       // ...and switching back restores exactly the first kid's counters.
       progress.registerCbnCompleted('cbn_flower');
       await progress.flush();
-      progress.resetForTest();
       await progress.loadFrom(JsonStore(fileA));
       expect(progress.completedCbnIds, {'cbn_fish'});
       expect(progress.completedTraceIds, {'letter_A'});
+    });
+
+    test('a restore mid-session does not blend the two kids together',
+        () async {
+      // The path this protects is settings_screen's restore: it calls
+      // Progress.load() on a store that has been in use all session, with
+      // no reset in between. Everything the first kid did has to be gone
+      // afterwards — including the celebrated stickers, because a reward
+      // wrongly marked as celebrated is a party the restored kid never
+      // gets to have.
+      final before = File('${dir.path}/progress_before.json');
+      final restored = File('${dir.path}/progress_restored.json');
+
+      await progress.loadFrom(JsonStore(before));
+      for (final id in ['a', 'b', 'c']) {
+        progress.registerArtworkCompleted(id);
+      }
+      progress.registerToolUsed(ToolKind.neon);
+      progress.registerTraceCompleted('letter_A');
+      progress.registerCbnCompleted('cbn_fish');
+      progress.toggleFavoritePage('cat');
+      progress.registerDailyTaskDone('2026-07-20');
+      expect(progress.takeUncelebrated(), isNotEmpty);
+      await progress.flush();
+
+      restored.writeAsStringSync('{"tasksDone": 1, "toolsUsed": ["brush"]}');
+      await progress.loadFrom(JsonStore(restored));
+
+      expect(progress.toolsUsed, {'brush'});
+      expect(progress.completedArtworkIds, isEmpty);
+      expect(progress.completedTraceIds, isEmpty);
+      expect(progress.completedCbnIds, isEmpty);
+      expect(progress.favoritePageIds, isEmpty);
+      expect(progress.celebratedEmojis, isEmpty);
+      expect(progress.tasksDone, 1);
+      expect(progress.lastTaskDay, '');
+      expect(progress.taskStreak, 0);
+    });
+
+    test('a restore from a file that does not exist starts from zero',
+        () async {
+      // Same path, but the backup carried no progress file for this kid:
+      // read() returns null, and the early return must not leave the
+      // previous kid's counters standing.
+      await progress.loadFrom(JsonStore(file));
+      progress.registerCbnCompleted('cbn_fish');
+      progress.registerDailyTaskDone('2026-07-20');
+      await progress.flush();
+
+      await progress.loadFrom(JsonStore(File('${dir.path}/nothing.json')));
+      expect(progress.completedCbnIds, isEmpty);
+      expect(progress.tasksDone, 0);
+      expect(progress.lastTaskDay, '');
     });
   });
 }

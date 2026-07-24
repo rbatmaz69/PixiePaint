@@ -46,9 +46,18 @@ class ProfileStore extends ChangeNotifier {
   }
 
   /// Test seam: drive from any store + documents dir.
+  ///
+  /// Replaces the kid list rather than adding to it — the same rule
+  /// [Progress.loadFrom] follows. A second load would otherwise hand every
+  /// child a twin, and `_migrate` below only runs while the list is empty,
+  /// so the duplicates would look like real profiles from then on. Folding
+  /// a *backup's* kids into this device's list is a different operation on
+  /// purpose: see [mergeRestoredProfiles].
   Future<void> loadFrom(JsonStore store, Directory docsDir) async {
     _store = store;
     _docsDir = docsDir;
+    profiles.clear();
+    _activeId = null;
     final json = await store.read();
     if (json != null) {
       profiles.addAll(((json['profiles'] as List?) ?? [])
