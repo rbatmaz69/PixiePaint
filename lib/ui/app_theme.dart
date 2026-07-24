@@ -21,6 +21,20 @@ abstract final class PixieTokens {
   static double stickerTilt(int index) =>
       (((index * 7) % 5) - 2) * 0.8 * math.pi / 180;
 
+  /// The lift under the white bars that float over the paper — the tool
+  /// strip, the rail, the button pills inside them.
+  ///
+  /// Tighter and quieter than [softShadow] on purpose: these sit *close*
+  /// above the drawing and must not throw a halo across it. Three places
+  /// carried three near-copies of it with different numbers.
+  static List<BoxShadow> barShadow() => [
+        BoxShadow(
+          color: PixiePalette.grape.withValues(alpha: 0.14),
+          blurRadius: 11,
+          offset: const Offset(0, 3),
+        ),
+      ];
+
   /// Soft, colored shadow — softer and friendlier than plain black.
   ///
   /// Two layers since v8.4: a tight contact shadow right under the edge,

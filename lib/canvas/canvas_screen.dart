@@ -645,13 +645,7 @@ class _CanvasScreenState extends State<CanvasScreen>
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: PixiePalette.grape.withValues(alpha: 0.15),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
+            boxShadow: PixieTokens.barShadow(),
           ),
           child: Row(
             children: leftHanded ? [actions, tools] : [tools, actions],
@@ -1016,13 +1010,7 @@ class _LeftRail extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: PixiePalette.grape.withValues(alpha: 0.15),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        boxShadow: PixieTokens.barShadow(),
       ),
       child: Column(
         children: [

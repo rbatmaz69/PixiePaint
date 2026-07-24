@@ -97,13 +97,7 @@ Widget _pill(List<Widget> children, Axis direction) {
     decoration: BoxDecoration(
       color: Colors.white.withValues(alpha: 0.85),
       borderRadius: BorderRadius.circular(24),
-      boxShadow: [
-        BoxShadow(
-          color: PixiePalette.grape.withValues(alpha: 0.12),
-          blurRadius: 12,
-          offset: const Offset(0, 4),
-        ),
-      ],
+      boxShadow: PixieTokens.barShadow(),
     ),
     child: direction == Axis.vertical
         ? Column(mainAxisSize: MainAxisSize.min, children: children)
