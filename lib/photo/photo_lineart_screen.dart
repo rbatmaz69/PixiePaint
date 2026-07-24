@@ -127,6 +127,11 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                             radius: 24,
                             shadowColor: PixiePalette.tangerine,
                             tiltIndex: 0,
+                            // The card here *is* the photograph, edge to
+                            // edge. The sticker gloss over it reads as a
+                            // smudge on the picture rather than as shine on
+                            // a sticker.
+                            sheen: false,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(24),
                               child: AspectRatio(
