@@ -48,6 +48,16 @@ class ReplayController extends ChangeNotifier {
   bool _cancelled = false;
   bool _running = false;
 
+  int _opsPlayed = 0;
+
+  /// How far the show has come, 0..1.
+  ///
+  /// Counted in operations, not in time: a fill takes a moment and a long
+  /// stroke takes seconds, so a clock would run visibly unevenly. This is
+  /// what the bar under the paper shows — without it a time-lapse of a
+  /// hundred strokes gives no clue whether it is nearly over.
+  double get progress => ops.isEmpty ? 1 : _opsPlayed / ops.length;
+
   /// Sticker images resolved once per replay run (path → image or null).
   final Map<String, ui.Image?> _stickers = {};
 
@@ -62,6 +72,7 @@ class ReplayController extends ChangeNotifier {
     if (_running) return;
     _running = true;
     _done = false;
+    _opsPlayed = 0;
     layer?.dispose();
     layer = null;
     activeStroke = null;
@@ -83,6 +94,12 @@ class ReplayController extends ChangeNotifier {
           _tick();
           await _delay(const Duration(milliseconds: 350));
       }
+      _opsPlayed++;
+      // Guarded, not just checked at the loop head: an op finishes *after*
+      // the cancel that arrived mid-way through it, and by then dispose()
+      // may already have run. Notifying a disposed ChangeNotifier throws.
+      if (_cancelled) break;
+      notifyListeners();
     }
     _running = false;
     if (!_cancelled) {

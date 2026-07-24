@@ -274,6 +274,35 @@ void main() {
           reason: 'a cancelled replay never reports itself finished');
     });
 
+    // The bar under the paper (v8.4). Counted in operations rather than in
+    // time on purpose: a fill takes a moment and a long stroke takes
+    // seconds, so a clock would visibly run uneven.
+    test('the progress runs from nothing to full across the ops', () async {
+      final controller = ReplayController(
+        width: w,
+        height: h,
+        ops: [for (var i = 0; i < 4; i++) brushStroke()],
+      );
+      final seen = <double>[];
+      controller.addListener(() => seen.add(controller.progress));
+
+      await controller.play();
+
+      expect(seen.first, greaterThan(0.0));
+      expect(seen.last, 1.0, reason: 'die Leiste kam nicht am Ende an');
+      expect(seen, orderedEquals([...seen]..sort()),
+          reason: 'die Leiste lief zwischendurch rückwärts');
+      controller.dispose();
+    });
+
+    test('an empty story is finished before it starts', () {
+      final controller = ReplayController(width: w, height: h, ops: []);
+      // Dividing by ops.length would be a NaN here, and a NaN width factor
+      // is an assertion in the layout, not a quiet wrong number.
+      expect(controller.progress, 1.0);
+      controller.dispose();
+    });
+
     test('replaying twice gives the same picture', () async {
       final ops = [brushStroke(kind: ToolKind.rainbow)];
       final first = await replay(ops);

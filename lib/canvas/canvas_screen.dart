@@ -21,6 +21,7 @@ import '../ui/hero_tags.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/paper_doodles.dart';
+import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../models/reward.dart';
@@ -571,31 +572,9 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (preview == null) {
       return Center(child: LoadingPixie(label: context.l10n.canvasLoading));
     }
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: AspectRatio(
-          aspectRatio: kCanvasWidth / kCanvasHeight,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: PixiePalette.ink.withValues(alpha: 0.12),
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.all(16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: preview,
-            ),
-          ),
-        ),
-      ),
+    return PaperSheet(
+      aspectRatio: kCanvasWidth / kCanvasHeight,
+      child: preview,
     );
   }
 

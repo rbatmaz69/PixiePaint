@@ -10,8 +10,11 @@ import '../models/draw_op.dart';
 import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
+import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
+import '../ui/pop_in.dart';
 import '../ui/sticker.dart';
 import '../util/image_io.dart';
 import '../util/svg_raster.dart';
@@ -87,28 +90,14 @@ class _ReplayScreenState extends State<ReplayScreen> {
               ? Center(child: LoadingPixie(label: context.l10n.canvasLoading))
               : Stack(
                   children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: AspectRatio(
-                          // From the artwork's own size, not the current
-                          // canvas constants — older or future works may
-                          // have been saved at other dimensions.
-                          aspectRatio: c.width / c.height,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      PixiePalette.ink.withValues(alpha: 0.12),
-                                  blurRadius: 18,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            clipBehavior: Clip.antiAlias,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: PaperSheet(
+                            aspectRatio: c.width / c.height,
+                            padding: EdgeInsets.zero,
+                            margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: SizedBox(
@@ -125,7 +114,10 @@ class _ReplayScreenState extends State<ReplayScreen> {
                             ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        _ReplayProgress(controller: c),
+                        const SizedBox(height: 8),
+                      ],
                     ),
                     Positioned(
                       top: 8,
@@ -173,6 +165,10 @@ class _ReplayScreenState extends State<ReplayScreen> {
 }
 
 /// Round pill showing the current speed (1×/2×/4×); tap to cycle.
+///
+/// A [Bouncy] like every other control in the app: it was the last raw
+/// [GestureDetector] left, which meant no press feedback, no tick, and —
+/// worse — nothing for a screen reader to find.
 class _SpeedButton extends StatelessWidget {
   const _SpeedButton({required this.controller});
 
@@ -182,8 +178,10 @@ class _SpeedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: context.l10n.replaySpeed,
-      child: GestureDetector(
+      excludeFromSemantics: true,
+      child: Bouncy(
         onTap: controller.cycleSpeed,
+        semanticLabel: context.l10n.replaySpeed,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
@@ -191,12 +189,67 @@ class _SpeedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(22),
             boxShadow: PixieTokens.softShadow(PixiePalette.grape),
           ),
-          child: Text(
-            '${controller.speed.round()}×',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+          // The number changes under the finger; without the pulse the tap
+          // reads as "1× became 2×" rather than as an answer.
+          child: Pulse(
+            trigger: controller.speed,
+            child: Text(
+              '${controller.speed.round()}×',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A slim crayon line under the paper, filling as the picture paints
+/// itself. Without it a time-lapse of a hundred strokes gives a child no
+/// idea whether it is nearly over — and the only way out looked like the
+/// back button.
+class _ReplayProgress extends StatelessWidget {
+  const _ReplayProgress({required this.controller});
+
+  final ReplayController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) => Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 8,
+                    color: PixiePalette.ink.withValues(alpha: 0.08),
+                  ),
+                  // A fraction of the available width, so this needs no
+                  // measuring and no second painter.
+                  FractionallySizedBox(
+                    widthFactor: controller.progress.clamp(0.0, 1.0),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        gradient: PixieGradients.trace,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
