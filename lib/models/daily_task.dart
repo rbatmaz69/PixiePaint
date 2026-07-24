@@ -719,9 +719,15 @@ int dayNumber(DateTime date) =>
         .difference(DateTime.utc(2026, 1, 1))
         .inDays;
 
-/// Deterministic task of the day. The stride (7) is coprime with the
-/// catalog length (30), so consecutive days never repeat and the full
-/// catalog cycles before anything comes back.
+/// Deterministic task of the day.
+///
+/// Walking the catalog in strides of 7 only reaches every prompt while 7 and
+/// the catalog length share no divisor. That is the invariant to keep in
+/// mind when appending: at 42 or 49 prompts the cycle would quietly collapse
+/// to six or seven of them, with no error anywhere. `daily_task_test.dart`
+/// checks it ("the whole catalog is used before anything comes back"), so
+/// the failure surfaces as a red test rather than as a child seeing the same
+/// handful of prompts forever.
 DailyTask taskForDate(DateTime date) {
   final n = dayNumber(date) * 7;
   return kDailyTasks[n % kDailyTasks.length];
