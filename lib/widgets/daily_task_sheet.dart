@@ -77,7 +77,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
   if (markDone != true || !context.mounted) return;
   Progress.instance.registerDailyTaskDone(today);
   Sfx.instance.tada();
-  showConfetti(context);
+  showConfetti(context, scale: ConfettiScale.small);
 }
 
 /// Home-screen pill: today's emoji and prompt, with a check badge once the

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/ui/app_theme.dart';
 import 'package:pixiepaint/ui/blob_background.dart';
 import 'package:pixiepaint/ui/motion.dart';
+import 'package:pixiepaint/widgets/confetti_burst.dart';
 
 /// "Reduce motion" (Android: remove animations, iOS: reduce motion).
 ///
@@ -59,6 +60,58 @@ void main() {
     // which is exactly why pumpAndSettle is not used here.
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.binding.hasScheduledFrame, isTrue);
+  });
+
+  // Confetti comes in two strengths since v8.4 — sharing a picture should
+  // not feel as big as finishing one. What must not change is that
+  // "reduce motion" cancels the paper and nothing else.
+  group('confetti', () {
+    Future<void> fire(WidgetTester tester,
+        {required ConfettiScale scale, required bool calm}) async {
+      await pump(
+        tester,
+        Builder(
+          builder: (context) => Center(
+            child: GestureDetector(
+              onTap: () => showConfetti(context, scale: scale),
+              child: const Text('los'),
+            ),
+          ),
+        ),
+        calm: calm,
+      );
+      await tester.tap(find.text('los'));
+      await tester.pump();
+    }
+
+    testWidgets('a party lasts longer than a nod, and both clear themselves up',
+        (tester) async {
+      // Between the two run times: the nod is over by now, the party is
+      // not. That is the difference, expressed in the one way a test can
+      // see it from outside.
+      const between = Duration(milliseconds: 1200);
+
+      await fire(tester, scale: ConfettiScale.small, calm: false);
+      await tester.pump(between);
+      expect(tester.binding.hasScheduledFrame, isFalse,
+          reason: 'der kleine Jubel lief nach 1,2 s immer noch');
+
+      await fire(tester, scale: ConfettiScale.party, calm: false);
+      await tester.pump(between);
+      expect(tester.binding.hasScheduledFrame, isTrue,
+          reason: 'die große Party war nach 1,2 s schon vorbei');
+
+      // And it removes its own overlay entry rather than sitting there.
+      await tester.pumpAndSettle();
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
+
+    testWidgets('with motion reduced no paper falls at all', (tester) async {
+      await fire(tester, scale: ConfettiScale.party, calm: true);
+      // Nothing was inserted, so there is nothing left to settle either.
+      await tester.pumpAndSettle();
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
   });
 
   testWidgets('reducedMotion reads the platform setting', (tester) async {

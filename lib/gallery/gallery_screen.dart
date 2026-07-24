@@ -119,7 +119,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     if (!mounted) return;
     if (ok) {
       Sfx.instance.tada();
-      showConfetti(context);
+      showConfetti(context, scale: ConfettiScale.small);
       await showKidDialog<void>(
         context: context,
         emoji: '📷',
@@ -269,7 +269,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     if (!await ParentalGate.show(context)) return;
     Sfx.instance.tada();
     await share_util.shareSavedArtwork(artwork);
-    if (mounted) showConfetti(context);
+    if (mounted) showConfetti(context, scale: ConfettiScale.small);
     await countShareAndMaybeReview();
   }
 

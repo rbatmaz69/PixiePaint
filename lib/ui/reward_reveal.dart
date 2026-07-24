@@ -57,6 +57,11 @@ class _RewardRevealContent extends StatefulWidget {
 
 class _RewardRevealContentState extends State<_RewardRevealContent>
     with SingleTickerProviderStateMixin {
+  /// Flipped once the sticker has landed, which fires the settle wobble
+  /// below. Without it the sticker slams in and then stands perfectly
+  /// still — the impact has nowhere to go.
+  bool _landed = false;
+
   /// Deliberately one-shot (not repeat): rays fade in, slowly turn ~40°
   /// and simply settle — the dialog is dismissed long before, and no
   /// route-observer plumbing is needed for a bounded animation.
@@ -70,6 +75,10 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
     // Confetti from inside the reveal so it renders above the scrim.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) showConfetti(context);
+    });
+    // 80 ms delay + 700 ms flight — this is where the sticker touches down.
+    Future<void>.delayed(const Duration(milliseconds: 780), () {
+      if (mounted) setState(() => _landed = true);
     });
   }
 
@@ -108,13 +117,17 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
                           ),
                         ),
                       ),
-                      PopIn(
-                        from: 0.0,
-                        rotateFrom: -0.35,
-                        delay: const Duration(milliseconds: 80),
-                        duration: const Duration(milliseconds: 700),
-                        child: Text(widget.emoji,
-                            style: const TextStyle(fontSize: 96)),
+                      Pulse(
+                        trigger: _landed,
+                        peak: 1.06,
+                        child: PopIn(
+                          from: 0.0,
+                          rotateFrom: -0.35,
+                          delay: const Duration(milliseconds: 80),
+                          duration: const Duration(milliseconds: 700),
+                          child: Text(widget.emoji,
+                              style: const TextStyle(fontSize: 96)),
+                        ),
                       ),
                     ],
                   ),
