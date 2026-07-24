@@ -1,8 +1,8 @@
 # Gerätetest-Checkliste
 
-Alles aus v6.1–v7.3 wurde gebaut, aber noch nie auf einem echten Gerät benutzt. Diese Liste ist für genau diese eine große Session gedacht: einmal von oben nach unten, mit einem Handy **und** einem Tablet.
+Alles aus v6.1–v8.5 wurde gebaut, aber noch nie auf einem echten Gerät benutzt. Diese Liste ist für genau diese eine große Session gedacht: einmal von oben nach unten, mit einem Handy **und** einem Tablet.
 
-Warum überhaupt eine Liste: Die Test-Suite deckt Logik und Beschriftungen ab, aber nichts von dem, was hier steht — Gesten, Druckstärke, Systemdialoge, Layout auf echten Seitenverhältnissen, Musik, Vibration.
+Warum überhaupt eine Liste: Die Test-Suite deckt Logik und Beschriftungen ab, aber nichts von dem, was hier steht — Gesten, Druckstärke, Systemdialoge, Layout auf echten Seitenverhältnissen, Musik, Vibration. Und seit v8.4/v8.5 auch nichts davon, ob die Bewegung **angenehm** wirkt; das kann nur ein Mensch beurteilen.
 
 **Vorbereitung**
 
@@ -156,12 +156,36 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Drucken zeigt die PDF-Vorschau richtig
 - [ ] Beim ersten Mal erscheinen die Berechtigungsdialoge mit den deutschen Texten aus der Info.plist bzw. dem Manifest
 
+## Design und Bewegung (neu in v8.4/v8.5)
+
+Diese Runde hat nichts hinzugefügt, sondern das Vorhandene zusammengeführt. Was hier zu prüfen ist, ist deshalb vor allem: **wirkt es ruhig, oder wirkt es unruhig?**
+
+- [ ] **Startseite öffnen:** die Karten kommen gestaffelt herein, nicht alle auf einmal und nicht ruckelnd
+- [ ] Dieselbe Staffelung in Bildauswahl, Galerie, Nachspuren, Szenen, Erfolge-Album, Einstellungen, Speicher und Problembericht — überall gleich schnell, nirgends doppelt
+- [ ] **Ausmalbild antippen:** das Bild fliegt in die Leinwand, statt dass der Bildschirm ausgetauscht wird. Kein Sprung, kein Zappeln, kein doppeltes Bild
+- [ ] Derselbe Flug aus der Galerie, von der Weitermalen-Karte und aus der Szenenauswahl
+- [ ] **Schatten anschauen** (Startseite, Galerie, Bildauswahl): liegen die Karten auf dem Papier, oder wirkt es zu schwer und schmutzig? → Zahl in `PixieTokens.softShadow`
+- [ ] **Glanz anschauen**, vor allem auf den Szenen-Kacheln, die fast ganz Bild sind: liest sich das als Aufkleber oder als Schliere? → `StickerCard(sheen: false)` für diesen Fall
+- [ ] Kopfzeilen: der farbige Strich unter dem Titel passt zur Farbe des jeweiligen Bildschirms
+- [ ] **Malen:** Werkzeug wechseln — nur das *aufgenommene* hüpft, das abgelegte bleibt ruhig
+- [ ] Farbe unten wechseln: der Farbpunkt am Werkzeug oben antwortet
+- [ ] Mehrfach Rückgängig tippen: der Knopf antwortet auf **jeden** Tipp, zuckt aber **nicht**, während gemalt wird
+- [ ] Die Papierstruktur hinter der Leinwand ist sichtbar, aber steht still und lenkt beim Malen nicht ab
+- [ ] **Zeitraffer starten:** die Leiste unter dem Papier füllt sich gleichmäßig und kommt am Ende wirklich an. Tempo umschalten — die Zahl antwortet
+- [ ] **Diashow starten:** die Punkte zeigen das richtige Bild, verschwinden nach drei Sekunden mit dem Schließen-Knopf und kommen bei Berührung zurück. Bei vielen Bildern wandert das Fenster mit
+- [ ] **Zu zweit malen** (Tablet): beide Flächen liegen auf einem Blatt mit einem Falz dazwischen
+- [ ] **Bild fertig malen** → großes Konfetti. **Bild teilen** → kleines. Der Unterschied muss auffallen
+- [ ] Sticker freischalten: der Sticker wippt beim Aufkommen nach
+- [ ] **„Bewegung reduzieren" im System einschalten** und alles noch einmal: nichts fliegt, nichts pulst, nichts driftet, kein Konfetti — die Belohnungen erscheinen aber weiterhin
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
 - [ ] Werkzeugleiste durchwischen: jedes Werkzeug wird benannt, das aktive zusätzlich als „ausgewählt"
 - [ ] Farbpalette durchwischen: die Farben heißen „Rot", „Blau" usw., nicht 16-mal dasselbe
 - [ ] Der Malbereich wird als eine Fläche angesagt, nicht Pixel für Pixel
+- [ ] Zeitraffer: der Tempo-Knopf wird benannt (war bis v8.5 für Screenreader gar nicht vorhanden)
+- [ ] Diashow: die Punktreihe wird als „4 / 17" angesagt, nicht als Reihe namenloser Punkte
 - [ ] **Systemschrift auf das Maximum stellen** und durch alle Screens gehen: nichts überlappt, nichts wird abgeschnitten, keine roten Overflow-Streifen
 
 ## Layout
