@@ -105,7 +105,7 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 > 🎨 PixiePaint ist ein liebevolles Malbuch für Kinder ab 3 Jahren.
 >
 > **Malen**
-> • 54 Ausmalbilder: Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Jahreszeiten
+> • 68 Ausmalbilder: Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Jahreszeiten
 > • Flächen füllen per Fingertipp – einfarbig, Punkte, Streifen, Regenbogen, Herzen, Sterne, Karo oder Seifenblasen
 > • Freies Zeichnen auf leerer Leinwand
 > • Eigene Fotos anmalen oder in ein Ausmalbild verwandeln
@@ -119,7 +119,7 @@ Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
 > **Immer wieder etwas Neues**
 > • Malen nach Zahlen: nummerierte Flächen ausmalen und ein Bild entstehen sehen
 > • Nachspuren: Buchstaben, Zahlen und Formen mit dem Finger nachfahren
-> • Sticker-Welt: sechs Szenen zum Bekleben und Weitermalen
+> • Sticker-Welt: acht Szenen zum Bekleben und Weitermalen
 > • Zu zweit malen: zwei Malflächen nebeneinander auf dem Tablet
 > • Zeitraffer: jedes Bild lässt sich als kleiner Film noch einmal anschauen
 > • Aufgabe des Tages: jeden Tag ein neuer Mal-Impuls, mit Serien-Zähler
@@ -215,7 +215,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 7.5.0 (versionCode 25) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.6.0 (versionCode 26) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
 | targetSdk | geerbt aus dem Flutter-SDK, siehe Schritt 3 |
 | Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |

@@ -135,7 +135,7 @@ Die Prüfung dauert meist 1–3 Tage; Apps in der Kids Category werden gelegentl
 | | |
 |---|---|
 | Bundle Identifier | `dev.rb.pixiepaint.pixiepaint` |
-| Version | 7.5.0 (Build 25) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.6.0 (Build 26) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | Berechtigungen | Fotobibliothek (Lesen und Sichern), beides hinter der Elternschranke |
 | Netzwerk | keines |
 | Tracking | keines (kein ATT-Dialog nötig) |

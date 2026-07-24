@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- candy: rings a small hand can aim at -->
+    <circle cx="512" cy="290" r="230"/>
+    <circle cx="512" cy="290" r="175"/>
+    <circle cx="512" cy="290" r="120"/>
+    <circle cx="512" cy="290" r="65"/>
+    <!-- stick -->
+    <path d="M 486 518 L 538 518 L 538 730 L 486 730 Z"/>
+    <!-- bow -->
+    <path d="M 486 560 C 420 512 372 566 424 600 C 452 618 480 600 486 578 Z"/>
+    <path d="M 538 560 C 604 512 652 566 600 600 C 572 618 544 600 538 578 Z"/>
+    <circle cx="512" cy="576" r="22"/>
+  </g>
+</svg>

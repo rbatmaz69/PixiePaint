@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- ears -->
+    <path d="M 352 210 L 300 92 L 434 150 Z"/>
+    <path d="M 672 210 L 724 92 L 590 150 Z"/>
+    <!-- head -->
+    <circle cx="512" cy="330" r="230"/>
+    <!-- eyes -->
+    <circle cx="430" cy="290" r="28"/>
+    <circle cx="594" cy="290" r="28"/>
+    <!-- snout -->
+    <ellipse cx="512" cy="418" rx="130" ry="90"/>
+    <ellipse cx="470" cy="410" rx="22" ry="30"/>
+    <ellipse cx="554" cy="410" rx="22" ry="30"/>
+    <!-- cheeks -->
+    <circle cx="326" cy="392" r="42"/>
+    <circle cx="698" cy="392" r="42"/>
+    <!-- body -->
+    <path d="M 344 500 C 286 566 288 690 356 716 L 668 716 C 736 690 738 566 680 500"/>
+    <!-- trotters -->
+    <path d="M 404 716 L 404 748 L 456 748 L 456 716 Z"/>
+    <path d="M 568 716 L 568 748 L 620 748 L 620 716 Z"/>
+    <!-- curly tail -->
+    <path d="M 726 604 C 792 596 800 660 756 664 C 726 666 722 634 748 630"/>
+  </g>
+</svg>

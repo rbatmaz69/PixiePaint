@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- nose cone -->
+    <path d="M 512 90 C 572 152 598 222 600 284 L 424 284 C 426 222 452 152 512 90 Z"/>
+    <!-- body -->
+    <path d="M 424 284 L 600 284 L 600 560 L 424 560 Z"/>
+    <!-- stripe: splits the body into two areas to number -->
+    <path d="M 424 470 L 600 470"/>
+    <!-- window -->
+    <circle cx="512" cy="372" r="58"/>
+    <!-- fins -->
+    <path d="M 424 424 L 322 560 L 424 560 Z"/>
+    <path d="M 600 424 L 702 560 L 600 560 Z"/>
+    <!-- flame -->
+    <path d="M 448 560 L 576 560 C 568 646 540 706 512 736 C 484 706 456 646 448 560 Z"/>
+  </g>
+</svg>

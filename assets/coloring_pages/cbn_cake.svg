@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- candles -->
+    <path d="M 396 196 L 430 196 L 430 292 L 396 292 Z"/>
+    <path d="M 495 196 L 529 196 L 529 292 L 495 292 Z"/>
+    <path d="M 594 196 L 628 196 L 628 292 L 594 292 Z"/>
+    <!-- flames -->
+    <path d="M 413 116 C 442 148 444 178 413 190 C 382 178 384 148 413 116 Z"/>
+    <path d="M 512 116 C 541 148 543 178 512 190 C 481 178 483 148 512 116 Z"/>
+    <path d="M 611 116 C 640 148 642 178 611 190 C 580 178 582 148 611 116 Z"/>
+    <!-- top layer -->
+    <path d="M 340 292 L 684 292 L 684 400 L 340 400 Z"/>
+    <!-- middle layer -->
+    <path d="M 300 400 L 724 400 L 724 520 L 300 520 Z"/>
+    <!-- bottom layer -->
+    <path d="M 260 520 L 764 520 L 764 656 L 260 656 Z"/>
+    <!-- plate -->
+    <path d="M 200 656 L 824 656 C 824 704 700 724 512 724 C 324 724 200 704 200 656 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <defs>
+    <linearGradient id="jungleSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#CDEEC0"/>
+      <stop offset="1" stop-color="#F4FBE8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="768" fill="url(#jungleSky)"/>
+  <!-- trunks, behind the canopy -->
+  <g fill="#8D6E63">
+    <path d="M 150 200 L 190 200 L 206 520 L 134 520 Z"/>
+    <path d="M 838 180 L 878 180 L 896 520 L 820 520 Z"/>
+    <path d="M 470 240 L 500 240 L 512 470 L 458 470 Z"/>
+  </g>
+  <!-- canopy: overlapping crowns across the top -->
+  <g fill="#7CC47F">
+    <ellipse cx="120" cy="180" rx="200" ry="150"/>
+    <ellipse cx="420" cy="130" rx="230" ry="130"/>
+    <ellipse cx="720" cy="150" rx="220" ry="140"/>
+    <ellipse cx="960" cy="200" rx="180" ry="160"/>
+  </g>
+  <g fill="#5FAE68">
+    <ellipse cx="270" cy="90" rx="180" ry="110"/>
+    <ellipse cx="600" cy="70" rx="200" ry="100"/>
+    <ellipse cx="880" cy="90" rx="170" ry="105"/>
+  </g>
+  <!-- hanging vines with leaves -->
+  <g stroke="#4E9B58" stroke-width="7" fill="none">
+    <path d="M 250 240 C 262 320 238 380 250 440"/>
+    <path d="M 700 250 C 712 330 688 390 700 450"/>
+  </g>
+  <g fill="#4E9B58">
+    <ellipse cx="234" cy="300" rx="34" ry="18" transform="rotate(-25 234 300)"/>
+    <ellipse cx="268" cy="370" rx="34" ry="18" transform="rotate(25 268 370)"/>
+    <ellipse cx="232" cy="430" rx="34" ry="18" transform="rotate(-25 232 430)"/>
+    <ellipse cx="684" cy="310" rx="34" ry="18" transform="rotate(-25 684 310)"/>
+    <ellipse cx="718" cy="380" rx="34" ry="18" transform="rotate(25 718 380)"/>
+  </g>
+  <!-- ground -->
+  <path d="M 0 470 Q 260 430 520 470 Q 780 510 1024 460 L 1024 768 L 0 768 Z" fill="#8FCB8F"/>
+  <!-- water hole -->
+  <ellipse cx="512" cy="640" rx="330" ry="86" fill="#4FC3F7"/>
+  <ellipse cx="512" cy="632" rx="250" ry="56" fill="#81D4FA"/>
+  <!-- grass tufts -->
+  <g stroke="#4E9B58" stroke-width="7" fill="none">
+    <path d="M 140 600 q 14 -46 4 -76"/>
+    <path d="M 168 606 q 16 -44 8 -72"/>
+    <path d="M 884 596 q -14 -46 -4 -76"/>
+    <path d="M 856 604 q -16 -44 -8 -72"/>
+  </g>
+  <!-- big leaves in the front corners -->
+  <g fill="#2E7D32">
+    <path d="M 60 768 C 20 656 100 574 220 592 C 190 686 140 738 108 768 Z"/>
+    <path d="M 964 768 C 1004 656 924 570 804 590 C 836 686 892 740 920 768 Z"/>
+  </g>
+  <!-- flowers -->
+  <g>
+    <circle cx="300" cy="524" r="17" fill="#FF8A65"/>
+    <circle cx="300" cy="524" r="7" fill="#FFF59D"/>
+    <circle cx="726" cy="536" r="17" fill="#BA68C8"/>
+    <circle cx="726" cy="536" r="7" fill="#FFF59D"/>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- cactus trunk with two arms, one closed outline -->
+    <path d="M 512 96 C 566 96 596 130 596 182 L 596 300 C 632 268 690 274 712 316 C 736 362 720 428 664 440 L 596 452 L 596 560 L 428 560 L 428 396 L 366 384 C 312 372 296 306 320 262 C 344 218 402 214 428 248 L 428 182 C 428 130 458 96 512 96 Z"/>
+    <!-- flower on top -->
+    <circle cx="512" cy="76" r="46"/>
+    <circle cx="512" cy="76" r="18"/>
+    <!-- pot -->
+    <path d="M 372 560 L 652 560 L 652 616 L 372 616 Z"/>
+    <path d="M 392 616 L 632 616 L 600 728 L 424 728 Z"/>
+    <!-- spines -->
+    <path d="M 470 240 L 470 216"/>
+    <path d="M 554 240 L 554 216"/>
+    <path d="M 470 340 L 470 316"/>
+    <path d="M 554 340 L 554 316"/>
+    <path d="M 470 440 L 470 416"/>
+    <path d="M 554 440 L 554 416"/>
+  </g>
+</svg>

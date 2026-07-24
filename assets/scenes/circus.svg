@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <defs>
+    <linearGradient id="circusSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD1E3"/>
+      <stop offset="1" stop-color="#FFF3E0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="768" fill="url(#circusSky)"/>
+  <!-- ground -->
+  <path d="M 0 560 L 1024 560 L 1024 768 L 0 768 Z" fill="#F3E5F5"/>
+  <ellipse cx="512" cy="672" rx="430" ry="104" fill="#F6D9A8"/>
+  <ellipse cx="512" cy="672" rx="340" ry="74" fill="#FBE9C6"/>
+  <!-- bunting -->
+  <path d="M 0 60 Q 512 140 1024 60" stroke="#A1887F" stroke-width="6" fill="none"/>
+  <g>
+    <path d="M 116 76 L 172 82 L 144 130 Z" fill="#EF5350"/>
+    <path d="M 256 98 L 312 104 L 284 152 Z" fill="#FFCA28"/>
+    <path d="M 396 112 L 452 116 L 424 164 Z" fill="#42A5F5"/>
+    <path d="M 572 116 L 628 112 L 600 164 Z" fill="#66BB6A"/>
+    <path d="M 712 104 L 768 98 L 740 152 Z" fill="#AB47BC"/>
+    <path d="M 852 82 L 908 76 L 880 130 Z" fill="#FF7043"/>
+  </g>
+  <!-- big top: white base, then wedges of equal width from the apex -->
+  <path d="M 512 172 L 812 576 L 212 576 Z" fill="#FFFFFF"/>
+  <g fill="#EF5350">
+    <path d="M 512 172 L 312 576 L 212 576 Z"/>
+    <path d="M 512 172 L 462 576 L 362 576 Z"/>
+    <path d="M 512 172 L 612 576 L 562 576 Z"/>
+    <path d="M 512 172 L 762 576 L 662 576 Z"/>
+  </g>
+  <!-- scalloped hem -->
+  <path d="M 212 576 q 50 40 100 0 q 50 40 100 0 q 50 40 100 0 q 50 40 100 0 q 50 40 100 0 q 50 40 100 0"
+        fill="#FFF3E0" stroke="none"/>
+  <!-- entrance -->
+  <path d="M 512 576 L 512 396 C 588 396 620 484 620 576 Z" fill="#FFE082"/>
+  <path d="M 512 576 L 512 396 C 436 396 404 484 404 576 Z" fill="#FFCA28"/>
+  <path d="M 512 576 L 512 452 C 556 452 574 508 574 576 Z" fill="#8D6E63" opacity="0.55"/>
+  <path d="M 512 576 L 512 452 C 468 452 450 508 450 576 Z" fill="#8D6E63" opacity="0.55"/>
+  <!-- mast and flag -->
+  <path d="M 512 172 L 512 104" stroke="#A1887F" stroke-width="8" fill="none"/>
+  <path d="M 512 104 L 596 128 L 512 152 Z" fill="#42A5F5"/>
+</svg>

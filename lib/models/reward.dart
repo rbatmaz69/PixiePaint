@@ -24,9 +24,15 @@ const List<StickerReward> kRewards = [
   StickerReward('🐉', RewardGoalKind.paintings, 12),
   StickerReward('🏰', RewardGoalKind.paintings, 16),
   StickerReward('🎠', RewardGoalKind.paintings, 20),
+  // v7.6: with 68 pictures in the catalog, 20 stopped being the end of the
+  // road.
+  StickerReward('🎡', RewardGoalKind.paintings, 25),
   StickerReward('🪄', RewardGoalKind.tools, 5),
   StickerReward('🛸', RewardGoalKind.tools, 9),
   StickerReward('💎', RewardGoalKind.shares, 1),
+  // v7.6: the first reward for the number pictures themselves. Reachable
+  // only since there are eight of them — the party pack already asks for 3.
+  StickerReward('🐮', RewardGoalKind.cbn, 5),
   StickerReward('🌞', RewardGoalKind.tasks, 3),
   StickerReward('🏅', RewardGoalKind.tasks, 10),
 ];

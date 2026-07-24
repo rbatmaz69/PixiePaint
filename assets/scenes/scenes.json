@@ -1,8 +1,10 @@
 [
- {"id": "meadow", "title": "Blumenwiese", "titleEn": "Meadow", "file": "meadow.svg"},
- {"id": "underwater", "title": "Unterwasser", "titleEn": "Underwater", "file": "underwater.svg"},
- {"id": "space", "title": "Weltraum", "titleEn": "Space", "file": "space.svg"},
- {"id": "castle", "title": "Schloss", "titleEn": "Castle", "file": "castle.svg"},
- {"id": "beach", "title": "Strand", "titleEn": "Beach", "file": "beach.svg"},
- {"id": "winter", "title": "Winter", "titleEn": "Winter", "file": "winter.svg"}
+ {"id": "meadow", "title": "Blumenwiese", "titleEn": "Meadow", "titles": {"es": "Prado", "fr": "Prairie", "it": "Prato fiorito", "nl": "Bloemenweide", "pl": "Łąka", "pt": "Prado", "tr": "Çiçekli çayır"}, "file": "meadow.svg"},
+ {"id": "underwater", "title": "Unterwasser", "titleEn": "Underwater", "titles": {"es": "Bajo el agua", "fr": "Sous l'eau", "it": "Sott'acqua", "nl": "Onderwater", "pl": "Pod wodą", "pt": "Debaixo da água", "tr": "Su altı"}, "file": "underwater.svg"},
+ {"id": "space", "title": "Weltraum", "titleEn": "Space", "titles": {"es": "Espacio", "fr": "Espace", "it": "Spazio", "nl": "Ruimte", "pl": "Kosmos", "pt": "Espaço", "tr": "Uzay"}, "file": "space.svg"},
+ {"id": "castle", "title": "Schloss", "titleEn": "Castle", "titles": {"es": "Castillo", "fr": "Château", "it": "Castello", "nl": "Kasteel", "pl": "Zamek", "pt": "Castelo", "tr": "Kale"}, "file": "castle.svg"},
+ {"id": "beach", "title": "Strand", "titleEn": "Beach", "titles": {"es": "Playa", "fr": "Plage", "it": "Spiaggia", "nl": "Strand", "pl": "Plaża", "pt": "Praia", "tr": "Kumsal"}, "file": "beach.svg"},
+ {"id": "winter", "title": "Winter", "titleEn": "Winter", "titles": {"es": "Invierno", "fr": "Hiver", "it": "Inverno", "nl": "Winter", "pl": "Zima", "pt": "Inverno", "tr": "Kış"}, "file": "winter.svg"},
+ {"id": "jungle", "title": "Dschungel", "titleEn": "Jungle", "titles": {"es": "Jungla", "fr": "Jungle", "it": "Giungla", "nl": "Jungle", "pl": "Dżungla", "pt": "Selva", "tr": "Orman"}, "file": "jungle.svg"},
+ {"id": "circus", "title": "Zirkus", "titleEn": "Circus", "titles": {"es": "Circo", "fr": "Cirque", "it": "Circo", "nl": "Circus", "pl": "Cyrk", "pt": "Circo", "tr": "Sirk"}, "file": "circus.svg"}
 ]

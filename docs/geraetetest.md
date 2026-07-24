@@ -55,6 +55,16 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Diashow läuft und der Bildschirm schaltet sich dabei nicht ab
 - [ ] **Diashow sofort wieder verlassen**, bevor das erste Bild da ist — in v7.4 wurde hier ein Absturzpfad behoben, das ist die Gegenprobe
 
+## Neue Inhalte (v7.6)
+
+- [ ] Kategorie **Bauernhof** ist im Picker da und hat fünf Bilder; jedes einmal antippen und eine Fläche füllen
+- [ ] Die anderen fünf neuen Bilder (Pinguin, Kaktus, Fee, Lolli, Sternschnuppe) ebenfalls einmal füllen — **läuft nirgends Farbe aus**, das ist der eine Fehler, den nur das Gerät zeigt
+- [ ] Vier neue Zahlenbilder (Rakete, Regenschirm, Kuchen, Haus): Palette zeigt die Nummern, richtige Farbe füllt
+- [ ] Zwei neue Szenen (Dschungel, Zirkus) bekleben und speichern
+- [ ] **Systemsprache auf Türkisch (oder Polnisch) stellen** und in die Bildauswahl gehen: die Motivnamen und die Kategorie-Tabs sind übersetzt, nicht deutsch. Danach zurückstellen.
+- [ ] Musik einschalten und **dreimal aus- und wieder einschalten**: es kommen drei verschiedene Stücke, das neue („Spieluhr") läuft ohne Knacken über den Schleifenpunkt
+- [ ] Tagesaufgaben-Banner nennt eine Aufgabe; über mehrere Tage (oder mit gestellter Gerätezeit) kommen unterschiedliche
+
 ## Die anderen Spielarten
 
 - [ ] **Malen nach Zahlen:** Palette zeigt die Nummern, richtige Farbe füllt, falsche nicht; fertiges Bild feiert

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- sun -->
+    <circle cx="852" cy="152" r="86"/>
+    <!-- roof -->
+    <path d="M 160 380 L 512 140 L 864 380 Z"/>
+    <!-- walls -->
+    <path d="M 240 380 L 784 380 L 784 690 L 240 690 Z"/>
+    <!-- door -->
+    <path d="M 440 500 L 584 500 L 584 690 L 440 690 Z"/>
+    <!-- door knob -->
+    <circle cx="556" cy="596" r="16"/>
+    <!-- windows -->
+    <path d="M 296 442 L 400 442 L 400 546 L 296 546 Z"/>
+    <path d="M 624 442 L 728 442 L 728 546 L 624 546 Z"/>
+    <!-- ground -->
+    <path d="M 120 690 L 960 690"/>
+  </g>
+</svg>

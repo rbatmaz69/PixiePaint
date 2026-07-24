@@ -3,6 +3,7 @@
   "id": "cat",
   "title": "Katze",
   "titleEn": "Cat",
+  "titles": {"es": "Gato", "fr": "Chat", "it": "Gatto", "nl": "Kat", "pl": "Kot", "pt": "Gato", "tr": "Kedi"},
   "file": "cat.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -11,6 +12,7 @@
   "id": "dog",
   "title": "Hund",
   "titleEn": "Dog",
+  "titles": {"es": "Perro", "fr": "Chien", "it": "Cane", "nl": "Hond", "pl": "Pies", "pt": "Cão", "tr": "Köpek"},
   "file": "dog.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -19,6 +21,7 @@
   "id": "fish",
   "title": "Fisch",
   "titleEn": "Fish",
+  "titles": {"es": "Pez", "fr": "Poisson", "it": "Pesce", "nl": "Vis", "pl": "Rybka", "pt": "Peixe", "tr": "Balık"},
   "file": "fish.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -27,6 +30,7 @@
   "id": "turtle",
   "title": "Schildkröte",
   "titleEn": "Turtle",
+  "titles": {"es": "Tortuga", "fr": "Tortue", "it": "Tartaruga", "nl": "Schildpad", "pl": "Żółw", "pt": "Tartaruga", "tr": "Kaplumbağa"},
   "file": "turtle.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -35,6 +39,7 @@
   "id": "butterfly",
   "title": "Schmetterling",
   "titleEn": "Butterfly",
+  "titles": {"es": "Mariposa", "fr": "Papillon", "it": "Farfalla", "nl": "Vlinder", "pl": "Motyl", "pt": "Borboleta", "tr": "Kelebek"},
   "file": "butterfly.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -43,6 +48,7 @@
   "id": "dino",
   "title": "Dino",
   "titleEn": "Dino",
+  "titles": {"es": "Dino", "fr": "Dino", "it": "Dino", "nl": "Dino", "pl": "Dino", "pt": "Dino", "tr": "Dino"},
   "file": "dino.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -51,6 +57,7 @@
   "id": "elephant",
   "title": "Elefant",
   "titleEn": "Elephant",
+  "titles": {"es": "Elefante", "fr": "Éléphant", "it": "Elefante", "nl": "Olifant", "pl": "Słoń", "pt": "Elefante", "tr": "Fil"},
   "file": "elephant.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -59,6 +66,7 @@
   "id": "lion",
   "title": "Löwe",
   "titleEn": "Lion",
+  "titles": {"es": "León", "fr": "Lion", "it": "Leone", "nl": "Leeuw", "pl": "Lew", "pt": "Leão", "tr": "Aslan"},
   "file": "lion.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -67,6 +75,7 @@
   "id": "owl",
   "title": "Eule",
   "titleEn": "Owl",
+  "titles": {"es": "Búho", "fr": "Hibou", "it": "Civetta", "nl": "Uil", "pl": "Sowa", "pt": "Mocho", "tr": "Baykuş"},
   "file": "owl.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -75,6 +84,7 @@
   "id": "flower",
   "title": "Blume",
   "titleEn": "Flower",
+  "titles": {"es": "Flor", "fr": "Fleur", "it": "Fiore", "nl": "Bloem", "pl": "Kwiatek", "pt": "Flor", "tr": "Çiçek"},
   "file": "flower.svg",
   "category": "Natur",
   "categoryEn": "Nature"
@@ -83,6 +93,7 @@
   "id": "house",
   "title": "Haus",
   "titleEn": "House",
+  "titles": {"es": "Casa", "fr": "Maison", "it": "Casa", "nl": "Huis", "pl": "Domek", "pt": "Casa", "tr": "Ev"},
   "file": "house.svg",
   "category": "Natur",
   "categoryEn": "Nature"
@@ -91,6 +102,7 @@
   "id": "car",
   "title": "Auto",
   "titleEn": "Car",
+  "titles": {"es": "Coche", "fr": "Voiture", "it": "Macchina", "nl": "Auto", "pl": "Samochód", "pt": "Carro", "tr": "Araba"},
   "file": "car.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -99,6 +111,7 @@
   "id": "rocket",
   "title": "Rakete",
   "titleEn": "Rocket",
+  "titles": {"es": "Cohete", "fr": "Fusée", "it": "Razzo", "nl": "Raket", "pl": "Rakieta", "pt": "Foguetão", "tr": "Roket"},
   "file": "rocket.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -107,6 +120,7 @@
   "id": "sailboat",
   "title": "Segelboot",
   "titleEn": "Sailboat",
+  "titles": {"es": "Velero", "fr": "Voilier", "it": "Barca a vela", "nl": "Zeilboot", "pl": "Żaglówka", "pt": "Veleiro", "tr": "Yelkenli"},
   "file": "sailboat.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -115,6 +129,7 @@
   "id": "balloon",
   "title": "Heißluftballon",
   "titleEn": "Hot-air balloon",
+  "titles": {"es": "Globo aerostático", "fr": "Montgolfière", "it": "Mongolfiera", "nl": "Luchtballon", "pl": "Balon na ogrzane powietrze", "pt": "Balão de ar", "tr": "Sıcak hava balonu"},
   "file": "balloon.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -123,6 +138,7 @@
   "id": "tractor",
   "title": "Traktor",
   "titleEn": "Tractor",
+  "titles": {"es": "Tractor", "fr": "Tracteur", "it": "Trattore", "nl": "Tractor", "pl": "Traktor", "pt": "Trator", "tr": "Traktör"},
   "file": "tractor.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -131,6 +147,7 @@
   "id": "submarine",
   "title": "U-Boot",
   "titleEn": "Submarine",
+  "titles": {"es": "Submarino", "fr": "Sous-marin", "it": "Sottomarino", "nl": "Duikboot", "pl": "Łódź podwodna", "pt": "Submarino", "tr": "Denizaltı"},
   "file": "submarine.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -139,6 +156,7 @@
   "id": "unicorn",
   "title": "Einhorn",
   "titleEn": "Unicorn",
+  "titles": {"es": "Unicornio", "fr": "Licorne", "it": "Unicorno", "nl": "Eenhoorn", "pl": "Jednorożec", "pt": "Unicórnio", "tr": "Tek boynuzlu at"},
   "file": "unicorn.svg",
   "category": "Fantasie",
   "categoryEn": "Fantasy"
@@ -147,6 +165,7 @@
   "id": "castle",
   "title": "Burg",
   "titleEn": "Castle",
+  "titles": {"es": "Castillo", "fr": "Château", "it": "Castello", "nl": "Kasteel", "pl": "Zamek", "pt": "Castelo", "tr": "Kale"},
   "file": "castle.svg",
   "category": "Fantasie",
   "categoryEn": "Fantasy"
@@ -155,6 +174,7 @@
   "id": "mushroom_house",
   "title": "Pilzhaus",
   "titleEn": "Mushroom house",
+  "titles": {"es": "Casa de seta", "fr": "Maison champignon", "it": "Casa dei funghi", "nl": "Paddenstoelhuis", "pl": "Domek grzybek", "pt": "Casa cogumelo", "tr": "Mantar ev"},
   "file": "mushroom_house.svg",
   "category": "Fantasie",
   "categoryEn": "Fantasy"
@@ -163,6 +183,7 @@
   "id": "icecream",
   "title": "Eis",
   "titleEn": "Ice cream",
+  "titles": {"es": "Helado", "fr": "Glace", "it": "Gelato", "nl": "Ijsje", "pl": "Lody", "pt": "Gelado", "tr": "Dondurma"},
   "file": "icecream.svg",
   "category": "Leckereien",
   "categoryEn": "Treats"
@@ -171,6 +192,7 @@
   "id": "cupcake",
   "title": "Törtchen",
   "titleEn": "Cupcake",
+  "titles": {"es": "Pastelito", "fr": "Cupcake", "it": "Cupcake", "nl": "Cupcake", "pl": "Babeczka", "pt": "Queque", "tr": "Kek"},
   "file": "cupcake.svg",
   "category": "Leckereien",
   "categoryEn": "Treats"
@@ -179,6 +201,7 @@
   "id": "frog",
   "title": "Frosch",
   "titleEn": "Frog",
+  "titles": {"es": "Rana", "fr": "Grenouille", "it": "Rana", "nl": "Kikker", "pl": "Żaba", "pt": "Rã", "tr": "Kurbağa"},
   "file": "frog.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -187,6 +210,7 @@
   "id": "bunny",
   "title": "Hase",
   "titleEn": "Bunny",
+  "titles": {"es": "Conejo", "fr": "Lapin", "it": "Coniglio", "nl": "Haas", "pl": "Zajączek", "pt": "Coelho", "tr": "Tavşan"},
   "file": "bunny.svg",
   "category": "Tiere",
   "categoryEn": "Animals"
@@ -195,6 +219,7 @@
   "id": "tree",
   "title": "Baum",
   "titleEn": "Tree",
+  "titles": {"es": "Árbol", "fr": "Arbre", "it": "Albero", "nl": "Boom", "pl": "Drzewo", "pt": "Árvore", "tr": "Ağaç"},
   "file": "tree.svg",
   "category": "Natur",
   "categoryEn": "Nature"
@@ -203,6 +228,7 @@
   "id": "sunflower",
   "title": "Sonnenblume",
   "titleEn": "Sunflower",
+  "titles": {"es": "Girasol", "fr": "Tournesol", "it": "Girasole", "nl": "Zonnebloem", "pl": "Słonecznik", "pt": "Girassol", "tr": "Ayçiçeği"},
   "file": "sunflower.svg",
   "category": "Natur",
   "categoryEn": "Nature"
@@ -211,6 +237,7 @@
   "id": "excavator",
   "title": "Bagger",
   "titleEn": "Excavator",
+  "titles": {"es": "Excavadora", "fr": "Pelleteuse", "it": "Escavatore", "nl": "Graafmachine", "pl": "Koparka", "pt": "Escavadora", "tr": "Kepçe"},
   "file": "excavator.svg",
   "category": "Fahrzeuge",
   "categoryEn": "Vehicles"
@@ -219,6 +246,7 @@
   "id": "dragon",
   "title": "Drache",
   "titleEn": "Dragon",
+  "titles": {"es": "Dragón", "fr": "Dragon", "it": "Drago", "nl": "Draak", "pl": "Smok", "pt": "Dragão", "tr": "Ejderha"},
   "file": "dragon.svg",
   "category": "Fantasie",
   "categoryEn": "Fantasy"
@@ -227,6 +255,7 @@
   "id": "mermaid",
   "title": "Meerjungfrau",
   "titleEn": "Mermaid",
+  "titles": {"es": "Sirena", "fr": "Sirène", "it": "Sirenetta", "nl": "Zeemeermin", "pl": "Syrenka", "pt": "Sereia", "tr": "Deniz kızı"},
   "file": "mermaid.svg",
   "category": "Fantasie",
   "categoryEn": "Fantasy"
@@ -235,6 +264,7 @@
   "id": "donut",
   "title": "Donut",
   "titleEn": "Donut",
+  "titles": {"es": "Dónut", "fr": "Beignet", "it": "Ciambella", "nl": "Donut", "pl": "Pączek", "pt": "Dónute", "tr": "Donut"},
   "file": "donut.svg",
   "category": "Leckereien",
   "categoryEn": "Treats"
@@ -243,6 +273,7 @@
   "id": "planet",
   "title": "Planet",
   "titleEn": "Planet",
+  "titles": {"es": "Planeta", "fr": "Planète", "it": "Pianeta", "nl": "Planeet", "pl": "Planeta", "pt": "Planeta", "tr": "Gezegen"},
   "file": "planet.svg",
   "category": "Weltraum",
   "categoryEn": "Space"
@@ -251,6 +282,7 @@
   "id": "astronaut",
   "title": "Astronaut",
   "titleEn": "Astronaut",
+  "titles": {"es": "Astronauta", "fr": "Astronaute", "it": "Astronauta", "nl": "Astronaut", "pl": "Astronauta", "pt": "Astronauta", "tr": "Astronot"},
   "file": "astronaut.svg",
   "category": "Weltraum",
   "categoryEn": "Space"
@@ -259,6 +291,7 @@
   "id": "ufo",
   "title": "Ufo",
   "titleEn": "UFO",
+  "titles": {"es": "Ovni", "fr": "Ovni", "it": "Ufo", "nl": "Ufo", "pl": "Ufo", "pt": "Óvni", "tr": "Ufo"},
   "file": "ufo.svg",
   "category": "Weltraum",
   "categoryEn": "Space"
@@ -267,6 +300,7 @@
   "id": "alien",
   "title": "Alien",
   "titleEn": "Alien",
+  "titles": {"es": "Alienígena", "fr": "Extraterrestre", "it": "Alieno", "nl": "Alien", "pl": "Kosmita", "pt": "Alienígena", "tr": "Uzaylı"},
   "file": "alien.svg",
   "category": "Weltraum",
   "categoryEn": "Space"
@@ -275,6 +309,7 @@
   "id": "moon",
   "title": "Mond",
   "titleEn": "Moon",
+  "titles": {"es": "Luna", "fr": "Lune", "it": "Luna", "nl": "Maan", "pl": "Księżyc", "pt": "Lua", "tr": "Ay"},
   "file": "moon.svg",
   "category": "Weltraum",
   "categoryEn": "Space"
@@ -283,6 +318,7 @@
   "id": "pizza",
   "title": "Pizza",
   "titleEn": "Pizza",
+  "titles": {"es": "Pizza", "fr": "Pizza", "it": "Pizza", "nl": "Pizza", "pl": "Pizza", "pt": "Pizza", "tr": "Pizza"},
   "file": "pizza.svg",
   "category": "Leckereien",
   "categoryEn": "Treats"
@@ -291,6 +327,7 @@
   "id": "popsicle",
   "title": "Eis am Stiel",
   "titleEn": "Ice pop",
+  "titles": {"es": "Polo", "fr": "Glace à l'eau", "it": "Ghiacciolo", "nl": "Waterijsje", "pl": "Lód na patyku", "pt": "Gelado de pau", "tr": "Buzlu şeker"},
   "file": "popsicle.svg",
   "category": "Leckereien",
   "categoryEn": "Treats"
@@ -299,6 +336,7 @@
   "id": "rainbow_sky",
   "title": "Regenbogen",
   "titleEn": "Rainbow",
+  "titles": {"es": "Arcoíris", "fr": "Arc-en-ciel", "it": "Arcobaleno", "nl": "Regenboog", "pl": "Tęcza", "pt": "Arco-íris", "tr": "Gökkuşağı"},
   "file": "rainbow.svg",
   "category": "Natur",
   "categoryEn": "Nature"
@@ -307,6 +345,7 @@
   "id": "cbn_balloons",
   "title": "Luftballons",
   "titleEn": "Balloons",
+  "titles": {"es": "Globos", "fr": "Ballons", "it": "Palloncini", "nl": "Ballonnen", "pl": "Baloniki", "pt": "Balões", "tr": "Balonlar"},
   "file": "cbn_balloons.svg",
   "category": "Zahlen",
   "categoryEn": "Numbers",
@@ -316,6 +355,7 @@
   "id": "cbn_fish",
   "title": "Fisch",
   "titleEn": "Fish",
+  "titles": {"es": "Pez", "fr": "Poisson", "it": "Pesce", "nl": "Vis", "pl": "Rybka", "pt": "Peixe", "tr": "Balık"},
   "file": "cbn_fish.svg",
   "category": "Zahlen",
   "categoryEn": "Numbers",
@@ -325,6 +365,7 @@
   "id": "cbn_flower",
   "title": "Blume",
   "titleEn": "Flower",
+  "titles": {"es": "Flor", "fr": "Fleur", "it": "Fiore", "nl": "Bloem", "pl": "Kwiatek", "pt": "Flor", "tr": "Çiçek"},
   "file": "cbn_flower.svg",
   "category": "Zahlen",
   "categoryEn": "Numbers",
@@ -334,6 +375,7 @@
   "id": "cbn_butterfly",
   "title": "Schmetterling",
   "titleEn": "Butterfly",
+  "titles": {"es": "Mariposa", "fr": "Papillon", "it": "Farfalla", "nl": "Vlinder", "pl": "Motyl", "pt": "Borboleta", "tr": "Kelebek"},
   "file": "cbn_butterfly.svg",
   "category": "Zahlen",
   "categoryEn": "Numbers",
@@ -343,6 +385,7 @@
   "id": "christmas_tree",
   "title": "Weihnachtsbaum",
   "titleEn": "Christmas tree",
+  "titles": {"es": "Árbol de Navidad", "fr": "Sapin de Noël", "it": "Albero di Natale", "nl": "Kerstboom", "pl": "Choinka", "pt": "Árvore de Natal", "tr": "Yılbaşı ağacı"},
   "file": "christmas_tree.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -352,6 +395,7 @@
   "id": "snowman",
   "title": "Schneemann",
   "titleEn": "Snowman",
+  "titles": {"es": "Muñeco de nieve", "fr": "Bonhomme de neige", "it": "Pupazzo di neve", "nl": "Sneeuwpop", "pl": "Bałwan", "pt": "Boneco de neve", "tr": "Kardan adam"},
   "file": "snowman.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -361,6 +405,7 @@
   "id": "gingerbread",
   "title": "Lebkuchenmann",
   "titleEn": "Gingerbread man",
+  "titles": {"es": "Galleta de jengibre", "fr": "Bonhomme en pain d'épices", "it": "Omino di pan di zenzero", "nl": "Peperkoekmannetje", "pl": "Piernikowy ludzik", "pt": "Boneco de gengibre", "tr": "Zencefilli kurabiye"},
   "file": "gingerbread.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -370,6 +415,7 @@
   "id": "snow_globe",
   "title": "Schneekugel",
   "titleEn": "Snow globe",
+  "titles": {"es": "Bola de nieve", "fr": "Boule à neige", "it": "Palla di neve", "nl": "Sneeuwbol", "pl": "Kula śnieżna", "pt": "Globo de neve", "tr": "Kar küresi"},
   "file": "snow_globe.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -379,6 +425,7 @@
   "id": "easter_egg",
   "title": "Osterei",
   "titleEn": "Easter egg",
+  "titles": {"es": "Huevo de Pascua", "fr": "Œuf de Pâques", "it": "Uovo di Pasqua", "nl": "Paasei", "pl": "Pisanka", "pt": "Ovo da Páscoa", "tr": "Paskalya yumurtası"},
   "file": "easter_egg.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -388,6 +435,7 @@
   "id": "easter_basket",
   "title": "Osterkorb",
   "titleEn": "Easter basket",
+  "titles": {"es": "Cesta de Pascua", "fr": "Panier de Pâques", "it": "Cestino di Pasqua", "nl": "Paasmandje", "pl": "Koszyczek wielkanocny", "pt": "Cesto da Páscoa", "tr": "Paskalya sepeti"},
   "file": "easter_basket.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -397,6 +445,7 @@
   "id": "sandcastle",
   "title": "Sandburg",
   "titleEn": "Sandcastle",
+  "titles": {"es": "Castillo de arena", "fr": "Château de sable", "it": "Castello di sabbia", "nl": "Zandkasteel", "pl": "Zamek z piasku", "pt": "Castelo de areia", "tr": "Kum kalesi"},
   "file": "sandcastle.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -406,6 +455,7 @@
   "id": "beach_umbrella",
   "title": "Sonnenschirm",
   "titleEn": "Beach umbrella",
+  "titles": {"es": "Sombrilla", "fr": "Parasol", "it": "Ombrellone", "nl": "Strandparasol", "pl": "Parasol plażowy", "pt": "Guarda-sol", "tr": "Plaj şemsiyesi"},
   "file": "beach_umbrella.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -415,6 +465,7 @@
   "id": "autumn_leaf",
   "title": "Herbstblatt",
   "titleEn": "Autumn leaf",
+  "titles": {"es": "Hoja de otoño", "fr": "Feuille d'automne", "it": "Foglia d'autunno", "nl": "Herfstblad", "pl": "Liść jesienny", "pt": "Folha de outono", "tr": "Sonbahar yaprağı"},
   "file": "autumn_leaf.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -424,6 +475,7 @@
   "id": "acorn",
   "title": "Eichel",
   "titleEn": "Acorn",
+  "titles": {"es": "Bellota", "fr": "Gland", "it": "Ghianda", "nl": "Eikel", "pl": "Żołądź", "pt": "Bolota", "tr": "Palamut"},
   "file": "acorn.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -433,6 +485,7 @@
   "id": "pumpkin",
   "title": "Kürbis",
   "titleEn": "Pumpkin",
+  "titles": {"es": "Calabaza", "fr": "Citrouille", "it": "Zucca", "nl": "Pompoen", "pl": "Dynia", "pt": "Abóbora", "tr": "Balkabağı"},
   "file": "pumpkin.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
@@ -442,9 +495,140 @@
   "id": "ghost",
   "title": "Gespenst",
   "titleEn": "Ghost",
+  "titles": {"es": "Fantasma", "fr": "Fantôme", "it": "Fantasma", "nl": "Spookje", "pl": "Duszek", "pt": "Fantasma", "tr": "Hayalet"},
   "file": "ghost.svg",
   "category": "Jahreszeiten",
   "categoryEn": "Seasons",
   "season": "halloween"
+ },
+ {
+  "id": "cow",
+  "title": "Kuh",
+  "titleEn": "Cow",
+  "titles": {"es": "Vaca", "fr": "Vache", "it": "Mucca", "nl": "Koe", "pl": "Krowa", "pt": "Vaca", "tr": "İnek"},
+  "file": "cow.svg",
+  "category": "Bauernhof",
+  "categoryEn": "Farm"
+ },
+ {
+  "id": "pig",
+  "title": "Schwein",
+  "titleEn": "Pig",
+  "titles": {"es": "Cerdo", "fr": "Cochon", "it": "Maialino", "nl": "Varken", "pl": "Świnka", "pt": "Porco", "tr": "Domuz"},
+  "file": "pig.svg",
+  "category": "Bauernhof",
+  "categoryEn": "Farm"
+ },
+ {
+  "id": "chicken",
+  "title": "Huhn",
+  "titleEn": "Chicken",
+  "titles": {"es": "Gallina", "fr": "Poule", "it": "Gallina", "nl": "Kip", "pl": "Kurka", "pt": "Galinha", "tr": "Tavuk"},
+  "file": "chicken.svg",
+  "category": "Bauernhof",
+  "categoryEn": "Farm"
+ },
+ {
+  "id": "sheep",
+  "title": "Schaf",
+  "titleEn": "Sheep",
+  "titles": {"es": "Oveja", "fr": "Mouton", "it": "Pecora", "nl": "Schaap", "pl": "Owca", "pt": "Ovelha", "tr": "Koyun"},
+  "file": "sheep.svg",
+  "category": "Bauernhof",
+  "categoryEn": "Farm"
+ },
+ {
+  "id": "barn",
+  "title": "Scheune",
+  "titleEn": "Barn",
+  "titles": {"es": "Granero", "fr": "Grange", "it": "Fienile", "nl": "Schuur", "pl": "Stodoła", "pt": "Celeiro", "tr": "Ahır"},
+  "file": "barn.svg",
+  "category": "Bauernhof",
+  "categoryEn": "Farm"
+ },
+ {
+  "id": "penguin",
+  "title": "Pinguin",
+  "titleEn": "Penguin",
+  "titles": {"es": "Pingüino", "fr": "Pingouin", "it": "Pinguino", "nl": "Pinguïn", "pl": "Pingwin", "pt": "Pinguim", "tr": "Penguen"},
+  "file": "penguin.svg",
+  "category": "Tiere",
+  "categoryEn": "Animals"
+ },
+ {
+  "id": "cactus",
+  "title": "Kaktus",
+  "titleEn": "Cactus",
+  "titles": {"es": "Cactus", "fr": "Cactus", "it": "Cactus", "nl": "Cactus", "pl": "Kaktus", "pt": "Cacto", "tr": "Kaktüs"},
+  "file": "cactus.svg",
+  "category": "Natur",
+  "categoryEn": "Nature"
+ },
+ {
+  "id": "fairy",
+  "title": "Fee",
+  "titleEn": "Fairy",
+  "titles": {"es": "Hada", "fr": "Fée", "it": "Fatina", "nl": "Fee", "pl": "Wróżka", "pt": "Fada", "tr": "Peri"},
+  "file": "fairy.svg",
+  "category": "Fantasie",
+  "categoryEn": "Fantasy"
+ },
+ {
+  "id": "lollipop",
+  "title": "Lolli",
+  "titleEn": "Lollipop",
+  "titles": {"es": "Piruleta", "fr": "Sucette", "it": "Lecca-lecca", "nl": "Lolly", "pl": "Lizak", "pt": "Chupa", "tr": "Lolipop"},
+  "file": "lollipop.svg",
+  "category": "Leckereien",
+  "categoryEn": "Treats"
+ },
+ {
+  "id": "shooting_star",
+  "title": "Sternschnuppe",
+  "titleEn": "Shooting star",
+  "titles": {"es": "Estrella fugaz", "fr": "Étoile filante", "it": "Stella cadente", "nl": "Vallende ster", "pl": "Spadająca gwiazda", "pt": "Estrela cadente", "tr": "Kayan yıldız"},
+  "file": "shooting_star.svg",
+  "category": "Weltraum",
+  "categoryEn": "Space"
+ },
+ {
+  "id": "cbn_rocket",
+  "title": "Rakete",
+  "titleEn": "Rocket",
+  "titles": {"es": "Cohete", "fr": "Fusée", "it": "Razzo", "nl": "Raket", "pl": "Rakieta", "pt": "Foguetão", "tr": "Roket"},
+  "file": "cbn_rocket.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_umbrella",
+  "title": "Regenschirm",
+  "titleEn": "Umbrella",
+  "titles": {"es": "Paraguas", "fr": "Parapluie", "it": "Ombrello", "nl": "Paraplu", "pl": "Parasol", "pt": "Guarda-chuva", "tr": "Şemsiye"},
+  "file": "cbn_umbrella.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_cake",
+  "title": "Kuchen",
+  "titleEn": "Cake",
+  "titles": {"es": "Tarta", "fr": "Gâteau", "it": "Torta", "nl": "Taart", "pl": "Tort", "pt": "Bolo", "tr": "Pasta"},
+  "file": "cbn_cake.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
+ },
+ {
+  "id": "cbn_house",
+  "title": "Haus",
+  "titleEn": "House",
+  "titles": {"es": "Casa", "fr": "Maison", "it": "Casa", "nl": "Huis", "pl": "Domek", "pt": "Casa", "tr": "Ev"},
+  "file": "cbn_house.svg",
+  "category": "Zahlen",
+  "categoryEn": "Numbers",
+  "mode": "cbn"
  }
 ]

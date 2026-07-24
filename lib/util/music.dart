@@ -14,10 +14,12 @@ class Music with WidgetsBindingObserver {
   Music._();
   static final Music instance = Music._();
 
-  /// Seamless WAV loops — compressed formats gap at the loop point.
+  /// Seamless WAV loops — compressed formats gap at the loop point. The
+  /// recipe for `music_box` is `tool/make_music.py`.
   static const List<String> tracks = [
     'sounds/music/lullaby.wav',
     'sounds/music/sunshine.wav',
+    'sounds/music/music_box.wav',
   ];
 
   final AudioPlayer _player = AudioPlayer();

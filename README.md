@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.5.0+25 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.6.0+26 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -26,7 +26,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 ## Features
 
 **Malen**
-- 54 Ausmalbilder in 8 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Zahlen, Jahreszeiten)
+- 68 Ausmalbilder in 9 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Zahlen, Jahreszeiten) — jedes Motiv in allen neun Sprachen benannt
 - Freies Zeichnen auf leerer Leinwand
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
 - 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
@@ -39,13 +39,13 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung
 
 **Weitere Spielarten**
-- **Malen nach Zahlen** — 4 Bilder mit nummerierten Flächen und eigener Palette
+- **Malen nach Zahlen** — 8 Bilder mit nummerierten Flächen und eigener Palette
 - **Nachspuren** — 44 Vorlagen (A–Z inkl. Umlaute, 0–9, 5 Formen), komplett ohne Assets aus der Schrift erzeugt
-- **Sticker-Welt** — 6 Szenen als Bühne zum Bekleben
+- **Sticker-Welt** — 8 Szenen als Bühne zum Bekleben
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
 - **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen
 - **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt
-- **Tagesaufgabe** — 30 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
+- **Tagesaufgabe** — 45 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
 - **Jahreszeiten** — 12 Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween; die Kategorie rutscht im Picker automatisch nach vorne, wenn ihr Anlass ansteht
 - **Erfolge-Album** — alle Belohnungs-Sticker und die Tagesaufgaben-Serie auf einen Blick
 
@@ -56,7 +56,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
 
 **Belohnungen**
-- 12 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
+- 13 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
 - Gesperrte Sticker als wackelnde Mystery-Boxen mit kindgerechter Fortschrittsanzeige
 - Rein lokal — keine Käufe, keine Accounts
 
@@ -224,7 +224,7 @@ flutter test test/shape_renderer_test.dart   # einzelne Datei
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 417 Tests in 46 Dateien:
+Die Test-Suite umfasst 488 Tests in 48 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
@@ -261,6 +261,17 @@ Platzhalter und Pluralformen folgen dem ICU-Format — Beispiele stehen bei `gat
 
 > **Zum Ton:** Die Übersetzungen stammen nicht von Muttersprachlern. Sie sind idiomatisch und kindgerecht formuliert, aber bevor die App in einem dieser Märkte tatsächlich veröffentlicht wird, lohnt sich ein Blick von jemandem, der die Sprache spricht — gerade bei einer Kinder-App trägt der Ton viel.
 
+**Namen von Inhalten liegen nicht in den ARB-Dateien** (seit v7.6). Motive, Kategorien, Szenen und Tagesaufgaben sind Daten, nicht Oberfläche — ihre Namen stehen direkt beim Inhalt, damit ein neues Bild eine Änderung bleibt und nicht neun:
+
+| Was | Wo | Deutsch | Englisch | Die anderen sieben |
+|---|---|---|---|---|
+| Bildtitel | `assets/coloring_pages/pages.json` | `title` | `titleEn` | `titles` |
+| Kategorien | `kCategoryNames` in `lib/models/coloring_page.dart` | der Schlüssel selbst | `categoryEn` in pages.json | dort im Eintrag |
+| Szenen | `assets/scenes/scenes.json` | `title` | `titleEn` | `titles` |
+| Tagesaufgaben | `kDailyTasks` in `lib/models/daily_task.dart` | `title` | `titleEn` | `titles` |
+
+Die Auswahl macht überall `localizedName` (`lib/models/localized_name.dart`): exakte Sprache → Englisch → Deutsch. `flutter test test/page_names_test.dart` schlägt fehl, sobald irgendwo eine der neun Sprachen fehlt — bis v7.6 kannte das Modell nur Deutsch und Englisch, ein türkisches Kind las also „Schmetterling" unter dem Schmetterling.
+
 ## Projektstruktur
 
 ```
@@ -286,7 +297,8 @@ lib/
 ├── photo/                 Foto → Ausmalbild (Kantenerkennung)
 ├── settings/              Einstellungen, Speicherplatz-Verwaltung, Problembericht
 ├── models/                Werkzeuge, Sticker, Belohnungen, Artwork, Ausmalbilder,
-│                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops
+│                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops,
+│                          Inhalts-Namen in neun Sprachen (localized_name.dart)
 ├── ui/                    Design-System (siehe unten)
 ├── util/                  Settings, Fortschritt, Profile, Sfx, Musik, Bild-IO,
 │                          Teilen, Speichern, PDF, Backup/Restore, JsonStore,
@@ -295,15 +307,17 @@ lib/
 └── l10n/                  ARB-Dateien + generierte Übersetzungen
 
 assets/
-├── coloring_pages/        54 SVGs + pages.json (Katalog)
+├── coloring_pages/        68 SVGs + pages.json (Katalog, Namen in 9 Sprachen)
 │   └── cbn/               Sidecar-JSON für „Malen nach Zahlen"
-├── scenes/                6 Szenen-SVGs + scenes.json
+├── scenes/                8 Szenen-SVGs + scenes.json
 ├── fonts/                 Fredoka (Medium/SemiBold/Bold)
-├── sounds/                pop, tick, tada + music/ (2 Loops)
+├── sounds/                pop, tick, tada + music/ (3 Loops)
 └── icon/                  App-Icon & Splash
 
 docs/                      Release-Anleitungen (Play Store, App Store),
                            Gerätetest-Checkliste, Datenschutzerklärung
+
+tool/                      make_music.py — erzeugt die Musik-Loops
 ```
 
 ## Architektur-Notizen
@@ -361,23 +375,28 @@ docs/                      Release-Anleitungen (Play Store, App Store),
      "id": "cat",
      "title": "Katze",
      "titleEn": "Cat",
+     "titles": {"es": "Gato", "fr": "Chat", "it": "Gatto", "nl": "Kat",
+                "pl": "Kot", "pt": "Gato", "tr": "Kedi"},
      "file": "cat.svg",
      "category": "Tiere",
      "categoryEn": "Animals"
    }
    ```
-   Die deutsche `category` ist der stabile Schlüssel — an ihr hängen die Pastell-Tints im Picker (`_categoryTint` in `lib/gallery/page_picker_screen.dart`).
-3. `flutter run` — Assets werden über den Ordner-Eintrag in der `pubspec.yaml` automatisch mitgenommen
+   Die deutsche `category` ist der stabile Schlüssel — an ihr hängen die Pastell-Tints im Picker (`_categoryTint` in `lib/gallery/page_picker_screen.dart`) und die Namen in `kCategoryNames`. Bei einer **neuen Kategorie** also beides ergänzen; beides ist ein Einzeiler, und `test/page_names_test.dart` sagt es sonst.
+3. `flutter test test/page_artwork_test.dart test/page_names_test.dart` — die Abnahme: rastert das Bild, prüft geschlossene füllbare Flächen und die neun Namen. **Das ist die Prüfung, nicht das Auge** — eine Kontur mit einer Lücke sieht perfekt aus und flutet beim ersten Tippen das ganze Bild.
+4. `flutter run` — Assets werden über den Ordner-Eintrag in der `pubspec.yaml` automatisch mitgenommen
 
 **Neuen Sticker** in `lib/models/stamp.dart` (`kStamps`) eintragen, **neue Belohnung** in `lib/models/reward.dart` (`kRewards`). Dort steht auch der Hinweis, welche Emoji plattformübergreifend farbig rendern.
 
-**Neue Szene** (Sticker-Welt): SVG nach `assets/scenes/` plus Eintrag in `scenes.json`.
+**Neue Szene** (Sticker-Welt): SVG nach `assets/scenes/` plus Eintrag in `scenes.json`, inklusive `titles`.
 
-**Neues Zahlenbild** („Malen nach Zahlen"): SVG wie ein normales Ausmalbild, dazu ein Sidecar `assets/coloring_pages/cbn/<id>.json` mit Palette und Beschriftungen. `test/cbn_pages_test.dart` prüft das Authoring end-to-end — jede Beschriftung muss in einer gültigen, einheitlich nummerierten Fläche liegen; der Test ist die Abnahme, nicht das Auge.
+**Neues Zahlenbild** („Malen nach Zahlen"): SVG wie ein normales Ausmalbild plus `"mode": "cbn"`, dazu ein Sidecar `assets/coloring_pages/cbn/<id>.json` mit Palette und Beschriftungen (Koordinaten in 2048 × 1536, also das Doppelte der SVG-Maße). `test/cbn_pages_test.dart` prüft das Authoring end-to-end — jede Beschriftung muss in einer gültigen, einheitlich nummerierten Fläche liegen; die Seitenliste leitet der Test aus `pages.json` ab, ein neues Bild ist also automatisch mit drin.
 
-**Neue Tagesaufgabe** in `lib/models/daily_task.dart` (`kDailyTasks`) — die Liste wird zyklisch über das Datum adressiert, neue Einträge verschieben also die Zuordnung für alle folgenden Tage.
+**Neue Tagesaufgabe** in `lib/models/daily_task.dart` (`kDailyTasks`) — **immer anhängen, nie einsortieren:** die Liste wird zyklisch über das Datum adressiert, ein Einschub verschiebt die Aufgabe jedes folgenden Tages.
 
-**Neues Jahreszeiten-Bild:** wie ein normales Ausmalbild, zusätzlich `"season"` im `pages.json`-Eintrag (einer der Schlüssel aus `kSeasonWindows` in `lib/models/coloring_page.dart`). `test/seasonal_pages_test.dart` prüft danach automatisch mit, dass die Datei existiert, rastert und geschlossene, füllbare Flächen hat.
+**Neues Jahreszeiten-Bild:** wie ein normales Ausmalbild, zusätzlich `"season"` im `pages.json`-Eintrag (einer der Schlüssel aus `kSeasonWindows` in `lib/models/coloring_page.dart`).
+
+**Neues Musikstück:** `tool/make_music.py` erweitern (eine Funktion plus ein Eintrag in `TRACKS`), Datei nach `assets/sounds/music/` erzeugen und in `Music.tracks` eintragen. Die WAVs sind synthetisiert — nahtlos, weil `ReleaseMode.loop` jeden Klick am Übergang alle paar Minuten wiederholt; das Skript prüft selbst, dass ein Stück in Stille endet.
 
 ## Veröffentlichen
 

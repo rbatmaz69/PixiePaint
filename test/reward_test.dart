@@ -98,7 +98,10 @@ void main() {
     test('all targets are reachable positives', () {
       for (final r in kRewards) {
         expect(r.target, greaterThan(0));
-        expect(r.target, lessThanOrEqualTo(20));
+        // The ceiling is a judgement about a child's patience rather than a
+        // technical limit. It moved from 20 to 25 in v7.6, when the catalog
+        // grew to 68 pictures and 20 stopped being the end of the road.
+        expect(r.target, lessThanOrEqualTo(25));
       }
     });
   });

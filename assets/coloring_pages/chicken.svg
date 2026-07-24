@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- tail feathers, attached to the back of the body -->
+    <path d="M 270 400 C 200 350 170 280 210 258 C 250 238 296 292 300 350 Z"/>
+    <path d="M 262 452 C 180 440 130 396 150 360 C 170 328 240 348 280 396 Z"/>
+    <!-- body -->
+    <ellipse cx="470" cy="470" rx="210" ry="165"/>
+    <!-- wing -->
+    <path d="M 400 430 C 480 410 560 460 540 520 C 520 574 430 570 390 520 C 366 490 370 442 400 430 Z"/>
+    <!-- comb, on top of the head -->
+    <path d="M 604 214 C 606 160 654 160 660 206 C 676 164 722 172 716 214 Z"/>
+    <!-- head -->
+    <circle cx="660" cy="300" r="105"/>
+    <!-- eye -->
+    <circle cx="692" cy="274" r="20"/>
+    <!-- beak -->
+    <path d="M 758 296 L 840 316 L 758 336 Z"/>
+    <!-- wattle under the beak -->
+    <path d="M 730 352 C 758 368 754 406 726 410 C 704 412 696 386 708 364 Z"/>
+    <!-- legs -->
+    <path d="M 424 632 L 424 706"/>
+    <path d="M 388 706 L 460 706"/>
+    <path d="M 536 632 L 536 706"/>
+    <path d="M 500 706 L 572 706"/>
+  </g>
+</svg>

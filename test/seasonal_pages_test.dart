@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pixiepaint/canvas/region_label.dart';
 import 'package:pixiepaint/models/coloring_page.dart';
-import 'package:pixiepaint/util/svg_raster.dart';
 
 /// Two things are checked here: that the seasonal windows behave across the
 /// awkward dates (New Year, the day before a window opens), and that every
@@ -79,9 +77,7 @@ void main() {
     });
   });
 
-  group('seasonal artwork', () {
-    const w = 2048, h = 1536;
-
+  group('seasonal catalog', () {
     /// The pages added in v6.9, read from the catalog rather than hardcoded
     /// so a new seasonal entry is covered the moment it is added.
     List<ColoringPage> seasonalPages() {
@@ -119,53 +115,8 @@ void main() {
           kSeasonWindows.keys.toSet());
     });
 
-    for (final id in const [
-      'christmas_tree',
-      'snowman',
-      'gingerbread',
-      'snow_globe',
-      'easter_egg',
-      'easter_basket',
-      'sandcastle',
-      'beach_umbrella',
-      'autumn_leaf',
-      'acorn',
-      'pumpkin',
-      'ghost',
-    ]) {
-      test('$id rasterizes into fillable, enclosed regions', () async {
-        final art =
-            await rasterizeSvgAsset('assets/coloring_pages/$id.svg', w, h);
-        final regions = labelRegions(art.barrierAlpha, w, h);
-
-        // Region 0 is the outline itself; the background is whatever region
-        // the top-left corner belongs to.
-        final background = regions[0];
-        final sizes = <int, int>{};
-        for (final region in regions) {
-          if (region == 0 || region == background) continue;
-          sizes[region] = (sizes[region] ?? 0) + 1;
-        }
-
-        // Areas smaller than this are anti-aliasing crumbs between strokes,
-        // not something a child could ever aim at.
-        const minUsefulArea = 2000;
-        final fillable =
-            sizes.values.where((px) => px >= minUsefulArea).length;
-
-        expect(fillable, greaterThanOrEqualTo(3),
-            reason: '$id: only $fillable fillable areas — an outline is '
-                'probably open and the fill leaks into the background');
-
-        // A gap in the outline shows up as a background that swallowed the
-        // whole picture.
-        final backgroundPixels =
-            regions.where((r) => r == background).length;
-        expect(backgroundPixels / regions.length, lessThan(0.9),
-            reason: '$id: the background covers the whole canvas');
-
-        art.dispose();
-      });
-    }
+    // The artwork itself (does it rasterize into fillable regions?) is
+    // checked for every page in the catalog by `page_artwork_test.dart` —
+    // it used to live here for the seasonal twelve only.
   });
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/canvas/region_label.dart';
 import 'package:pixiepaint/models/cbn_spec.dart';
@@ -9,7 +12,23 @@ import 'package:pixiepaint/util/svg_raster.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   const w = 2048, h = 1536;
-  const pages = ['cbn_balloons', 'cbn_fish', 'cbn_flower', 'cbn_butterfly'];
+
+  /// Read out of the catalog rather than listed here: the four pages of v6.3
+  /// were hardcoded, and the four added in v7.6 would have slipped straight
+  /// past this test.
+  final pages = (jsonDecode(
+              File('assets/coloring_pages/pages.json').readAsStringSync())
+          as List)
+      .cast<Map<String, dynamic>>()
+      .where((e) => e['mode'] == 'cbn')
+      .map((e) => e['id'] as String)
+      .toList();
+
+  test('the catalog has color-by-number pages at all', () {
+    // Guards the derivation above: a renamed `mode` value would otherwise
+    // turn this whole file into zero tests that all pass.
+    expect(pages, hasLength(8));
+  });
 
   for (final id in pages) {
     test('$id: every label sits in a valid, consistently numbered region',

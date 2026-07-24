@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- wings: below the head, or they read as ears -->
+    <ellipse cx="356" cy="360" rx="120" ry="84" transform="rotate(-22 356 360)"/>
+    <ellipse cx="668" cy="360" rx="120" ry="84" transform="rotate(22 668 360)"/>
+    <!-- dress -->
+    <path d="M 512 300 L 452 368 L 396 616 L 628 616 L 572 368 Z"/>
+    <path d="M 396 616 C 430 656 470 656 512 616 C 554 656 594 656 628 616"/>
+    <!-- legs -->
+    <path d="M 470 642 L 462 716"/>
+    <path d="M 554 642 L 562 716"/>
+    <!-- arms -->
+    <path d="M 462 380 L 368 448"/>
+    <path d="M 562 380 L 688 462"/>
+    <!-- wand -->
+    <path d="M 688 462 L 774 534"/>
+    <!-- star on the wand -->
+    <path d="M 838 540 L 856 592 L 910 594 L 866 628 L 882 680 L 838 648 L 794 680 L 810 628 L 766 594 L 820 592 Z"/>
+    <!-- head -->
+    <circle cx="512" cy="208" r="94"/>
+    <!-- hair -->
+    <path d="M 420 190 C 420 112 604 112 604 190 C 574 162 450 162 420 190 Z"/>
+    <!-- eyes and smile -->
+    <circle cx="484" cy="206" r="13"/>
+    <circle cx="540" cy="206" r="13"/>
+    <path d="M 486 250 C 500 266 524 266 538 250"/>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768">
+  <g fill="none" stroke="#000000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- canopy -->
+    <path d="M 200 420 C 200 210 340 120 512 120 C 684 120 824 210 824 420 Z"/>
+    <!-- ribs: straight to the exact apex, so every panel closes -->
+    <path d="M 356 420 L 512 120"/>
+    <path d="M 512 420 L 512 120"/>
+    <path d="M 668 420 L 512 120"/>
+    <!-- handle -->
+    <path d="M 494 420 L 530 420 L 530 636 L 494 636 Z"/>
+    <circle cx="512" cy="672" r="40"/>
+    <!-- raindrops -->
+    <path d="M 200 530 C 232 570 240 606 214 622 C 188 638 164 610 178 578 Z"/>
+    <path d="M 812 530 C 844 570 852 606 826 622 C 800 638 776 610 790 578 Z"/>
+  </g>
+</svg>

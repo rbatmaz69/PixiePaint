@@ -2,10 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import 'localized_name.dart';
+
 class ColoringPage {
   final String id;
   final String title;
   final String? titleEn;
+
+  /// The remaining seven languages, keyed by language code (see
+  /// [localizedName]). German lives in [title], English in [titleEn].
+  final Map<String, String>? titles;
+
   final String file;
 
   /// German category name — also the stable grouping key for the tab bar.
@@ -24,6 +31,7 @@ class ColoringPage {
     required this.id,
     required this.title,
     this.titleEn,
+    this.titles,
     required this.file,
     required this.category,
     this.categoryEn,
@@ -36,10 +44,17 @@ class ColoringPage {
   String get assetPath => 'assets/coloring_pages/$file';
 
   String titleFor(String languageCode) =>
-      languageCode == 'en' ? (titleEn ?? title) : title;
+      localizedName(languageCode, de: title, en: titleEn, more: titles);
 
-  String categoryFor(String languageCode) =>
-      languageCode == 'en' ? (categoryEn ?? category) : category;
+  /// Category names come from [kCategoryNames] rather than from every single
+  /// page entry — the eight of them are shared by 68 pictures, and repeating
+  /// them per page is 68 chances to spell one differently.
+  String categoryFor(String languageCode) => localizedName(
+        languageCode,
+        de: category,
+        en: categoryEn,
+        more: kCategoryNames[category],
+      );
 
   static List<ColoringPage>? _cache;
 
@@ -51,6 +66,7 @@ class ColoringPage {
               id: e['id'] as String,
               title: e['title'] as String,
               titleEn: e['titleEn'] as String?,
+              titles: namesFromJson(e['titles']),
               file: e['file'] as String,
               category: e['category'] as String,
               categoryEn: e['categoryEn'] as String?,
@@ -70,6 +86,98 @@ class ColoringPage {
     return null;
   }
 }
+
+/// The picker's tab names in the seven languages that are not German (the
+/// German name is the key and the stable grouping key everywhere else) and not
+/// English (that one stays in `pages.json` as `categoryEn`, where it has
+/// always been).
+///
+/// `test/page_names_test.dart` fails if a category from `pages.json` is
+/// missing here — a new category otherwise shows up as a German word in the
+/// middle of a Polish tab bar.
+const Map<String, Map<String, String>> kCategoryNames = {
+  'Tiere': {
+    'es': 'Animales',
+    'fr': 'Animaux',
+    'it': 'Animali',
+    'nl': 'Dieren',
+    'pl': 'Zwierzęta',
+    'pt': 'Animais',
+    'tr': 'Hayvanlar',
+  },
+  'Natur': {
+    'es': 'Naturaleza',
+    'fr': 'Nature',
+    'it': 'Natura',
+    'nl': 'Natuur',
+    'pl': 'Przyroda',
+    'pt': 'Natureza',
+    'tr': 'Doğa',
+  },
+  'Fahrzeuge': {
+    'es': 'Vehículos',
+    'fr': 'Véhicules',
+    'it': 'Veicoli',
+    'nl': 'Voertuigen',
+    'pl': 'Pojazdy',
+    'pt': 'Veículos',
+    'tr': 'Taşıtlar',
+  },
+  'Fantasie': {
+    'es': 'Fantasía',
+    'fr': 'Fantaisie',
+    'it': 'Fantasia',
+    'nl': 'Fantasie',
+    'pl': 'Fantazja',
+    'pt': 'Fantasia',
+    'tr': 'Fantezi',
+  },
+  'Leckereien': {
+    'es': 'Golosinas',
+    'fr': 'Gourmandises',
+    'it': 'Dolcetti',
+    'nl': 'Lekkers',
+    'pl': 'Smakołyki',
+    'pt': 'Guloseimas',
+    'tr': 'Lezzetler',
+  },
+  'Weltraum': {
+    'es': 'Espacio',
+    'fr': 'Espace',
+    'it': 'Spazio',
+    'nl': 'Ruimte',
+    'pl': 'Kosmos',
+    'pt': 'Espaço',
+    'tr': 'Uzay',
+  },
+  'Bauernhof': {
+    'es': 'Granja',
+    'fr': 'Ferme',
+    'it': 'Fattoria',
+    'nl': 'Boerderij',
+    'pl': 'Gospodarstwo',
+    'pt': 'Fazenda',
+    'tr': 'Çiftlik',
+  },
+  'Zahlen': {
+    'es': 'Números',
+    'fr': 'Chiffres',
+    'it': 'Numeri',
+    'nl': 'Cijfers',
+    'pl': 'Liczby',
+    'pt': 'Números',
+    'tr': 'Sayılar',
+  },
+  'Jahreszeiten': {
+    'es': 'Estaciones',
+    'fr': 'Saisons',
+    'it': 'Stagioni',
+    'nl': 'Seizoenen',
+    'pl': 'Pory roku',
+    'pt': 'Estações',
+    'tr': 'Mevsimler',
+  },
+};
 
 /// When each occasion is "in season", as (startMonth, startDay, endMonth,
 /// endDay) with both ends inclusive.
