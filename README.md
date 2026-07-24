@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.4.0+35 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.5.0+36 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -46,7 +46,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - **Nachspuren** — 44 Vorlagen (A–Z inkl. Umlaute, 0–9, 5 Formen), komplett ohne Assets aus der Schrift erzeugt
 - **Sticker-Welt** — 8 Szenen als Bühne zum Bekleben
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
-- **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen
+- **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen, mit Fortschrittsleiste und umschaltbarem Tempo
 - **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt
 - **Tagesaufgabe** — 45 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
 - **Jahreszeiten** — 12 Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween; die Kategorie rutscht im Picker automatisch nach vorne, wenn ihr Anlass ansteht
@@ -56,7 +56,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Automatisches Speichern (alle 30 s und beim Verlassen)
 - **Weitermalen** — die Startseite bietet das zuletzt gemalte Bild des aktiven Kindes mit Vorschaubild an
 - Favoriten, Umbenennen, Filter
-- Diashow über alle Bilder
+- Diashow über alle Bilder — Punkte zeigen, das wievielte von wie vielen läuft, und verschwinden mit der Bedienung
 - Das angetippte Bild fliegt in die Leinwand, statt dass der Bildschirm einfach ausgetauscht wird — aus der Galerie, aus der Bildauswahl, von der Weitermalen-Karte und aus der Szenenauswahl
 - Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
 
@@ -320,7 +320,7 @@ lib/
 │                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops,
 │                          Inhalts-Namen in neun Sprachen (localized_name.dart)
 ├── ui/                    Design-System (siehe unten) — inkl. entrance.dart,
-│                          paper_doodles.dart und hero_tags.dart
+│                          paper_doodles.dart, paper_sheet.dart, hero_tags.dart
 ├── util/                  Settings, Fortschritt, Profile, Sfx, Musik, Bild-IO,
 │                          Teilen, Speichern, PDF, Backup/Restore, JsonStore,
 │                          Fehlerlog
@@ -353,6 +353,7 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 - `entrance.dart` — **die eine** Staffel-Animation aller Screens (siehe unten)
 - `blob_background.dart` + `paper_doodles.dart` — driftende Blobs + Doodles auf **einem** 28-s-Ticker, der sich automatisch pausiert, sobald die Route verdeckt oder die App im Hintergrund ist. Der Malbildschirm nimmt denselben Doodle-Painter, aber ohne Ticker und blasser
 - `hero_tags.dart` — die Tags der Flüge in die Leinwand, an einer Stelle vergeben
+- `paper_sheet.dart` — das Blatt Papier, auf dem ein Bild liegt (Leinwand, Zeitraffer, Zwei-Maler)
 - `kid_dialog.dart`, `kid_sheet.dart`, `reward_reveal.dart` — Dialoge, Sheets, Belohnungs-Moment
 
 **Erreichbarkeit der Werkzeugleiste** (seit v8.0): `ToolBarRail` scrollt, `ToolActionCluster` nicht. Rückgängig und Wiederholen lagen bis dahin am Ende eines rund 1000 px breiten Streifens — auf einem 360-dp-Telefon außerhalb des Bildes, hinter einer Wischgeste, die nichts ankündigte. Die beiden Knöpfe platziert seither der Bildschirm selbst (in `_buildPortrait` und `_LeftRail`), gespiegelt für Linkshänder. Der Streifen daneben blendet seine Ränder weich aus, sobald dort wirklich mehr steht, und holt ein über ein Auswahl-Blatt gewähltes Werkzeug per `Scrollable.ensureVisible` zurück in den Blick. **Was neu in die Leiste kommt, gehört in den scrollenden Teil** — der feste Cluster ist für das reserviert, was ein Kind im Zweifel *sofort* braucht.

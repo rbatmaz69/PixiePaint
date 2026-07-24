@@ -146,6 +146,19 @@ class ArtworkStore {
 
   static Future<void> delete(Artwork artwork) async {
     final dir = Directory(artwork.dirPath);
-    if (await dir.exists()) await dir.delete(recursive: true);
+    // ignore: avoid_print
+    print('PPDEBUG delete start ${artwork.dirPath}');
+    if (await dir.exists()) {
+      try {
+        await dir.delete(recursive: true);
+        // ignore: avoid_print
+        print('PPDEBUG delete ok ${artwork.dirPath}');
+      } catch (e, s) {
+        // ignore: avoid_print
+        print('PPDEBUG delete FAILED $e\nleft: '
+            '${dir.existsSync() ? dir.listSync().map((f) => f.path.split('/').last).toList() : 'gone'}\n$s');
+        rethrow;
+      }
+    }
   }
 }
