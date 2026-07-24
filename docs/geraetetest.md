@@ -76,6 +76,13 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Herz wieder abwählen → mit dem letzten Herz verschwindet der Reiter
 - [ ] Lange auf eine Kachel drücken druckt weiterhin (Elternschranke), das Herz stört das nicht
 
+**Fühlen und für alle** (neu in v8.3)
+
+- [ ] Einstellungen → Spaß: „Vibrieren" ist ein eigener Schalter. Ton **aus**, Vibration **an** → Knöpfe fühlen sich weiterhin an
+- [ ] Beides aus → gar keine Rückmeldung; beides an → wie gewohnt
+- [ ] System-Einstellung „Animationen entfernen" (Android: Entwickleroptionen/Bedienungshilfen) bzw. „Bewegung reduzieren" (iOS) einschalten: Hintergrund-Blobs stehen still, Knöpfe federn nicht mehr, kein Konfetti — die Belohnungs-Sticker erscheinen trotzdem
+- [ ] Systemschriftgröße auf das Maximum stellen: Startseite, Einstellungen, Bildauswahl und Malbereich bleiben heil (keine abgeschnittenen Texte, keine gelb-schwarzen Streifen)
+
 ## Stift und Handballen (nur mit Stylus)
 
 - [ ] Druckstärke ändert die Strichbreite

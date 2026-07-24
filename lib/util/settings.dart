@@ -22,6 +22,13 @@ class Settings extends ChangeNotifier {
   bool soundsOn = true;
   bool musicOn = false;
 
+  /// Whether buttons still answer with a small vibration.
+  ///
+  /// Its own switch since v8.3: until then every haptic hung off
+  /// [soundsOn], so a parent muting the app in a waiting room also took
+  /// away the last feedback a child had that a tap had landed at all.
+  bool hapticsOn = true;
+
   /// Mirrors the canvas layout: tool rail on the right (landscape) and the
   /// floating buttons swapped, so a left drawing hand never crosses them.
   bool leftHanded = false;
@@ -70,6 +77,7 @@ class Settings extends ChangeNotifier {
     deleteNeedsGate = json['deleteNeedsGate'] as bool? ?? false;
     soundsOn = json['soundsOn'] as bool? ?? true;
     musicOn = json['musicOn'] as bool? ?? false;
+    hapticsOn = json['hapticsOn'] as bool? ?? true;
     musicTrack = json['musicTrack'] as int? ?? 0;
     pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
     welcomeSeen = json['welcomeSeen'] as bool? ?? false;
@@ -85,6 +93,7 @@ class Settings extends ChangeNotifier {
       {bool? stylusOnly,
       bool? deleteNeedsGate,
       bool? soundsOn,
+      bool? hapticsOn,
       bool? musicOn,
       int? musicTrack,
       bool? leftHanded,
@@ -92,6 +101,7 @@ class Settings extends ChangeNotifier {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
     if (soundsOn != null) this.soundsOn = soundsOn;
+    if (hapticsOn != null) this.hapticsOn = hapticsOn;
     if (musicOn != null) this.musicOn = musicOn;
     if (musicTrack != null) this.musicTrack = musicTrack;
     if (leftHanded != null) this.leftHanded = leftHanded;
@@ -125,6 +135,7 @@ class Settings extends ChangeNotifier {
       'stylusOnly': stylusOnly,
       'deleteNeedsGate': deleteNeedsGate,
       'soundsOn': soundsOn,
+      'hapticsOn': hapticsOn,
       'musicOn': musicOn,
       'musicTrack': musicTrack,
       'leftHanded': leftHanded,
@@ -167,6 +178,7 @@ class Settings extends ChangeNotifier {
     stylusOnly = false;
     deleteNeedsGate = false;
     soundsOn = true;
+    hapticsOn = true;
     musicOn = false;
     musicTrack = 0;
     leftHanded = false;

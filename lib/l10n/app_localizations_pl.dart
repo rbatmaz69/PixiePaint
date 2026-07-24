@@ -903,4 +903,10 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get favoritePageAction => 'Ulubiony obrazek';
+
+  @override
+  String get hapticsTitle => 'Wibracje';
+
+  @override
+  String get hapticsSubtitle => 'Przyciski odpowiadają lekkim drgnięciem';
 }

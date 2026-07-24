@@ -881,4 +881,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get favoritePageAction => 'Lieblingsbild';
+
+  @override
+  String get hapticsTitle => 'Vibrieren';
+
+  @override
+  String get hapticsSubtitle => 'Die Knöpfe geben ein kleines Fühl-Signal';
 }

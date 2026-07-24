@@ -880,4 +880,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get favoritePageAction => 'Disegno preferito';
+
+  @override
+  String get hapticsTitle => 'Vibrazione';
+
+  @override
+  String get hapticsSubtitle => 'I pulsanti rispondono con un piccolo tocco';
 }

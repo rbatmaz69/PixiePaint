@@ -245,10 +245,20 @@ class _PageGrid extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    page.titleFor(lang),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                  // One line, and it may shrink: the tiles form a grid with
+                  // a fixed aspect ratio, so a long name at a large system
+                  // font has to give rather than push the picture out.
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        page.titleFor(lang),
+                        maxLines: 1,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                      ),
                     ),
                   ),
                 ],

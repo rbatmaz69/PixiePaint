@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
+
 import 'pixie_palette.dart';
 
 /// Route observer so the blob animation pauses whenever any route (screen,
@@ -46,6 +48,10 @@ class _BlobBackgroundState extends State<BlobBackground>
   bool _coveredByRoute = false;
   bool _appPaused = false;
 
+  /// "Reduce motion" is on: the blobs stay where they are. They are the one
+  /// thing in this app that moves *without being asked to*.
+  bool _calm = false;
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +63,11 @@ class _BlobBackgroundState extends State<BlobBackground>
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null) pixieRouteObserver.subscribe(this, route);
+    final calm = reducedMotion(context);
+    if (calm != _calm) {
+      _calm = calm;
+      _sync();
+    }
   }
 
   @override
@@ -78,7 +89,7 @@ class _BlobBackgroundState extends State<BlobBackground>
   }
 
   void _sync() {
-    final shouldRun = !_coveredByRoute && !_appPaused;
+    final shouldRun = !_coveredByRoute && !_appPaused && !_calm;
     if (shouldRun && !_c.isAnimating) {
       _c.repeat();
     } else if (!shouldRun && _c.isAnimating) {

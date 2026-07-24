@@ -116,6 +116,30 @@ void main() {
     expect(settings.pauseAfterMinutes, 0);
   });
 
+  test('sound and vibration are two switches, not one', () async {
+    await load();
+    expect(settings.soundsOn, isTrue);
+    expect(settings.hapticsOn, isTrue);
+
+    // Muting the app in a waiting room must not take the touch feedback
+    // with it — until v8.3 it did.
+    await settings.update(soundsOn: false);
+    expect(settings.hapticsOn, isTrue);
+
+    await settings.update(hapticsOn: false);
+    await settings.flush();
+    await settings.loadFrom(JsonStore(file));
+    expect(settings.hapticsOn, isFalse);
+    expect(settings.soundsOn, isFalse);
+  });
+
+  test('a settings file from before v8.3 keeps vibration on', () async {
+    file.writeAsStringSync('{"soundsOn": false}');
+    await load();
+    expect(settings.soundsOn, isFalse);
+    expect(settings.hapticsOn, isTrue);
+  });
+
   test('the rotate nudge is shown once and never again', () async {
     await load();
     expect(settings.rotateHintSeen, isFalse);

@@ -877,4 +877,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get favoritePageAction => 'En sevdiğim resim';
+
+  @override
+  String get hapticsTitle => 'Titreşim';
+
+  @override
+  String get hapticsSubtitle => 'Düğmeler küçük bir titreşimle karşılık verir';
 }

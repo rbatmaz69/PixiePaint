@@ -67,7 +67,9 @@ void tearDownPixieStorage(Directory root) {
 /// see the same text, sizes and colors a kid does.
 ///
 /// [textScale] drives the accessibility checks: the app clamps system text
-/// scaling at 1.3, and these tests are what keeps that promise honest.
+/// scaling (at 1.6 since v8.3), and these tests are what keeps that promise
+/// honest. It is applied *inside* the clamp on purpose — a test that asks
+/// for 1.6 gets 1.6, whatever the clamp above happens to be.
 Future<void> pumpPixie(
   WidgetTester tester,
   Widget child, {

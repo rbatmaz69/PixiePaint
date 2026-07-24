@@ -33,8 +33,12 @@ class PixiePaintApp extends StatelessWidget {
       // A parent's phone set to 200% system text would push the painting
       // toolbars off their fixed heights. Honouring the setting up to a
       // point beats ignoring it (labels do grow) and beats a broken canvas.
+      //
+      // Raised from 1.3 to 1.6 in v8.3, after the four screens that carry
+      // text were taught to give way — `test/widget/text_scale_test.dart`
+      // holds that at 360 × 640, the smallest phone this ships to.
       builder: (context, child) => MediaQuery.withClampedTextScaling(
-        maxScaleFactor: 1.3,
+        maxScaleFactor: 1.6,
         child: child!,
       ),
       // The welcome runs once, before the home screen is ever seen.

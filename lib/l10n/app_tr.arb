@@ -382,5 +382,7 @@
   "rotateHint": "Beni yan çevir, boyamak için daha çok yer olsun",
   "simpleToolsTitle": "Basit araçlar",
   "simpleToolsSubtitle": "Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için",
-  "favoritePageAction": "En sevdiğim resim"
+  "favoritePageAction": "En sevdiğim resim",
+  "hapticsTitle": "Titreşim",
+  "hapticsSubtitle": "Düğmeler küçük bir titreşimle karşılık verir"
 }

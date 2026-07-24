@@ -2,10 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import 'color_palette.dart';
 
 /// Full-screen confetti rain for ~1.2s, self-removing. No dependencies.
 void showConfetti(BuildContext context) {
+  // Forty-four pieces of paper falling across the whole screen is exactly
+  // what "reduce motion" is asking us not to do. The moment itself is not
+  // cancelled: the sound, the vibration and the sticker reveal all stay.
+  if (reducedMotion(context)) return;
   final overlay = Overlay.maybeOf(context);
   if (overlay == null) return;
   late OverlayEntry entry;

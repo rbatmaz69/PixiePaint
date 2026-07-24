@@ -1587,6 +1587,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Lieblingsbild'**
   String get favoritePageAction;
+
+  /// Settings switch: haptic feedback, independent of sound
+  ///
+  /// In de, this message translates to:
+  /// **'Vibrieren'**
+  String get hapticsTitle;
+
+  /// No description provided for @hapticsSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Knöpfe geben ein kleines Fühl-Signal'**
+  String get hapticsSubtitle;
 }
 
 class _AppLocalizationsDelegate

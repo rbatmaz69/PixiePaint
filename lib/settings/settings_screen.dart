@@ -66,6 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       {bool? stylusOnly,
       bool? deleteNeedsGate,
       bool? soundsOn,
+      bool? hapticsOn,
       bool? musicOn,
       bool? leftHanded,
       int? pauseAfterMinutes}) async {
@@ -73,6 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         stylusOnly: stylusOnly,
         deleteNeedsGate: deleteNeedsGate,
         soundsOn: soundsOn,
+        hapticsOn: hapticsOn,
         musicOn: musicOn,
         leftHanded: leftHanded,
         pauseAfterMinutes: pauseAfterMinutes);
@@ -348,6 +350,16 @@ class _SettingsScreenState extends State<SettingsScreen>
                               value: settings.soundsOn,
                               onChanged: (v) => _update(soundsOn: v),
                             ),
+                            // Its own row, right under the sound one: they
+                            // used to be the same switch.
+                            _KidRow(
+                              emoji: '📳',
+                              tint: PixiePalette.bubblegumLight,
+                              title: context.l10n.hapticsTitle,
+                              subtitle: context.l10n.hapticsSubtitle,
+                              value: settings.hapticsOn,
+                              onChanged: (v) => _update(hapticsOn: v),
+                            ),
                             _KidRow(
                               emoji: '🎶',
                               tint: PixiePalette.bubblegumLight,
@@ -462,12 +474,16 @@ class _Section extends StatelessWidget {
             children: [
               StickerEmoji(emoji, size: 18, shadowColor: accent),
               const SizedBox(width: 10),
-              Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: PixiePalette.ink),
+              // Section names are whole phrases ("Sicherheit & Eltern") and
+              // run past the edge at a large system font.
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: PixiePalette.ink),
+                ),
               ),
             ],
           ),
@@ -546,12 +562,18 @@ class _KidRow extends StatelessWidget {
           ),
           if (trailingText != null) ...[
             const SizedBox(width: 8),
-            Text(
-              trailingText!,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: PixiePalette.ink),
+            // The chosen value can be a whole phrase ("nach 45 Minuten"),
+            // which at the largest system font is wider than what is left
+            // of the row.
+            Flexible(
+              child: Text(
+                trailingText!,
+                textAlign: TextAlign.end,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: PixiePalette.ink),
+              ),
             ),
             const SizedBox(width: 4),
             Icon(Icons.chevron_right_rounded,

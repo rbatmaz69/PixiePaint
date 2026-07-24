@@ -90,7 +90,12 @@ class _HomeScreenState extends State<HomeScreen>
                   // collapses into a six-item list.
                   final rowW = constraints.maxWidth - 48;
                   final cardW = ((rowW - 20) / 2).clamp(128.0, 230.0);
-                  final cardH = cardW * 0.9;
+                  // The label grows with the system font, so the card has
+                  // to. A fixed 0.9 * width overflowed at the largest text
+                  // size the app allows — the tiles simply get taller, the
+                  // page scrolls, and the grid stays two across.
+                  final textScale = MediaQuery.textScalerOf(context).scale(1);
+                  final cardH = cardW * 0.9 + (textScale - 1).clamp(0, 1) * 56;
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(24),
                     child: Column(
@@ -413,14 +418,27 @@ class _BigCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 64)),
+            // The emoji is the part that gives way when the system font is
+            // large: the word is what a reader needs, the picture still
+            // reads at a smaller size.
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(emoji, style: const TextStyle(fontSize: 64)),
+              ),
+            ),
             const SizedBox(height: 12),
-            Text(
-              label,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+            Flexible(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         ),

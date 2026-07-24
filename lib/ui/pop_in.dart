@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
+
 /// One-shot entrance: scales the child from [from] to 1 with an elastic
 /// overshoot and settles an optional starting rotation to zero. Fire and
 /// forget — the controller runs once and the widget stays settled.
@@ -53,6 +55,11 @@ class _PopInState extends State<PopIn> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // With "reduce motion" on the entrance still happens — it just arrives
+    // by fading rather than flying in and overshooting.
+    if (reducedMotion(context)) {
+      return FadeTransition(opacity: _c, child: widget.child);
+    }
     return AnimatedBuilder(
       animation: _t,
       builder: (context, child) {
@@ -116,6 +123,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    if (reducedMotion(context)) return widget.child;
     return ScaleTransition(scale: _scale, child: widget.child);
   }
 }

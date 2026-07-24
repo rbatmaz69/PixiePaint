@@ -881,4 +881,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get favoritePageAction => 'Lievelingsplaat';
+
+  @override
+  String get hapticsTitle => 'Trillen';
+
+  @override
+  String get hapticsSubtitle => 'De knoppen geven een klein trilsignaal';
 }

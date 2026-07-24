@@ -382,5 +382,7 @@
   "rotateHint": "Vira-me de lado para teres mais espaço para pintar",
   "simpleToolsTitle": "Ferramentas simples",
   "simpleToolsSubtitle": "Só pincel, balde, autocolantes e borracha – para os mais pequenos",
-  "favoritePageAction": "Desenho preferido"
+  "favoritePageAction": "Desenho preferido",
+  "hapticsTitle": "Vibração",
+  "hapticsSubtitle": "Os botões respondem com uma pequena vibração"
 }

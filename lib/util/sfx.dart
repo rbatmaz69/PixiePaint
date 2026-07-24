@@ -32,32 +32,34 @@ class Sfx {
     }
   }
 
-  bool get _on => Settings.instance.soundsOn;
+  bool get _audible => Settings.instance.soundsOn;
+
+  /// Sound and touch are asked separately since v8.3. They used to share one
+  /// switch, so a tablet muted in a waiting room also stopped answering a
+  /// tap in the one way that still worked there.
+  bool get _tactile => Settings.instance.hapticsOn;
 
   /// Fill landed / stamp placed.
   void pop() {
-    if (!_on) return;
     try {
-      _pop?.start();
-      HapticFeedback.lightImpact();
+      if (_audible) _pop?.start();
+      if (_tactile) HapticFeedback.lightImpact();
     } catch (_) {}
   }
 
   /// Tool, color or size selected.
   void tick() {
-    if (!_on) return;
     try {
-      _tick?.start(volume: 0.6);
-      HapticFeedback.selectionClick();
+      if (_audible) _tick?.start(volume: 0.6);
+      if (_tactile) HapticFeedback.selectionClick();
     } catch (_) {}
   }
 
   /// Artwork shared.
   void tada() {
-    if (!_on) return;
     try {
-      _tada?.play(AssetSource('sounds/tada.wav'));
-      HapticFeedback.mediumImpact();
+      if (_audible) _tada?.play(AssetSource('sounds/tada.wav'));
+      if (_tactile) HapticFeedback.mediumImpact();
     } catch (_) {}
   }
 }

@@ -5,4 +5,4 @@
 /// whole plugin for one string is not worth it in an app that ships no
 /// network code. `test/app_version_test.dart` compares it against
 /// `pubspec.yaml`, so it cannot quietly fall behind.
-const String kAppVersion = '8.2.0';
+const String kAppVersion = '8.3.0';

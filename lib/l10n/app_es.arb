@@ -382,5 +382,7 @@
   "rotateHint": "Gírame de lado y tendrás más sitio para pintar",
   "simpleToolsTitle": "Herramientas sencillas",
   "simpleToolsSubtitle": "Solo pincel, relleno, pegatinas y goma: para los más pequeños",
-  "favoritePageAction": "Dibujo favorito"
+  "favoritePageAction": "Dibujo favorito",
+  "hapticsTitle": "Vibración",
+  "hapticsSubtitle": "Los botones responden con un pequeño toque"
 }

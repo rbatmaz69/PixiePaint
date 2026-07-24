@@ -394,5 +394,10 @@
   },
   "@continuePainting": {
     "description": "Home card that reopens the picture this child painted last"
+  },
+  "hapticsTitle": "Vibrieren",
+  "hapticsSubtitle": "Die Knöpfe geben ein kleines Fühl-Signal",
+  "@hapticsTitle": {
+    "description": "Settings switch: haptic feedback, independent of sound"
   }
 }

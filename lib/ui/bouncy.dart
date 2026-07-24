@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../util/sfx.dart';
+import 'motion.dart';
 
 /// The app-wide press effect: squash to [pressedScale] on touch-down, spring
 /// back with an elastic bounce on release. Uses only `Transform.scale`
@@ -56,12 +57,16 @@ class _BouncyState extends State<Bouncy> {
 
   @override
   Widget build(BuildContext context) {
+    // With "reduce motion" on, the press still answers — it just stops
+    // springing. Almost every control in this app is a Bouncy, so this one
+    // branch is most of what that setting means here.
+    final calm = reducedMotion(context);
     Widget child = AnimatedScale(
       scale: _pressed ? widget.pressedScale : 1.0,
-      duration: _pressed
+      duration: _pressed || calm
           ? const Duration(milliseconds: 90)
           : const Duration(milliseconds: 450),
-      curve: _pressed ? Curves.easeOut : Curves.elasticOut,
+      curve: _pressed || calm ? Curves.easeOut : Curves.elasticOut,
       child: widget.child,
     );
     if (widget.minSize > 0) {
