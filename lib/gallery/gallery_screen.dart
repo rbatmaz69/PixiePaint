@@ -302,16 +302,12 @@ class _GalleryScreenState extends State<GalleryScreen>
           icon: Icons.slideshow_rounded,
           tooltip: context.l10n.slideshowTooltip,
           accent: PixiePalette.mint,
-          onTap: () {
-            final ordered = [
-              ...artworks.where((a) => a.favorite),
-              ...artworks.where((a) => !a.favorite),
-            ];
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => SlideshowScreen(artworks: ordered)),
-            );
-          },
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) =>
+                  SlideshowScreen(artworks: _favoritesFirst(artworks)),
+            ),
+          ),
         );
       },
     );
@@ -356,12 +352,7 @@ class _GalleryScreenState extends State<GalleryScreen>
             ),
           );
         }
-        // Favorites bubble to the top, then newest first (list() is
-        // already sorted by updatedAt).
-        final sorted = [
-          ...artworks.where((a) => a.favorite),
-          ...artworks.where((a) => !a.favorite),
-        ];
+        final sorted = _favoritesFirst(artworks);
         final shown = _favoritesOnly
             ? sorted.where((a) => a.favorite).toList()
             : sorted;
@@ -424,6 +415,17 @@ class _GalleryScreenState extends State<GalleryScreen>
   /// Fade + rise on the shared entrance controller, slot-staggered.
   Widget _staggered(int slot, Widget child) => entrance(slot, child);
 }
+
+/// Hearted pictures to the top, the rest behind them in the order they came
+/// in — [ArtworkStore.list] has already sorted those newest first.
+///
+/// The grid and the slideshow share this on purpose: the order a child sees
+/// on screen is the order the show plays in, and the two would otherwise
+/// drift apart the next time one of them is touched.
+List<Artwork> _favoritesFirst(List<Artwork> artworks) => [
+      ...artworks.where((a) => a.favorite),
+      ...artworks.where((a) => !a.favorite),
+    ];
 
 /// "Polaroid" card: white frame, soft shadow, wider bottom edge carrying
 /// the kid-given name, heart toggle floating on the photo corner. The heart

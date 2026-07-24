@@ -29,6 +29,33 @@ import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
 import '../settings/settings_screen.dart';
 
+/// One tile in the big grid. Everything a card differs in and nothing else —
+/// the size comes from the layout, the entrance slot from its position.
+class _CardSpec {
+  const _CardSpec({
+    required this.emoji,
+    required this.label,
+    required this.gradient,
+    required this.tiltIndex,
+    required this.onTap,
+  });
+
+  final String emoji;
+  final String label;
+  final Gradient gradient;
+  final int tiltIndex;
+  final VoidCallback onTap;
+}
+
+/// Where the cards start in the entrance cascade: header, continue card and
+/// daily-task banner come first.
+const int _firstCardSlot = 3;
+
+/// The two floating buttons in the corners bring up the rear. Well past the
+/// cards on purpose — [buildEntrance] clamps the stagger at slot 10, so they
+/// simply arrive with the last of them rather than before any.
+const int _chromeSlot = 11;
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -41,6 +68,80 @@ class _HomeScreenState extends State<HomeScreen>
   /// The cascade: header, continue card, daily-task banner, the cards and
   /// the two chrome buttons. [EntranceMixin] does the work.
   Widget _staggered(int slot, Widget child) => entrance(slot, child);
+
+  /// The grid, in the order it is shown. A list rather than eight spelled-out
+  /// widgets because the eight only ever differed in these five fields — and
+  /// because the entrance slots then come from the position instead of being
+  /// typed by hand, which is how gallery, album and two-painter ended up
+  /// sharing one and flying in together.
+  List<_CardSpec> _cards(BuildContext context) {
+    void open(Widget Function() screen) {
+      unawaited(Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => screen()),
+      ));
+    }
+
+    return [
+      _CardSpec(
+        emoji: '🖍️',
+        label: context.l10n.cardColoring,
+        gradient: PixieGradients.coloring,
+        tiltIndex: 1,
+        onTap: () => open(PagePickerScreen.new),
+      ),
+      _CardSpec(
+        emoji: '✏️',
+        label: context.l10n.cardFreeDraw,
+        gradient: PixieGradients.freeDraw,
+        tiltIndex: 2,
+        onTap: () => open(CanvasScreen.new),
+      ),
+      _CardSpec(
+        emoji: '🏞️',
+        label: context.l10n.cardScenes,
+        gradient: PixieGradients.scenes,
+        tiltIndex: 3,
+        onTap: () => open(ScenePickerScreen.new),
+      ),
+      _CardSpec(
+        emoji: '📷',
+        label: context.l10n.cardPhoto,
+        gradient: PixieGradients.photo,
+        tiltIndex: 4,
+        onTap: () => _pickPhoto(context),
+      ),
+      _CardSpec(
+        emoji: '✍️',
+        label: context.l10n.cardTrace,
+        gradient: PixieGradients.trace,
+        tiltIndex: 5,
+        onTap: () => open(TracePickerScreen.new),
+      ),
+      _CardSpec(
+        emoji: '🖼️',
+        label: context.l10n.cardGallery,
+        gradient: PixieGradients.gallery,
+        tiltIndex: 6,
+        onTap: () => open(GalleryScreen.new),
+      ),
+      _CardSpec(
+        emoji: '🏆',
+        label: context.l10n.albumTitle,
+        gradient: PixieGradients.rewards,
+        tiltIndex: 4,
+        onTap: () => openAlbum(context),
+      ),
+      // Two painters need the room of a tablet.
+      if (MediaQuery.sizeOf(context).shortestSide >= 600)
+        _CardSpec(
+          emoji: '🤝',
+          label: context.l10n.cardTwoPainter,
+          gradient: PixieGradients.freeDraw,
+          tiltIndex: 2,
+          onTap: () => open(TwoPainterScreen.new),
+        ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,124 +182,14 @@ class _HomeScreenState extends State<HomeScreen>
                           runSpacing: 20,
                           alignment: WrapAlignment.center,
                           children: [
-                            _staggered(
-                              3,
-                              _BigCard(
-                                emoji: '🖍️',
-                                label: context.l10n.cardColoring,
-                                gradient: PixieGradients.coloring,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 1,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const PagePickerScreen()),
-                                ),
-                              ),
-                            ),
-                            _staggered(
-                              4,
-                              _BigCard(
-                                emoji: '✏️',
-                                label: context.l10n.cardFreeDraw,
-                                gradient: PixieGradients.freeDraw,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 2,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => const CanvasScreen()),
-                                ),
-                              ),
-                            ),
-                            _staggered(
-                              5,
-                              _BigCard(
-                                emoji: '🏞️',
-                                label: context.l10n.cardScenes,
-                                gradient: PixieGradients.scenes,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 3,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ScenePickerScreen()),
-                                ),
-                              ),
-                            ),
-                            _staggered(
-                              6,
-                              _BigCard(
-                                emoji: '📷',
-                                label: context.l10n.cardPhoto,
-                                gradient: PixieGradients.photo,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 4,
-                                onTap: () => _pickPhoto(context),
-                              ),
-                            ),
-                            _staggered(
-                              7,
-                              _BigCard(
-                                emoji: '✍️',
-                                label: context.l10n.cardTrace,
-                                gradient: PixieGradients.trace,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 5,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          const TracePickerScreen()),
-                                ),
-                              ),
-                            ),
-                            _staggered(
-                              8,
-                              _BigCard(
-                                emoji: '🖼️',
-                                label: context.l10n.cardGallery,
-                                gradient: PixieGradients.gallery,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 6,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => const GalleryScreen()),
-                                ),
-                              ),
-                            ),
-                            _staggered(
-                              8,
-                              _BigCard(
-                                emoji: '🏆',
-                                label: context.l10n.albumTitle,
-                                gradient: PixieGradients.rewards,
-                                width: cardW,
-                                height: cardH,
-                                tiltIndex: 4,
-                                onTap: () => openAlbum(context),
-                              ),
-                            ),
-                            // Two painters need the room of a tablet.
-                            if (MediaQuery.sizeOf(context).shortestSide >= 600)
+                            for (final (i, card)
+                                in _cards(context).indexed)
                               _staggered(
-                                8,
+                                _firstCardSlot + i,
                                 _BigCard(
-                                  emoji: '🤝',
-                                  label: context.l10n.cardTwoPainter,
-                                  gradient: PixieGradients.freeDraw,
+                                  spec: card,
                                   width: cardW,
                                   height: cardH,
-                                  tiltIndex: 2,
-                                  onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (_) =>
-                                            const TwoPainterScreen()),
-                                  ),
                                 ),
                               ),
                           ],
@@ -212,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 left: 8,
                 child: _staggered(
-                  9,
+                  _chromeSlot,
                   ListenableBuilder(
                     listenable: Settings.instance,
                     builder: (context, _) {
@@ -239,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 right: 8,
                 child: _staggered(
-                  10,
+                  _chromeSlot + 1,
                   StickerCircleButton(
                     icon: Icons.settings_rounded,
                     tooltip: context.l10n.settingsTooltip,
@@ -359,32 +350,24 @@ class _Header extends StatelessWidget {
 
 class _BigCard extends StatelessWidget {
   const _BigCard({
-    required this.emoji,
-    required this.label,
-    required this.gradient,
-    required this.onTap,
+    required this.spec,
     required this.width,
     required this.height,
-    required this.tiltIndex,
   });
 
-  final String emoji;
-  final String label;
-  final Gradient gradient;
-  final VoidCallback onTap;
+  final _CardSpec spec;
   final double width;
   final double height;
-  final int tiltIndex;
 
   @override
   Widget build(BuildContext context) {
     return Bouncy(
-      onTap: onTap,
+      onTap: spec.onTap,
       child: StickerCard(
-        gradient: gradient,
+        gradient: spec.gradient,
         width: width,
         height: height,
-        tiltIndex: tiltIndex,
+        tiltIndex: spec.tiltIndex,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -394,13 +377,13 @@ class _BigCard extends StatelessWidget {
             Flexible(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(emoji, style: const TextStyle(fontSize: 64)),
+                child: Text(spec.emoji, style: const TextStyle(fontSize: 64)),
               ),
             ),
             const SizedBox(height: 12),
             Flexible(
               child: Text(
-                label,
+                spec.label,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

@@ -35,6 +35,16 @@ abstract final class PixieTokens {
         ),
       ];
 
+  /// The white bars themselves: rounded, opaque, lifted by [barShadow].
+  ///
+  /// The tool strip and the rail are the same object seen upright and on its
+  /// side, so they should not be able to drift apart in radius or fill.
+  static BoxDecoration barDecoration() => BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: barShadow(),
+      );
+
   /// Soft, colored shadow — softer and friendlier than plain black.
   ///
   /// Two layers since v8.4: a tight contact shadow right under the edge,

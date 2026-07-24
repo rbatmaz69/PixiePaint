@@ -89,6 +89,72 @@ List<BoxShadow> _selectionShadow(Color accent, bool selected) => [
       ),
     ];
 
+/// The shell every toolbar button that can be *picked* wears: a tooltip, a
+/// bouncy tap target, and a container that grows a white fill, an accent
+/// border and [_selectionShadow] when it is the chosen one. Unselected it
+/// is a bare circle; selected it squares off into a rounded tile.
+///
+/// The tools and the magic mirror carried two copies of this, identical
+/// down to the 220 ms and the 1.18 scale. Only what sits inside differs, so
+/// only that is passed in.
+class _PickableButton extends StatelessWidget {
+  const _PickableButton({
+    required this.label,
+    required this.accent,
+    required this.selected,
+    required this.size,
+    required this.onTap,
+    required this.child,
+  });
+
+  final String label;
+  final Color accent;
+  final bool selected;
+  final double size;
+  final VoidCallback onTap;
+
+  /// Scaled and faded by the selection — pass the plain content.
+  final Widget child;
+
+  /// How much the unselected state is dimmed. The tools stay legible
+  /// (0.75); the mirror goes further (0.4), because "off" is a real state
+  /// there rather than just "not this one".
+  static const double toolRestOpacity = 0.75;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: label,
+      // The label is handed to Bouncy instead, which announces it together
+      // with the selected state; leaving it here too would read it twice.
+      excludeFromSemantics: true,
+      child: Bouncy(
+        onTap: onTap,
+        playTick: false,
+        semanticLabel: label,
+        semanticSelected: selected,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutBack,
+          width: size,
+          height: size,
+          margin: const EdgeInsets.all(1),
+          decoration: BoxDecoration(
+            color: selected ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(selected ? 18 : size / 2),
+            border: Border.all(
+              color: selected ? accent : Colors.transparent,
+              width: 2.5,
+            ),
+            boxShadow: _selectionShadow(accent, selected),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
 /// Rounded pill container around one group of buttons.
 Widget _pill(List<Widget> children, Axis direction) {
   return Container(
@@ -482,79 +548,80 @@ class _ToolButton extends StatelessWidget {
       _ => toolEmoji(tool),
     };
 
-    return Tooltip(
-      message: toolLabel(context, tool),
-      // The label is handed to Bouncy instead, which announces it together
-      // with the selected state; leaving it here too would read it twice.
-      excludeFromSemantics: true,
-      child: Bouncy(
-        onTap: onTap,
-        playTick: false,
-        semanticLabel: toolLabel(context, tool),
-        semanticSelected: selected,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutBack,
-          width: size,
-          height: size,
-          margin: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: selected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(selected ? 18 : size / 2),
-            border: Border.all(
-              color: selected ? accent : Colors.transparent,
-              width: 2.5,
+    return _PickableButton(
+      label: toolLabel(context, tool),
+      accent: accent,
+      selected: selected,
+      size: size,
+      onTap: onTap,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Two motions on purpose: the scale is the *state* (this one is
+          // picked, and stays bigger), the pulse is the *answer* (you just
+          // picked it). `only: true` keeps the answer to the tool being
+          // picked up — the one being put down stays quiet.
+          Pulse(
+            trigger: selected,
+            only: true,
+            peak: 1.2,
+            child: _SelectionScale(
+              selected: selected,
+              restOpacity: _PickableButton.toolRestOpacity,
+              child: Text(emoji, style: TextStyle(fontSize: size * 0.46)),
             ),
-            boxShadow: _selectionShadow(accent, selected),
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Two motions on purpose: the scale is the *state* (this one
-              // is picked, and stays bigger), the pulse is the *answer*
-              // (you just picked it). `only: true` keeps the answer to the
-              // tool being picked up — the one being put down stays quiet.
-              Pulse(
-                trigger: selected,
-                only: true,
-                peak: 1.2,
-                child: AnimatedScale(
-                  scale: selected ? 1.18 : 1.0,
+          if (showColorBadge)
+            Positioned(
+              right: 6,
+              bottom: 6,
+              // The color is chosen at the *other* end of the screen — this
+              // badge is where a child sees that their tap landed on the
+              // tool they are about to draw with.
+              child: Pulse(
+                trigger: controller.color,
+                peak: 1.35,
+                child: AnimatedContainer(
                   duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOutBack,
-                  child: Opacity(
-                    opacity: selected ? 1.0 : 0.75,
-                    child: Text(emoji,
-                        style: TextStyle(fontSize: size * 0.46)),
+                  curve: Curves.easeOut,
+                  width: 11,
+                  height: 11,
+                  decoration: BoxDecoration(
+                    color: controller.color,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1.5),
                   ),
                 ),
               ),
-              if (showColorBadge)
-                Positioned(
-                  right: 6,
-                  bottom: 6,
-                  // The color is chosen at the *other* end of the screen —
-                  // this badge is where a child sees that their tap landed
-                  // on the tool they are about to draw with.
-                  child: Pulse(
-                    trigger: controller.color,
-                    peak: 1.35,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 220),
-                      curve: Curves.easeOut,
-                      width: 11,
-                      height: 11,
-                      decoration: BoxDecoration(
-                        color: controller.color,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 1.5),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The selected state's own little motion: a hair bigger and at full
+/// strength when picked, dimmed and back to normal size when not.
+class _SelectionScale extends StatelessWidget {
+  const _SelectionScale({
+    required this.selected,
+    required this.restOpacity,
+    required this.child,
+  });
+
+  final bool selected;
+  final double restOpacity;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: selected ? 1.18 : 1.0,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutBack,
+      child: Opacity(
+        opacity: selected ? 1.0 : restOpacity,
+        child: child,
       ),
     );
   }
@@ -571,45 +638,21 @@ class _SymmetryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = controller.symmetryFolds > 1;
-    const accent = Color(0xFF7C6BF0);
-    return Tooltip(
-      message: context.l10n.symmetryTitle,
-      excludeFromSemantics: true,
-      child: Bouncy(
-        onTap: onTap,
-        playTick: false,
-        semanticLabel: context.l10n.symmetryTitle,
-        semanticSelected: active,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutBack,
-          width: 52,
-          height: 52,
-          margin: const EdgeInsets.all(1),
-          decoration: BoxDecoration(
-            color: active ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(active ? 18 : 26),
-            border: Border.all(
-              color: active ? accent : Colors.transparent,
-              width: 2.5,
-            ),
-            boxShadow: _selectionShadow(accent, active),
-          ),
-          child: Center(
-            child: AnimatedScale(
-              scale: active ? 1.18 : 1.0,
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutBack,
-              child: Opacity(
-                opacity: active ? 1.0 : 0.4,
-                child: Text(
-                  active
-                      ? symmetry.symmetryEmoji(controller.symmetryFolds)
-                      : '🦋',
-                  style: const TextStyle(fontSize: 24),
-                ),
-              ),
-            ),
+    return _PickableButton(
+      label: context.l10n.symmetryTitle,
+      accent: const Color(0xFF7C6BF0),
+      selected: active,
+      size: 52,
+      onTap: onTap,
+      child: Center(
+        child: _SelectionScale(
+          selected: active,
+          // Dimmer than a tool at rest: "off" is a real state of the mirror,
+          // not just "some other tool is picked".
+          restOpacity: 0.4,
+          child: Text(
+            active ? symmetry.symmetryEmoji(controller.symmetryFolds) : '🦋',
+            style: const TextStyle(fontSize: 24),
           ),
         ),
       ),

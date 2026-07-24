@@ -642,11 +642,7 @@ class _CanvasScreenState extends State<CanvasScreen>
         Container(
           height: 56,
           margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: PixieTokens.barShadow(),
-          ),
+          decoration: PixieTokens.barDecoration(),
           child: Row(
             children: leftHanded ? [actions, tools] : [tools, actions],
           ),
@@ -657,6 +653,9 @@ class _CanvasScreenState extends State<CanvasScreen>
   }
 
   Widget _canvasArea({required bool portrait}) {
+    // Read once: the floating buttons all mirror on the same setting, and
+    // five separate reads in one build could in principle disagree.
+    final leftHanded = Settings.instance.leftHanded;
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Stack(
@@ -703,29 +702,31 @@ class _CanvasScreenState extends State<CanvasScreen>
           if (portrait) ...[
             Positioned(
               top: 8,
-              left: Settings.instance.leftHanded ? null : 8,
-              right: Settings.instance.leftHanded ? 8 : null,
-              child: _RoundButton(
+              left: leftHanded ? null : 8,
+              right: leftHanded ? 8 : null,
+              child: StickerCircleButton(
                 icon: Icons.arrow_back_rounded,
                 tooltip: context.l10n.back,
                 onTap: _leave,
+                accent: PixiePalette.grape,
               ),
             ),
             Positioned(
               top: 8,
-              left: Settings.instance.leftHanded ? 60 : null,
-              right: Settings.instance.leftHanded ? null : 60,
-              child: _RoundButton(
+              left: leftHanded ? 60 : null,
+              right: leftHanded ? null : 60,
+              child: StickerCircleButton(
                 icon: Icons.ios_share_rounded,
                 tooltip: context.l10n.shareForParents,
                 onTap: _share,
+                accent: PixiePalette.grape,
               ),
             ),
           ],
           Positioned(
             top: 8,
-            left: Settings.instance.leftHanded ? 8 : null,
-            right: Settings.instance.leftHanded ? null : 8,
+            left: leftHanded ? 8 : null,
+            right: leftHanded ? null : 8,
             child: ListenableBuilder(
               listenable: viewport,
               builder: (context, _) {
@@ -740,10 +741,11 @@ class _CanvasScreenState extends State<CanvasScreen>
                       scale: zoomed ? 1 : 0.3,
                       duration: const Duration(milliseconds: 250),
                       curve: zoomed ? Curves.easeOutBack : Curves.easeIn,
-                      child: _RoundButton(
+                      child: StickerCircleButton(
                         icon: Icons.fit_screen_rounded,
                         tooltip: context.l10n.resetView,
                         onTap: viewport.reset,
+                        accent: PixiePalette.grape,
                       ),
                     ),
                   ),
@@ -874,29 +876,6 @@ class _RotateHintState extends State<_RotateHint> {
   }
 }
 
-/// White round floating sticker button used for the canvas overlays.
-class _RoundButton extends StatelessWidget {
-  const _RoundButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return StickerCircleButton(
-      icon: icon,
-      tooltip: tooltip,
-      onTap: onTap,
-      accent: PixiePalette.grape,
-    );
-  }
-}
-
 /// Floating pill that briefly confirms a tool change ("🖌️ Pinsel"), then
 /// fades out.
 class _ToolChip extends StatefulWidget {
@@ -1007,11 +986,7 @@ class _LeftRail extends StatelessWidget {
     return Container(
       width: 76,
       margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: PixieTokens.barShadow(),
-      ),
+      decoration: PixieTokens.barDecoration(),
       child: Column(
         children: [
           const SizedBox(height: 6),
