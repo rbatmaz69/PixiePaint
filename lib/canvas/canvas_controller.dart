@@ -106,11 +106,6 @@ class CanvasController extends ChangeNotifier {
   bool get canUndo => _undoStack.canUndo;
   bool get canRedo => _undoStack.canRedo;
 
-  /// Step counts, for the buttons that want to answer every accepted tap
-  /// rather than only the ones that change what can be pressed.
-  int get undoDepth => _undoStack.undoDepth;
-  int get redoDepth => _undoStack.redoDepth;
-
   // ----------------------------------------------------------------- op log
 
   /// Whether committed operations are recorded for the time-lapse replay.

@@ -172,31 +172,5 @@ void main() {
       expect(stack.bytesInUse, 0);
       expect(stack.canUndo, isFalse);
     });
-
-    // The undo button pulses on these since v8.4: canUndo alone stays true
-    // across a whole run of taps, so a button watching only that would sit
-    // still while a child taps back through five strokes.
-    test('the depths follow every step, not just the first and the last', () {
-      final stack = UndoStack();
-      stack.push(oneMb());
-      stack.push(oneMb());
-      stack.push(oneMb());
-      expect(stack.undoDepth, 3);
-      expect(stack.redoDepth, 0);
-
-      stack.undo(oneMb())?.dispose();
-      expect(stack.undoDepth, 2);
-      expect(stack.redoDepth, 1);
-
-      stack.undo(oneMb())?.dispose();
-      expect(stack.undoDepth, 1);
-      expect(stack.redoDepth, 2);
-
-      stack.redo(oneMb())?.dispose();
-      expect(stack.undoDepth, 2);
-      expect(stack.redoDepth, 1);
-
-      stack.dispose();
-    });
   });
 }

@@ -36,12 +36,6 @@ class UndoStack {
   bool get canUndo => _undo.isNotEmpty;
   bool get canRedo => _redo.isNotEmpty;
 
-  /// How many steps each side holds. The UI watches these to answer a tap
-  /// that barely changes the picture — undoing a short stroke otherwise
-  /// looks like nothing happened, and the child taps again.
-  int get undoDepth => _undo.length;
-  int get redoDepth => _redo.length;
-
   /// A blank canvas costs nothing; anything else is its raw RGBA size.
   static int _costOf(ui.Image? image) =>
       image == null ? 0 : image.width * image.height * 4;

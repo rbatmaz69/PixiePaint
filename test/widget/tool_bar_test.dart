@@ -3,6 +3,7 @@ import 'dart:ui' show Tristate;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/canvas/canvas_controller.dart';
 import 'package:pixiepaint/models/tool.dart';
+import 'package:pixiepaint/ui/pop_in.dart';
 import 'package:pixiepaint/widgets/color_palette.dart';
 import 'package:pixiepaint/widgets/tool_bar.dart';
 
@@ -197,6 +198,55 @@ void main() {
 
       handle.dispose();
     });
+  });
+
+  // The picked-up tool hops (v8.4). The one being put down must not — a
+  // double motion on the tool you just left reads as an error, not as an
+  // answer. Both buttons are Pulses; only the new one may be running.
+  testWidgets('picking a tool up hops, putting one down stays quiet',
+      (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(root));
+    final handle = tester.ensureSemantics();
+
+    await pumpToolBar(tester);
+    await tester.pumpAndSettle();
+
+    // The emoji's Pulse is the first one inside a tool button; brush, fill
+    // and shape carry a second one on their color badge. Its own
+    // ScaleTransition is likewise the outermost of several — AnimatedScale
+    // builds one too.
+    ScaleTransition pulseOf(String label) => tester.widget<ScaleTransition>(
+          find
+              .descendant(
+                of: find
+                    .descendant(
+                      of: find.bySemanticsLabel(label),
+                      matching: find.byType(Pulse),
+                    )
+                    .first,
+                matching: find.byType(ScaleTransition),
+              )
+              .first,
+        );
+
+    controller.selectTool(ToolKind.brush);
+    await tester.pumpAndSettle();
+
+    // Switch away: the marker is picked up, the brush is put down.
+    controller.selectTool(ToolKind.marker);
+    // Two pumps on purpose: the first is the rebuild that starts the pulse,
+    // the second lets it run. Advancing the clock in the first would sample
+    // the controller at zero and pass for the wrong reason.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+
+    expect(pulseOf('Filzstift').scale.value, greaterThan(1.0),
+        reason: 'das aufgenommene Werkzeug hat nicht geantwortet');
+    expect(pulseOf('Pinsel').scale.value, 1.0,
+        reason: 'das abgelegte Werkzeug hat mitgehüpft');
+
+    handle.dispose();
   });
 
   testWidgets('the toolbar survives the largest text scale the app allows',

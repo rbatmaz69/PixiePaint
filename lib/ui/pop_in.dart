@@ -85,11 +85,20 @@ class Pulse extends StatefulWidget {
     required this.trigger,
     required this.child,
     this.peak = 1.15,
+    this.only,
   });
 
   final Object? trigger;
   final Widget child;
   final double peak;
+
+  /// Fire only when [trigger] changes *to* this value; null fires on every
+  /// change.
+  ///
+  /// A toolbar button whose trigger is "am I selected" would otherwise hop
+  /// twice per switch: once on the tool being picked up, once on the one
+  /// being put down. Only picking up is worth celebrating.
+  final Object? only;
 
   @override
   State<Pulse> createState() => _PulseState();
@@ -112,7 +121,9 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   @override
   void didUpdateWidget(Pulse old) {
     super.didUpdateWidget(old);
-    if (old.trigger != widget.trigger) _c.forward(from: 0);
+    if (old.trigger == widget.trigger) return;
+    if (widget.only != null && widget.trigger != widget.only) return;
+    _c.forward(from: 0);
   }
 
   @override

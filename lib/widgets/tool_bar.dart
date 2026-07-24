@@ -111,7 +111,8 @@ Widget _pill(List<Widget> children, Axis direction) {
   );
 }
 
-/// Undo and redo, and nothing else.
+/// Undo and redo, and nothing else. Stateful only to count its own taps —
+/// see [_ToolActionClusterState].
 ///
 /// These two live *outside* [ToolBarRail] on purpose. The rail scrolls — on
 /// a 360 dp phone it shows about six of its nineteen buttons — and undo used
@@ -122,7 +123,7 @@ Widget _pill(List<Widget> children, Axis direction) {
 /// "Clear everything" deliberately stayed *in* the rail: it is the one
 /// destructive action here, it asks for confirmation anyway, and being a
 /// little harder to reach suits it.
-class ToolActionCluster extends StatelessWidget {
+class ToolActionCluster extends StatefulWidget {
   const ToolActionCluster({
     super.key,
     required this.controller,
@@ -133,34 +134,56 @@ class ToolActionCluster extends StatelessWidget {
   final Axis direction;
 
   @override
+  State<ToolActionCluster> createState() => _ToolActionClusterState();
+}
+
+class _ToolActionClusterState extends State<ToolActionCluster> {
+  /// Counts *accepted* taps, and nothing else.
+  ///
+  /// Undoing a short stroke barely changes the picture, and a child who
+  /// sees nothing happen taps again — so the button answers with a pulse.
+  /// The obvious trigger, the undo stack's depth, is the wrong one: every
+  /// stroke pushes onto it, and the button would twitch through the whole
+  /// drawing. Counting here means only a press that actually did something
+  /// moves it.
+  int _undos = 0;
+  int _redos = 0;
+
+  @override
   Widget build(BuildContext context) {
+    final controller = widget.controller;
     return ListenableBuilder(
       listenable: controller,
-      // Undoing a small stroke barely changes the picture, and a child who
-      // sees nothing happen taps again. The pulse is the receipt: it fires
-      // on the undo depth, so every accepted tap answers.
       builder: (context, _) => _pill([
         Pulse(
-          trigger: controller.undoDepth,
+          trigger: _undos,
           child: _ActionButton(
             icon: Icons.undo_rounded,
             enabled: controller.canUndo,
             filled: true,
             label: context.l10n.undoAction,
-            onTap: controller.undo,
+            onTap: () {
+              if (!controller.canUndo) return;
+              controller.undo();
+              setState(() => _undos++);
+            },
           ),
         ),
         Pulse(
-          trigger: controller.redoDepth,
+          trigger: _redos,
           child: _ActionButton(
             icon: Icons.redo_rounded,
             enabled: controller.canRedo,
             filled: true,
             label: context.l10n.redoAction,
-            onTap: controller.redo,
+            onTap: () {
+              if (!controller.canRedo) return;
+              controller.redo();
+              setState(() => _redos++);
+            },
           ),
         ),
-      ], direction),
+      ], widget.direction),
     );
   }
 }
@@ -499,10 +522,11 @@ class _ToolButton extends StatelessWidget {
             children: [
               // Two motions on purpose: the scale is the *state* (this one
               // is picked, and stays bigger), the pulse is the *answer*
-              // (you just picked it). Without the second one, tapping the
-              // tool you already had selected looks like nothing happened.
+              // (you just picked it). `only: true` keeps the answer to the
+              // tool being picked up — the one being put down stays quiet.
               Pulse(
                 trigger: selected,
+                only: true,
                 peak: 1.2,
                 child: AnimatedScale(
                   scale: selected ? 1.18 : 1.0,
