@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.3.0+34 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.4.0+35 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -39,6 +39,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Pipette: Farbe direkt vom Bild aufnehmen
 - Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo — **Rückgängig und Wiederholen stehen fest neben der Werkzeugleiste** und scrollen nie mit weg
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung
+- Jedes angetippte Werkzeug hüpft an, die Farbplakette am Werkzeug bestätigt die Farbwahl vom anderen Ende des Bildschirms, und Rückgängig antwortet auf jeden angenommenen Tipp
 
 **Weitere Spielarten**
 - **Malen nach Zahlen** — 8 Bilder mit nummerierten Flächen und eigener Palette
@@ -56,10 +57,12 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - **Weitermalen** — die Startseite bietet das zuletzt gemalte Bild des aktiven Kindes mit Vorschaubild an
 - Favoriten, Umbenennen, Filter
 - Diashow über alle Bilder
+- Das angetippte Bild fliegt in die Leinwand, statt dass der Bildschirm einfach ausgetauscht wird — aus der Galerie, aus der Bildauswahl, von der Weitermalen-Karte und aus der Szenenauswahl
 - Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
 
 **Belohnungen**
 - 13 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
+- Konfetti in zwei Stärken: ein Nicken fürs Teilen, eine Party fürs fertige Bild
 - Gesperrte Sticker als wackelnde Mystery-Boxen mit kindgerechter Fortschrittsanzeige
 - Rein lokal — keine Käufe, keine Accounts
 
@@ -316,7 +319,8 @@ lib/
 ├── models/                Werkzeuge, Sticker, Belohnungen, Artwork, Ausmalbilder,
 │                          Profile, Szenen, Tagesaufgaben, Zeichen-Ops,
 │                          Inhalts-Namen in neun Sprachen (localized_name.dart)
-├── ui/                    Design-System (siehe unten)
+├── ui/                    Design-System (siehe unten) — inkl. entrance.dart,
+│                          paper_doodles.dart und hero_tags.dart
 ├── util/                  Settings, Fortschritt, Profile, Sfx, Musik, Bild-IO,
 │                          Teilen, Speichern, PDF, Backup/Restore, JsonStore,
 │                          Fehlerlog
@@ -343,13 +347,17 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 **Design-System** (`lib/ui/`) — die Sticker-Buch-Sprache:
 - `pixie_palette.dart` — **die eine** Farbquelle. Jeder UI-Ton leitet sich hiervon ab. (Die Malfarben in `widgets/color_palette.dart` sind bewusst getrennt: das ist Inhalt, keine Oberfläche.)
 - `app_theme.dart` — Tokens (Radien, `softShadow`, `stickerTilt`), Gradients, Typo-Skala, Component-Themes
-- `sticker.dart` — `StickerCard`, `StickerCircleButton`, `StickerEmoji`, `stickerSelectionDecoration`
-- `pixie_header.dart` — einheitlicher Screen-Kopf (ersetzt AppBars)
+- `sticker.dart` — `StickerCard` (inkl. Aufkleber-Glanz), `StickerCircleButton`, `StickerEmoji`, `stickerSelectionDecoration`
+- `pixie_header.dart` — einheitlicher Screen-Kopf (ersetzt AppBars), mit Akzent-Unterstrich je Bildschirm
 - `bouncy.dart`, `pop_in.dart` — Bewegungs-Primitive (Press-Feder, Entrance-Pop, Puls)
-- `blob_background.dart` — driftende Blobs + Doodles auf **einem** 28-s-Ticker, der sich automatisch pausiert, sobald die Route verdeckt oder die App im Hintergrund ist
+- `entrance.dart` — **die eine** Staffel-Animation aller Screens (siehe unten)
+- `blob_background.dart` + `paper_doodles.dart` — driftende Blobs + Doodles auf **einem** 28-s-Ticker, der sich automatisch pausiert, sobald die Route verdeckt oder die App im Hintergrund ist. Der Malbildschirm nimmt denselben Doodle-Painter, aber ohne Ticker und blasser
+- `hero_tags.dart` — die Tags der Flüge in die Leinwand, an einer Stelle vergeben
 - `kid_dialog.dart`, `kid_sheet.dart`, `reward_reveal.dart` — Dialoge, Sheets, Belohnungs-Moment
 
 **Erreichbarkeit der Werkzeugleiste** (seit v8.0): `ToolBarRail` scrollt, `ToolActionCluster` nicht. Rückgängig und Wiederholen lagen bis dahin am Ende eines rund 1000 px breiten Streifens — auf einem 360-dp-Telefon außerhalb des Bildes, hinter einer Wischgeste, die nichts ankündigte. Die beiden Knöpfe platziert seither der Bildschirm selbst (in `_buildPortrait` und `_LeftRail`), gespiegelt für Linkshänder. Der Streifen daneben blendet seine Ränder weich aus, sobald dort wirklich mehr steht, und holt ein über ein Auswahl-Blatt gewähltes Werkzeug per `Scrollable.ensureVisible` zurück in den Blick. **Was neu in die Leiste kommt, gehört in den scrollenden Teil** — der feste Cluster ist für das reserviert, was ein Kind im Zweifel *sofort* braucht.
+
+**Eine Bewegung, eine Stelle** (seit v8.4): Startseite, Bildauswahl, Galerie und Einstellungen trugen dieselbe Staffel-Animation in je eigener Fassung, fünf weitere Bildschirme hatten gar keine. `lib/ui/entrance.dart` ist diese Bewegung genau einmal, mit zwei Zugängen: `EntranceMixin` für Screens, die ohnehin einen `State` haben (setzt nichts Zusätzliches in den Widget-Baum), und `EntranceGroup` + `Entrance` für Raster aus zustandslosen Widgets. Beide rufen dasselbe `buildEntrance`. **Die Gruppe gehört in den geladenen Zweig** eines `FutureBuilder`, nicht darüber — sonst läuft die Staffelung ab, während der Bildschirm noch von der Platte liest. Bei „Bewegung reduzieren" bleibt die Einblendung, der Weg dorthin fällt weg.
 
 **Canvas-Performance:** Der `CanvasController` trennt zwei Signale — `repaint` (ValueNotifier, feuert bei jedem Zeichen-Sample und lässt nur den Painter neu malen) und `notifyListeners()` (nur für Werkzeugleisten-State). Der `CustomPaint` liegt in einer eigenen `RepaintBoundary`. **Neue Effekte im Malbereich gehören als Geschwister-Overlay daneben, niemals hinein** — Vorbild: `fill_burst.dart` und `stamp_burst.dart`.
 
