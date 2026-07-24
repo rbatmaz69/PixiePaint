@@ -234,7 +234,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 7.7.0 (versionCode 27) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.9.0 (versionCode 29) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
 | targetSdk | geerbt aus dem Flutter-SDK, siehe Schritt 3 |
 | Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |

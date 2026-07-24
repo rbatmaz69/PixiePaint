@@ -11,6 +11,16 @@ flutter analyze && flutter test          # muss beides sauber sein
 flutter run --release -d <geräte-id>     # Release, nicht Debug — Debug ist spürbar langsamer
 ```
 
+**Erster Schritt auf dem Gerät: der Rauchtest** (seit v7.9). Er fährt den mechanischen Anfang dieser Liste automatisch ab — App starten, Bild öffnen, malen, verlassen, Bild liegt auf der Platte — und prüft nebenbei, dass die App dabei nichts in ihr Fehlerlog geschrieben hat:
+
+```bash
+flutter test integration_test/app_test.dart -d <geräte-id>
+```
+
+Läuft er durch, ist die Grundmechanik auf diesem Gerät bewiesen und du kannst dich auf das konzentrieren, was nur ein Mensch beurteilen kann: Gesten, Druckstärke, Layout, Töne, Tempo. Scheitert er, steht im Fehlertext, an welchem Schritt — das ist dann der erste Befund der Session.
+
+> Der Test legt genau ein Bild an und löscht es am Ende wieder. Auf einem Gerät mit echten Kinderbildern rührt er sonst nichts an.
+
 Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vorher `adb uninstall dev.rb.pixiepaint`), damit auch der erste Start mitgeprüft wird. Achtung: damit sind vorhandene Bilder weg.
 
 ---

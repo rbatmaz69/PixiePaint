@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 7.8.0+28 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.9.0+29 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -223,6 +223,14 @@ flutter analyze     # Linter — muss fehlerfrei sein
 flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
+
+**Rauchtest auf echtem Gerät** (seit v7.9):
+
+```bash
+flutter test integration_test/app_test.dart -d <geräte-id>
+```
+
+Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Platte liegt (`paint.png` und `meta.json`) — die mechanische Spitze von [`docs/geraetetest.md`](docs/geraetetest.md). Er läuft gegen die echten App-Daten des Geräts, legt deshalb genau ein Bild an und räumt es wieder weg. Die Beschriftungen holt er sich aus dem laufenden Baum, er funktioniert also auch auf einem türkischen Gerät. **Nicht in der CI** — dafür bräuchte es einen Emulator im Workflow; das ist ein eigener Schritt, wenn sich der Test bewährt hat.
 
 **CI** (seit v7.8, [`.github/workflows/ci.yml`](.github/workflows/ci.yml)): Jeder Push nach `main` und jeder Pull Request laufen durch drei Jobs — `flutter analyze` + Tests auf Ubuntu, die Golden-Bilder getrennt auf macOS, und ein `flutter build appbundle --release`. Der Android-Build ist keine Auslieferung (er ist nicht mit dem Upload-Schlüssel signiert), sondern die Wache für die Gradle-Seite: er wird die KGP-Warnung melden, sobald sie ein Fehler wird.
 
