@@ -1,0 +1,9 @@
+# Declaring the tag keeps `flutter test` from warning about an unknown one.
+#
+# `golden` marks the visual regression in test/golden/. It is separated
+# because those 24 images were produced on macOS and Linux antialiases
+# differently — CI runs them on a macOS runner, everything else on Ubuntu
+# (see .github/workflows/ci.yml).
+tags:
+  golden:
+    description: Visual regression of the drawing renderers; platform-sensitive.

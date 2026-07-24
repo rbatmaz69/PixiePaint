@@ -2,7 +2,9 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.7.0+27 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+[![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
+
+**Aktuelle Version:** 7.8.0+28 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -222,6 +224,8 @@ flutter test        # alle Unit-Tests
 flutter test test/shape_renderer_test.dart   # einzelne Datei
 ```
 
+**CI** (seit v7.8, [`.github/workflows/ci.yml`](.github/workflows/ci.yml)): Jeder Push nach `main` und jeder Pull Request laufen durch drei Jobs — `flutter analyze` + Tests auf Ubuntu, die Golden-Bilder getrennt auf macOS, und ein `flutter build appbundle --release`. Der Android-Build ist keine Auslieferung (er ist nicht mit dem Upload-Schlüssel signiert), sondern die Wache für die Gradle-Seite: er wird die KGP-Warnung melden, sobald sie ein Fehler wird.
+
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
 Die Test-Suite umfasst 518 Tests in 49 Dateien:
@@ -237,6 +241,8 @@ flutter test --update-goldens test/golden/
 ```
 
 > Schlagen nach einem Flutter-Update **alle** 24 Bilder gleichzeitig fehl, liegt das fast immer an geänderter Kantenglättung im SDK und nicht an der App.
+
+> **Warum die Goldens in der CI einen eigenen Job auf macOS haben:** Linux glättet Kanten anders, die Referenzbilder sind hier auf macOS entstanden. Sie tragen deshalb das Tag `golden` (`dart_test.yaml`), der Ubuntu-Job läuft mit `--exclude-tags golden`, der macOS-Job mit `--tags golden`. Ein roter Golden-Job ist damit ein echter Befund. Er wird **nicht** mit `--update-goldens` beantwortet, ohne vorher zu wissen, was sich geändert hat.
 
 > **Drei Fallstricke bei Widget-Tests in diesem Projekt** (alle im Code kommentiert, siehe `test/widget/harness.dart`):
 > 1. `testWidgets` läuft in einer Fake-Async-Zone — echte Datei-I/O löst dort **nie** ein und der Test hängt, statt zu scheitern. Setup deshalb in `tester.runAsync(...)`.

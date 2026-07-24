@@ -1,0 +1,82 @@
+name: CI
+
+# Every push to main and every pull request. The repository is public, so all
+# runners — including macOS — are free; there is no reason to be stingy about
+# what gets checked.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A newer push makes an in-flight run pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Pinned on purpose: the golden images below are pixel comparisons, and a
+  # Flutter upgrade is a change to them. Keep in step with the README.
+  FLUTTER_VERSION: 3.44.6
+
+jobs:
+  analyze_test:
+    name: Analyze & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # `unawaited_futures` and friends live here — see analysis_options.yaml.
+      - run: flutter analyze
+      # Everything except the goldens; those need macOS (next job).
+      - run: flutter test --exclude-tags golden
+
+  goldens:
+    name: Golden images (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # Separate runner on purpose: the 24 reference images were produced on
+      # macOS, and Linux antialiases differently. Running them here means a
+      # red job is a real change to the drawing, not platform noise.
+      - run: flutter test --tags golden
+      # So a failure can be looked at instead of guessed about.
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: golden-failures
+          path: test/golden/failures/
+          if-no-files-found: ignore
+
+  android_build:
+    name: Android release build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # Not a deliverable — nothing here is signed with the upload key (that
+      # lives only on the developer's machine, see docs/play-store-release.md).
+      # This job exists to catch the Gradle side breaking, and specifically the
+      # Kotlin-Gradle-Plugin warning from flutter_file_dialog and in_app_review
+      # the day it turns into an error.
+      - run: flutter build appbundle --release
