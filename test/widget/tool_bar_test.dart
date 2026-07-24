@@ -42,7 +42,7 @@ void main() {
   testWidgets('every tool button announces itself to a screen reader',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await pumpToolBar(tester);
@@ -59,7 +59,7 @@ void main() {
   testWidgets('the active tool is announced as selected, not just present',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await pumpToolBar(tester);
@@ -76,7 +76,7 @@ void main() {
 
   testWidgets('tapping a tool selects it on the controller', (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await pumpToolBar(tester);
     expect(controller.tool, isNot(ToolKind.eraser));
@@ -90,7 +90,7 @@ void main() {
   testWidgets('undo is announced as disabled while there is nothing to undo',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await pumpToolBar(tester);
@@ -104,7 +104,7 @@ void main() {
   testWidgets('colors have spoken names instead of sixteen identical buttons',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await pumpPixie(
@@ -140,7 +140,7 @@ void main() {
 
     testWidgets('shows four tools instead of fourteen', (tester) async {
       final root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
       final handle = tester.ensureSemantics();
 
       await pumpSimple(tester);
@@ -163,7 +163,7 @@ void main() {
     testWidgets('the bucket paints straight away, with no sheet in the way',
         (tester) async {
       final root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
       final handle = tester.ensureSemantics();
 
       await pumpSimple(tester);
@@ -182,7 +182,7 @@ void main() {
     testWidgets('its buttons are bigger than the full toolbar\'s',
         (tester) async {
       final root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
       final handle = tester.ensureSemantics();
 
       await pumpToolBar(tester);
@@ -206,7 +206,7 @@ void main() {
   testWidgets('picking a tool up hops, putting one down stays quiet',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await pumpToolBar(tester);
@@ -252,7 +252,7 @@ void main() {
   testWidgets('the toolbar survives the largest text scale the app allows',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     // 2.0 is what a phone with the largest accessibility font asks for; the
     // app clamps it to 1.3, and nothing may overflow at that size.

@@ -24,7 +24,7 @@ void main() {
 
   Future<void> start(WidgetTester tester) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     await pumpPixie(
       tester,
       Builder(

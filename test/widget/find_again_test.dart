@@ -64,7 +64,7 @@ void main() {
     testWidgets('the hearts tab appears only once something is in it',
         (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await start(tester, const PagePickerScreen(), const Size(500, 900));
 
@@ -81,7 +81,7 @@ void main() {
 
     testWidgets('the heart fills in and can be taken back', (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await start(tester, const PagePickerScreen(), const Size(500, 900));
 
@@ -103,7 +103,7 @@ void main() {
 
     testWidgets('stays away on a device with no pictures yet', (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await start(tester, card, const Size(400, 800));
 
@@ -112,7 +112,7 @@ void main() {
 
     testWidgets('offers the picture this child painted last', (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
       await makeArtwork(tester, id: 'older', name: 'Alt');
       await makeArtwork(tester, id: 'newer', name: 'Neu');
 
@@ -126,7 +126,7 @@ void main() {
 
     testWidgets("ignores another child's pictures", (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
       await makeArtwork(tester,
           id: 'siblings', name: 'Vom Bruder', profileId: 'some-other-kid');
 

@@ -25,7 +25,7 @@ void main() {
 
   Future<void> setUpLog(WidgetTester tester, {int entries = 0}) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     await tester.runAsync(() async {
       log.resetForTest();
       await log.initIn(root);

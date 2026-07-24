@@ -11,7 +11,10 @@ import 'dart:io';
 /// import itself in a circle).
 void Function(Object error, StackTrace stack, String path)? onPersistFailure;
 
-void _reportFailure(Object error, StackTrace stack, String path) {
+/// Public because deleting an artwork fails the same way a write does — full
+/// disk, no permission — and belongs in the same log rather than in an
+/// unhandled async error nobody ever sees.
+void reportPersistFailure(Object error, StackTrace stack, String path) {
   try {
     onPersistFailure?.call(error, stack, path);
   } catch (_) {
@@ -75,7 +78,7 @@ class JsonStore {
     } catch (e, s) {
       // Storage full or permissions — keep the previous file untouched, and
       // say so in the error log.
-      _reportFailure(e, s, file.path);
+      reportPersistFailure(e, s, file.path);
       try {
         if (await _tmpFile.exists()) await _tmpFile.delete();
       } catch (_) {}
@@ -124,7 +127,7 @@ Future<bool> _atomic(
     await tmp.rename(file.path);
     return true;
   } catch (e, s) {
-    if (report) _reportFailure(e, s, file.path);
+    if (report) reportPersistFailure(e, s, file.path);
     try {
       if (await tmp.exists()) await tmp.delete();
     } catch (_) {}

@@ -42,7 +42,7 @@ void main() {
   testWidgets('undo is on screen without scrolling, on a small phone',
       (tester) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await openCanvas(tester);
@@ -65,7 +65,7 @@ void main() {
   testWidgets('the action cluster changes sides for a left-handed child',
       (tester) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     final handle = tester.ensureSemantics();
 
     await openCanvas(tester);
@@ -93,7 +93,7 @@ void main() {
     testWidgets('appears once on a phone and marks itself seen',
         (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await openCanvas(tester);
       expect(find.text('Quer hast du mehr Platz zum Malen'), findsOneWidget);
@@ -106,7 +106,7 @@ void main() {
 
     testWidgets('stays away on a tablet, where upright is fine', (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await openCanvas(tester, size: const Size(800, 1200));
 
@@ -116,7 +116,7 @@ void main() {
 
     testWidgets('goes away by itself', (tester) async {
       root = await setUpPixieStorage(tester);
-      addTearDown(() => tearDownPixieStorage(root));
+      addTearDown(() => tearDownPixieStorage(tester, root));
 
       await openCanvas(tester);
       expect(find.text('Quer hast du mehr Platz zum Malen'), findsOneWidget);

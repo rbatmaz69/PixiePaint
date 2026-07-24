@@ -63,7 +63,7 @@ void main() {
 
   testWidgets('the right answer opens the gate', (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await openGate(tester);
     await submit(tester, '${expectedAnswer(tester)}');
@@ -73,7 +73,7 @@ void main() {
 
   testWidgets('a wrong answer keeps the gate shut', (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await openGate(tester);
     await submit(tester, '1');
@@ -88,7 +88,7 @@ void main() {
   testWidgets('three wrong answers give up rather than let anyone in',
       (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await openGate(tester);
     for (var i = 0; i < 3; i++) {
@@ -101,7 +101,7 @@ void main() {
 
   testWidgets('cancelling reports a refusal, never a pass', (tester) async {
     final root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await openGate(tester);
     await tester.tap(find.text('Abbrechen'));

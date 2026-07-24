@@ -60,10 +60,22 @@ class _SlideshowScreenState extends State<SlideshowScreen>
   Timer? _advance;
   Timer? _hideControls;
 
+  /// Holding the screen awake is a nicety, and both calls are
+  /// fire-and-forget. A platform that refuses — or any host with nothing
+  /// behind the channel — would otherwise land a `PlatformException` as an
+  /// unhandled async error in the middle of a slideshow, which is a far
+  /// worse outcome than a screen that dims.
+  void _keepScreenAwake(bool awake) {
+    unawaited(
+      (awake ? WakelockPlus.enable() : WakelockPlus.disable())
+          .catchError((Object _) {}),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    WakelockPlus.enable();
+    _keepScreenAwake(true);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     _start();
     _scheduleHideControls();
@@ -148,7 +160,7 @@ class _SlideshowScreenState extends State<SlideshowScreen>
     _kenBurnsOrNull?.dispose();
     _current?.dispose();
     _next?.dispose();
-    WakelockPlus.disable();
+    _keepScreenAwake(false);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }

@@ -17,7 +17,7 @@ void main() {
   /// to escape the fake-async zone), so every test opens with this.
   Future<void> start(WidgetTester tester, {double textScale = 1.0}) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     await pumpPixie(
       tester,
       const SettingsScreen(),

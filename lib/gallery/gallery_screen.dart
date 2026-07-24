@@ -67,7 +67,15 @@ class _GalleryScreenState extends State<GalleryScreen>
   /// in a setState on a screen that is already gone.
   void _reload() {
     if (!mounted) return;
-    setState(() => _future = _loadForActiveProfile());
+    // A block body, not an arrow: `=> _future = ...` hands the assigned
+    // Future back as the closure's return value, and setState asserts on a
+    // callback that returns one. The list still reloaded — the assignment
+    // happens either way and asserts are off in release — so this only ever
+    // showed as a debug-mode exception, and only after a delete or rename
+    // actually got as far as reloading.
+    setState(() {
+      _future = _loadForActiveProfile();
+    });
   }
 
   Future<void> _toggleFavorite(Artwork artwork) async {

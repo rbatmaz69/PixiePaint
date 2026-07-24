@@ -27,7 +27,7 @@ void main() {
 
   Future<void> openAndLeave(WidgetTester tester, Widget screen) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
 
     await pumpPixie(tester, screen, size: const Size(420, 860));
     // One frame only: the loading state, nothing more.

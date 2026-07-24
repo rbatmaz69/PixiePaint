@@ -144,21 +144,21 @@ class ArtworkStore {
   static Future<bool> updateMeta(Artwork artwork) => atomicWriteString(
       File('${artwork.dirPath}/meta.json'), jsonEncode(artwork.toJson()));
 
+  /// Removes the picture's whole directory.
+  ///
+  /// Never throws. Every caller starts this from a tap and does not await
+  /// the result, so an exception here would become an unhandled async error
+  /// — invisible in a test and a red screen in the app. A delete can
+  /// genuinely fail (no permission, or a write landing in the directory
+  /// while it is being emptied, which leaves it present but empty), and the
+  /// honest answer is to say so in the error log and leave the gallery to
+  /// re-read what is actually on disk.
   static Future<void> delete(Artwork artwork) async {
     final dir = Directory(artwork.dirPath);
-    // ignore: avoid_print
-    print('PPDEBUG delete start ${artwork.dirPath}');
-    if (await dir.exists()) {
-      try {
-        await dir.delete(recursive: true);
-        // ignore: avoid_print
-        print('PPDEBUG delete ok ${artwork.dirPath}');
-      } catch (e, s) {
-        // ignore: avoid_print
-        print('PPDEBUG delete FAILED $e\nleft: '
-            '${dir.existsSync() ? dir.listSync().map((f) => f.path.split('/').last).toList() : 'gone'}\n$s');
-        rethrow;
-      }
+    try {
+      if (await dir.exists()) await dir.delete(recursive: true);
+    } catch (e, s) {
+      reportPersistFailure(e, s, dir.path);
     }
   }
 }

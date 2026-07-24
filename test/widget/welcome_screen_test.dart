@@ -21,7 +21,7 @@ void main() {
 
   Future<void> start(WidgetTester tester) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     await pumpPixie(tester, const WelcomeScreen(),
         size: const Size(420, 860));
     await settle(tester);
@@ -102,7 +102,7 @@ void main() {
   testWidgets('it survives the largest text scale the app allows',
       (tester) async {
     root = await setUpPixieStorage(tester);
-    addTearDown(() => tearDownPixieStorage(root));
+    addTearDown(() => tearDownPixieStorage(tester, root));
     await pumpPixie(tester, const WelcomeScreen(),
         size: const Size(420, 860), textScale: 2.0);
     await settle(tester);
