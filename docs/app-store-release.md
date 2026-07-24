@@ -4,6 +4,18 @@ Das iOS-Gegenstück zu [`play-store-release.md`](play-store-release.md). Schritt
 
 > **Apples Kids-Kategorie ist strenger als Googles Familienrichtlinie.** Der wichtigste Unterschied: In der Kids Category sind Analytics und Werbe-SDKs von Drittanbietern **komplett verboten** (nicht nur eingeschränkt), und jeder Link nach draußen muss hinter einer Elternschranke liegen. PixiePaint erfüllt beides von Haus aus — die App hat kein einziges Netzwerk-SDK. Siehe Schritt 6.
 
+> **Voraussetzung, die gerade nicht erfüllt ist:** `flutter doctor` meldet auf diesem Rechner „Xcode installation is incomplete" und „CocoaPods not installed" — es sind nur die Command Line Tools da. Ohne vollständiges Xcode lässt sich für iOS **nichts** bauen, auch kein Simulator-Lauf. Erster Schritt ist also:
+>
+> ```bash
+> # Xcode aus dem App Store installieren, dann:
+> sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+> sudo xcodebuild -runFirstLaunch
+> sudo gem install cocoapods
+> flutter doctor
+> ```
+>
+> Das betrifft auch die Gegenprobe für die Berechtigungstexte aus v7.7 (siehe Schritt 6): die neun `InfoPlist.strings` sind eingetragen und durch `test/ios_localization_test.dart` abgesichert, aber **auf einem echten iOS-Build noch nie gelaufen**.
+
 ## 1. 👤 Apple Developer Program
 
 1. https://developer.apple.com/programs/ → Mitgliedschaft abschließen (99 $/Jahr)
@@ -72,7 +84,7 @@ Für die Beta-Prüfung wird eine „Beta App Description" und eine Kontakt-E-Mai
 - **Keine Links nach draußen ohne Elternschranke.** Erfüllt: „App bewerten" ist der einzige Link und liegt im Eltern-Bereich hinter der Rechenaufgabe.
 - **Keine Käufe ohne Elternschranke.** Erfüllt: Es gibt keine Käufe.
 - **Keine Erhebung personenbezogener Daten.** Erfüllt.
-- **Datenschutzerklärung ist Pflicht.** URL: `https://rbatmaz69.github.io/PixiePaint/privacy-policy` (GitHub Pages aktivieren wie in [`play-store-release.md`](play-store-release.md) Schritt 5 beschrieben).
+- **Datenschutzerklärung ist Pflicht.** URL: `https://rbatmaz69.github.io/PixiePaint/privacy-policy/` (GitHub Pages aktivieren wie in [`play-store-release.md`](play-store-release.md) Schritt 5 beschrieben — im Repo ist alles vorbereitet, es fehlt nur der Schalter in den Repo-Einstellungen).
 
 **App-Datenschutz („Nutrition Label").** App Store Connect → App-Datenschutz → „Daten werden nicht erfasst" auswählen. Das ist für PixiePaint korrekt und die einzige Antwort, die zur App passt: keine Analytics, keine IDs, keine Accounts, keine Netzwerkaufrufe. Fotos werden ausschließlich lokal verarbeitet, und die Sicherungsdatei erzeugt der Nutzer selbst und teilt sie über das System-Share-Sheet.
 
@@ -84,6 +96,12 @@ Das gilt auch für den **Problembericht** aus v7.5 (Einstellungen → „Problem
 |---|---|---|
 | `NSPhotoLibraryUsageDescription` | „Zum Auswählen eines Fotos zum Anmalen." | Foto-Import, hinter der Elternschranke |
 | `NSPhotoLibraryAddUsageDescription` | „Zum Speichern deiner Bilder in Fotos." | „In Fotos speichern", hinter der Elternschranke |
+
+**In neun Sprachen (seit v7.7).** iOS zeigt diese Dialoge in der **Systemsprache des Geräts**, nicht in der App-Sprache — ein spanisches iPhone las vorher den deutschen Satz. Die Übersetzungen liegen in `ios/Runner/<sprache>.lproj/InfoPlist.strings`, die Sprachliste zusätzlich als `CFBundleLocalizations` in der `Info.plist` (davon liest App Store Connect die Sprachen der App).
+
+Dass eine Datei auf der Platte liegt, genügt nicht: Xcode muss sie kennen. Dafür sind in `project.pbxproj` eine `PBXVariantGroup` „InfoPlist.strings", die neun Dateireferenzen, der Eintrag in der Resources-Phase und die neun Codes in `knownRegions` ergänzt. `test/ios_localization_test.dart` prüft beides — Datei **und** Eintrag im Projekt — und leitet die Sprachliste aus den vorhandenen `app_*.arb` ab, damit eine zehnte Sprache nicht ohne Berechtigungstext bleiben kann.
+
+> **Was noch fehlt:** die Gegenprobe auf einem echten Gerät. Systemsprache umstellen, App neu installieren, Foto-Import antippen → der Dialog muss in dieser Sprache erscheinen. Solange kein Xcode installiert ist (siehe oben), ist das nicht prüfbar. Sollte der iOS-Build nach v7.7 fehlschlagen, ist der erste Verdächtige die `project.pbxproj`; der Rückweg ist `git revert` genau dieser Datei (die `.lproj`-Dateien selbst können bleiben, sie werden dann nur nicht eingebunden).
 
 ## 7. 👤 Store-Eintrag
 
@@ -128,6 +146,9 @@ Die Prüfung dauert meist 1–3 Tage; Apps in der Kids Category werden gelegentl
 - [ ] App-Datenschutz auf „Daten werden nicht erfasst" gesetzt
 - [ ] Kids Category und Altersfreigabe 4+ eingetragen
 - [ ] Screenshots für 6,9" iPhone und 13" iPad
+- [ ] Xcode vollständig installiert, `flutter doctor` grün für iOS (siehe ganz oben)
+- [ ] Berechtigungsdialog in einer nicht-deutschen Systemsprache gegengeprüft
+- [ ] `appstore_icon_1024.png` aus `python3 tool/make_store_graphics.py` (falls das Icon nicht aus dem Asset-Katalog gezogen wird)
 - [ ] Gerätetest-Checkliste abgearbeitet ([`geraetetest.md`](geraetetest.md)), besonders VoiceOver und Foto-Berechtigungen
 
 ## Technische Fakten (für die Formulare)
@@ -135,7 +156,7 @@ Die Prüfung dauert meist 1–3 Tage; Apps in der Kids Category werden gelegentl
 | | |
 |---|---|
 | Bundle Identifier | `dev.rb.pixiepaint.pixiepaint` |
-| Version | 7.6.0 (Build 26) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.7.0 (Build 27) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | Berechtigungen | Fotobibliothek (Lesen und Sichern), beides hinter der Elternschranke |
 | Netzwerk | keines |
 | Tracking | keines (kein ATT-Dialog nötig) |

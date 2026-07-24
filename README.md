@@ -2,7 +2,7 @@
 
 Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbung, ohne Datensammlung. Gebaut mit Flutter für Android und iOS.
 
-**Aktuelle Version:** 7.6.0+26 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 7.7.0+27 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -224,7 +224,7 @@ flutter test test/shape_renderer_test.dart   # einzelne Datei
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 488 Tests in 48 Dateien:
+Die Test-Suite umfasst 518 Tests in 49 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht.
@@ -318,6 +318,7 @@ docs/                      Release-Anleitungen (Play Store, App Store),
                            Gerätetest-Checkliste, Datenschutzerklärung
 
 tool/                      make_music.py — erzeugt die Musik-Loops
+                           make_store_graphics.py — Icon & Feature-Grafik
 ```
 
 ## Architektur-Notizen
@@ -396,6 +397,8 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 
 **Neues Jahreszeiten-Bild:** wie ein normales Ausmalbild, zusätzlich `"season"` im `pages.json`-Eintrag (einer der Schlüssel aus `kSeasonWindows` in `lib/models/coloring_page.dart`).
 
+**Store-Grafiken** (Icon 512, Feature-Grafik 1024 × 500, Apple-Icon 1024): `python3 tool/make_store_graphics.py`, Ergebnis in `build/store/`. Braucht `brew install librsvg` und Pillow. Die Grafik baut auf den echten Ausmalbildern und der Fredoka-Schrift auf — ändert sich das Icon oder die Palette, ist derselbe Befehl die Aktualisierung.
+
 **Neues Musikstück:** `tool/make_music.py` erweitern (eine Funktion plus ein Eintrag in `TRACKS`), Datei nach `assets/sounds/music/` erzeugen und in `Music.tracks` eintragen. Die WAVs sind synthetisiert — nahtlos, weil `ReleaseMode.loop` jeden Klick am Übergang alle paar Minuten wiederholt; das Skript prüft selbst, dass ein Stück in Stille endet.
 
 ## Veröffentlichen
@@ -417,7 +420,9 @@ Die Versionsnummer wird in der `pubspec.yaml` gepflegt: `version: 7.4.2+24` bede
 
 ## Datenschutz
 
-PixiePaint sammelt **keine** Daten. Alles bleibt auf dem Gerät: keine Internetverbindung, keine Analytics, keine Werbe-IDs, keine Accounts. Fotos werden ausschließlich lokal verarbeitet. Die vollständige Erklärung: [`docs/privacy-policy.md`](docs/privacy-policy.md).
+PixiePaint sammelt **keine** Daten. Alles bleibt auf dem Gerät: keine Internetverbindung, keine Analytics, keine Werbe-IDs, keine Accounts. Fotos werden ausschließlich lokal verarbeitet. Die vollständige Erklärung: [`docs/privacy-policy.md`](docs/privacy-policy.md) — sie zählt einzeln auf, was auf dem Gerät liegt (Bilder, Profil-Namen, Einstellungen, Fortschritt, eigene Sticker, Fehlerlog) und über welche drei Wege überhaupt etwas das Gerät verlassen kann.
+
+Der Ordner `docs/` ist zugleich die öffentliche Seite (GitHub Pages, Quelle `main` / `/docs`): Startseite `docs/index.md`, Datenschutzerklärung unter `/privacy-policy/`. Die drei internen Anleitungen sind in `docs/_config.yml` von der Auslieferung ausgenommen. **Jede neue Seite braucht YAML-Front-Matter** — ohne verarbeitet Jekyll sie nicht und die Adresse liefert eine 404.
 
 | | |
 |---|---|

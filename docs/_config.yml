@@ -1,0 +1,22 @@
+# GitHub Pages serves this folder (Settings → Pages → main / /docs).
+#
+# The site exists for one reason: both stores require a publicly reachable
+# privacy policy, and for a children's app that page is the one a reviewer
+# actually opens.
+title: PixiePaint
+description: Ein Malbuch für Kinder ab 3 Jahren – komplett offline, ohne Werbung, ohne Datensammlung.
+theme: jekyll-theme-minimal
+
+# The release guides and the device-test checklist live in this folder because
+# they belong next to the code, not because they belong on a product page.
+# Excluding them keeps the site to what it is for. (The repository is public,
+# so they stay readable there — this is about what the site publishes, not
+# about secrecy.)
+exclude:
+  - play-store-release.md
+  - app-store-release.md
+  - geraetetest.md
+
+# Jekyll only *processes* files that carry YAML front matter — a plain .md
+# would be copied through verbatim and the /privacy-policy/ URL would 404.
+# Both pages here have front matter; keep it that way when adding one.

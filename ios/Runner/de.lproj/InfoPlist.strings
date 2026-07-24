@@ -1,0 +1,5 @@
+/* Permission texts, shown by iOS in the system language.
+   Generated alongside lib/l10n/app_de.arb — keep both in step;
+   test/ios_localization_test.dart fails if a language is missing. */
+"NSPhotoLibraryUsageDescription" = "Zum Auswählen eines Fotos zum Anmalen.";
+"NSPhotoLibraryAddUsageDescription" = "Zum Speichern deiner Bilder in Fotos.";

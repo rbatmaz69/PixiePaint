@@ -83,11 +83,19 @@ Hinweis: Ohne `key.properties` baut der Befehl trotzdem (Debug-Signatur als Fall
 
 ## 5. Datenschutzerklärung veröffentlichen
 
-Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps):
+Play verlangt eine öffentliche Datenschutz-URL (besonders für Kinder-Apps). Im Repo ist alles dafür vorbereitet (`docs/_config.yml`, `docs/index.md`, Front-Matter in `docs/privacy-policy.md`) — es fehlt nur der Schalter:
 
-1. 👤 GitHub-Repo → Settings → Pages → Branch `main`, Ordner `/docs` → Save
-2. Die URL ist dann: `https://rbatmaz69.github.io/PixiePaint/privacy-policy`
-3. Diese URL später in der Play Console unter „Datenschutzerklärung" eintragen
+1. 👤 GitHub-Repo → **Settings → Pages** → Source „Deploy from a branch" → Branch `main`, Ordner `/docs` → **Save**. Der erste Build dauert eine bis zwei Minuten.
+2. Die Adressen sind dann:
+   - Startseite: `https://rbatmaz69.github.io/PixiePaint/`
+   - **Datenschutzerklärung: `https://rbatmaz69.github.io/PixiePaint/privacy-policy/`**
+3. Diese URL in der Play Console unter „Datenschutzerklärung" eintragen (und in App Store Connect, siehe [`app-store-release.md`](app-store-release.md))
+
+> **Der Schrägstrich am Ende ist der richtige.** Die Seite hat `permalink: /privacy-policy/`; GitHub leitet die Variante ohne Schrägstrich dorthin um, aber eintragen sollte man die kanonische.
+
+> **Warum das nicht von allein funktioniert hätte:** GitHub Pages baut mit Jekyll, und Jekyll verarbeitet eine `.md`-Datei nur, wenn sie YAML-Front-Matter hat — sonst kopiert es sie unverändert durch, und die URL liefert eine 404 (bzw. rohes Markdown zum Herunterladen). Die Datei hat jetzt Front-Matter; wer hier eine Seite ergänzt, gibt ihr auch eine.
+
+> Die drei internen Anleitungen in diesem Ordner (diese hier, `app-store-release.md`, `geraetetest.md`) sind in `_config.yml` unter `exclude:` aufgeführt und werden **nicht** als Website ausgeliefert. Im öffentlichen Repo bleiben sie natürlich lesbar.
 
 ## 6. 👤 App in der Play Console anlegen
 
@@ -153,7 +161,16 @@ Unter „Store-Eintrag → Übersetzungen verwalten" pro Sprache Kurzbeschreibun
 Reihenfolge nach Aufwand-Nutzen: zuerst Englisch (Standard-Fallback für alle nicht gepflegten Sprachen), dann Spanisch, Französisch, Türkisch, Portugiesisch, Italienisch, Polnisch, Niederländisch.
 
 - **Kategorie:** Lernen (oder Kunst & Design)
-- **Grafiken:** App-Icon 512×512 (aus `assets/icon/icon.png` herunterskalieren), Feature-Grafik 1024×500, Screenshots siehe unten
+- **Grafiken:** erzeugt ein Befehl (seit v7.7):
+
+  ```bash
+  python3 tool/make_store_graphics.py
+  ```
+
+  Ergebnis in `build/store/`: `play_icon_512.png` (512 × 512, ohne Transparenz), `play_feature_graphic_1024x500.png` und `appstore_icon_1024.png` für den App Store. Die Feature-Grafik entsteht aus den echten Ausmalbildern, der Fredoka-Schrift und den Palette-Tönen der App — wenn sich das Icon oder die Farben ändern, ist derselbe Befehl die Aktualisierung. Voraussetzungen: `brew install librsvg` und Pillow.
+
+  **Vor dem Hochladen ansehen.** Die drei Dateien sind reine Optik; kein Test kann beurteilen, ob sie gut aussehen.
+- **Screenshots:** siehe unten
 
 ### Screenshot-Plan
 
@@ -185,6 +202,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
   - *Keine In-App-Käufe.* Belohnungs-Sticker werden ausschließlich durch Malen freigeschaltet, nie gekauft.
   - *Elternschranke.* Alles, was die App verlässt (Teilen, Drucken, In Fotos speichern, Foto-Import) oder etwas löscht, liegt hinter einer Multiplikationsaufgabe. Google akzeptiert das als „age screen" für solche Aktionen.
   - *Foto-Zugriff.* Der Import läuft über den System-Picker; die App fordert keine dauerhafte Galerie-Berechtigung an.
+  - *Systembackup.* Die App setzt kein `android:allowBackup="false"`, das Android-Systembackup darf ihre Daten also in das Google-Konto sichern. Das ist Absicht — so überleben die Bilder eines Kindes einen Gerätewechsel — und steht auch so in der Datenschutzerklärung. Für das Datensicherheits-Formular ändert es nichts: die Sicherung macht das Betriebssystem, nicht die App, und die App selbst erhebt und überträgt weiterhin nichts.
 
 - **Datensicherheit-Formular:** „Es werden keine Nutzerdaten erhoben" und „keine Daten weitergegeben". Das stimmt: alles bleibt auf dem Gerät, Fotos werden nur lokal verarbeitet. Die Sicherungsdatei erzeugt der Nutzer selbst und teilt sie über das System-Share-Sheet — die App lädt nichts hoch. Dasselbe gilt für den Problembericht aus v7.5: er wird lokal in `errors.log` geschrieben, enthält keine Geräte-IDs und keine Pfade, und verlässt das Gerät nur, wenn ein Elternteil ihn hinter der Rechenaufgabe bewusst teilt. Es gibt weiterhin kein Analytics- und kein Crash-SDK.
 
@@ -206,7 +224,8 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 - [ ] Ziel-API-Level und 16-KB-Ausrichtung geprüft (Schritt 3)
 - [ ] Version in `pubspec.yaml` erhöht (Name **und** Build-Nummer)
 - [ ] `flutter build appbundle --release` erfolgreich
-- [ ] GitHub Pages aktiv, Datenschutz-URL erreichbar
+- [ ] GitHub Pages aktiv (Settings → Pages → `main` / `/docs`), `https://rbatmaz69.github.io/PixiePaint/privacy-policy/` erreichbar
+- [ ] `python3 tool/make_store_graphics.py` gelaufen, die drei Dateien in `build/store/` angesehen
 - [ ] Screenshots nach Plan aufgenommen
 - [ ] Gerätetest-Checkliste abgearbeitet ([`geraetetest.md`](geraetetest.md))
 
@@ -215,7 +234,7 @@ Aufnehmen am einfachsten während der Gerätetest-Session (siehe [`geraetetest.m
 | | |
 |---|---|
 | applicationId | `dev.rb.pixiepaint` |
-| Version | 7.6.0 (versionCode 26) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
+| Version | 7.7.0 (versionCode 27) — maßgeblich ist immer `version:` in der `pubspec.yaml` |
 | minSdk | 24 (Android 7.0) |
 | targetSdk | geerbt aus dem Flutter-SDK, siehe Schritt 3 |
 | Berechtigungen | Fotobibliothek (Import über den System-Picker, Export via MediaStore); `WRITE_EXTERNAL_STORAGE` nur bis API 29 |

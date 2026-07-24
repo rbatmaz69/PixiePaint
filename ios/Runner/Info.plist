@@ -2,10 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<!-- German is the fallback; the localized versions live in
+		     ios/Runner/<lang>.lproj/InfoPlist.strings and override these two
+		     strings in the system language of the device. -->
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Zum Auswählen eines Fotos zum Anmalen.</string>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>Zum Speichern deiner Bilder in Fotos.</string>
+		<!-- The languages the app ships. iOS derives this from the .lproj
+		     folders too, but App Store Connect reads it from here — without it
+		     the store lists the app as German-only. -->
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>de</string>
+			<string>en</string>
+			<string>es</string>
+			<string>fr</string>
+			<string>it</string>
+			<string>nl</string>
+			<string>pl</string>
+			<string>pt</string>
+			<string>tr</string>
+		</array>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>CFBundleDevelopmentRegion</key>
