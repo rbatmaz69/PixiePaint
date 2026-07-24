@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.1.0+32 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.2.0+33 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -28,7 +28,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 ## Features
 
 **Malen**
-- 68 Ausmalbilder in 9 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Zahlen, Jahreszeiten) — jedes Motiv in allen neun Sprachen benannt
+- 68 Ausmalbilder in 9 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Zahlen, Jahreszeiten) — jedes Motiv in allen neun Sprachen benannt, mit Herz als **Lieblingsbild** je Kind (eigener Reiter ganz vorne)
 - Freies Zeichnen auf leerer Leinwand
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
 - 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
@@ -53,6 +53,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 **Galerie**
 - Automatisches Speichern (alle 30 s und beim Verlassen)
+- **Weitermalen** — die Startseite bietet das zuletzt gemalte Bild des aktiven Kindes mit Vorschaubild an
 - Favoriten, Umbenennen, Filter
 - Diashow über alle Bilder
 - Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
@@ -236,7 +237,7 @@ Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Pl
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 533 Tests in 50 Dateien:
+Die Test-Suite umfasst 542 Tests in 51 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht. Dazu seit v8.0 `canvas_reach_test.dart` — die Frage, ob ein Kind die Knöpfe überhaupt *erreicht*: Rückgängig muss auf einem 360-dp-Telefon ohne Wischen auf dem Schirm stehen.

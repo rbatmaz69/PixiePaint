@@ -878,4 +878,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten';
+
+  @override
+  String get favoritePageAction => 'Lieblingsbild';
 }

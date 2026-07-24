@@ -381,5 +381,6 @@
   "errorLogShareNote": "Zapis z PixiePaint — zostaje na urządzeniu, dopóki nie zostanie świadomie udostępniony.",
   "rotateHint": "Obróć mnie na bok — będzie więcej miejsca do malowania",
   "simpleToolsTitle": "Proste narzędzia",
-  "simpleToolsSubtitle": "Tylko pędzel, wypełnianie, naklejki i gumka – dla najmłodszych"
+  "simpleToolsSubtitle": "Tylko pędzel, wypełnianie, naklejki i gumka – dla najmłodszych",
+  "favoritePageAction": "Ulubiony obrazek"
 }

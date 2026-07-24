@@ -876,4 +876,7 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Só pincel, balde, autocolantes e borracha – para os mais pequenos';
+
+  @override
+  String get favoritePageAction => 'Desenho preferido';
 }

@@ -876,4 +876,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Solo pincel, relleno, pegatinas y goma: para los más pequeños';
+
+  @override
+  String get favoritePageAction => 'Dibujo favorito';
 }

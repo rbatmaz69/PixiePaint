@@ -12,6 +12,8 @@ import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/pdf_export.dart';
+import '../util/progress.dart';
+import '../util/sfx.dart';
 import '../widgets/parental_gate.dart';
 
 /// Soft tint per category (keyed by the stable German category name),
@@ -88,8 +90,41 @@ class _PagePickerScreenState extends State<PagePickerScreen>
         final orderedCats =
             orderedCategories(categories, pages, DateTime.now());
         final scheme = Theme.of(context).colorScheme;
-        return DefaultTabController(
-          length: orderedCats.length + 1,
+        return ListenableBuilder(
+          listenable: Progress.instance,
+          builder: (context, _) {
+            final favorites = [
+              for (final p in pages)
+                if (Progress.instance.isFavoritePage(p.id)) p,
+            ];
+            return _pickerBody(
+                context, pages, favorites, orderedCats, categoryLabels,
+                scheme: scheme, lang: lang);
+          },
+        );
+      },
+    );
+  }
+
+  /// The tabs. The hearts tab only exists once something is in it — an
+  /// empty first tab would greet every new child with a blank screen.
+  ///
+  /// Its presence changes the tab count, so the controller is keyed on that
+  /// count: rebuilding a [DefaultTabController] with a different length and
+  /// the same state is exactly the case Flutter asserts on.
+  Widget _pickerBody(
+    BuildContext context,
+    List<ColoringPage> pages,
+    List<ColoringPage> favorites,
+    List<String> orderedCats,
+    Map<String, String> categoryLabels, {
+    required ColorScheme scheme,
+    required String lang,
+  }) {
+    final hasFavorites = favorites.isNotEmpty;
+    return DefaultTabController(
+          key: ValueKey(hasFavorites),
+          length: orderedCats.length + (hasFavorites ? 2 : 1),
           child: Scaffold(
             body: BlobBackground(
               gradient: PixieGradients.pickerBg,
@@ -119,6 +154,7 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                       unselectedLabelColor: scheme.onSurfaceVariant,
                       splashBorderRadius: BorderRadius.circular(24),
                       tabs: [
+                        if (hasFavorites) const Tab(text: '💖'),
                         Tab(text: context.l10n.categoryAll),
                         for (final c in orderedCats)
                           Tab(text: categoryLabels[c]),
@@ -127,6 +163,8 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                     Expanded(
                       child: TabBarView(
                         children: [
+                          if (hasFavorites)
+                            _PageGrid(pages: favorites, entrance: _entrance),
                           _PageGrid(pages: pages, entrance: _entrance),
                           for (final c in orderedCats)
                             _PageGrid(
@@ -145,8 +183,6 @@ class _PagePickerScreenState extends State<PagePickerScreen>
             ),
           ),
         );
-      },
-    );
   }
 }
 
@@ -220,6 +256,16 @@ class _PageGrid extends StatelessWidget {
             ),
           ),
         );
+        // The heart sits *on* the card rather than being a long-press: the
+        // long-press is the parents' print shortcut, and a child who cannot
+        // read needs the mark they made to be visible without holding
+        // anything down.
+        card = Stack(
+          children: [
+            card,
+            Positioned(top: 0, right: 0, child: _FavoriteHeart(page: page)),
+          ],
+        );
         // One-shot staggered entrance for the first visible items only.
         if (i < 12) {
           final anim = CurvedAnimation(
@@ -242,6 +288,56 @@ class _PageGrid extends StatelessWidget {
           );
         }
         return card;
+      },
+    );
+  }
+}
+
+/// The heart in the corner of a picture tile.
+///
+/// Per child (it lives in that child's progress file), and it is the only
+/// way back to a favourite motif that does not involve reading a tab label.
+class _FavoriteHeart extends StatelessWidget {
+  const _FavoriteHeart({required this.page});
+
+  final ColoringPage page;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: Progress.instance,
+      builder: (context, _) {
+        final on = Progress.instance.isFavoritePage(page.id);
+        return Bouncy(
+          onTap: () {
+            Progress.instance.toggleFavoritePage(page.id);
+            Sfx.instance.pop();
+          },
+          playTick: false,
+          semanticLabel: context.l10n.favoritePageAction,
+          semanticSelected: on,
+          child: AnimatedScale(
+            scale: on ? 1.0 : 0.85,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutBack,
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: on ? 0.95 : 0.7),
+                shape: BoxShape.circle,
+                boxShadow: PixieTokens.softShadow(PixiePalette.bubblegum),
+              ),
+              child: Icon(
+                on ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                size: 20,
+                color: on
+                    ? PixiePalette.bubblegum
+                    : PixiePalette.ink.withValues(alpha: 0.35),
+              ),
+            ),
+          ),
+        );
       },
     );
   }

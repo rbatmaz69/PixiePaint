@@ -257,7 +257,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get galleryEmpty => 'Henüz resim yok –\nhadi bir tane boya!';
 
   @override
-  String get continuePainting => 'Boyamaya devam';
+  String get continuePainting => 'Boyamaya devam et';
 
   @override
   String get slideshowTooltip => 'Slayt gösterisini başlat';
@@ -874,4 +874,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için';
+
+  @override
+  String get favoritePageAction => 'En sevdiğim resim';
 }

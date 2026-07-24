@@ -89,7 +89,7 @@
   "patternBubbles": "Baloncuklar",
   "galleryTitle": "Resimlerim",
   "galleryEmpty": "Henüz resim yok –\nhadi bir tane boya!",
-  "continuePainting": "Boyamaya devam",
+  "continuePainting": "Boyamaya devam et",
   "slideshowTooltip": "Slayt gösterisini başlat",
   "replayAction": "Filmi izle",
   "replayAgain": "Tekrar oynat",
@@ -381,5 +381,6 @@
   "errorLogShareNote": "PixiePaint kaydı — bilerek paylaşılana kadar cihazda kalır.",
   "rotateHint": "Beni yan çevir, boyamak için daha çok yer olsun",
   "simpleToolsTitle": "Basit araçlar",
-  "simpleToolsSubtitle": "Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için"
+  "simpleToolsSubtitle": "Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için",
+  "favoritePageAction": "En sevdiğim resim"
 }

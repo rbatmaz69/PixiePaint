@@ -237,6 +237,49 @@ void main() {
     });
   });
 
+  group('favorite pictures', () {
+    test('a heart survives a restart', () async {
+      await load();
+      expect(progress.isFavoritePage('cat'), isFalse);
+
+      progress.toggleFavoritePage('cat');
+      progress.toggleFavoritePage('rocket');
+      await progress.flush();
+
+      progress.resetForTest();
+      await progress.loadFrom(JsonStore(file));
+      expect(progress.favoritePageIds, {'cat', 'rocket'});
+    });
+
+    test('tapping the heart again takes it back', () async {
+      await load();
+      progress.toggleFavoritePage('cat');
+      progress.toggleFavoritePage('cat');
+      expect(progress.favoritePageIds, isEmpty,
+          reason: 'a child must be able to change their mind');
+    });
+
+    test('a progress file from before v8.2 simply has no favorites',
+        () async {
+      file.writeAsStringSync('{"tasksDone": 3}');
+      await load();
+      expect(progress.tasksDone, 3);
+      expect(progress.favoritePageIds, isEmpty);
+    });
+
+    test('hearts belong to one child, not to the device', () async {
+      final fileA = File('${dir.path}/progress_fav_a.json');
+      final fileB = File('${dir.path}/progress_fav_b.json');
+      await progress.loadFrom(JsonStore(fileA));
+      progress.toggleFavoritePage('cat');
+      await progress.flush();
+
+      progress.resetForTest();
+      await progress.loadFrom(JsonStore(fileB));
+      expect(progress.favoritePageIds, isEmpty);
+    });
+  });
+
   group('per-profile isolation', () {
     test('loadFrom another file starts fresh — kids do not share rewards',
         () async {

@@ -257,7 +257,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get galleryEmpty => 'Pas encore d\'image –\ncolorie-en une !';
 
   @override
-  String get continuePainting => 'Continuer';
+  String get continuePainting => 'Continuer à peindre';
 
   @override
   String get slideshowTooltip => 'Lancer le diaporama';
@@ -877,4 +877,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits';
+
+  @override
+  String get favoritePageAction => 'Dessin préféré';
 }

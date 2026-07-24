@@ -89,7 +89,7 @@
   "patternBubbles": "Bolle",
   "galleryTitle": "I miei disegni",
   "galleryEmpty": "Ancora nessun disegno –\ncolorane uno!",
-  "continuePainting": "Continua a colorare",
+  "continuePainting": "Continua a dipingere",
   "slideshowTooltip": "Avvia la presentazione",
   "replayAction": "Guarda il filmato",
   "replayAgain": "Rivedi",
@@ -381,5 +381,6 @@
   "errorLogShareNote": "Registrato da PixiePaint: resta sul dispositivo finché non viene condiviso di proposito.",
   "rotateHint": "Girami di lato: avrai più spazio per dipingere",
   "simpleToolsTitle": "Strumenti semplici",
-  "simpleToolsSubtitle": "Solo pennello, riempimento, adesivi e gomma: per i più piccoli"
+  "simpleToolsSubtitle": "Solo pennello, riempimento, adesivi e gomma: per i più piccoli",
+  "favoritePageAction": "Disegno preferito"
 }

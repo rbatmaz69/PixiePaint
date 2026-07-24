@@ -387,5 +387,12 @@
   "simpleToolsSubtitle": "Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten",
   "@simpleToolsTitle": {
     "description": "Per-profile switch: cut the toolbar down to four tools"
+  },
+  "favoritePageAction": "Lieblingsbild",
+  "@favoritePageAction": {
+    "description": "Heart on a coloring-page tile in the picker (per child)"
+  },
+  "@continuePainting": {
+    "description": "Home card that reopens the picture this child painted last"
   }
 }

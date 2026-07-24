@@ -876,4 +876,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Just brush, fill, stickers and eraser – for the littlest ones';
+
+  @override
+  String get favoritePageAction => 'Favourite picture';
 }

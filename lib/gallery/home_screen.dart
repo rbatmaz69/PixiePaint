@@ -23,6 +23,7 @@ import '../widgets/daily_task_sheet.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/profile_sheet.dart';
 import 'album_screen.dart';
+import 'continue_card.dart';
 import 'gallery_screen.dart';
 import 'page_picker_screen.dart';
 import '../settings/settings_screen.dart';
@@ -46,11 +47,11 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  /// Number of entrance slots: header, daily-task banner, six cards and the
-  /// two chrome buttons. The step is derived from it so adding a card keeps
+  /// Number of entrance slots: header, continue card, daily-task banner,
+  /// six cards and the two chrome buttons. The step is derived from it so adding a card keeps
   /// the whole cascade inside the controller's run instead of piling up at
   /// the clamp.
-  static const int _slotCount = 10;
+  static const int _slotCount = 11;
   static const double _slotStep = 0.45 / (_slotCount - 1);
 
   /// One-shot staggered entrance: fade + rise, offset per slot.
@@ -97,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen>
                       children: [
                         _staggered(0, _Header(wave: wave)),
                         const SizedBox(height: 20),
-                        _staggered(1, DailyTaskBanner(width: rowW)),
+                        _staggered(1, ContinueCard(width: rowW)),
+                        _staggered(2, DailyTaskBanner(width: rowW)),
                         const SizedBox(height: 22),
                         Wrap(
                           spacing: 20,
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen>
                           alignment: WrapAlignment.center,
                           children: [
                             _staggered(
-                              2,
+                              3,
                               _BigCard(
                                 emoji: '🖍️',
                                 label: context.l10n.cardColoring,
@@ -121,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              3,
+                              4,
                               _BigCard(
                                 emoji: '✏️',
                                 label: context.l10n.cardFreeDraw,
@@ -136,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              4,
+                              5,
                               _BigCard(
                                 emoji: '🏞️',
                                 label: context.l10n.cardScenes,
@@ -152,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              5,
+                              6,
                               _BigCard(
                                 emoji: '📷',
                                 label: context.l10n.cardPhoto,
@@ -164,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              6,
+                              7,
                               _BigCard(
                                 emoji: '✍️',
                                 label: context.l10n.cardTrace,
@@ -180,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              7,
+                              8,
                               _BigCard(
                                 emoji: '🖼️',
                                 label: context.l10n.cardGallery,
@@ -195,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                             ),
                             _staggered(
-                              7,
+                              8,
                               _BigCard(
                                 emoji: '🏆',
                                 label: context.l10n.albumTitle,
@@ -209,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen>
                             // Two painters need the room of a tablet.
                             if (MediaQuery.sizeOf(context).shortestSide >= 600)
                               _staggered(
-                                7,
+                                8,
                                 _BigCard(
                                   emoji: '🤝',
                                   label: context.l10n.cardTwoPainter,
@@ -235,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 left: 8,
                 child: _staggered(
-                  8,
+                  9,
                   ListenableBuilder(
                     listenable: Settings.instance,
                     builder: (context, _) {
@@ -262,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen>
                 top: 8,
                 right: 8,
                 child: _staggered(
-                  9,
+                  10,
                   StickerCircleButton(
                     icon: Icons.settings_rounded,
                     tooltip: context.l10n.settingsTooltip,

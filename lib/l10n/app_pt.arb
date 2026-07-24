@@ -381,5 +381,6 @@
   "errorLogShareNote": "Registo do PixiePaint — fica no dispositivo até ser partilhado de propósito.",
   "rotateHint": "Vira-me de lado para teres mais espaço para pintar",
   "simpleToolsTitle": "Ferramentas simples",
-  "simpleToolsSubtitle": "Só pincel, balde, autocolantes e borracha – para os mais pequenos"
+  "simpleToolsSubtitle": "Só pincel, balde, autocolantes e borracha – para os mais pequenos",
+  "favoritePageAction": "Desenho preferido"
 }

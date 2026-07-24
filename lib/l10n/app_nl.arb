@@ -89,7 +89,7 @@
   "patternBubbles": "Bellen",
   "galleryTitle": "Mijn tekeningen",
   "galleryEmpty": "Nog geen tekeningen –\nmaak er een!",
-  "continuePainting": "Verder kleuren",
+  "continuePainting": "Verder tekenen",
   "slideshowTooltip": "Diavoorstelling starten",
   "replayAction": "Filmpje bekijken",
   "replayAgain": "Nog eens afspelen",
@@ -381,5 +381,6 @@
   "errorLogShareNote": "Vastgelegd door PixiePaint — blijft op het apparaat tot het bewust gedeeld wordt.",
   "rotateHint": "Draai me om, dan heb je meer ruimte om te tekenen",
   "simpleToolsTitle": "Eenvoudige gereedschappen",
-  "simpleToolsSubtitle": "Alleen kwast, vullen, stickers en gum – voor de allerkleinsten"
+  "simpleToolsSubtitle": "Alleen kwast, vullen, stickers en gum – voor de allerkleinsten",
+  "favoritePageAction": "Lievelingsplaat"
 }

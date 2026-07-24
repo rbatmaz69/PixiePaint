@@ -258,7 +258,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get galleryEmpty => 'Nog geen tekeningen –\nmaak er een!';
 
   @override
-  String get continuePainting => 'Verder kleuren';
+  String get continuePainting => 'Verder tekenen';
 
   @override
   String get slideshowTooltip => 'Diavoorstelling starten';
@@ -878,4 +878,7 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Alleen kwast, vullen, stickers en gum – voor de allerkleinsten';
+
+  @override
+  String get favoritePageAction => 'Lievelingsplaat';
 }

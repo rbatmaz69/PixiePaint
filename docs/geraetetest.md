@@ -67,6 +67,15 @@ Auf einem Gerät testen, auf dem die App **noch nicht** installiert war (oder vo
 - [ ] Rückgängig ist weiterhin da
 - [ ] Zweites Kind ohne den Schalter anlegen und wechseln → dort sind wieder alle 14 Werkzeuge da
 
+**Wiederfinden** (neu in v8.2)
+
+- [ ] Bild malen, verlassen → auf der Startseite steht oben „Weitermalen" mit dem Vorschaubild; antippen führt genau in dieses Bild
+- [ ] Ein zweites Bild malen → die Karte zeigt jetzt das neuere
+- [ ] Auf ein anderes Kind wechseln → die Karte zeigt dessen letztes Bild, oder verschwindet, wenn es noch keines hat
+- [ ] Bildauswahl: Herz auf einer Kachel antippen → der Reiter „💖" erscheint ganz vorne und enthält das Bild
+- [ ] Herz wieder abwählen → mit dem letzten Herz verschwindet der Reiter
+- [ ] Lange auf eine Kachel drücken druckt weiterhin (Elternschranke), das Herz stört das nicht
+
 ## Stift und Handballen (nur mit Stylus)
 
 - [ ] Druckstärke ändert die Strichbreite

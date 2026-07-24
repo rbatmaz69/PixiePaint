@@ -89,7 +89,7 @@
   "patternBubbles": "Bulles",
   "galleryTitle": "Mes images",
   "galleryEmpty": "Pas encore d'image –\ncolorie-en une !",
-  "continuePainting": "Continuer",
+  "continuePainting": "Continuer à peindre",
   "slideshowTooltip": "Lancer le diaporama",
   "replayAction": "Voir le film",
   "replayAgain": "Rejouer",
@@ -381,5 +381,6 @@
   "errorLogShareNote": "Enregistré par PixiePaint — reste sur l'appareil jusqu'à un partage volontaire.",
   "rotateHint": "Tourne-moi sur le côté pour peindre plus grand",
   "simpleToolsTitle": "Outils simples",
-  "simpleToolsSubtitle": "Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits"
+  "simpleToolsSubtitle": "Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits",
+  "favoritePageAction": "Dessin préféré"
 }

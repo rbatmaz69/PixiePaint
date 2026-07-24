@@ -258,7 +258,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get galleryEmpty => 'Ancora nessun disegno –\ncolorane uno!';
 
   @override
-  String get continuePainting => 'Continua a colorare';
+  String get continuePainting => 'Continua a dipingere';
 
   @override
   String get slideshowTooltip => 'Avvia la presentazione';
@@ -877,4 +877,7 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Solo pennello, riempimento, adesivi e gomma: per i più piccoli';
+
+  @override
+  String get favoritePageAction => 'Disegno preferito';
 }

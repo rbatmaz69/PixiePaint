@@ -604,7 +604,7 @@ abstract class AppLocalizations {
   /// **'Noch keine Bilder –\nmal doch eins!'**
   String get galleryEmpty;
 
-  /// No description provided for @continuePainting.
+  /// Home card that reopens the picture this child painted last
   ///
   /// In de, this message translates to:
   /// **'Weitermalen'**
@@ -1581,6 +1581,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten'**
   String get simpleToolsSubtitle;
+
+  /// Heart on a coloring-page tile in the picker (per child)
+  ///
+  /// In de, this message translates to:
+  /// **'Lieblingsbild'**
+  String get favoritePageAction;
 }
 
 class _AppLocalizationsDelegate

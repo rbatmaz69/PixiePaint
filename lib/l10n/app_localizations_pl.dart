@@ -900,4 +900,7 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get simpleToolsSubtitle =>
       'Tylko pędzel, wypełnianie, naklejki i gumka – dla najmłodszych';
+
+  @override
+  String get favoritePageAction => 'Ulubiony obrazek';
 }

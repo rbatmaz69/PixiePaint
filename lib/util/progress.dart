@@ -42,6 +42,14 @@ class Progress extends ChangeNotifier {
   /// Rewards whose unlock party has already been shown.
   final Set<String> celebratedEmojis = {};
 
+  /// Coloring pages this child marked with a heart.
+  ///
+  /// Sixty-eight pictures across ten tabs is a lot to search through when
+  /// you cannot read yet and just want the cat again. Kept per profile
+  /// (this whole file is), and here rather than in the settings because it
+  /// is the child's choice, not the parent's.
+  final Set<String> favoritePageIds = {};
+
   JsonStore? _store;
 
   /// Loads the given profile's progress from `progress_<id>.json`. Each kid
@@ -71,6 +79,7 @@ class Progress extends ChangeNotifier {
     completedTraceIds.clear();
     completedCbnIds.clear();
     celebratedEmojis.clear();
+    favoritePageIds.clear();
     tasksDone = 0;
     lastTaskDay = '';
     taskStreak = 0;
@@ -97,6 +106,8 @@ class Progress extends ChangeNotifier {
     taskStreak = json['taskStreak'] as int? ?? 0;
     celebratedEmojis.addAll(
         ((json['celebratedEmojis'] as List?) ?? []).whereType<String>());
+    favoritePageIds.addAll(
+        ((json['favoritePageIds'] as List?) ?? []).whereType<String>());
   }
 
   /// Test seam: forget everything loaded so far.
@@ -168,6 +179,16 @@ class Progress extends ChangeNotifier {
     return fresh;
   }
 
+  bool isFavoritePage(String pageId) => favoritePageIds.contains(pageId);
+
+  /// Hearts a picture, or takes the heart back. Costs nothing to change
+  /// its mind about, which is the point of a heart on a picture.
+  void toggleFavoritePage(String pageId) {
+    if (!favoritePageIds.remove(pageId)) favoritePageIds.add(pageId);
+    _persist();
+    notifyListeners();
+  }
+
   bool isRewardUnlocked(StickerReward reward) =>
       isUnlocked(reward, snapshot());
 
@@ -182,6 +203,7 @@ class Progress extends ChangeNotifier {
       'lastTaskDay': lastTaskDay,
       'taskStreak': taskStreak,
       'celebratedEmojis': celebratedEmojis.toList(),
+      'favoritePageIds': favoritePageIds.toList(),
     });
   }
 
