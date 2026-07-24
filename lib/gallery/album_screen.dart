@@ -5,6 +5,7 @@ import '../models/reward.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -46,22 +47,30 @@ class AlbumScreen extends StatelessWidget {
                     onBack: () => Navigator.of(context).pop(),
                   ),
                   Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
-                      children: [
-                        _Summary(
-                          earned: earned.length,
-                          total: kRewards.length,
-                          streak: progress.taskStreak,
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          l10n.albumStickers,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 10),
-                        _StickerGrid(snapshot: snapshot),
-                      ],
+                    child: EntranceGroup(
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                        children: [
+                          Entrance(
+                            slot: 0,
+                            child: _Summary(
+                              earned: earned.length,
+                              total: kRewards.length,
+                              streak: progress.taskStreak,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          Entrance(
+                            slot: 1,
+                            child: Text(
+                              l10n.albumStickers,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          _StickerGrid(snapshot: snapshot),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -144,10 +153,14 @@ class _StickerGrid extends StatelessWidget {
         crossAxisSpacing: 12,
       ),
       itemCount: kRewards.length,
-      itemBuilder: (context, i) => _RewardTile(
-        reward: kRewards[i],
-        snapshot: snapshot,
-        tiltIndex: i,
+      // Slot 2 onwards: the summary and the heading go first.
+      itemBuilder: (context, i) => Entrance(
+        slot: i + 2,
+        child: _RewardTile(
+          reward: kRewards[i],
+          snapshot: snapshot,
+          tiltIndex: i,
+        ),
       ),
     );
   }

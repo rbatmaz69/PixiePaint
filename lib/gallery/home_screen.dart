@@ -13,6 +13,7 @@ import 'scene_picker_screen.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -36,41 +37,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _entrance = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 1100))
-    ..forward();
-
-  @override
-  void dispose() {
-    _entrance.dispose();
-    super.dispose();
-  }
-
-  /// Number of entrance slots: header, continue card, daily-task banner,
-  /// six cards and the two chrome buttons. The step is derived from it so adding a card keeps
-  /// the whole cascade inside the controller's run instead of piling up at
-  /// the clamp.
-  static const int _slotCount = 11;
-  static const double _slotStep = 0.45 / (_slotCount - 1);
-
-  /// One-shot staggered entrance: fade + rise, offset per slot.
-  Widget _staggered(int slot, Widget child) {
-    final start = (_slotStep * slot).clamp(0.0, 0.45);
-    final anim = CurvedAnimation(
-      parent: _entrance,
-      curve: Interval(start, (start + 0.55).clamp(0.0, 1.0),
-          curve: Curves.easeOutCubic),
-    );
-    return FadeTransition(
-      opacity: anim,
-      child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.18), end: Offset.zero)
-            .animate(anim),
-        child: child,
-      ),
-    );
-  }
+    with SingleTickerProviderStateMixin, EntranceMixin {
+  /// The cascade: header, continue card, daily-task banner, the cards and
+  /// the two chrome buttons. [EntranceMixin] does the work.
+  Widget _staggered(int slot, Widget child) => entrance(slot, child);
 
   @override
   Widget build(BuildContext context) {

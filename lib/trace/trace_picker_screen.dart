@@ -7,6 +7,7 @@ import '../models/tool.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -65,14 +66,16 @@ class TracePickerScreen extends StatelessWidget {
                   ],
                 ),
                 Expanded(
-                  child: ListenableBuilder(
-                    listenable: Progress.instance,
-                    builder: (context, _) => TabBarView(
-                      children: [
-                        _TraceGrid(templates: letters),
-                        _TraceGrid(templates: numbers),
-                        _TraceGrid(templates: shapes),
-                      ],
+                  child: EntranceGroup(
+                    child: ListenableBuilder(
+                      listenable: Progress.instance,
+                      builder: (context, _) => TabBarView(
+                        children: [
+                          _TraceGrid(templates: letters),
+                          _TraceGrid(templates: numbers),
+                          _TraceGrid(templates: shapes),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -103,7 +106,7 @@ class _TraceGrid extends StatelessWidget {
       itemBuilder: (context, i) {
         final t = templates[i];
         final done = Progress.instance.completedTraceIds.contains(t.id);
-        return Bouncy(
+        final Widget tile = Bouncy(
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (_) => CanvasScreen(traceTemplate: t)),
@@ -141,6 +144,9 @@ class _TraceGrid extends StatelessWidget {
             ),
           ),
         );
+        // Staggered entrance for the first visible tiles only — the grid is
+        // 44 templates long and the rest arrive scrolled-to, not animated.
+        return i < 12 ? Entrance(slot: i, child: tile) : tile;
       },
     );
   }

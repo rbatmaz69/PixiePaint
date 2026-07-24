@@ -6,6 +6,7 @@ import '../models/artwork.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
@@ -136,10 +137,13 @@ class _StorageScreenState extends State<StorageScreen> {
 
   Widget _body(BuildContext context) {
     final l10n = context.l10n;
-    return CustomScrollView(
+    return EntranceGroup(
+        child: CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: Padding(
+          child: Entrance(
+            slot: 0,
+            child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
             child: StickerCard(
               color: Colors.white,
@@ -167,15 +171,19 @@ class _StorageScreenState extends State<StorageScreen> {
               ),
             ),
           ),
+          ),
         ),
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
-            child: Text(
-              _artworks.isEmpty
-                  ? l10n.storageEmpty
-                  : l10n.storageCleanupHint,
-              style: Theme.of(context).textTheme.bodyMedium,
+          child: Entrance(
+            slot: 1,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+              child: Text(
+                _artworks.isEmpty
+                    ? l10n.storageEmpty
+                    : l10n.storageCleanupHint,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ),
         ),
@@ -189,23 +197,27 @@ class _StorageScreenState extends State<StorageScreen> {
               childAspectRatio: 0.9,
             ),
             delegate: SliverChildBuilderDelegate(
-              (context, i) => _Tile(
-                artwork: _artworks[i],
-                selected: _selected.contains(_artworks[i].id),
-                onTap: () {
-                  Sfx.instance.tick();
-                  setState(() {
-                    final id = _artworks[i].id;
-                    if (!_selected.remove(id)) _selected.add(id);
-                  });
-                },
+              // Slot 2 onwards: the summary and the hint go first.
+              (context, i) => Entrance(
+                slot: i + 2,
+                child: _Tile(
+                  artwork: _artworks[i],
+                  selected: _selected.contains(_artworks[i].id),
+                  onTap: () {
+                    Sfx.instance.tick();
+                    setState(() {
+                      final id = _artworks[i].id;
+                      if (!_selected.remove(id)) _selected.add(id);
+                    });
+                  },
+                ),
               ),
               childCount: _artworks.length,
             ),
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

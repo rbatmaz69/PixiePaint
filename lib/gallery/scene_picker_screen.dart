@@ -7,6 +7,7 @@ import '../models/scene.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -39,7 +40,10 @@ class ScenePickerScreen extends StatelessWidget {
                     if (scenes == null) {
                       return const Center(child: LoadingPixie());
                     }
-                    return GridView.builder(
+                    // Inside the loaded branch: the cascade starts when the
+                    // stages are there, not while they load.
+                    return EntranceGroup(
+                        child: GridView.builder(
                       padding: const EdgeInsets.all(16),
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -51,7 +55,9 @@ class ScenePickerScreen extends StatelessWidget {
                       itemCount: scenes.length,
                       itemBuilder: (context, i) {
                         final scene = scenes[i];
-                        return Bouncy(
+                        return Entrance(
+                          slot: i,
+                          child: Bouncy(
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (_) => CanvasScreen(scene: scene)),
@@ -87,9 +93,10 @@ class ScenePickerScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                        ),
                         );
                       },
-                    );
+                    ));
                   },
                 ),
               ),

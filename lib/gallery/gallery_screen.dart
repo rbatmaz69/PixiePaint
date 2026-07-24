@@ -9,6 +9,7 @@ import '../replay/replay_screen.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -36,35 +37,14 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, EntranceMixin {
   late Future<List<Artwork>> _future;
   bool _favoritesOnly = false;
-
-  /// Created on first use, so the entrance animation starts when the content
-  /// actually appears rather than while the list is still loading.
-  ///
-  /// The nullable backing field is what makes that safe: leaving this screen
-  /// before the load finished means `build` never touched the getter, and a
-  /// plain `late final` would then *create* the controller inside dispose(),
-  /// where the element tree is already deactivated — an outright crash. On a
-  /// device with a big gallery and slow storage that is a very short window
-  /// to hit.
-  AnimationController? _entranceOrNull;
-  AnimationController get _entrance => _entranceOrNull ??= AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 900),
-      )..forward();
 
   @override
   void initState() {
     super.initState();
     _future = _loadForActiveProfile();
-  }
-
-  @override
-  void dispose() {
-    _entranceOrNull?.dispose();
-    super.dispose();
   }
 
   /// Only the active kid's pictures. Legacy artworks (no profileId) belong
@@ -488,26 +468,7 @@ class _GalleryScreenState extends State<GalleryScreen>
   }
 
   /// Fade + rise on the shared entrance controller, slot-staggered.
-  Widget _staggered(int slot, Widget child) {
-    final anim = CurvedAnimation(
-      parent: _entrance,
-      curve: Interval(
-        (0.05 * slot).clamp(0.0, 0.5),
-        (0.05 * slot + 0.5).clamp(0.0, 1.0),
-        curve: Curves.easeOutCubic,
-      ),
-    );
-    return FadeTransition(
-      opacity: anim,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.12),
-          end: Offset.zero,
-        ).animate(anim),
-        child: child,
-      ),
-    );
-  }
+  Widget _staggered(int slot, Widget child) => entrance(slot, child);
 }
 
 /// "Polaroid" card: white frame, soft shadow, wider bottom edge carrying

@@ -7,6 +7,7 @@ import '../models/coloring_page.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -38,29 +39,7 @@ class PagePickerScreen extends StatefulWidget {
   State<PagePickerScreen> createState() => _PagePickerScreenState();
 }
 
-class _PagePickerScreenState extends State<PagePickerScreen>
-    with SingleTickerProviderStateMixin {
-  /// Created on first use, so the entrance animation starts when the content
-  /// actually appears rather than while the list is still loading.
-  ///
-  /// The nullable backing field is what makes that safe: leaving this screen
-  /// before the load finished means `build` never touched the getter, and a
-  /// plain `late final` would then *create* the controller inside dispose(),
-  /// where the element tree is already deactivated — an outright crash. On a
-  /// device with a big gallery and slow storage that is a very short window
-  /// to hit.
-  AnimationController? _entranceOrNull;
-  AnimationController get _entrance => _entranceOrNull ??= AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 900),
-      )..forward();
-
-  @override
-  void dispose() {
-    _entranceOrNull?.dispose();
-    super.dispose();
-  }
-
+class _PagePickerScreenState extends State<PagePickerScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ColoringPage>>(
@@ -160,21 +139,24 @@ class _PagePickerScreenState extends State<PagePickerScreen>
                           Tab(text: categoryLabels[c]),
                       ],
                     ),
+                    // Inside the loaded branch on purpose: the cascade
+                    // starts when the pictures are actually there, not
+                    // while the list is still coming off disk.
                     Expanded(
-                      child: TabBarView(
-                        children: [
-                          if (hasFavorites)
-                            _PageGrid(pages: favorites, entrance: _entrance),
-                          _PageGrid(pages: pages, entrance: _entrance),
-                          for (final c in orderedCats)
-                            _PageGrid(
-                              pages: [
-                                for (final p in pages)
-                                  if (p.category == c) p,
-                              ],
-                              entrance: _entrance,
-                            ),
-                        ],
+                      child: EntranceGroup(
+                        child: TabBarView(
+                          children: [
+                            if (hasFavorites) _PageGrid(pages: favorites),
+                            _PageGrid(pages: pages),
+                            for (final c in orderedCats)
+                              _PageGrid(
+                                pages: [
+                                  for (final p in pages)
+                                    if (p.category == c) p,
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -187,10 +169,9 @@ class _PagePickerScreenState extends State<PagePickerScreen>
 }
 
 class _PageGrid extends StatelessWidget {
-  const _PageGrid({required this.pages, required this.entrance});
+  const _PageGrid({required this.pages});
 
   final List<ColoringPage> pages;
-  final Animation<double> entrance;
 
   @override
   Widget build(BuildContext context) {
@@ -277,26 +258,7 @@ class _PageGrid extends StatelessWidget {
           ],
         );
         // One-shot staggered entrance for the first visible items only.
-        if (i < 12) {
-          final anim = CurvedAnimation(
-            parent: entrance,
-            curve: Interval(
-              (0.05 * i).clamp(0.0, 0.5),
-              (0.05 * i + 0.5).clamp(0.0, 1.0),
-              curve: Curves.easeOutCubic,
-            ),
-          );
-          card = FadeTransition(
-            opacity: anim,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 0.12),
-                end: Offset.zero,
-              ).animate(anim),
-              child: card,
-            ),
-          );
-        }
+        if (i < 12) card = Entrance(slot: i, child: card);
         return card;
       },
     );

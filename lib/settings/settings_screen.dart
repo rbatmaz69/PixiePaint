@@ -7,6 +7,7 @@ import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
@@ -32,33 +33,11 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _entrance = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 900))
-    ..forward();
-
-  @override
-  void dispose() {
-    _entrance.dispose();
-    super.dispose();
-  }
-
-  /// Fade + rise on the shared entrance controller, slot-staggered.
-  Widget _staggered(int slot, Widget child) {
-    final anim = CurvedAnimation(
-      parent: _entrance,
-      curve: Interval(0.10 * slot, 0.10 * slot + 0.55,
-          curve: Curves.easeOutCubic),
-    );
-    return FadeTransition(
-      opacity: anim,
-      child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.12), end: Offset.zero)
-            .animate(anim),
-        child: child,
-      ),
-    );
-  }
+    with SingleTickerProviderStateMixin, EntranceMixin {
+  /// Fade + rise, slot-staggered. Doubled: this screen has four big
+  /// sections rather than a grid of tiles, and they read better arriving
+  /// one after the other than almost together.
+  Widget _staggered(int slot, Widget child) => entrance(slot * 2, child);
 
   /// Persist and tick — after the update, so switching sounds OFF is
   /// correctly silent and switching ON ticks.

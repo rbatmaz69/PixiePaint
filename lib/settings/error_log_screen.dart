@@ -6,6 +6,7 @@ import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
+import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -100,39 +101,44 @@ class _ErrorLogScreenState extends State<ErrorLogScreen> {
                 onBack: () => Navigator.of(context).pop(),
               ),
               Expanded(
-                child: ListView(
+                child: EntranceGroup(
+                    child: ListView(
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                   children: [
-                    StickerCard(
-                      color: Colors.white,
-                      radius: 24,
-                      shadowColor: PixiePalette.sky,
-                      padding: const EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.errorLogCount(entries.length),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            l10n.errorLogHint,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                    color: PixiePalette.ink
-                                        .withValues(alpha: 0.7)),
-                          ),
-                        ],
+                    Entrance(
+                      slot: 0,
+                      child: StickerCard(
+                        color: Colors.white,
+                        radius: 24,
+                        shadowColor: PixiePalette.sky,
+                        padding: const EdgeInsets.all(18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.errorLogCount(entries.length),
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              l10n.errorLogHint,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                      color: PixiePalette.ink
+                                          .withValues(alpha: 0.7)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     if (entries.isEmpty)
-                      _EmptyState(text: l10n.errorLogEmpty)
+                      Entrance(slot: 1, child: _EmptyState(text: l10n.errorLogEmpty))
                     else ...[
-                      for (final entry in entries) _EntryCard(entry: entry),
+                      for (final (i, entry) in entries.indexed)
+                        Entrance(slot: i + 1, child: _EntryCard(entry: entry)),
                       const SizedBox(height: 8),
                       KidDialogButton(
                         label: l10n.errorLogShare,
@@ -147,7 +153,7 @@ class _ErrorLogScreenState extends State<ErrorLogScreen> {
                       ),
                     ],
                   ],
-                ),
+                )),
               ),
             ],
           ),
