@@ -245,6 +245,8 @@ class _Tile extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
+            // Tighter than the tile that frames it, on purpose — see the
+            // gallery's polaroid for the same reasoning.
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: artwork.thumbFile.existsSync()

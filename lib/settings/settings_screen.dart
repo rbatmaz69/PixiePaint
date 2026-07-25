@@ -502,7 +502,7 @@ class _KidRow extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: tint,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(PixieTokens.rSmall),
             ),
             child: Text(emoji, style: const TextStyle(fontSize: 24)),
           ),

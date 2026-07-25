@@ -22,6 +22,17 @@ abstract final class PixieTokens {
   /// directions and used to arrive at 32 by two unrelated routes.
   static const double rSheet = 32;
 
+  // Two kinds of radius deliberately stay off this list, so that finding a
+  // bare number in the code still means something:
+  //
+  // * **Hairlines** (2–4): the crayon underline in the header, a progress
+  //   bar's cap, the dots of a page indicator. Those are the thickness of
+  //   the thing itself, not a corner treatment.
+  // * **Inner clips**: an image clipped *inside* a rounded frame has to
+  //   lose roughly the padding between the two, or the corners pinch
+  //   visibly. It is derived from its frame, not chosen — see the gallery's
+  //   polaroid and the storage tile.
+
   /// The spacing ladder. Not a 4-grid on principle — these are the rungs
   /// the app already stood on, so adopting them moves nothing. The two
   /// smallest sit close together because 6 and 8 do different jobs: 6 packs

@@ -490,7 +490,7 @@ class _PolaroidCardState extends State<_PolaroidCard>
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(PixieTokens.rSmall),
             boxShadow: PixieTokens.softShadow(PixiePalette.mint),
           ),
           child: Stack(
@@ -498,6 +498,9 @@ class _PolaroidCardState extends State<_PolaroidCard>
               Positioned.fill(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 26),
+                  // Deliberately tighter than the frame above: a clip
+                  // inside a rounded box has to lose roughly the padding
+                  // between them, or the corners visibly pinch.
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: artwork.thumbFile.existsSync()
