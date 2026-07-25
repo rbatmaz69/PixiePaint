@@ -57,7 +57,7 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                 child: Center(
                   child: Pulse(
                     trigger: _presetTaps,
-                    peak: 1.12,
+                    peak: PixieMotion.pulsePeak,
                     child: AnimatedContainer(
                       duration: PixieMotion.press,
                       curve: PixieCurves.settle,
@@ -82,15 +82,31 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                   ),
                 ),
               ),
-              Slider(
-                min: kMinBrushSize,
-                max: kMaxBrushSize,
-                value: controller.brushSize.clamp(
-                  kMinBrushSize,
-                  kMaxBrushSize,
+              // The slider wears the paint colour rather than the theme's
+              // purple. A child dragging this is choosing how thick *this*
+              // colour goes on, and the preview dot above already says so —
+              // the control under their finger said something else.
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: controller.color,
+                  thumbColor: controller.color,
+                  // White and the very light colours would vanish into the
+                  // sheet; they keep the theme's outline instead.
+                  overlayColor: controller.color.withValues(alpha: 0.18),
+                  inactiveTrackColor: light
+                      ? Colors.black12
+                      : controller.color.withValues(alpha: 0.22),
                 ),
-                onChanged: (v) => controller.selectSize(v, silent: true),
-                onChangeEnd: (_) => Sfx.instance.tick(),
+                child: Slider(
+                  min: kMinBrushSize,
+                  max: kMaxBrushSize,
+                  value: controller.brushSize.clamp(
+                    kMinBrushSize,
+                    kMaxBrushSize,
+                  ),
+                  onChanged: (v) => controller.selectSize(v, silent: true),
+                  onChangeEnd: (_) => Sfx.instance.tick(),
+                ),
               ),
               const SizedBox(height: PixieTokens.gapSmall),
               Row(

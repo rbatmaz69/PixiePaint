@@ -320,6 +320,14 @@ ThemeData buildPixieTheme() {
     ),
     switchTheme: SwitchThemeData(
       thumbColor: const WidgetStatePropertyAll(Colors.white),
+      // "On" should not be carried by colour alone — a parent who cannot
+      // tell mint from grey still has to be able to read their own
+      // settings screen.
+      thumbIcon: WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? const Icon(Icons.check_rounded, color: PixiePalette.mint)
+            : null,
+      ),
       trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       trackColor: WidgetStateProperty.resolveWith(
         (states) => states.contains(WidgetState.selected)
