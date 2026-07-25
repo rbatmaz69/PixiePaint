@@ -108,6 +108,7 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
                   // whichever one the child taps, the thumbnail flies into
                   // the paper sheet on the canvas.
                   tag: artworkHeroTag(artwork.id),
+                  flightShuttleBuilder: pixieHeroShuttle,
                   child: Image.file(
                     artwork.thumbFile,
                     width: 64,

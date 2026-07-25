@@ -548,10 +548,12 @@ class _CanvasScreenState extends State<CanvasScreen>
     final Widget? preview = switch ((page, resume, scene)) {
       (final ColoringPage p, _, _) => Hero(
           tag: pageHeroTag(p.id),
+          flightShuttleBuilder: pixieHeroShuttle,
           child: SvgPicture.asset(p.assetPath, fit: BoxFit.contain),
         ),
       (_, final Artwork a, _) when a.thumbFile.existsSync() => Hero(
           tag: artworkHeroTag(a.id),
+          flightShuttleBuilder: pixieHeroShuttle,
           child: Image.file(
             a.thumbFile,
             fit: BoxFit.cover,
@@ -564,6 +566,7 @@ class _CanvasScreenState extends State<CanvasScreen>
         ),
       (_, _, final Scene s) => Hero(
           tag: sceneHeroTag(s.id),
+          flightShuttleBuilder: pixieHeroShuttle,
           child: SvgPicture.asset(s.assetPath, fit: BoxFit.cover),
         ),
       _ => null,

@@ -77,6 +77,8 @@ class ScenePickerScreen extends StatelessWidget {
                                       width: double.infinity,
                                       child: Hero(
                                         tag: sceneHeroTag(scene.id),
+                                        flightShuttleBuilder:
+                                            pixieHeroShuttle,
                                         child: SvgPicture.asset(
                                           scene.assetPath,
                                           fit: BoxFit.cover,

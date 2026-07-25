@@ -220,6 +220,7 @@ class _PageGrid extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Hero(
                         tag: pageHeroTag(page.id),
+                        flightShuttleBuilder: pixieHeroShuttle,
                         child: SvgPicture.asset(
                           page.assetPath,
                           fit: BoxFit.contain,

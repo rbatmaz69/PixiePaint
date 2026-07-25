@@ -505,6 +505,7 @@ class _PolaroidCardState extends State<_PolaroidCard>
                             // Flies into the paper sheet on the canvas while
                             // the picture is being loaded back.
                             tag: artworkHeroTag(artwork.id),
+                            flightShuttleBuilder: pixieHeroShuttle,
                             child: Image.file(
                               artwork.thumbFile,
                               fit: BoxFit.cover,
