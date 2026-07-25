@@ -186,6 +186,7 @@ Diese Runde hat der Bewegung Tokens gegeben und ein paar Stellen ergänzt. Die w
 - [ ] Die vier Auswahl-Blätter (Formen, Spiegel, Sticker, Füllmuster) waren mit 150 ms die schnellsten und sind jetzt bei 240. Wirkt das weich oder träge?
 - [ ] **Farbe wechseln:** die weiße Schale gleitet von Feld zu Feld, statt zu verschwinden und woanders aufzutauchen. Sie muss dabei *unter* dem Farbfeld bleiben und beim seitlichen Scrollen mitwandern
 - [ ] Eine Farbe über „Mehr Farben" mischen: die Schale landet auf dem zusätzlichen Feld ganz rechts
+- [ ] **Ein Zahlenbild öffnen:** dieselbe Schale gleitet dort zwischen den nummerierten Feldern. Die Kachel selbst wächst nicht mehr mit — nur der *Hinweis* nach mehreren Fehlversuchen wippt noch groß heraus, und der Haken für „fertig" bleibt
 - [ ] **Größen-Blatt öffnen:** Regler, Daumen und Aura tragen die aktuelle Malfarbe. Bei Weiß und Rosa bleibt der Regler trotzdem erkennbar
 - [ ] **Einstellungen:** jeder eingeschaltete Schalter hat einen Haken im Daumen
 - [ ] **Von der Startseite in einen Bildschirm gehen:** die Startseite tritt dabei zurück und dunkelt leicht ab — es gibt ein Vorne und ein Hinten. Beim Zurück umgekehrt
