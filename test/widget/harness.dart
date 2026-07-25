@@ -124,11 +124,15 @@ Future<void> tearDownPixieStorage(WidgetTester tester, Directory root) async {
 /// scaling (at 1.6 since v8.3), and these tests are what keeps that promise
 /// honest. It is applied *inside* the clamp on purpose — a test that asks
 /// for 1.6 gets 1.6, whatever the clamp above happens to be.
+///
+/// [reduceMotion] is the platform's "remove animations" switch, which the
+/// app honours everywhere (see `motion_test.dart`).
 Future<void> pumpPixie(
   WidgetTester tester,
   Widget child, {
   Size size = const Size(400, 800),
   double textScale = 1.0,
+  bool reduceMotion = false,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
@@ -143,8 +147,10 @@ Future<void> pumpPixie(
       builder: (context, inner) => MediaQuery.withClampedTextScaling(
         maxScaleFactor: 1.3,
         child: MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: TextScaler.linear(textScale)),
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(textScale),
+            disableAnimations: reduceMotion,
+          ),
           child: inner!,
         ),
       ),

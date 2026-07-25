@@ -121,6 +121,63 @@ void main() {
     handle.dispose();
   });
 
+  // Sixteen swatches each animating their own selection is sixteen things
+  // changing at once. One dish gliding is the movement that answers "where
+  // did my colour go?" — and it only works because the slots are a fixed
+  // width, so the target is arithmetic rather than a measurement.
+  group('the colour cradle', () {
+    Future<void> pumpPalette(WidgetTester tester,
+            {bool reduceMotion = false}) =>
+        pumpPixie(
+          tester,
+          Scaffold(body: Center(child: ColorPalette(controller: controller))),
+          size: const Size(900, 300),
+          reduceMotion: reduceMotion,
+        );
+
+    AnimatedPositioned cradle(WidgetTester tester) =>
+        tester.widget<AnimatedPositioned>(find.byType(AnimatedPositioned));
+
+    testWidgets('slides to whichever colour was picked', (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await pumpPalette(tester);
+
+      controller.selectColor(kPaletteColors[3]);
+      await tester.pumpAndSettle();
+      expect(cradle(tester).left, 3 * kSwatchSlot);
+
+      controller.selectColor(kPaletteColors[11]);
+      await tester.pumpAndSettle();
+      expect(cradle(tester).left, 11 * kSwatchSlot);
+    });
+
+    testWidgets('a mixed colour is cradled in its own slot after the sixteen',
+        (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await pumpPalette(tester);
+      controller.selectColor(const Color(0xFF7A3B91));
+      await tester.pumpAndSettle();
+
+      expect(cradle(tester).left, kPaletteColors.length * kSwatchSlot);
+    });
+
+    testWidgets('with motion reduced it is simply there, not on its way',
+        (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await pumpPalette(tester, reduceMotion: true);
+      expect(cradle(tester).duration, Duration.zero);
+
+      await pumpPalette(tester);
+      expect(cradle(tester).duration, greaterThan(Duration.zero));
+    });
+  });
+
   group('simple mode', () {
     Future<void> pumpSimple(WidgetTester tester) => pumpPixie(
           tester,

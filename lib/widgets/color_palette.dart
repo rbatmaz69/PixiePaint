@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
+import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
+import '../ui/motion.dart';
 import '../util/color_utils.dart';
 import 'color_picker_sheet.dart';
 
@@ -25,6 +26,10 @@ const List<Color> kPaletteColors = [
   Color(0xFF000000), // schwarz
   Color(0xFFFFFFFF), // weiß
 ];
+
+/// Width of one swatch slot. Fixed, and that is what lets the selection
+/// cradle find its target by arithmetic instead of by measuring.
+const double kSwatchSlot = 56;
 
 /// Height the palette row asks for. Trimmed from 76 in v8.0: on a phone in
 /// portrait every dp the two bars give back goes to the paper, and the
@@ -72,32 +77,95 @@ class ColorPalette extends StatelessWidget {
       listenable: controller,
       builder: (context, _) {
         final custom = !kPaletteColors.contains(controller.color);
+        // A custom color gets its own swatch right after the sixteen, so
+        // that is where the cradle has to be for it.
+        final selectedSlot = custom
+            ? kPaletteColors.length
+            : kPaletteColors.indexOf(controller.color);
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
+          child: Stack(
             children: [
-              for (final c in kPaletteColors)
-                PixieColorSwatch(
-                  color: c,
-                  selected: controller.color == c,
-                  onTap: () => controller.selectColor(c),
-                ),
-              // A color picked from the big sheet or the eyedropper lives
-              // here so its selection stays visible.
-              if (custom)
-                PixieColorSwatch(
-                  color: controller.color,
-                  selected: true,
-                  onTap: () => showColorPickerSheet(context, controller),
-                ),
-              _MoreColorsSwatch(
-                onTap: () => showColorPickerSheet(context, controller),
+              // Painted first, so it sits *behind* the swatches. It is
+              // positioned, so the Row below is what sizes this Stack.
+              _SelectionCradle(
+                slot: selectedSlot,
+                color: controller.color,
+              ),
+              Row(
+                children: [
+                  for (final c in kPaletteColors)
+                    PixieColorSwatch(
+                      color: c,
+                      selected: controller.color == c,
+                      cradled: true,
+                      onTap: () => controller.selectColor(c),
+                    ),
+                  // A color picked from the big sheet or the eyedropper lives
+                  // here so its selection stays visible.
+                  if (custom)
+                    PixieColorSwatch(
+                      color: controller.color,
+                      selected: true,
+                      cradled: true,
+                      onTap: () => showColorPickerSheet(context, controller),
+                    ),
+                  _MoreColorsSwatch(
+                    onTap: () => showColorPickerSheet(context, controller),
+                  ),
+                ],
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+/// The white dish the chosen color sits in, which slides from slot to slot
+/// instead of appearing in one and disappearing from another.
+///
+/// Sixteen swatches each animating their own selection is sixteen things
+/// changing at once; one dish gliding is a single movement the eye can
+/// follow, and it is what tells a child *where the color went* when they
+/// pick a new one. The slots are a fixed [kSwatchSlot] wide, so this needs
+/// no keys, no measuring and no layout pass — the target is `slot * width`.
+///
+/// It lives inside the scroll view's content, so it travels with the row
+/// rather than sliding out from under it.
+class _SelectionCradle extends StatelessWidget {
+  const _SelectionCradle({required this.slot, required this.color});
+
+  final int slot;
+  final Color color;
+
+  static const double _size = 50;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPositioned(
+      // Gliding *is* the movement here, so with "reduce motion" on the dish
+      // simply is where it belongs. One of the few places where the honest
+      // reduced form is an instant jump rather than a fade.
+      duration: motionDuration(context, PixieMotion.select),
+      curve: PixieCurves.spring,
+      left: slot * kSwatchSlot,
+      top: 0,
+      bottom: 0,
+      width: kSwatchSlot,
+      child: Center(
+        child: Container(
+          width: _size,
+          height: _size,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(PixieTokens.rSmall),
+            boxShadow: PixieTokens.softShadow(color),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -111,8 +179,9 @@ class PixieColorSwatch extends StatelessWidget {
     required this.color,
     required this.selected,
     required this.onTap,
-    this.slotWidth = 56,
+    this.slotWidth = kSwatchSlot,
     this.slotHeight = 54,
+    this.cradled = false,
   });
 
   final Color color;
@@ -121,9 +190,20 @@ class PixieColorSwatch extends StatelessWidget {
   final double slotWidth;
   final double slotHeight;
 
+  /// A [_SelectionCradle] slides behind this row and carries the selection.
+  ///
+  /// The swatch then stops growing and stops casting its own shadow — two
+  /// things saying "picked" on top of each other is louder, not clearer,
+  /// and at 1.18 the swatch would grow to exactly the cradle's size and
+  /// hide it completely. The picker sheet has no cradle (it is a grid, and
+  /// a dish gliding across two dimensions is a different animal), so there
+  /// this stays false and the swatch keeps announcing itself.
+  final bool cradled;
+
   @override
   Widget build(BuildContext context) {
     final light = needsBorder(color);
+    final bool self = selected && !cradled;
     return Bouncy(
       onTap: onTap,
       playTick: false,
@@ -135,7 +215,7 @@ class PixieColorSwatch extends StatelessWidget {
         height: slotHeight,
         child: Center(
           child: AnimatedScale(
-            scale: selected ? PixieMotion.selectedScale : 1.0,
+            scale: self ? PixieMotion.selectedScale : 1.0,
             duration: PixieMotion.select,
             curve: PixieCurves.spring,
             child: AnimatedContainer(
@@ -145,23 +225,24 @@ class PixieColorSwatch extends StatelessWidget {
               height: 42,
               decoration: BoxDecoration(
                 color: color,
+                // The squircle squares off when picked — the one bit of the
+                // selection the swatch keeps either way, because it is the
+                // shape change a child sees under their own finger.
                 borderRadius: BorderRadius.circular(selected ? 14 : 21),
                 border: Border.all(
-                  color: selected
+                  color: self
                       ? Colors.white
                       : (light ? Colors.black26 : Colors.transparent),
-                  width: selected ? 3 : 1.5,
+                  width: self ? 3 : 1.5,
                 ),
-                boxShadow: selected
-                    ? [
-                        BoxShadow(
-                          color: (light ? Colors.black26 : color)
-                              .withValues(alpha: 0.45),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
+                boxShadow: [
+                  BoxShadow(
+                    color: (light ? Colors.black26 : color)
+                        .withValues(alpha: self ? 0.45 : 0.0),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: selected
                   ? Icon(Icons.check,
