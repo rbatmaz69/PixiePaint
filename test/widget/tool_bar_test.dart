@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/canvas/canvas_controller.dart';
 import 'package:pixiepaint/models/tool.dart';
 import 'package:pixiepaint/ui/pop_in.dart';
+import 'package:pixiepaint/ui/selection_cradle.dart';
+import 'package:pixiepaint/ui/pixie_palette.dart';
 import 'package:pixiepaint/widgets/color_palette.dart';
 import 'package:pixiepaint/widgets/tool_bar.dart';
 
@@ -163,6 +165,34 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(cradle(tester).left, kPaletteColors.length * kSwatchSlot);
+    });
+
+    // Found by rendering the row and looking at it: the dish tints its
+    // shadow with the chosen colour, so picking white gave a white dish
+    // casting a white shadow on cream paper — nothing at all. The swatch
+    // used to handle this itself, and the handling was lost when the
+    // shadow moved out into the cradle.
+    testWidgets('a white colour does not give the dish a white shadow',
+        (tester) async {
+      final root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await pumpPalette(tester);
+      controller.selectColor(const Color(0xFFFFFFFF));
+      await tester.pumpAndSettle();
+
+      final accent =
+          tester.widget<SelectionCradle>(find.byType(SelectionCradle)).accent;
+      expect(accent, isNot(const Color(0xFFFFFFFF)));
+      expect(accent, PixiePalette.ink);
+
+      // The counter-proof: a colour that stands on its own keeps its own.
+      controller.selectColor(kPaletteColors[0]);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<SelectionCradle>(find.byType(SelectionCradle)).accent,
+        kPaletteColors[0],
+      );
     });
 
     testWidgets('with motion reduced it is simply there, not on its way',
