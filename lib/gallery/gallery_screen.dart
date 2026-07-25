@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../ui/celebrate.dart';
 
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,6 @@ import 'slideshow_screen.dart';
 import '../util/save_to_photos.dart';
 import '../util/sfx.dart';
 import '../util/share.dart' as share_util;
-import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
 import 'artwork_store.dart';
 
@@ -122,8 +122,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     final ok = await saveArtworkToPhotos(artwork);
     if (!mounted) return;
     if (ok) {
-      Sfx.instance.tada();
-      showConfetti(context, scale: ConfettiScale.small);
+      celebrate(context, level: Celebration.nod);
       await showKidNotice(
         context,
         emoji: '📷',
@@ -227,7 +226,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     if (!await ParentalGate.show(context)) return;
     Sfx.instance.tada();
     await share_util.shareSavedArtwork(artwork);
-    if (mounted) showConfetti(context, scale: ConfettiScale.small);
+    if (mounted) celebrate(context, level: Celebration.nod, sound: false);
     await countShareAndMaybeReview();
   }
 

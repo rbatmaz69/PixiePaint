@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../ui/celebrate.dart';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -39,7 +40,6 @@ import '../util/share.dart' as share_util;
 import '../util/svg_raster.dart';
 import '../widgets/cbn_palette.dart';
 import '../widgets/color_palette.dart';
-import '../widgets/confetti_burst.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/shape_picker.dart' as shapes;
 import '../widgets/tool_bar.dart';
@@ -349,16 +349,14 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (result.completed && !_cbnCelebrated) {
       _cbnCelebrated = true;
       Progress.instance.registerCbnCompleted(pageId!);
-      Sfx.instance.tada();
-      if (mounted) showConfetti(context);
+      if (mounted) celebrate(context);
     }
   }
 
   void _onTraceStroke(Stroke stroke) {
     if (_trace?.registerStroke(stroke) != true) return;
     Progress.instance.registerTraceCompleted(traceId!);
-    Sfx.instance.tada();
-    if (mounted) showConfetti(context);
+    if (mounted) celebrate(context);
   }
 
   /// Arms the painting-break curtain, if a parent asked for one.
@@ -406,7 +404,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       paintLayer: controller.paintLayer,
       lineArt: controller.lineArt,
     );
-    if (mounted) showConfetti(context);
+    if (mounted) celebrate(context, level: Celebration.nod, sound: false);
     await countShareAndMaybeReview();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/ui/app_theme.dart';
 import 'package:pixiepaint/ui/blob_background.dart';
+import 'package:pixiepaint/ui/celebrate.dart';
 import 'package:pixiepaint/ui/motion.dart';
 import 'package:pixiepaint/widgets/confetti_burst.dart';
 
@@ -109,6 +110,51 @@ void main() {
     testWidgets('with motion reduced no paper falls at all', (tester) async {
       await fire(tester, scale: ConfettiScale.party, calm: true);
       // Nothing was inserted, so there is nothing left to settle either.
+      await tester.pumpAndSettle();
+      expect(tester.binding.hasScheduledFrame, isFalse);
+    });
+  });
+
+  // Every celebration in the app goes through celebrate() since v8.6, so
+  // this is where the "reward stays, movement goes" rule is now enforced
+  // for all seven of them at once rather than wherever someone remembered.
+  group('celebrate', () {
+    Future<void> cheer(WidgetTester tester,
+        {required Celebration level, required bool calm}) async {
+      await pump(
+        tester,
+        Builder(
+          builder: (context) => Center(
+            child: GestureDetector(
+              onTap: () => celebrate(context, level: level, sound: false),
+              child: const Text('juhu'),
+            ),
+          ),
+        ),
+        calm: calm,
+      );
+      await tester.tap(find.text('juhu'));
+      await tester.pump();
+    }
+
+    testWidgets('a nod is shorter than a party', (tester) async {
+      const between = Duration(milliseconds: 1200);
+
+      await cheer(tester, level: Celebration.nod, calm: false);
+      await tester.pump(between);
+      expect(tester.binding.hasScheduledFrame, isFalse,
+          reason: 'das Nicken lief nach 1,2 s immer noch');
+
+      await cheer(tester, level: Celebration.party, calm: false);
+      await tester.pump(between);
+      expect(tester.binding.hasScheduledFrame, isTrue,
+          reason: 'die Party war nach 1,2 s schon vorbei');
+
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('with motion reduced the paper stays away', (tester) async {
+      await cheer(tester, level: Celebration.party, calm: true);
       await tester.pumpAndSettle();
       expect(tester.binding.hasScheduledFrame, isFalse);
     });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/celebrate.dart';
 
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
@@ -10,8 +11,6 @@ import '../ui/kid_sheet.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/progress.dart';
-import '../util/sfx.dart';
-import 'confetti_burst.dart';
 
 /// Today's painting prompt: big and readable, with "let's go" (into free
 /// drawing) and an honest self-check "done" button — no fake detection.
@@ -72,8 +71,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
 
   if (markDone != true || !context.mounted) return;
   Progress.instance.registerDailyTaskDone(today);
-  Sfx.instance.tada();
-  showConfetti(context, scale: ConfettiScale.small);
+  celebrate(context, level: Celebration.nod);
 }
 
 /// Home-screen pill: today's emoji and prompt, with a check badge once the
