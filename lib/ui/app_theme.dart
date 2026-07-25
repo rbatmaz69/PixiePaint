@@ -11,8 +11,28 @@ abstract final class PixieTokens {
   static const double rSmall = 16;
   static const double rCard = 28;
 
+  /// Picker tiles, chips and the paper sheet.
+  static const double rTile = 20;
+
+  /// Anything pill-shaped: the tool bars, and the white chips that float
+  /// over the paper. One of the four had already drifted to 22.
+  static const double rPill = 24;
+
+  /// Dialogs and bottom sheets. They are the same surface seen from two
+  /// directions and used to arrive at 32 by two unrelated routes.
+  static const double rSheet = 32;
+
+  /// The spacing ladder. Not a 4-grid on principle — these are the rungs
+  /// the app already stood on, so adopting them moves nothing. The two
+  /// smallest sit close together because 6 and 8 do different jobs: 6 packs
+  /// a row of small things, 8 separates an emoji from its label.
+  static const double gapTiny = 6;
+  static const double gapSmall = 8;
   static const double gap = 12;
+  static const double gapMedium = 16;
   static const double gapLarge = 20;
+  static const double gapXl = 24;
+  static const double gapHuge = 32;
 
   /// Thick white outline that makes a surface read as a sticker.
   static const double stickerBorder = 4.0;
@@ -42,7 +62,7 @@ abstract final class PixieTokens {
   /// side, so they should not be able to drift apart in radius or fill.
   static BoxDecoration barDecoration() => BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(rPill),
         boxShadow: barShadow(),
       );
 
@@ -95,7 +115,7 @@ abstract final class PixieGradients {
   static const LinearGradient photo = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [PixiePalette.tangerineLight, Color(0xFFFFB7CF)],
+    colors: [PixiePalette.tangerineLight, PixiePalette.blushLight],
   );
   static const LinearGradient gallery = LinearGradient(
     begin: Alignment.topLeft,
@@ -110,7 +130,7 @@ abstract final class PixieGradients {
   static const LinearGradient scenes = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [PixiePalette.grapeLight, Color(0xFFC5A8F2)],
+    colors: [PixiePalette.grapeLight, PixiePalette.grapeMid],
   );
   /// Trophy gold. Warmer than [coloring] on purpose — the two sit next to
   /// each other on the home screen and must not read as the same card.
@@ -255,16 +275,17 @@ ThemeData buildPixieTheme() {
     // outline against the dark barrier.
     dialogTheme: DialogThemeData(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(PixieTokens.rCard + 4),
+        borderRadius: BorderRadius.circular(PixieTokens.rSheet),
         side: const BorderSide(
             color: Colors.white, width: PixieTokens.stickerBorder + 1),
       ),
-      backgroundColor: const Color(0xFFFFFDF8),
+      backgroundColor: PixiePalette.paperCard,
     ),
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Color(0xFFFFFDF8),
+      backgroundColor: PixiePalette.paperCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(PixieTokens.rSheet)),
       ),
       showDragHandle: true,
     ),

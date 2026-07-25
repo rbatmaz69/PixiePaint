@@ -88,7 +88,7 @@ class StickerCard extends StatelessWidget {
 BoxDecoration stickerSelectionDecoration({
   required bool selected,
   required Color accent,
-  double radius = 20,
+  double radius = PixieTokens.rTile,
   Color restColor = Colors.transparent,
 }) {
   return BoxDecoration(

@@ -72,7 +72,7 @@ class ScenePickerScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(PixieTokens.rSmall),
                                     child: SizedBox(
                                       width: double.infinity,
                                       child: Hero(

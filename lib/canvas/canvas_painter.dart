@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../ui/pixie_palette.dart';
 
 import 'package:flutter/material.dart';
 
@@ -138,7 +139,7 @@ class CanvasPainter extends CustomPainter {
     final folds = controller.symmetryFolds;
     final center = controller.canvasCenter;
     final paint = Paint()
-      ..color = const Color(0xFF7C6BF0).withValues(alpha: 0.18)
+      ..color = PixiePalette.periwinkle.withValues(alpha: 0.18)
       ..strokeWidth = 3;
     final reach = size.longestSide;
     if (folds == 2) {

@@ -98,7 +98,7 @@ class DailyTaskBanner extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(26),
+              borderRadius: BorderRadius.circular(PixieTokens.rCard),
               boxShadow: PixieTokens.softShadow(PixiePalette.sunshine),
             ),
             child: Row(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
+import '../ui/pixie_palette.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../canvas/fill_pattern.dart';
@@ -72,15 +74,15 @@ class _PatternTile extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: stickerSelectionDecoration(
           selected: selected,
-          accent: const Color(0xFF2BB68A),
-          restColor: const Color(0xFFF5F0E8),
+          accent: PixiePalette.jade,
+          restColor: PixiePalette.paperDeep,
           radius: 24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(PixieTokens.rSmall),
               child: CustomPaint(
                 size: const Size(84, 84),
                 painter: _PatternPreviewPainter(pattern, color),

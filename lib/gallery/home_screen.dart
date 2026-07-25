@@ -280,7 +280,7 @@ class _ProfileChip extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(PixieTokens.rPill),
                 boxShadow: PixieTokens.softShadow(PixiePalette.grape),
               ),
               child: Row(

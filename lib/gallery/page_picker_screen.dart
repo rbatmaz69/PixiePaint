@@ -31,7 +31,7 @@ Color _categoryTint(String category) => switch (category) {
   'Bauernhof' => const Color(0xFFE8E3CF),
   'Zahlen' => PixiePalette.tangerineLight,
   'Jahreszeiten' => const Color(0xFFFFE0DC),
-  _ => const Color(0xFFF5F0E8),
+  _ => PixiePalette.paperDeep,
 };
 
 class PagePickerScreen extends StatefulWidget {
@@ -123,7 +123,7 @@ class _PagePickerScreenState extends State<PagePickerScreen> {
                       tabAlignment: TabAlignment.start,
                       indicator: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(PixieTokens.rPill),
                         boxShadow: PixieTokens.softShadow(
                           PixiePalette.sunshine,
                         ),
@@ -133,7 +133,7 @@ class _PagePickerScreenState extends State<PagePickerScreen> {
                       labelPadding: const EdgeInsets.symmetric(horizontal: 16),
                       labelColor: scheme.primary,
                       unselectedLabelColor: scheme.onSurfaceVariant,
-                      splashBorderRadius: BorderRadius.circular(24),
+                      splashBorderRadius: BorderRadius.circular(PixieTokens.rPill),
                       tabs: [
                         if (hasFavorites) const Tab(text: '💖'),
                         Tab(text: context.l10n.categoryAll),
@@ -215,7 +215,7 @@ class _PageGrid extends StatelessWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(PixieTokens.rSmall),
                       ),
                       padding: const EdgeInsets.all(8),
                       child: Hero(

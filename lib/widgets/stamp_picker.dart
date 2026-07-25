@@ -1,4 +1,6 @@
 import 'dart:io';
+import '../ui/app_theme.dart';
+import '../ui/pixie_palette.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -263,8 +265,8 @@ class _MakeStickerTile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F0E8),
-            borderRadius: BorderRadius.circular(20),
+            color: PixiePalette.paperDeep,
+            borderRadius: BorderRadius.circular(PixieTokens.rTile),
             border: Border.all(color: const Color(0xFFDBD2C3), width: 2),
           ),
           child: const Center(
@@ -303,7 +305,7 @@ class _MyStickerTile extends StatelessWidget {
           padding: const EdgeInsets.all(6),
           decoration: stickerSelectionDecoration(
             selected: selected,
-            accent: const Color(0xFFFFB020),
+            accent: PixiePalette.amber,
           ),
           child: Image.file(file, fit: BoxFit.contain),
         ),
@@ -330,7 +332,7 @@ class _StampTile extends StatelessWidget {
         curve: PixieCurves.spring,
         decoration: stickerSelectionDecoration(
           selected: selected,
-          accent: const Color(0xFFFFB020),
+          accent: PixiePalette.amber,
         ),
         child: Center(
           child: Text(emoji, style: TextStyle(fontSize: selected ? 40 : 36)),
@@ -395,8 +397,8 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
         },
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F0E8),
-            borderRadius: BorderRadius.circular(20),
+            color: PixiePalette.paperDeep,
+            borderRadius: BorderRadius.circular(PixieTokens.rTile),
           ),
           child: Stack(
             alignment: Alignment.center,

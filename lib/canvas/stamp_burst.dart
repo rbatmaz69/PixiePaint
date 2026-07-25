@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../ui/pixie_palette.dart';
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _StampBurstPainter extends CustomPainter {
   final double t; // 0..1
   final double stampSize;
 
-  static const Color _gold = Color(0xFFFFE082);
+  static const Color _gold = PixiePalette.gold;
 
   @override
   void paint(Canvas canvas, Size size) {

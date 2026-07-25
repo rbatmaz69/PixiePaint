@@ -94,7 +94,7 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(PixieTokens.rPill),
             boxShadow: PixieTokens.softShadow(PixiePalette.mint),
           ),
           child: Row(
@@ -102,7 +102,7 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
               // The thumbnail is the label for a child who cannot read; the
               // words next to it are for whoever reads over their shoulder.
               ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(PixieTokens.rSmall),
                 child: Hero(
                   // The same picture as the gallery tile, so the same tag:
                   // whichever one the child taps, the thumbnail flies into

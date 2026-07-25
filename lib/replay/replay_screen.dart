@@ -187,7 +187,7 @@ class _SpeedButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(PixieTokens.rPill),
             boxShadow: PixieTokens.softShadow(PixiePalette.grape),
           ),
           // The number changes under the finger; without the pulse the tap

@@ -666,7 +666,7 @@ class _CanvasScreenState extends State<CanvasScreen>
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(PixieTokens.rTile),
                 boxShadow: [
                   BoxShadow(
                     color: PixiePalette.ink.withValues(alpha: 0.12),
@@ -855,7 +855,7 @@ class _RotateHintState extends State<_RotateHint> {
           margin: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(PixieTokens.rPill),
             boxShadow: PixieTokens.softShadow(PixiePalette.grape),
           ),
           child: Row(
@@ -938,7 +938,7 @@ class _ToolChipState extends State<_ToolChip> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(PixieTokens.rPill),
             boxShadow: PixieTokens.softShadow(PixiePalette.grape),
           ),
           child: Row(

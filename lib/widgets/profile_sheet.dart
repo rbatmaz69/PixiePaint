@@ -367,7 +367,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
                       decoration: BoxDecoration(
                         color: _emoji == emoji
                             ? PixiePalette.grapeLight
-                            : const Color(0xFFF5F0E8),
+                            : PixiePalette.paperDeep,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: _emoji == emoji

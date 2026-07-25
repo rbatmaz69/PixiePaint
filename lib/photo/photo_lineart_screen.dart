@@ -134,7 +134,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                             // a sticker.
                             sheen: false,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(PixieTokens.rPill),
                               child: AspectRatio(
                                 aspectRatio: 4 / 3,
                                 // Crossfade between detail levels instead of a
@@ -188,7 +188,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: PixieGradients.freeDraw,
-                              borderRadius: BorderRadius.circular(22),
+                              borderRadius: BorderRadius.circular(PixieTokens.rPill),
                               border: Border.all(
                                 color: Colors.white,
                                 width: PixieTokens.stickerBorder,

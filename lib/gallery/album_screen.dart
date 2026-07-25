@@ -190,7 +190,7 @@ class _RewardTile extends StatelessWidget {
           : rewardRuleText(context, reward, snapshot),
       child: StickerCard(
         color: Colors.white,
-        radius: 20,
+        radius: PixieTokens.rTile,
         shadowColor:
             unlocked ? PixiePalette.sunshine : PixiePalette.ink,
         tiltIndex: tiltIndex,

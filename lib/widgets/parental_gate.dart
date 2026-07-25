@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../ui/app_theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -95,7 +96,7 @@ class _GateDialogState extends State<_GateDialog> {
                   hintText: context.l10n.gateHint,
                   errorText: error,
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(PixieTokens.rSmall)),
                 ),
               ),
               const SizedBox(height: 20),

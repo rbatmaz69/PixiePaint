@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/pixie_palette.dart';
 
 import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
@@ -53,8 +54,8 @@ Future<void> showSymmetryPicker(
             curve: PixieCurves.spring,
             decoration: stickerSelectionDecoration(
               selected: selected,
-              accent: const Color(0xFF7C6BF0),
-              restColor: const Color(0xFFF5F0E8),
+              accent: PixiePalette.periwinkle,
+              restColor: PixiePalette.paperDeep,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

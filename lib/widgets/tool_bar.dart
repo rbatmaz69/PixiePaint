@@ -23,15 +23,15 @@ Color toolAccent(ToolKind tool) => switch (tool) {
   ToolKind.crayon => PixiePalette.tangerine,
   ToolKind.rainbow => PixiePalette.berry,
   ToolKind.glitter => PixiePalette.bubblegum,
-  ToolKind.neon => const Color(0xFFFFB020),
+  ToolKind.neon => PixiePalette.amber,
   ToolKind.trail => const Color(0xFFE91E63),
   ToolKind.dotted => const Color(0xFF5C6BC0),
   ToolKind.twin => const Color(0xFF26A69A),
   ToolKind.eraser => const Color(0xFF90A4AE),
-  ToolKind.fill => const Color(0xFF2BB68A),
-  ToolKind.stamp => const Color(0xFFFFB020),
+  ToolKind.fill => PixiePalette.jade,
+  ToolKind.stamp => PixiePalette.amber,
   ToolKind.eyedropper => const Color(0xFF00A28C),
-  ToolKind.shape => const Color(0xFF7C6BF0),
+  ToolKind.shape => PixiePalette.periwinkle,
 };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -163,7 +163,7 @@ Widget _pill(List<Widget> children, Axis direction) {
     padding: const EdgeInsets.all(3),
     decoration: BoxDecoration(
       color: Colors.white.withValues(alpha: 0.85),
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(PixieTokens.rPill),
       boxShadow: PixieTokens.barShadow(),
     ),
     child: direction == Axis.vertical
@@ -641,7 +641,7 @@ class _SymmetryButton extends StatelessWidget {
     final active = controller.symmetryFolds > 1;
     return _PickableButton(
       label: context.l10n.symmetryTitle,
-      accent: const Color(0xFF7C6BF0),
+      accent: PixiePalette.periwinkle,
       selected: active,
       size: 52,
       onTap: onTap,

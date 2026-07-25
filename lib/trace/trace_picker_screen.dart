@@ -51,14 +51,14 @@ class TracePickerScreen extends StatelessWidget {
                 TabBar(
                   indicator: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(PixieTokens.rPill),
                     boxShadow: PixieTokens.softShadow(PixiePalette.mint),
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
                   labelColor: scheme.primary,
                   unselectedLabelColor: scheme.onSurfaceVariant,
-                  splashBorderRadius: BorderRadius.circular(24),
+                  splashBorderRadius: BorderRadius.circular(PixieTokens.rPill),
                   tabs: [
                     Tab(text: context.l10n.traceTabLetters),
                     Tab(text: context.l10n.traceTabNumbers),

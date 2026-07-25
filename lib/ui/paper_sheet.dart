@@ -32,7 +32,7 @@ class PaperSheet extends StatelessWidget {
   /// Radius of the sheet and, eight points tighter, of the picture inside
   /// it — the paper is what has the rounded corners, the drawing merely
   /// stops short of them.
-  static const double radius = 20;
+  static const double radius = PixieTokens.rTile;
 
   @override
   Widget build(BuildContext context) {
