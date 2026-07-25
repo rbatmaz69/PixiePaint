@@ -178,6 +178,26 @@ Diese Runde hat nichts hinzugefügt, sondern das Vorhandene zusammengeführt. Wa
 - [ ] Sticker freischalten: der Sticker wippt beim Aufkommen nach
 - [ ] **„Bewegung reduzieren" im System einschalten** und alles noch einmal: nichts fliegt, nichts pulst, nichts driftet, kein Konfetti — die Belohnungen erscheinen aber weiterhin
 
+## Bewegung und Einheitlichkeit (neu in v8.6)
+
+Diese Runde hat der Bewegung Tokens gegeben und ein paar Stellen ergänzt. Die wichtigste Frage ist nicht „gefällt es", sondern: **fühlt sich Auswählen überall gleich an?** Vorher lief dieselbe Handlung an sieben verschiedenen Geschwindigkeiten.
+
+- [ ] **Nacheinander antippen:** Werkzeug, Farbe, Form, Zauber-Spiegel, Sticker, Pinselgröße, Galerie-Filter, Kind-Profil. Alle acht müssen sich **gleich schnell** anfühlen. Fühlt sich eines davon zäh oder hektisch an, ist es die ganze Sprosse — dann `PixieMotion.select` verstellen, nicht die einzelne Stelle
+- [ ] Die vier Auswahl-Blätter (Formen, Spiegel, Sticker, Füllmuster) waren mit 150 ms die schnellsten und sind jetzt bei 240. Wirkt das weich oder träge?
+- [ ] **Farbe wechseln:** die weiße Schale gleitet von Feld zu Feld, statt zu verschwinden und woanders aufzutauchen. Sie muss dabei *unter* dem Farbfeld bleiben und beim seitlichen Scrollen mitwandern
+- [ ] Eine Farbe über „Mehr Farben" mischen: die Schale landet auf dem zusätzlichen Feld ganz rechts
+- [ ] **Größen-Blatt öffnen:** Regler, Daumen und Aura tragen die aktuelle Malfarbe. Bei Weiß und Rosa bleibt der Regler trotzdem erkennbar
+- [ ] **Einstellungen:** jeder eingeschaltete Schalter hat einen Haken im Daumen
+- [ ] **Von der Startseite in einen Bildschirm gehen:** die Startseite tritt dabei zurück und dunkelt leicht ab — es gibt ein Vorne und ein Hinten. Beim Zurück umgekehrt
+- [ ] **Ausmalbild antippen:** das Bild behält während des Fluges runde Ecken und einen Schatten. Vorher war es unterwegs ein nacktes Rechteck. Auch auf dem Rückweg prüfen
+- [ ] **Startseite ansehen, ohne zu tippen:** die acht Karten atmen ganz langsam und *nicht* im Gleichtakt. Wenn es als „die Seite wackelt" liest, ist die Amplitude zu groß (`_BigCard`, derzeit ±2,5 px)
+- [ ] **Startseite scrollen:** die Blobs im Hintergrund wandern langsamer als die Karten
+- [ ] **Galerie mit vielen Bildern weit nach unten scrollen:** auch das vierzigste Bild schwebt herein, statt einfach da zu sein. Dasselbe in Bildauswahl, Erfolge-Album und Speicher
+- [ ] **Abstände querlesen** (Startseite, Einstellungen, Dialoge): 92 Abstände wurden auf die Leiter gezogen, dabei wurden 31 um 2–4 px **enger**. Sieht irgendwo etwas gedrängt aus?
+- [ ] Bei größter Systemschrift dieselben Bildschirme noch einmal — die Abstände wurden nur enger, es sollte also eher mehr passen als vorher
+- [ ] **Teilen** (aus der Leinwand *und* aus der Galerie): beide geben jetzt dasselbe kleine Konfetti. Vorher warf die Leinwand die volle Party
+- [ ] **„Bewegung reduzieren" im System einschalten:** Karten stehen still, keine Parallaxe, die Farbschale springt sofort an ihren Platz statt zu gleiten, Bildschirme blenden nur noch ein. Konfetti bleibt aus, die Belohnung selbst erscheint weiterhin
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
