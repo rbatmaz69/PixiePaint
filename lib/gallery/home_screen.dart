@@ -15,6 +15,7 @@ import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/motion.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/music.dart';
@@ -68,6 +69,18 @@ class _HomeScreenState extends State<HomeScreen>
   /// The cascade: header, continue card, daily-task banner, the cards and
   /// the two chrome buttons. [EntranceMixin] does the work.
   Widget _staggered(int slot, Widget child) => entrance(slot, child);
+
+  /// How far the grid has been scrolled, handed to [BlobBackground] so the
+  /// paper drifts a fraction of what the stickers on it do. A notifier
+  /// rather than setState: only the blob layer needs to hear about it, and
+  /// rebuilding the whole grid on every scroll frame would be absurd.
+  final ValueNotifier<double> _scrollY = ValueNotifier<double>(0);
+
+  @override
+  void dispose() {
+    _scrollY.dispose();
+    super.dispose();
+  }
 
   /// The grid, in the order it is shown. A list rather than eight spelled-out
   /// widgets because the eight only ever differed in these five fields — and
@@ -148,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: BlobBackground(
         gradient: PixieGradients.homeBg,
+        parallax: _scrollY,
         builder: (context, wave) => SafeArea(
           child: Stack(
             children: [
@@ -167,34 +181,43 @@ class _HomeScreenState extends State<HomeScreen>
                   // page scrolls, and the grid stays two across.
                   final textScale = MediaQuery.textScalerOf(context).scale(1);
                   final cardH = cardW * 0.9 + (textScale - 1).clamp(0, 1) * 56;
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _staggered(0, _Header(wave: wave)),
-                        const SizedBox(height: PixieTokens.gapLarge),
-                        _staggered(1, ContinueCard(width: rowW)),
-                        _staggered(2, DailyTaskBanner(width: rowW)),
-                        const SizedBox(height: PixieTokens.gapLarge),
-                        Wrap(
-                          spacing: 20,
-                          runSpacing: 20,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            for (final (i, card)
-                                in _cards(context).indexed)
-                              _staggered(
-                                _firstCardSlot + i,
-                                _BigCard(
-                                  spec: card,
-                                  width: cardW,
-                                  height: cardH,
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (n) {
+                      if (n.metrics.axis == Axis.vertical) {
+                        _scrollY.value = n.metrics.pixels;
+                      }
+                      return false;
+                    },
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _staggered(0, _Header(wave: wave)),
+                          const SizedBox(height: PixieTokens.gapLarge),
+                          _staggered(1, ContinueCard(width: rowW)),
+                          _staggered(2, DailyTaskBanner(width: rowW)),
+                          const SizedBox(height: PixieTokens.gapLarge),
+                          Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              for (final (i, card)
+                                  in _cards(context).indexed)
+                                _staggered(
+                                  _firstCardSlot + i,
+                                  _BigCard(
+                                    spec: card,
+                                    width: cardW,
+                                    height: cardH,
+                                    wave: wave,
+                                  ),
                                 ),
-                              ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }),
@@ -349,15 +372,21 @@ class _BigCard extends StatelessWidget {
     required this.spec,
     required this.width,
     required this.height,
+    required this.wave,
   });
 
   final _CardSpec spec;
   final double width;
   final double height;
 
+  /// The blob background's 28-second loop, borrowed. The header has swayed
+  /// on it since v8.2; the cards were the only stickers on the page holding
+  /// perfectly still. Their own ticker would have been eight more of them.
+  final Animation<double> wave;
+
   @override
   Widget build(BuildContext context) {
-    return Bouncy(
+    final Widget card = Bouncy(
       onTap: spec.onTap,
       child: StickerCard(
         gradient: spec.gradient,
@@ -392,6 +421,22 @@ class _BigCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+    if (reducedMotion(context)) return card;
+    return AnimatedBuilder(
+      animation: wave,
+      // The card paints once and is only re-composited as it drifts — the
+      // whole point of borrowing a ticker instead of adding one.
+      child: RepaintBoundary(child: card),
+      builder: (context, child) {
+        // Each card takes its phase from its tilt slot, so the eight breathe
+        // out of step. In step they would read as the page moving.
+        final t = 2 * pi * wave.value + spec.tiltIndex * 0.8;
+        return Transform.translate(
+          offset: Offset(sin(t) * 1.5, cos(t * 1.3) * 2.5),
+          child: child,
+        );
+      },
     );
   }
 }

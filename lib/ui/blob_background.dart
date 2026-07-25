@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import 'motion.dart';
@@ -24,7 +26,16 @@ class BlobBackground extends StatefulWidget {
     required this.gradient,
     required this.builder,
     this.showDoodles = true,
+    this.parallax,
   });
+
+  /// Scroll offset of the content in front, if the screen scrolls.
+  ///
+  /// The paper then travels a fraction of what the stickers on it do, which
+  /// is the whole of what "depth" means here — a flat page and a page with
+  /// a behind differ by about six percent. Ignored when motion is reduced:
+  /// parallax is motion the reader did not ask for, only inferred.
+  final ValueListenable<double>? parallax;
 
   final Gradient gradient;
 
@@ -114,11 +125,15 @@ class _BlobBackgroundState extends State<BlobBackground>
         DecoratedBox(decoration: BoxDecoration(gradient: widget.gradient)),
         RepaintBoundary(
           child: AnimatedBuilder(
-            animation: _c,
-            builder: (context, _) => CustomPaint(
-              painter: _BlobPainter(_c.value),
-              foregroundPainter:
-                  widget.showDoodles ? DoodlePainter(_c.value) : null,
+            animation: Listenable.merge([_c, if (!_calm) widget.parallax]),
+            builder: (context, _) => Transform.translate(
+              offset: Offset(
+                  0, -(_calm ? 0.0 : (widget.parallax?.value ?? 0)) * 0.06),
+              child: CustomPaint(
+                painter: _BlobPainter(_c.value),
+                foregroundPainter:
+                    widget.showDoodles ? DoodlePainter(_c.value) : null,
+              ),
             ),
           ),
         ),
