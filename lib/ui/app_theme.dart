@@ -171,6 +171,14 @@ abstract final class PixieGradients {
 
 /// Scale-and-fade page transition with a hint of overshoot — playful but
 /// quick, and Hero-compatible.
+///
+/// Both directions are handled. Until v8.6 only [animation] was: the
+/// arriving screen grew in, and the one it landed on top of just sat there
+/// at full size and full brightness behind it. That reads as two unrelated
+/// pictures swapping rather than as one screen covering another, and it is
+/// the single cheapest thing in the app that makes navigation feel flat.
+/// Now the covered screen also steps back a little and dims, so there is a
+/// front and a back.
 class PixiePageTransitionsBuilder extends PageTransitionsBuilder {
   const PixiePageTransitionsBuilder();
 
@@ -182,17 +190,38 @@ class PixiePageTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    // With "reduce motion" on, screens still arrive — they just stop
+    // travelling to get here. Both the growing and the stepping back go.
+    if (reducedMotion(context)) {
+      return FadeTransition(opacity: animation, child: child);
+    }
+
+    // Being covered by the next screen: back off and dim. Quiet on
+    // purpose — this is depth, not a second animation competing with the
+    // one the eye is meant to follow.
+    final away = CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: PixieCurves.enter,
+      reverseCurve: PixieCurves.exit,
+    );
     return FadeTransition(
-      opacity: CurvedAnimation(parent: animation, curve: PixieCurves.enter),
+      opacity: Tween<double>(begin: 1.0, end: 0.65).animate(away),
       child: ScaleTransition(
-        scale: Tween<double>(begin: 0.94, end: 1.0).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: PixieCurves.spring,
-            reverseCurve: PixieCurves.exit,
+        scale: Tween<double>(begin: 1.0, end: 0.92).animate(away),
+        // Arriving.
+        child: FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: PixieCurves.enter),
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.94, end: 1.0).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: PixieCurves.spring,
+                reverseCurve: PixieCurves.exit,
+              ),
+            ),
+            child: child,
           ),
         ),
-        child: child,
       ),
     );
   }

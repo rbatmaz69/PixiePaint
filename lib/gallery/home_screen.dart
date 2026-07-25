@@ -276,13 +276,9 @@ class _ProfileChip extends StatelessWidget {
           return Bouncy(
             onTap: () => showProfileSheet(context),
             playTick: false,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(PixieTokens.rPill),
-                boxShadow: PixieTokens.softShadow(PixiePalette.grape),
-              ),
+            child: StickerPill(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: PixieTokens.gap, vertical: PixieTokens.gapSmall),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

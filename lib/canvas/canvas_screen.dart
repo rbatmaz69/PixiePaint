@@ -850,14 +850,8 @@ class _RotateHintState extends State<_RotateHint> {
         onTap: _dismiss,
         playTick: false,
         semanticLabel: context.l10n.rotateHint,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(PixieTokens.rPill),
-            boxShadow: PixieTokens.softShadow(PixiePalette.grape),
-          ),
+        child: StickerPill(
+          margin: const EdgeInsets.symmetric(horizontal: PixieTokens.gapXl),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -934,13 +928,7 @@ class _ToolChipState extends State<_ToolChip> {
       child: AnimatedOpacity(
         opacity: _visible ? 1 : 0,
         duration: PixieMotion.select,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(PixieTokens.rPill),
-            boxShadow: PixieTokens.softShadow(PixiePalette.grape),
-          ),
+        child: StickerPill(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

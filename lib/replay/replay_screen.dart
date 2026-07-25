@@ -183,13 +183,9 @@ class _SpeedButton extends StatelessWidget {
       child: Bouncy(
         onTap: controller.cycleSpeed,
         semanticLabel: context.l10n.replaySpeed,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(PixieTokens.rPill),
-            boxShadow: PixieTokens.softShadow(PixiePalette.grape),
-          ),
+        child: StickerPill(
+          padding: const EdgeInsets.symmetric(
+              horizontal: PixieTokens.gap, vertical: PixieTokens.gapSmall),
           // The number changes under the finger; without the pulse the tap
           // reads as "1× became 2×" rather than as an answer.
           child: Pulse(

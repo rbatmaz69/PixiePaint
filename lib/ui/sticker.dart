@@ -105,6 +105,50 @@ BoxDecoration stickerSelectionDecoration({
   );
 }
 
+/// The white pill that floats over the paper: the profile chip on the home
+/// screen, the "you picked the brush" confirmation, the rotate hint, the
+/// replay speed button.
+///
+/// Four places built this by hand out of the same three lines, and they had
+/// already started to disagree — three at radius 24, one at 22, and three
+/// different paddings for the same shape. It is small enough that copying
+/// it never felt like duplication, which is exactly how a design language
+/// comes apart at the seams.
+///
+/// Not a button on its own: wrap it in a [Bouncy] where it should answer to
+/// a tap. Half of these are hints that must not look tappable.
+class StickerPill extends StatelessWidget {
+  const StickerPill({
+    super.key,
+    required this.child,
+    this.accent = PixiePalette.grape,
+    this.padding = const EdgeInsets.symmetric(
+        horizontal: PixieTokens.gapMedium, vertical: PixieTokens.gapSmall),
+    this.margin,
+  });
+
+  final Widget child;
+
+  /// Tints the shadow so the pill belongs to what it is talking about.
+  final Color accent;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(PixieTokens.rPill),
+        boxShadow: PixieTokens.softShadow(accent),
+      ),
+      child: child,
+    );
+  }
+}
+
 /// White round sticker button for chrome (back, share, settings, undo…):
 /// white circle, colored soft shadow, built-in Bouncy press.
 class StickerCircleButton extends StatelessWidget {
