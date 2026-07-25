@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.5.0+36 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 8.6.0+37 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -346,7 +346,9 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 
 **Design-System** (`lib/ui/`) — die Sticker-Buch-Sprache:
 - `pixie_palette.dart` — **die eine** Farbquelle. Jeder UI-Ton leitet sich hiervon ab. (Die Malfarben in `widgets/color_palette.dart` sind bewusst getrennt: das ist Inhalt, keine Oberfläche.)
-- `app_theme.dart` — Tokens (Radien, `softShadow`, `stickerTilt`), Gradients, Typo-Skala, Component-Themes
+- `app_theme.dart` — Tokens (Radien, Abstandsleiter, `softShadow`, `stickerTilt`), Gradients, Typo-Skala, Component-Themes
+- `motion.dart` — **die eine** Zeit- und Kurvenquelle: `PixieMotion`, `PixieCurves` und die Reduce-Motion-Regel (siehe unten)
+- `celebrate.dart` — **die eine** Art, wie diese App jubelt (Konfetti-Stärke + Ton, zwei Größen)
 - `sticker.dart` — `StickerCard` (inkl. Aufkleber-Glanz), `StickerCircleButton`, `StickerEmoji`, `stickerSelectionDecoration`
 - `pixie_header.dart` — einheitlicher Screen-Kopf (ersetzt AppBars), mit Akzent-Unterstrich je Bildschirm
 - `bouncy.dart`, `pop_in.dart` — Bewegungs-Primitive (Press-Feder, Entrance-Pop, Puls)
@@ -359,7 +361,13 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 
 **Erreichbarkeit der Werkzeugleiste** (seit v8.0): `ToolBarRail` scrollt, `ToolActionCluster` nicht. Rückgängig und Wiederholen lagen bis dahin am Ende eines rund 1000 px breiten Streifens — auf einem 360-dp-Telefon außerhalb des Bildes, hinter einer Wischgeste, die nichts ankündigte. Die beiden Knöpfe platziert seither der Bildschirm selbst (in `_buildPortrait` und `_LeftRail`), gespiegelt für Linkshänder. Der Streifen daneben blendet seine Ränder weich aus, sobald dort wirklich mehr steht, und holt ein über ein Auswahl-Blatt gewähltes Werkzeug per `Scrollable.ensureVisible` zurück in den Blick. **Was neu in die Leiste kommt, gehört in den scrollenden Teil** — der feste Cluster ist für das reserviert, was ein Kind im Zweifel *sofort* braucht.
 
+**Die Bewegungs-Leiter** (seit v8.6): Farben, Radien und Schatten lagen längst zentral, Zeiten und Kurven nicht — rund 80 `Duration`-Literale standen an den Aufrufstellen, und dieselbe Interaktion lief an sieben verschiedenen Geschwindigkeiten (eine Form auswählen 150 ms, ein Werkzeug 220, eine Farbe 260; `color_palette` und `cbn_palette` trugen sogar zwei verschiedene Zeiten auf *einem* Widget, sodass die Kachel fertig gewachsen war, bevor ihr Rahmen nachkam). `PixieMotion` benennt die Sprossen nach dem Zweck statt nach der Länge — `press` · `snap` · `select` · `enter` · `spring` · `pop` · `stage`, dazu `emojiDelay` und die beiden `dwell`-Zeiten für „wie lange bleibt etwas stehen". Eine Aufrufstelle kann damit nur noch die Frage stellen, die sie wirklich hat: „ist das eine Auswahl?" statt „waren es 220 oder 240?". **Im Zweifel `select`.**
+
+Was die Leiter ausdrücklich *nicht* regiert, steht in ihrem Doc-Kommentar: choreographierte Effekte, deren Zeiten aufeinander antworten statt auf eine Sprosse — Konfetti, `fill_burst`, `stamp_burst`, der Pausen-Vorhang, Flug und Landung der Belohnungs-Enthüllung, der Hüpfer des Lade-Pixies, Ken Burns in der Diashow und sämtliche Zeiten in `replay_controller.dart` (das ist Wiedergabe, kein Design). Sie bleiben handgestimmt. So bekommt eine Leiter keine zwanzig Sprossen und hört nicht auf, etwas zu bedeuten.
+
 **Eine Bewegung, eine Stelle** (seit v8.4): Startseite, Bildauswahl, Galerie und Einstellungen trugen dieselbe Staffel-Animation in je eigener Fassung, fünf weitere Bildschirme hatten gar keine. `lib/ui/entrance.dart` ist diese Bewegung genau einmal, mit zwei Zugängen: `EntranceMixin` für Screens, die ohnehin einen `State` haben (setzt nichts Zusätzliches in den Widget-Baum), und `EntranceGroup` + `Entrance` für Raster aus zustandslosen Widgets. Beide rufen dasselbe `buildEntrance`. **Die Gruppe gehört in den geladenen Zweig** eines `FutureBuilder`, nicht darüber — sonst läuft die Staffelung ab, während der Bildschirm noch von der Platte liest. Bei „Bewegung reduzieren" bleibt die Einblendung, der Weg dorthin fällt weg.
+
+Seit v8.6 kommt `Reveal` dazu, für das untere Ende langer Raster: die Staffel staffelt einen Bildschirm voll und ist dann fertig, also bekommt das vierzigste Bild in der Galerie Deckkraft 1 in die Hand gedrückt und blinkt ins Dasein. Das faule Bauen *ist* die Sichtbarkeitserkennung — eine Kachel, die nach dem Ende der Staffel entsteht, ist per Definition eine, zu der gerade gescrollt wurde —, und sie läuft dann wieder dasselbe `buildEntrance` ab, damit beide Wege nicht auseinanderlaufen können.
 
 **Canvas-Performance:** Der `CanvasController` trennt zwei Signale — `repaint` (ValueNotifier, feuert bei jedem Zeichen-Sample und lässt nur den Painter neu malen) und `notifyListeners()` (nur für Werkzeugleisten-State). Der `CustomPaint` liegt in einer eigenen `RepaintBoundary`. **Neue Effekte im Malbereich gehören als Geschwister-Overlay daneben, niemals hinein** — Vorbild: `fill_burst.dart` und `stamp_burst.dart`.
 
@@ -377,7 +385,7 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 - **Der wichtigste Eintragstyp ist `save`.** `atomicWrite*` und `JsonStore` schlucken jeden Schreibfehler absichtlich (die alte Datei bleibt dadurch intakt) — sie melden ihn jetzt über den Hook `onPersistFailure` in `json_store.dart`. „Speicher voll" ist damit belegbar, statt nur als „ein Bild war weg" erinnerbar.
 - Ein fehlgeschlagener Build zeigt in Release die `OopsCard` statt des grauen Kastens (`lib/ui/oops_card.dart`); in Debug bleiben die roten Streifen. Aufgezeichnet wird nur einmal — `FlutterError.onError` sieht die Ausnahme schon, `ErrorWidget.builder` schreibt bewusst nichts mehr dazu.
 
-**Vier Regeln, die dieses Projekt gelernt hat** — jede steht für einen Fehler, der schon einmal passiert ist:
+**Sieben Regeln, die dieses Projekt gelernt hat** — jede steht für einen Fehler, der schon einmal passiert ist:
 
 1. **Neue Persistenz immer über `JsonStore` bzw. `atomicWrite*`** (`lib/util/json_store.dart`), nie über nacktes `writeAsString`. Der Store serialisiert die Schreibvorgänge und ersetzt die Zieldatei atomar per Rename. Wo mehrere Dateien zusammen ein Ganzes bilden (ein Artwork-Ordner), wird die *identifizierende* Datei zuletzt geschrieben — `meta.json` ist der Commit-Marker.
 2. **Neue Effekte im Malbereich gehören als Geschwister-Overlay neben den Painter**, niemals hinein (siehe Canvas-Performance oben).
@@ -393,6 +401,8 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 6. **Der Undo-Stack budgetiert Speicher, nicht Schritte** (`lib/canvas/undo_stack.dart`). Ein Schnappschuss der Malebene ist 12 MB; eine feste Schrittzahl reserviert damit schnell dreistellige Megabyte. Wer dort etwas ändert, prüft `bytesInUse` — `test/undo_stack_test.dart` hält die Obergrenze für beide Canvas-Größen fest.
 
 7. **`Curves.easeOutBack` überschwingt über beide Tween-Enden hinaus.** In einer `AnimatedContainer`-Dekoration darf deshalb kein `boxShadow` gegen `null` animiert werden: der Blur-Radius wird dabei negativ und `dart:ui` bricht ab. Stattdessen den Radius konstant lassen und nur die Deckkraft bewegen (`_selectionShadow` in `lib/widgets/tool_bar.dart`).
+
+   **Nachtrag v8.6:** Diese Regel reichte weiter, als sie beschrieben war. `stickerSelectionDecoration` gab `boxShadow` gegen `null` zurück, und alle fünf Picker darauf hängen in einem `AnimatedContainer` — dazu die Aktionsknöpfe der Werkzeugleiste. Sechs Widgets, in denen der Absturz schon lag; sichtbar wurde er nur nicht, weil genau diese Stellen ohne Kurve liefen, also still `Curves.linear`. Beim Anhängen an die Bewegungs-Leiter wären sie alle gleichzeitig aufgewacht. Deshalb hat `PixieTokens.softShadow` jetzt ein `strength`: der Schatten ist immer da, nur seine Alpha wandert, und die klemmt `Color.lerp` ab. **Ein Schatten, der manchmal fehlt, wird ausgeblendet, nicht weggelassen.**
 
 ## Inhalte erweitern
 
