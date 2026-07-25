@@ -399,10 +399,10 @@ class _GalleryScreenState extends State<GalleryScreen>
                     onLongPress: () => _showItemMenu(shown[i]),
                     onToggleFavorite: () => _toggleFavorite(shown[i]),
                   );
-                  // One-shot staggered entrance for the first visible
-                  // items only (matches the page picker).
-                  if (i < 12) card = _staggered(i + 1, card);
-                  return card;
+                  // Staggered on the way in, and still arriving for the
+                  // fortieth picture, which is only ever built once it is
+                  // scrolled to.
+                  return reveal(i + 1, card);
                 },
               ),
             ),

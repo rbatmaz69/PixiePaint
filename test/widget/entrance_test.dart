@@ -77,6 +77,90 @@ void main() {
     expect(inside<SlideTransition>('ruhig'), findsNothing);
   });
 
+  /// [Reveal] exists for the bottom of a long grid: a tile that is only
+  /// built once it is scrolled to, long after the cascade finished. The
+  /// plain [Entrance] hands that tile a finished controller, so it blinks
+  /// into existence at full opacity — which is the whole thing being fixed.
+  group('Reveal', () {
+    /// Builds a group, lets its cascade finish, then adds one more tile.
+    Future<void> pumpLatecomer(WidgetTester tester, Widget Function() late_,
+        {required bool calm}) async {
+      var showLate = false;
+      late StateSetter rebuild;
+      await pump(
+        tester,
+        EntranceGroup(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              rebuild = setState;
+              return Column(
+                children: [
+                  const Entrance(slot: 0, child: Text('früh')),
+                  if (showLate) late_(),
+                ],
+              );
+            },
+          ),
+        ),
+        calm: calm,
+      );
+      // The cascade is over before the latecomer is ever built.
+      await tester.pumpAndSettle();
+      rebuild(() => showLate = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    testWidgets('a tile built after the cascade still arrives', (tester) async {
+      await pumpLatecomer(
+          tester, () => const Reveal(slot: 30, child: Text('spät')),
+          calm: false);
+
+      final midway = tester.widget<FadeTransition>(find
+          .descendant(
+            of: find.widgetWithText(Reveal, 'spät'),
+            matching: find.byType(FadeTransition),
+          )
+          .first);
+      expect(midway.opacity.value, lessThan(1.0),
+          reason: 'die nachgescrollte Kachel war sofort voll da');
+
+      // And it finishes, like every other piece of this movement.
+      await tester.pumpAndSettle();
+      final settled = tester.widget<FadeTransition>(find
+          .descendant(
+            of: find.widgetWithText(Reveal, 'spät'),
+            matching: find.byType(FadeTransition),
+          )
+          .first);
+      expect(settled.opacity.value, 1.0);
+    });
+
+    testWidgets('a plain Entrance in the same spot does not — that is why',
+        (tester) async {
+      await pumpLatecomer(
+          tester, () => const Entrance(slot: 30, child: Text('spät')),
+          calm: false);
+
+      final t = tester.widget<FadeTransition>(inside<FadeTransition>('spät'));
+      expect(t.opacity.value, 1.0);
+    });
+
+    testWidgets('with motion reduced it fades in without moving',
+        (tester) async {
+      await pumpLatecomer(
+          tester, () => const Reveal(slot: 30, child: Text('spät')),
+          calm: true);
+      await tester.pumpAndSettle();
+
+      final of = find.widgetWithText(Reveal, 'spät');
+      expect(find.descendant(of: of, matching: find.byType(FadeTransition)),
+          findsWidgets);
+      expect(find.descendant(of: of, matching: find.byType(SlideTransition)),
+          findsNothing);
+    });
+  });
+
   testWidgets('an Entrance without a group above it just shows its child',
       (tester) async {
     await pump(tester, const Entrance(slot: 4, child: Text('allein')),

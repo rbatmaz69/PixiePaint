@@ -194,7 +194,7 @@ class _StorageScreenState extends State<StorageScreen> {
             ),
             delegate: SliverChildBuilderDelegate(
               // Slot 2 onwards: the summary and the hint go first.
-              (context, i) => Entrance(
+              (context, i) => Reveal(
                 slot: i + 2,
                 child: _Tile(
                   artwork: _artworks[i],

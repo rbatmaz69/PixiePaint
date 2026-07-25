@@ -154,7 +154,7 @@ class _StickerGrid extends StatelessWidget {
       ),
       itemCount: kRewards.length,
       // Slot 2 onwards: the summary and the heading go first.
-      itemBuilder: (context, i) => Entrance(
+      itemBuilder: (context, i) => Reveal(
         slot: i + 2,
         child: _RewardTile(
           reward: kRewards[i],

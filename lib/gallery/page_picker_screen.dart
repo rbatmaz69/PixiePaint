@@ -259,9 +259,9 @@ class _PageGrid extends StatelessWidget {
             Positioned(top: 0, right: 0, child: _FavoriteHeart(page: page)),
           ],
         );
-        // One-shot staggered entrance for the first visible items only.
-        if (i < 12) card = Entrance(slot: i, child: card);
-        return card;
+        // Staggered on the way in, and still arriving further down the
+        // grid, where tiles are built as they are scrolled to.
+        return Reveal(slot: i, child: card);
       },
     );
   }
