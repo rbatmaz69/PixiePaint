@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
-import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/motion.dart';
+import '../ui/pixie_palette.dart';
+import '../ui/selection_cradle.dart';
 import '../util/color_utils.dart';
 import 'color_picker_sheet.dart';
 
@@ -89,9 +90,11 @@ class ColorPalette extends StatelessWidget {
             children: [
               // Painted first, so it sits *behind* the swatches. It is
               // positioned, so the Row below is what sizes this Stack.
-              _SelectionCradle(
+              SelectionCradle(
                 slot: selectedSlot,
-                color: controller.color,
+                accent: controller.color,
+                slotWidth: kSwatchSlot,
+                size: 50,
               ),
               Row(
                 children: [
@@ -124,52 +127,6 @@ class ColorPalette extends StatelessWidget {
   }
 }
 
-/// The white dish the chosen color sits in, which slides from slot to slot
-/// instead of appearing in one and disappearing from another.
-///
-/// Sixteen swatches each animating their own selection is sixteen things
-/// changing at once; one dish gliding is a single movement the eye can
-/// follow, and it is what tells a child *where the color went* when they
-/// pick a new one. The slots are a fixed [kSwatchSlot] wide, so this needs
-/// no keys, no measuring and no layout pass — the target is `slot * width`.
-///
-/// It lives inside the scroll view's content, so it travels with the row
-/// rather than sliding out from under it.
-class _SelectionCradle extends StatelessWidget {
-  const _SelectionCradle({required this.slot, required this.color});
-
-  final int slot;
-  final Color color;
-
-  static const double _size = 50;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      // Gliding *is* the movement here, so with "reduce motion" on the dish
-      // simply is where it belongs. One of the few places where the honest
-      // reduced form is an instant jump rather than a fade.
-      duration: motionDuration(context, PixieMotion.select),
-      curve: PixieCurves.spring,
-      left: slot * kSwatchSlot,
-      top: 0,
-      bottom: 0,
-      width: kSwatchSlot,
-      child: Center(
-        child: Container(
-          width: _size,
-          height: _size,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(PixieTokens.rSmall),
-            boxShadow: PixieTokens.softShadow(color),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// Squircle swatch in a fixed-size slot: selection only scales and decorates
 /// (AnimatedScale), never changes layout — so picking a color doesn't
 /// relayout the whole scroll row.
@@ -190,7 +147,7 @@ class PixieColorSwatch extends StatelessWidget {
   final double slotWidth;
   final double slotHeight;
 
-  /// A [_SelectionCradle] slides behind this row and carries the selection.
+  /// A [SelectionCradle] slides behind this row and carries the selection.
   ///
   /// The swatch then stops growing and stops casting its own shadow — two
   /// things saying "picked" on top of each other is louder, not clearer,
@@ -291,7 +248,7 @@ class _MoreColorsSwatch extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF9B6DFF).withValues(alpha: 0.3),
+                  color: PixiePalette.grape.withValues(alpha: 0.3),
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),

@@ -94,7 +94,7 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
   Widget build(BuildContext context) {
     final textPop = CurvedAnimation(
         parent: widget.route,
-        curve: const Interval(0.45, 1.0, curve: Curves.easeOutCubic));
+        curve: const Interval(0.45, 1.0, curve: PixieCurves.enter));
     return Material(
       type: MaterialType.transparency,
       child: SafeArea(

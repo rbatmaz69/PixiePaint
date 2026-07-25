@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../ui/motion.dart';
 import '../models/cbn_spec.dart';
 import '../ui/bouncy.dart';
+import '../ui/motion.dart';
+import '../ui/selection_cradle.dart';
 
 /// Color-by-number palette: one numbered swatch per color. Solved numbers
 /// get a check badge; [hintNumber] pulses to point at the right swatch
@@ -23,27 +24,50 @@ class CbnPalette extends StatelessWidget {
   final int? hintNumber;
   final ValueChanged<int> onSelect;
 
+  /// One swatch plus the padding around it. Uniform, which is what lets
+  /// [SelectionCradle] find its slot by arithmetic.
+  static const double _slot = 64;
+
   @override
   Widget build(BuildContext context) {
+    final picked = selectedNumber == null
+        ? null
+        : spec.numbers.indexOf(selectedNumber!);
     return Center(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
           children: [
-            for (final n in spec.numbers)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: _Swatch(
-                  number: n,
-                  color: spec.colorOf[n]!,
-                  selected: n == selectedNumber,
-                  done: doneNumbers.contains(n),
-                  hinted: n == hintNumber,
-                  onTap: () => onSelect(n),
-                ),
-              ),
+            // The same dish as the paint palette. The two sit in the same
+            // place on screen — a child painting a number picture and one
+            // painting a normal one should not meet two different ideas of
+            // what "picked" looks like.
+            SelectionCradle(
+              slot: picked != null && picked >= 0 ? picked : null,
+              accent: selectedNumber == null
+                  ? Colors.white
+                  : spec.colorOf[selectedNumber!]!,
+              slotWidth: _slot,
+              size: 60,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final n in spec.numbers)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: _Swatch(
+                      number: n,
+                      color: spec.colorOf[n]!,
+                      selected: n == selectedNumber,
+                      done: doneNumbers.contains(n),
+                      hinted: n == hintNumber,
+                      onTap: () => onSelect(n),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),
@@ -73,7 +97,7 @@ class _Swatch extends StatelessWidget {
     return Bouncy(
       onTap: onTap,
       child: AnimatedScale(
-        scale: hinted ? 1.25 : (selected ? 1.1 : 1.0),
+        scale: hinted ? 1.25 : 1.0,
         duration: PixieMotion.select,
         curve: PixieCurves.spring,
         child: AnimatedContainer(
@@ -90,8 +114,8 @@ class _Swatch extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: color.withValues(alpha: selected ? 0.6 : 0.3),
-                blurRadius: selected ? 12 : 6,
+                color: color.withValues(alpha: 0.3),
+                blurRadius: 6,
                 offset: const Offset(0, 3),
               ),
             ],
