@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/motion.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/pop_in.dart';
 import '../util/sfx.dart';
@@ -22,9 +23,9 @@ Future<void> showPauseCurtain(BuildContext context) async {
     barrierDismissible: false,
     barrierLabel: '',
     barrierColor: PixiePalette.ink.withValues(alpha: 0.55),
-    transitionDuration: const Duration(milliseconds: 420),
+    transitionDuration: PixieMotion.enter,
     transitionBuilder: (context, anim, _, child) => FadeTransition(
-      opacity: CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+      opacity: CurvedAnimation(parent: anim, curve: PixieCurves.enter),
       child: child,
     ),
     pageBuilder: (context, _, _) => const _PauseCurtain(),
@@ -69,7 +70,7 @@ class _PauseCurtainState extends State<_PauseCurtain> {
                   const PopIn(
                     from: 0.4,
                     rotateFrom: -0.12,
-                    duration: Duration(milliseconds: 620),
+                    delay: PixieMotion.emojiDelay,
                     child: Text('🌈', style: TextStyle(fontSize: 72)),
                   ),
                   const SizedBox(height: 16),

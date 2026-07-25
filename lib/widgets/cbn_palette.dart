@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../models/cbn_spec.dart';
 import '../ui/bouncy.dart';
 
@@ -73,10 +74,11 @@ class _Swatch extends StatelessWidget {
       onTap: onTap,
       child: AnimatedScale(
         scale: hinted ? 1.25 : (selected ? 1.1 : 1.0),
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOutBack,
+        duration: PixieMotion.select,
+        curve: PixieCurves.spring,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: PixieMotion.select,
+          curve: PixieCurves.settle,
           width: 54,
           height: 54,
           decoration: BoxDecoration(

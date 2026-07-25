@@ -24,7 +24,7 @@ import 'motion.dart';
 const double _slotStep = 0.05;
 
 /// How long a full cascade takes, first slot to last.
-const Duration kEntranceDuration = Duration(milliseconds: 900);
+const Duration kEntranceDuration = PixieMotion.stage;
 
 /// Fade + rise + a touch of scale on [controller], offset by [slot].
 ///
@@ -42,7 +42,7 @@ Widget buildEntrance(
     curve: Interval(
       start,
       (start + 0.5).clamp(0.0, 1.0),
-      curve: Curves.easeOutCubic,
+      curve: PixieCurves.enter,
     ),
   );
   if (reducedMotion(context)) {

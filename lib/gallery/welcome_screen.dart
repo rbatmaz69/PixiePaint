@@ -6,6 +6,7 @@ import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/motion.dart';
 import '../ui/page_dots.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/pop_in.dart';
@@ -58,8 +59,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     }
     Sfx.instance.tick();
     _pages.nextPage(
-      duration: const Duration(milliseconds: 320),
-      curve: Curves.easeOutCubic,
+      duration: PixieMotion.enter,
+      curve: PixieCurves.enter,
     );
   }
 
@@ -157,7 +158,7 @@ class _Card extends StatelessWidget {
             PopIn(
               from: 0.4,
               rotateFrom: -0.12,
-              duration: const Duration(milliseconds: 620),
+              delay: PixieMotion.emojiDelay,
               child: Text(emoji, style: const TextStyle(fontSize: 88)),
             ),
             const SizedBox(height: 24),

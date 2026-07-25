@@ -15,6 +15,7 @@ import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/motion.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
 import '../util/pdf_export.dart';
@@ -558,11 +559,11 @@ class _PolaroidCardState extends State<_PolaroidCard>
                   size: 40,
                   accent: PixiePalette.berry,
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
+                    duration: PixieMotion.select,
                     transitionBuilder: (child, anim) => ScaleTransition(
                       scale: CurvedAnimation(
                         parent: anim,
-                        curve: Curves.easeOutBack,
+                        curve: PixieCurves.spring,
                       ),
                       child: child,
                     ),
@@ -635,7 +636,8 @@ class _FilterChip extends StatelessWidget {
       onTap: onTap,
       playTick: false,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
+        duration: PixieMotion.select,
+        curve: PixieCurves.spring,
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: stickerSelectionDecoration(
           selected: selected,

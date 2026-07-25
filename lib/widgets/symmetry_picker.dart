@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
 import '../canvas/symmetry.dart';
 import '../l10n/l10n.dart';
@@ -48,7 +49,8 @@ Future<void> showSymmetryPicker(
             Navigator.pop(sheetContext);
           },
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
+            duration: PixieMotion.select,
+            curve: PixieCurves.spring,
             decoration: stickerSelectionDecoration(
               selected: selected,
               accent: const Color(0xFF7C6BF0),

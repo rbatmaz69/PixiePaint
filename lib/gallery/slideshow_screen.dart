@@ -9,6 +9,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/motion.dart';
 import '../ui/page_dots.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -199,7 +200,7 @@ class _SlideshowScreenState extends State<SlideshowScreen>
               left: 16,
               child: AnimatedOpacity(
                 opacity: _showControls ? 1 : 0,
-                duration: const Duration(milliseconds: 300),
+                duration: PixieMotion.select,
                 child: IgnorePointer(
                   ignoring: !_showControls,
                   child: StickerCircleButton(
@@ -221,7 +222,7 @@ class _SlideshowScreenState extends State<SlideshowScreen>
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: _showControls ? 1 : 0,
-                  duration: const Duration(milliseconds: 300),
+                  duration: PixieMotion.select,
                   child: Center(
                     child: PageDots(
                       count: widget.artworks.length,

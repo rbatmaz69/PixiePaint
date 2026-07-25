@@ -7,6 +7,7 @@ import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/motion.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/image_io.dart';
@@ -175,7 +176,7 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                     // which reads as a different button rather than as the
                     // same one working.
                     child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
+                      duration: PixieMotion.snap,
                       child: _saving
                           ? const LoadingPixie(
                               key: ValueKey('saving'),

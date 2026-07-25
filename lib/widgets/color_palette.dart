@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../ui/bouncy.dart';
@@ -134,11 +135,12 @@ class PixieColorSwatch extends StatelessWidget {
         height: slotHeight,
         child: Center(
           child: AnimatedScale(
-            scale: selected ? 1.22 : 1.0,
-            duration: const Duration(milliseconds: 260),
-            curve: Curves.easeOutBack,
+            scale: selected ? PixieMotion.selectedScale : 1.0,
+            duration: PixieMotion.select,
+            curve: PixieCurves.spring,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
+              duration: PixieMotion.select,
+              curve: PixieCurves.settle,
               width: 42,
               height: 42,
               decoration: BoxDecoration(

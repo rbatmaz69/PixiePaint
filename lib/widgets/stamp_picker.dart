@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/reward.dart';
@@ -297,7 +298,8 @@ class _MyStickerTile extends StatelessWidget {
         playTick: false,
         onTap: onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: PixieMotion.select,
+          curve: PixieCurves.spring,
           padding: const EdgeInsets.all(6),
           decoration: stickerSelectionDecoration(
             selected: selected,
@@ -324,7 +326,8 @@ class _StampTile extends StatelessWidget {
       playTick: false,
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: PixieMotion.select,
+        curve: PixieCurves.spring,
         decoration: stickerSelectionDecoration(
           selected: selected,
           accent: const Color(0xFFFFB020),

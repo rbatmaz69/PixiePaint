@@ -19,6 +19,7 @@ import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/hero_tags.dart';
 import '../ui/kid_dialog.dart';
+import '../ui/motion.dart';
 import '../ui/loading_pixie.dart';
 import '../ui/paper_doodles.dart';
 import '../ui/paper_sheet.dart';
@@ -327,7 +328,7 @@ class _CanvasScreenState extends State<CanvasScreen>
     if (verdict.showHint) {
       _cbnHintTimer?.cancel();
       setState(() => _cbnHint = verdict.correctNumber);
-      _cbnHintTimer = Timer(const Duration(milliseconds: 1600), () {
+      _cbnHintTimer = Timer(PixieMotion.dwell, () {
         if (mounted) setState(() => _cbnHint = null);
       });
     }
@@ -507,7 +508,7 @@ class _CanvasScreenState extends State<CanvasScreen>
             painter: const DoodlePainter(0.12, alpha: 0.04),
             child: SafeArea(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
+              duration: PixieMotion.select,
               child: loading
                   ? KeyedSubtree(
                       key: const ValueKey('loading'),
@@ -736,11 +737,11 @@ class _CanvasScreenState extends State<CanvasScreen>
                   ignoring: !zoomed,
                   child: AnimatedOpacity(
                     opacity: zoomed ? 1 : 0,
-                    duration: const Duration(milliseconds: 200),
+                    duration: PixieMotion.select,
                     child: AnimatedScale(
                       scale: zoomed ? 1 : 0.3,
-                      duration: const Duration(milliseconds: 250),
-                      curve: zoomed ? Curves.easeOutBack : Curves.easeIn,
+                      duration: PixieMotion.select,
+                      curve: zoomed ? PixieCurves.spring : PixieCurves.exit,
                       child: StickerCircleButton(
                         icon: Icons.fit_screen_rounded,
                         tooltip: context.l10n.resetView,
@@ -766,12 +767,12 @@ class _CanvasScreenState extends State<CanvasScreen>
           ListenableBuilder(
             listenable: controller,
             builder: (context, _) => AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: PixieMotion.select,
               transitionBuilder: (child, anim) => FadeTransition(
                 opacity: anim,
                 child: ScaleTransition(
                   scale: Tween(begin: 0.7, end: 1.0).animate(
-                    CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+                    CurvedAnimation(parent: anim, curve: PixieCurves.spring),
                   ),
                   child: child,
                 ),
@@ -822,14 +823,14 @@ class _RotateHintState extends State<_RotateHint> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       unawaited(Settings.instance.markRotateHintSeen());
     });
-    _timer = Timer(const Duration(seconds: 6), _dismiss);
+    _timer = Timer(PixieMotion.dwellLong, _dismiss);
   }
 
   void _dismiss() {
     if (!mounted || !_visible) return;
     setState(() => _visible = false);
     _timer?.cancel();
-    _timer = Timer(const Duration(milliseconds: 300), () {
+    _timer = Timer(PixieMotion.select, () {
       if (mounted) widget.onDone();
     });
   }
@@ -844,7 +845,7 @@ class _RotateHintState extends State<_RotateHint> {
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: _visible ? 1 : 0,
-      duration: const Duration(milliseconds: 300),
+      duration: PixieMotion.select,
       child: Bouncy(
         onTap: _dismiss,
         playTick: false,
@@ -912,7 +913,7 @@ class _ToolChipState extends State<_ToolChip> {
     _lastShape = shape;
     _timer?.cancel();
     setState(() => _visible = true);
-    _timer = Timer(const Duration(milliseconds: 1500), () {
+    _timer = Timer(PixieMotion.dwell, () {
       if (mounted) setState(() => _visible = false);
     });
   }
@@ -928,11 +929,11 @@ class _ToolChipState extends State<_ToolChip> {
   Widget build(BuildContext context) {
     return AnimatedSlide(
       offset: _visible ? Offset.zero : const Offset(0, -0.4),
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOutBack,
+      duration: PixieMotion.select,
+      curve: PixieCurves.spring,
       child: AnimatedOpacity(
         opacity: _visible ? 1 : 0,
-        duration: const Duration(milliseconds: 250),
+        duration: PixieMotion.select,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(

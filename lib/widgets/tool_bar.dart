@@ -4,6 +4,7 @@ import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/tool.dart';
 import '../ui/app_theme.dart';
+import '../ui/motion.dart';
 import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
@@ -95,7 +96,7 @@ List<BoxShadow> _selectionShadow(Color accent, bool selected) => [
 /// is a bare circle; selected it squares off into a rounded tile.
 ///
 /// The tools and the magic mirror carried two copies of this, identical
-/// down to the 220 ms and the 1.18 scale. Only what sits inside differs, so
+/// down to the timing and the scale. Only what sits inside differs, so
 /// only that is passed in.
 class _PickableButton extends StatelessWidget {
   const _PickableButton({
@@ -134,8 +135,8 @@ class _PickableButton extends StatelessWidget {
         semanticLabel: label,
         semanticSelected: selected,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutBack,
+          duration: PixieMotion.select,
+          curve: PixieCurves.spring,
           width: size,
           height: size,
           margin: const EdgeInsets.all(1),
@@ -316,8 +317,8 @@ class _ToolBarRailState extends State<ToolBarRail> {
       Scrollable.ensureVisible(
         ctx,
         alignment: 0.5,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
+        duration: PixieMotion.select,
+        curve: PixieCurves.settle,
       );
     });
   }
@@ -564,7 +565,7 @@ class _ToolButton extends StatelessWidget {
           Pulse(
             trigger: selected,
             only: true,
-            peak: 1.2,
+            peak: PixieMotion.pulsePeak,
             child: _SelectionScale(
               selected: selected,
               restOpacity: _PickableButton.toolRestOpacity,
@@ -580,10 +581,10 @@ class _ToolButton extends StatelessWidget {
               // tool they are about to draw with.
               child: Pulse(
                 trigger: controller.color,
-                peak: 1.35,
+                peak: PixieMotion.pulsePeakLoud,
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOut,
+                  duration: PixieMotion.select,
+                  curve: PixieCurves.settle,
                   width: 11,
                   height: 11,
                   decoration: BoxDecoration(
@@ -616,9 +617,9 @@ class _SelectionScale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedScale(
-      scale: selected ? 1.18 : 1.0,
-      duration: const Duration(milliseconds: 220),
-      curve: Curves.easeOutBack,
+      scale: selected ? PixieMotion.selectedScale : 1.0,
+      duration: PixieMotion.select,
+      curve: PixieCurves.spring,
       child: Opacity(
         opacity: selected ? 1.0 : restOpacity,
         child: child,
@@ -692,8 +693,8 @@ class _SizeButton extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
+              duration: PixieMotion.snap,
+              curve: PixieCurves.settle,
               width: previewDiameter,
               height: previewDiameter,
               decoration: BoxDecoration(
@@ -746,16 +747,16 @@ class _ActionButton extends StatelessWidget {
       onTap: enabled ? onTap : null,
       semanticLabel: label,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: PixieMotion.snap,
+        curve: PixieCurves.settle,
         width: 48,
         height: 48,
         margin: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: filled && enabled ? Colors.white : Colors.transparent,
           shape: BoxShape.circle,
-          boxShadow: filled && enabled
-              ? PixieTokens.softShadow(PixiePalette.grape)
-              : null,
+          boxShadow: PixieTokens.softShadow(PixiePalette.grape,
+              strength: filled && enabled ? 1.0 : 0.0),
         ),
         child: Icon(
           icon,

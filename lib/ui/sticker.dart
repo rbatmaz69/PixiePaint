@@ -98,7 +98,10 @@ BoxDecoration stickerSelectionDecoration({
       color: selected ? accent : Colors.transparent,
       width: 2.5,
     ),
-    boxShadow: selected ? PixieTokens.softShadow(accent) : null,
+    // Zero-alpha rather than null: every caller wraps this in an
+    // [AnimatedContainer], and a shadow tweened against nothing is the
+    // negative-blur crash. See [PixieTokens.softShadow].
+    boxShadow: PixieTokens.softShadow(accent, strength: selected ? 1.0 : 0.0),
   );
 }
 

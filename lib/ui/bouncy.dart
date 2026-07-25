@@ -14,7 +14,7 @@ class Bouncy extends StatefulWidget {
     this.onLongPress,
     this.playTick = true,
     this.minSize = 48.0,
-    this.pressedScale = 0.9,
+    this.pressedScale = PixieMotion.pressedScale,
     this.semanticLabel,
     this.semanticSelected,
   });
@@ -63,10 +63,8 @@ class _BouncyState extends State<Bouncy> {
     final calm = reducedMotion(context);
     Widget child = AnimatedScale(
       scale: _pressed ? widget.pressedScale : 1.0,
-      duration: _pressed || calm
-          ? const Duration(milliseconds: 90)
-          : const Duration(milliseconds: 450),
-      curve: _pressed || calm ? Curves.easeOut : Curves.elasticOut,
+      duration: _pressed || calm ? PixieMotion.press : PixieMotion.spring,
+      curve: _pressed || calm ? PixieCurves.settle : PixieCurves.bounce,
       child: widget.child,
     );
     if (widget.minSize > 0) {

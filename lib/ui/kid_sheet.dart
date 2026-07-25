@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
 import 'pop_in.dart';
 
 /// Kid-friendly bottom sheet shell: rounded top (via theme), drag handle,
@@ -27,7 +28,7 @@ Future<T?> showKidSheet<T>({
               children: [
                 PopIn(
                   from: 0.4,
-                  delay: const Duration(milliseconds: 100),
+                  delay: PixieMotion.emojiDelay,
                   child: Text(emoji, style: const TextStyle(fontSize: 26)),
                 ),
                 const SizedBox(width: 10),

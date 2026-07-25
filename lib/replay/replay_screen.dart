@@ -12,6 +12,7 @@ import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/motion.dart';
 import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/pop_in.dart';
@@ -141,7 +142,7 @@ class _ReplayScreenState extends State<ReplayScreen> {
                             // Replay again once the show is over.
                             AnimatedOpacity(
                               opacity: c.done ? 1 : 0,
-                              duration: const Duration(milliseconds: 250),
+                              duration: PixieMotion.select,
                               child: IgnorePointer(
                                 ignoring: !c.done,
                                 child: StickerCircleButton(
@@ -238,8 +239,8 @@ class _ReplayProgress extends StatelessWidget {
                   FractionallySizedBox(
                     widthFactor: controller.progress.clamp(0.0, 1.0),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeOut,
+                      duration: PixieMotion.snap,
+                      curve: PixieCurves.settle,
                       height: 8,
                       decoration: BoxDecoration(
                         gradient: PixieGradients.trace,

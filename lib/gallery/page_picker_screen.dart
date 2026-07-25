@@ -10,6 +10,7 @@ import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
 import '../ui/hero_tags.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/motion.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -291,8 +292,8 @@ class _FavoriteHeart extends StatelessWidget {
           semanticSelected: on,
           child: AnimatedScale(
             scale: on ? 1.0 : 0.85,
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeOutBack,
+            duration: PixieMotion.select,
+            curve: PixieCurves.spring,
             child: Container(
               width: 36,
               height: 36,

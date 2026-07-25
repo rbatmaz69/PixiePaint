@@ -11,9 +11,9 @@ class PopIn extends StatefulWidget {
     required this.child,
     this.from = 0.0,
     this.rotateFrom = 0.0,
-    this.duration = const Duration(milliseconds: 500),
+    this.duration = PixieMotion.pop,
     this.delay = Duration.zero,
-    this.curve = Curves.elasticOut,
+    this.curve = PixieCurves.bounce,
   });
 
   final Widget child;
@@ -84,7 +84,7 @@ class Pulse extends StatefulWidget {
     super.key,
     required this.trigger,
     required this.child,
-    this.peak = 1.15,
+    this.peak = PixieMotion.pulsePeak,
     this.only,
   });
 
@@ -105,16 +105,16 @@ class Pulse extends StatefulWidget {
 }
 
 class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 300));
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: PixieMotion.select);
   late final Animation<double> _scale = TweenSequence<double>([
     TweenSequenceItem(
         tween: Tween(begin: 1.0, end: widget.peak)
-            .chain(CurveTween(curve: Curves.easeOut)),
+            .chain(CurveTween(curve: PixieCurves.settle)),
         weight: 40),
     TweenSequenceItem(
         tween: Tween(begin: widget.peak, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeOutBack)),
+            .chain(CurveTween(curve: PixieCurves.spring)),
         weight: 60),
   ]).animate(_c);
 

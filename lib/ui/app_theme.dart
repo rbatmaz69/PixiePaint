@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
 import 'pixie_palette.dart';
 
 /// Design tokens: radii, spacing, sticker geometry and the soft colored
@@ -55,14 +56,23 @@ abstract final class PixieTokens {
   /// [AnimatedContainer] with overshooting curves (see the toolbar), and a
   /// blur radius pulled below zero is an assertion in `dart:ui` — so only
   /// the alpha, which [Color.lerp] clamps, is ever allowed to vary.
-  static List<BoxShadow> softShadow(Color color) => [
+  ///
+  /// [strength] is what makes that reachable: a control that only *some­times*
+  /// casts a shadow must fade it via `strength: 0` rather than by handing
+  /// [AnimatedContainer] a `null` to tween against. Tweening a shadow list
+  /// against `null` is the same negative-blur crash by another route, and it
+  /// used to sit in six widgets at once — every picker built on
+  /// `stickerSelectionDecoration`, plus the toolbar's action buttons. With a
+  /// zero-alpha shadow always present there is nothing left to get wrong,
+  /// and any curve is safe.
+  static List<BoxShadow> softShadow(Color color, {double strength = 1.0}) => [
         BoxShadow(
-          color: color.withValues(alpha: 0.18),
+          color: color.withValues(alpha: 0.18 * strength),
           blurRadius: 4,
           offset: const Offset(0, 2),
         ),
         BoxShadow(
-          color: color.withValues(alpha: 0.22),
+          color: color.withValues(alpha: 0.22 * strength),
           blurRadius: 16,
           offset: const Offset(0, 6),
         ),
@@ -153,13 +163,13 @@ class PixiePageTransitionsBuilder extends PageTransitionsBuilder {
     Widget child,
   ) {
     return FadeTransition(
-      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      opacity: CurvedAnimation(parent: animation, curve: PixieCurves.enter),
       child: ScaleTransition(
         scale: Tween<double>(begin: 0.94, end: 1.0).animate(
           CurvedAnimation(
             parent: animation,
-            curve: Curves.easeOutBack,
-            reverseCurve: Curves.easeIn,
+            curve: PixieCurves.spring,
+            reverseCurve: PixieCurves.exit,
           ),
         ),
         child: child,

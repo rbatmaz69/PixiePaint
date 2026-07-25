@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/confetti_burst.dart';
 import 'kid_dialog.dart';
+import 'motion.dart';
 import 'pop_in.dart';
 
 /// Full-screen sticker unlock moment: dark scrim, soft light rays, the
@@ -23,7 +24,7 @@ Future<void> showRewardReveal(
     barrierColor: Colors.black.withValues(alpha: 0.72),
     transitionDuration: const Duration(milliseconds: 550),
     transitionBuilder: (context, anim, _, child) => FadeTransition(
-      opacity: CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+      opacity: CurvedAnimation(parent: anim, curve: PixieCurves.enter),
       child: child,
     ),
     pageBuilder: (context, anim, _) => _RewardRevealContent(

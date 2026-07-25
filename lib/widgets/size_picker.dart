@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/tool.dart';
@@ -57,8 +58,8 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                     trigger: _presetTaps,
                     peak: 1.12,
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 120),
-                      curve: Curves.easeOut,
+                      duration: PixieMotion.press,
+                      curve: PixieCurves.settle,
                       width: controller.brushSize,
                       height: controller.brushSize,
                       decoration: BoxDecoration(
@@ -102,7 +103,8 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                       },
                       playTick: false,
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
+                        duration: PixieMotion.select,
+                        curve: PixieCurves.settle,
                         width: 64,
                         height: 64,
                         alignment: Alignment.center,

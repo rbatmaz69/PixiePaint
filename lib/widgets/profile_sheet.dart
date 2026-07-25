@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../ui/motion.dart';
 import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
 import '../models/profile.dart';
@@ -109,7 +110,8 @@ class _ProfileBubble extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: PixieMotion.select,
+              curve: PixieCurves.settle,
               width: 80,
               height: 80,
               alignment: Alignment.center,

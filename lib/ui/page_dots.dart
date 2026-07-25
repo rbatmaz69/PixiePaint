@@ -8,6 +8,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
 import 'pixie_palette.dart';
 
 class PageDots extends StatelessWidget {
@@ -49,8 +50,8 @@ class PageDots extends StatelessWidget {
         children: [
           for (var i = first; i < first + shown; i++)
             AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
+              duration: PixieMotion.select,
+              curve: PixieCurves.settle,
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: i == index ? 22 : 8,
               height: 8,

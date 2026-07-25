@@ -11,6 +11,7 @@ import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
 import '../ui/loading_pixie.dart';
+import '../ui/motion.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
@@ -139,7 +140,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                                 // Crossfade between detail levels instead of a
                                 // hard swap (identical aspect, no layout jump).
                                 child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 250),
+                                  duration: PixieMotion.select,
                                   child: _preview == null
                                       ? const Center(
                                           key: ValueKey('loading'),
@@ -204,7 +205,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 180),
+                                  duration: PixieMotion.snap,
                                   child: _starting
                                       ? const SizedBox(
                                           key: ValueKey('starting'),
@@ -261,8 +262,8 @@ class _DetailPill extends StatelessWidget {
     return Bouncy(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
+        duration: PixieMotion.select,
+        curve: PixieCurves.spring,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: stickerSelectionDecoration(
           selected: selected,
