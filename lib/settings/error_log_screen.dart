@@ -115,7 +115,7 @@ class _ErrorLogScreenState extends State<ErrorLogScreen> {
                               l10n.errorLogCount(entries.length),
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: PixieTokens.gapTiny),
                             Text(
                               l10n.errorLogHint,
                               style: Theme.of(context)
@@ -129,20 +129,20 @@ class _ErrorLogScreenState extends State<ErrorLogScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: PixieTokens.gapMedium),
                     if (entries.isEmpty)
                       Entrance(slot: 1, child: _EmptyState(text: l10n.errorLogEmpty))
                     else ...[
                       for (final (i, entry) in entries.indexed)
                         Entrance(slot: i + 1, child: _EntryCard(entry: entry)),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: PixieTokens.gapSmall),
                       KidDialogButton(
                         label: l10n.errorLogShare,
                         emoji: '📤',
                         sticker: true,
                         onTap: _busy ? () {} : _share,
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: PixieTokens.gapSmall),
                       KidDialogTextButton(
                         label: l10n.errorLogClear,
                         onTap: _busy ? () {} : _clear,
@@ -171,7 +171,7 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         children: [
           StickerEmoji('🎉', size: 44, shadowColor: PixiePalette.mint),
-          const SizedBox(height: 14),
+          const SizedBox(height: PixieTokens.gap),
           Text(
             text,
             textAlign: TextAlign.center,
@@ -243,14 +243,14 @@ class _EntryCardState extends State<_EntryCard> {
                     ),
                 ],
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: PixieTokens.gapTiny),
               Text(entry.message, style: mono),
               if (entry.detail != null) ...[
                 const SizedBox(height: 4),
                 Text(entry.detail!, style: mono),
               ],
               if (_open && entry.stack.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: PixieTokens.gapSmall),
                 Text(entry.stack, style: mono),
               ],
             ],

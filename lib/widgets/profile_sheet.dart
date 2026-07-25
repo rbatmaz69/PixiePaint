@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
 
 import '../ui/motion.dart';
 import '../gallery/artwork_store.dart';
@@ -76,7 +77,7 @@ class _ProfileSheetBodyState extends State<_ProfileSheetBody> {
                   ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: PixieTokens.gapLarge),
             KidDialogTextButton(
               label: context.l10n.profileManage,
               onTap: _manage,
@@ -133,7 +134,7 @@ class _ProfileBubble extends StatelessWidget {
               ),
               child: Text(profile.emoji, style: const TextStyle(fontSize: 40)),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: PixieTokens.gapTiny),
             Text(
               profile.name.isEmpty ? context.l10n.profileDefaultName : profile.name,
               maxLines: 1,
@@ -275,7 +276,7 @@ class _ManageProfilesState extends State<_ManageProfiles> {
                 ),
               )
             else
-              const SizedBox(height: 20),
+              const SizedBox(height: PixieTokens.gapLarge),
           ],
         ),
       ),
@@ -337,7 +338,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: PixieTokens.gap),
             TextField(
               controller: _name,
               autofocus: true,
@@ -350,7 +351,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
                 hintText: context.l10n.profileNameHint,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: PixieTokens.gapSmall),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -381,7 +382,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
                   ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: PixieTokens.gapSmall),
             // A parent decision, and it already sits behind the gate: this
             // editor is only reachable from "manage children".
             SwitchListTile.adaptive(
@@ -391,7 +392,7 @@ class _ProfileEditorState extends State<_ProfileEditor> {
               subtitle: Text(context.l10n.simpleToolsSubtitle),
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: PixieTokens.gapSmall),
             KidDialogButton(
               emoji: '💾',
               label: context.l10n.renameSave,

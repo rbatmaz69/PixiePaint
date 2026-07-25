@@ -170,7 +170,7 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
                           accent: PixiePalette.grape,
                           onTap: _leave,
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: PixieTokens.gapSmall),
                         StickerCircleButton(
                           icon: Icons.flip_rounded,
                           tooltip: context.l10n.twoPainterFlip,

@@ -157,7 +157,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                           ),
                         ),
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: PixieTokens.gapMedium),
                         entrance(
                           2,
                           Wrap(
@@ -178,7 +178,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                           ],
                         ),
                         ),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: PixieTokens.gapLarge),
                         entrance(
                           4,
                           Bouncy(
@@ -222,7 +222,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                                           size: 24,
                                         ),
                                 ),
-                                const SizedBox(width: 10),
+                                const SizedBox(width: PixieTokens.gapSmall),
                                 Text(
                                   context.l10n.letsGo,
                                   style: Theme.of(context).textTheme.titleLarge,

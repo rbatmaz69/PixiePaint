@@ -88,7 +88,7 @@ class _PatternTile extends StatelessWidget {
                 painter: _PatternPreviewPainter(pattern, color),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: PixieTokens.gapSmall),
             Text(label, style: Theme.of(context).textTheme.titleSmall),
           ],
         ),

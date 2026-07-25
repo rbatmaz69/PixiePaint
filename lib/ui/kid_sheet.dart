@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 
 import 'motion.dart';
 import 'pop_in.dart';
@@ -31,7 +32,7 @@ Future<T?> showKidSheet<T>({
                   delay: PixieMotion.emojiDelay,
                   child: Text(emoji, style: const TextStyle(fontSize: 26)),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: PixieTokens.gapSmall),
                 Flexible(
                   child: Text(title,
                       style: Theme.of(context).textTheme.titleLarge),

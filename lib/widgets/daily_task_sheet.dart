@@ -38,7 +38,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
                 .headlineSmall
                 ?.copyWith(fontWeight: FontWeight.w700),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: PixieTokens.gapLarge),
           KidDialogButton(
             emoji: '🖌️',
             label: context.l10n.dailyTaskGo,
@@ -50,7 +50,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
               );
             },
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: PixieTokens.gapSmall),
           if (!alreadyDone)
             KidDialogButton(
               emoji: '✅',
@@ -105,7 +105,7 @@ class DailyTaskBanner extends StatelessWidget {
               children: [
                 StickerEmoji(task.emoji,
                     size: 26, shadowColor: PixiePalette.sunshine),
-                const SizedBox(width: 12),
+                const SizedBox(width: PixieTokens.gap),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

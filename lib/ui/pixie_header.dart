@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 
 import '../l10n/l10n.dart';
 import 'pixie_palette.dart';
@@ -37,11 +38,11 @@ class PixieHeader extends StatelessWidget {
               tooltip: context.l10n.back,
               accent: accent,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: PixieTokens.gapSmall),
           ],
           StickerEmoji(emoji,
               size: 26, tiltIndex: 1, shadowColor: accent),
-          const SizedBox(width: 12),
+          const SizedBox(width: PixieTokens.gap),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

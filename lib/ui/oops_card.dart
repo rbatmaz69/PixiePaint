@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 
 import '../l10n/app_localizations.dart';
 import 'pixie_palette.dart';
@@ -34,7 +35,7 @@ class OopsCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text('🙈', style: TextStyle(fontSize: 56)),
-          const SizedBox(height: 14),
+          const SizedBox(height: PixieTokens.gap),
           Text(
             l10n?.oopsTitle ?? 'Ups — hier ist etwas durcheinandergeraten.',
             textAlign: TextAlign.center,
@@ -45,7 +46,7 @@ class OopsCard extends StatelessWidget {
               color: PixiePalette.ink,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: PixieTokens.gapSmall),
           Text(
             l10n?.oopsBody ?? 'Geh einen Schritt zurück und probier es nochmal.',
             textAlign: TextAlign.center,

@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../ui/app_theme.dart';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -229,7 +230,7 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: PixieTokens.gapMedium),
           ],
         ),
       ),

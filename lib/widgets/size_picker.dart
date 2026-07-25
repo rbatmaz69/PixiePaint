@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
 
 import '../ui/motion.dart';
 import '../canvas/canvas_controller.dart';
@@ -91,7 +92,7 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                 onChanged: (v) => controller.selectSize(v, silent: true),
                 onChangeEnd: (_) => Sfx.instance.tick(),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: PixieTokens.gapSmall),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

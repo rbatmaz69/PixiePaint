@@ -183,7 +183,7 @@ class _GalleryScreenState extends State<GalleryScreen>
               // Only for pictures painted since the op log exists — there is
               // no story to play back for the older ones.
               if (artwork.opsFile.existsSync()) ...[
-                const SizedBox(height: 10),
+                const SizedBox(height: PixieTokens.gapSmall),
                 entry(
                   '🎬',
                   l10n.replayAction,
@@ -194,19 +194,19 @@ class _GalleryScreenState extends State<GalleryScreen>
                   ),
                 ),
               ],
-              const SizedBox(height: 10),
+              const SizedBox(height: PixieTokens.gapSmall),
               entry('✏️', l10n.renameAction, PixieGradients.freeDraw,
                   () => _rename(artwork)),
-              const SizedBox(height: 10),
+              const SizedBox(height: PixieTokens.gapSmall),
               entry('📷', l10n.saveToPhotos, PixieGradients.gallery,
                   () => _saveToPhotos(artwork)),
-              const SizedBox(height: 10),
+              const SizedBox(height: PixieTokens.gapSmall),
               entry('💌', l10n.shareForParents, PixieGradients.photo,
                   () => _share(artwork)),
-              const SizedBox(height: 10),
+              const SizedBox(height: PixieTokens.gapSmall),
               entry('🖨️', l10n.printForParents, PixieGradients.trace,
                   () => _print(artwork)),
-              const SizedBox(height: 6),
+              const SizedBox(height: PixieTokens.gapTiny),
               // Small and quiet, not one of the colorful cards — deleting a
               // picture should never be the easiest thing on this sheet.
               KidDialogTextButton(
@@ -328,13 +328,13 @@ class _GalleryScreenState extends State<GalleryScreen>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const LoadingPixie(emoji: '🖼️'),
-                const SizedBox(height: 8),
+                const SizedBox(height: PixieTokens.gapSmall),
                 Text(
                   context.l10n.galleryEmpty,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: PixieTokens.gapLarge),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 320),
                   child: KidDialogButton(
@@ -372,7 +372,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                         selected: !_favoritesOnly,
                         onTap: () => setState(() => _favoritesOnly = false),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: PixieTokens.gapSmall),
                       _FilterChip(
                         label: '❤️ ${context.l10n.filterFavorites}',
                         selected: _favoritesOnly,

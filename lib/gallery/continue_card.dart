@@ -122,7 +122,7 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: PixieTokens.gap),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

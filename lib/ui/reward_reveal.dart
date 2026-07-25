@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'app_theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -133,7 +134,7 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: PixieTokens.gapSmall),
                 FadeTransition(
                   opacity: textPop,
                   child: SlideTransition(
@@ -151,7 +152,7 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
                               .headlineSmall
                               ?.copyWith(color: Colors.white),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: PixieTokens.gapSmall),
                         Text(
                           widget.body,
                           textAlign: TextAlign.center,
@@ -160,7 +161,7 @@ class _RewardRevealContentState extends State<_RewardRevealContent>
                               .titleMedium
                               ?.copyWith(color: Colors.white70),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: PixieTokens.gapXl),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 320),
                           child: KidDialogButton(

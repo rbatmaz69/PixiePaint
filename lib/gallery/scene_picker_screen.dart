@@ -85,7 +85,7 @@ class ScenePickerScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: PixieTokens.gapSmall),
                                 Text(
                                   scene.titleFor(lang),
                                   style: Theme.of(context)

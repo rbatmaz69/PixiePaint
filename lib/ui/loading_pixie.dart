@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'app_theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class _LoadingPixieState extends State<LoadingPixie>
           child: Text(widget.emoji, style: TextStyle(fontSize: widget.size)),
         ),
         if (widget.label != null) ...[
-          const SizedBox(height: 14),
+          const SizedBox(height: PixieTokens.gap),
           Text(widget.label!, style: Theme.of(context).textTheme.titleMedium),
         ],
       ],

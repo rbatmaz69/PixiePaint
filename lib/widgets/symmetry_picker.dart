@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
 import '../ui/pixie_palette.dart';
 
 import '../ui/motion.dart';
@@ -62,7 +63,7 @@ Future<void> showSymmetryPicker(
               children: [
                 Text(symmetryEmoji(folds),
                     style: const TextStyle(fontSize: 40)),
-                const SizedBox(height: 6),
+                const SizedBox(height: PixieTokens.gapTiny),
                 Text(
                   symmetryLabel(context, folds),
                   style: Theme.of(context).textTheme.labelMedium,

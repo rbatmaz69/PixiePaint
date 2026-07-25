@@ -296,7 +296,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           ],
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: PixieTokens.gapMedium),
                       _staggered(
                         1,
                         _Section(
@@ -334,7 +334,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           ],
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: PixieTokens.gapMedium),
                       _staggered(
                         2,
                         _Section(
@@ -374,7 +374,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           ],
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      const SizedBox(height: PixieTokens.gapMedium),
                       _staggered(
                         3,
                         _Section(
@@ -436,7 +436,7 @@ class _Section extends StatelessWidget {
           child: Row(
             children: [
               StickerEmoji(emoji, size: 18, shadowColor: accent),
-              const SizedBox(width: 10),
+              const SizedBox(width: PixieTokens.gapSmall),
               // Section names are whole phrases ("Sicherheit & Eltern") and
               // run past the edge at a large system font.
               Expanded(
@@ -506,7 +506,7 @@ class _KidRow extends StatelessWidget {
             ),
             child: Text(emoji, style: const TextStyle(fontSize: 24)),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: PixieTokens.gap),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -524,7 +524,7 @@ class _KidRow extends StatelessWidget {
             ),
           ),
           if (trailingText != null) ...[
-            const SizedBox(width: 8),
+            const SizedBox(width: PixieTokens.gapSmall),
             // The chosen value can be a whole phrase ("nach 45 Minuten"),
             // which at the largest system font is wider than what is left
             // of the row.
@@ -543,7 +543,7 @@ class _KidRow extends StatelessWidget {
                 color: scheme.onSurfaceVariant),
           ],
           if (onChanged != null) ...[
-            const SizedBox(width: 8),
+            const SizedBox(width: PixieTokens.gapSmall),
             Transform.scale(
               scale: 1.15,
               child: Switch(value: value ?? false, onChanged: onChanged),

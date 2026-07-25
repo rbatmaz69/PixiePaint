@@ -59,7 +59,7 @@ class AlbumScreen extends StatelessWidget {
                               streak: progress.taskStreak,
                             ),
                           ),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: PixieTokens.gapMedium),
                           Entrance(
                             slot: 1,
                             child: Text(
@@ -67,7 +67,7 @@ class AlbumScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: PixieTokens.gapSmall),
                           _StickerGrid(snapshot: snapshot),
                         ],
                       ),
@@ -109,7 +109,7 @@ class _Summary extends StatelessWidget {
             rotateFrom: -0.1,
             child: Text('🏆', style: TextStyle(fontSize: 46)),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: PixieTokens.gapMedium),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +225,7 @@ class _RewardTile extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (!unlocked) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: PixieTokens.gapSmall),
             Text(
               l10n.rewardProgress(
                   progressFor(reward, snapshot), reward.target),

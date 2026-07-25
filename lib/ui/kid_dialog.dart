@@ -61,18 +61,18 @@ Future<T?> showKidDialog<T>({
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 48)),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: PixieTokens.gapSmall),
               Text(title,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge),
               if (body != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: PixieTokens.gap),
                 body,
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: PixieTokens.gapLarge),
               for (final (i, action)
                   in (actions?.call(context) ?? const <Widget>[]).indexed) ...[
-                if (i > 0) const SizedBox(height: 10),
+                if (i > 0) const SizedBox(height: PixieTokens.gapSmall),
                 action,
               ],
             ],
@@ -163,7 +163,7 @@ class KidDialogButton extends StatelessWidget {
           children: [
             if (emoji != null) ...[
               Text(emoji!, style: const TextStyle(fontSize: 26)),
-              const SizedBox(width: 10),
+              const SizedBox(width: PixieTokens.gapSmall),
             ],
             Flexible(
               child: Text(

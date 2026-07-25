@@ -161,7 +161,7 @@ class _Card extends StatelessWidget {
               delay: PixieMotion.emojiDelay,
               child: Text(emoji, style: const TextStyle(fontSize: 88)),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: PixieTokens.gapXl),
             StickerCard(
               color: Colors.white,
               radius: 24,
@@ -175,7 +175,7 @@ class _Card extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: PixieTokens.gapSmall),
                   Text(
                     body,
                     textAlign: TextAlign.center,

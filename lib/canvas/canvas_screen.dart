@@ -862,7 +862,7 @@ class _RotateHintState extends State<_RotateHint> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text('🔄', style: TextStyle(fontSize: 22)),
-              const SizedBox(width: 10),
+              const SizedBox(width: PixieTokens.gapSmall),
               Flexible(
                 child: Text(
                   context.l10n.rotateHint,
@@ -952,7 +952,7 @@ class _ToolChipState extends State<_ToolChip> {
                 ),
                 style: const TextStyle(fontSize: 20),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: PixieTokens.gapSmall),
               Text(
                 toolLabel(context, _lastTool),
                 style: Theme.of(context).textTheme.titleMedium,
@@ -990,7 +990,7 @@ class _LeftRail extends StatelessWidget {
       decoration: PixieTokens.barDecoration(),
       child: Column(
         children: [
-          const SizedBox(height: 6),
+          const SizedBox(height: PixieTokens.gapTiny),
           Tooltip(
             message: context.l10n.back,
             child: Bouncy(
@@ -1023,7 +1023,7 @@ class _LeftRail extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: PixieTokens.gapTiny),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
 
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
@@ -50,7 +51,7 @@ class _ColorPickerBody extends StatelessWidget {
                 Row(
                   children: [
                     const Text('🕐', style: TextStyle(fontSize: 18)),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: PixieTokens.gapSmall),
                     Text(context.l10n.colorRecent,
                         style: Theme.of(context).textTheme.titleSmall),
                   ],
@@ -70,7 +71,7 @@ class _ColorPickerBody extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: PixieTokens.gapSmall),
               ],
               for (final row in grid)
                 Row(

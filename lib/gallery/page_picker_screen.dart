@@ -227,7 +227,7 @@ class _PageGrid extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: PixieTokens.gapSmall),
                   // One line, and it may shrink: the tiles form a grid with
                   // a fixed aspect ratio, so a long name at a large system
                   // font has to give rather than push the picture out.

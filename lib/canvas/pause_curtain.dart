@@ -73,7 +73,7 @@ class _PauseCurtainState extends State<_PauseCurtain> {
                     delay: PixieMotion.emojiDelay,
                     child: Text('🌈', style: TextStyle(fontSize: 72)),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: PixieTokens.gapMedium),
                   Text(
                     l10n.pauseTitle,
                     textAlign: TextAlign.center,
@@ -82,14 +82,14 @@ class _PauseCurtainState extends State<_PauseCurtain> {
                         .headlineMedium
                         ?.copyWith(color: Colors.white),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: PixieTokens.gapSmall),
                   Text(
                     l10n.pauseBody,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Colors.white.withValues(alpha: 0.85)),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: PixieTokens.gapXl),
                   KidDialogButton(
                     label: l10n.pauseContinue,
                     emoji: '🔓',
@@ -97,7 +97,7 @@ class _PauseCurtainState extends State<_PauseCurtain> {
                     gradient: PixieGradients.coloring,
                     onTap: _continue,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: PixieTokens.gap),
                   Text(
                     l10n.pauseSaved,
                     textAlign: TextAlign.center,

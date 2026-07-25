@@ -173,10 +173,10 @@ class _HomeScreenState extends State<HomeScreen>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _staggered(0, _Header(wave: wave)),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: PixieTokens.gapLarge),
                         _staggered(1, ContinueCard(width: rowW)),
                         _staggered(2, DailyTaskBanner(width: rowW)),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: PixieTokens.gapLarge),
                         Wrap(
                           spacing: 20,
                           runSpacing: 20,
@@ -287,7 +287,7 @@ class _ProfileChip extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(profile.emoji, style: const TextStyle(fontSize: 22)),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: PixieTokens.gapSmall),
                   Flexible(
                     child: Text(
                       profile.name.isEmpty
@@ -334,7 +334,7 @@ class _Header extends StatelessWidget {
         children: [
           const StickerEmoji('🎨',
               size: 56, tiltIndex: 2, shadowColor: PixiePalette.grape),
-          const SizedBox(height: 10),
+          const SizedBox(height: PixieTokens.gapSmall),
           Text(
             'PixiePaint',
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -380,7 +380,7 @@ class _BigCard extends StatelessWidget {
                 child: Text(spec.emoji, style: const TextStyle(fontSize: 64)),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: PixieTokens.gap),
             Flexible(
               child: Text(
                 spec.label,

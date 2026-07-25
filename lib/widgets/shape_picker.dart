@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../ui/app_theme.dart';
 import '../ui/pixie_palette.dart';
 
 import '../ui/motion.dart';
@@ -68,7 +69,7 @@ Future<void> showShapePicker(
                   size: const Size(52, 52),
                   painter: _ShapePreviewPainter(kind, controller.color),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: PixieTokens.gapTiny),
                 Text(
                   shapeLabel(context, kind),
                   style: Theme.of(context).textTheme.labelMedium,

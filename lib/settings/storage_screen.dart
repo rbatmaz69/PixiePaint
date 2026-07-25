@@ -153,7 +153,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     formatBytes(_usage.totalBytes),
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: PixieTokens.gapTiny),
                   Text(
                     l10n.storageBreakdown(
                       _usage.artworkCount,

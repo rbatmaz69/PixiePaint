@@ -158,7 +158,7 @@ class _StampSectionsState extends State<_StampSections>
       child: Row(
         children: [
           Text(emoji, style: const TextStyle(fontSize: 18)),
-          const SizedBox(width: 8),
+          const SizedBox(width: PixieTokens.gapSmall),
           Text(label, style: Theme.of(context).textTheme.titleMedium),
         ],
       ),
@@ -432,7 +432,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(rule, textAlign: TextAlign.center),
-          const SizedBox(height: 8),
+          const SizedBox(height: PixieTokens.gapSmall),
           Text(
             context.l10n
                 .rewardProgress(progressFor(reward, snapshot), reward.target),

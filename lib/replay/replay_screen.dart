@@ -115,9 +115,9 @@ class _ReplayScreenState extends State<ReplayScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: PixieTokens.gapMedium),
                         _ReplayProgress(controller: c),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: PixieTokens.gapSmall),
                       ],
                     ),
                     Positioned(
@@ -138,7 +138,7 @@ class _ReplayScreenState extends State<ReplayScreen> {
                         builder: (context, _) => Row(
                           children: [
                             _SpeedButton(controller: c),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: PixieTokens.gapSmall),
                             // Replay again once the show is over.
                             AnimatedOpacity(
                               opacity: c.done ? 1 : 0,
