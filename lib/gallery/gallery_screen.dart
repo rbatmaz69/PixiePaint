@@ -453,6 +453,10 @@ class _PolaroidCard extends StatefulWidget {
 class _PolaroidCardState extends State<_PolaroidCard>
     with SingleTickerProviderStateMixin {
   late bool _fav = widget.artwork.favorite;
+  /// Hand-tuned, not a rung of [PixieMotion]: the six dots have to fly out,
+  /// slow and fade against each other, which is the same choreographed
+  /// class as `fill_burst` and `stamp_burst`. It just happens to live here
+  /// rather than in a file whose name says so.
   late final AnimationController _burst = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 500),
