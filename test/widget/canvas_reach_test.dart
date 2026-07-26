@@ -177,9 +177,13 @@ void main() {
 
         // Sideways, Back and Share live in the rail — a sibling of the
         // canvas rather than something floating over it, so they cannot
-        // overlap by construction. What is worth holding here is that the
-        // paper is the picture's shape on its side too, so a tap beside the
-        // picture is not a stroke clamped onto its edge.
+        // overlap by construction. Checking them here holds the other half:
+        // that a screen reader can still find them by name in the rail.
+        expectClearOfPaper(tester, 'Zurück');
+        expectClearOfPaper(tester, 'Teilen (für Eltern)');
+
+        // And the paper is the picture's shape on its side too, so a tap
+        // beside the picture is not a stroke clamped onto its edge.
         final sheet = paper(tester);
         expect(sheet.width / sheet.height,
             closeTo(kCanvasWidth / kCanvasHeight, 0.01));

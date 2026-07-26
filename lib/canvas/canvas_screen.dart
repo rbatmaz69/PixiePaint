@@ -1075,6 +1075,10 @@ class _LeftRail extends StatelessWidget {
             message: context.l10n.back,
             child: Bouncy(
               onTap: onBack,
+              // A tooltip is not a name a screen reader announces — sideways
+              // these two are the only controls not built from
+              // [StickerCircleButton], which passes its tooltip on for them.
+              semanticLabel: context.l10n.back,
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 28,
@@ -1096,6 +1100,7 @@ class _LeftRail extends StatelessWidget {
             message: context.l10n.shareForParents,
             child: Bouncy(
               onTap: onShare,
+              semanticLabel: context.l10n.shareForParents,
               child: Icon(
                 Icons.ios_share_rounded,
                 size: 26,
