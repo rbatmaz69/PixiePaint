@@ -345,7 +345,7 @@ tool/                      make_music.py — erzeugt die Musik-Loops
 ## Architektur-Notizen
 
 **Design-System** (`lib/ui/`) — die Sticker-Buch-Sprache:
-- `pixie_palette.dart` — **die eine** Farbquelle. Jeder UI-Ton leitet sich hiervon ab. (Die Malfarben in `widgets/color_palette.dart` sind bewusst getrennt: das ist Inhalt, keine Oberfläche.)
+- `pixie_palette.dart` — **die eine** Farbquelle. Jeder UI-Ton leitet sich hiervon ab. (Die Malfarben in `util/color_utils.dart` sind bewusst getrennt: das ist Inhalt, keine Oberfläche.)
 - `app_theme.dart` — Tokens (Radien, Abstandsleiter, `softShadow`, `stickerTilt`), Gradients, Typo-Skala, Component-Themes
 - `motion.dart` — **die eine** Zeit- und Kurvenquelle: `PixieMotion`, `PixieCurves` und die Reduce-Motion-Regel (siehe unten)
 - `celebrate.dart` — **die eine** Art, wie diese App jubelt (Konfetti-Stärke + Ton, zwei Größen)

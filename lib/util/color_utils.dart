@@ -3,6 +3,31 @@ import 'dart:ui';
 
 import 'package:flutter/painting.dart' show HSLColor;
 
+/// The sixteen colors of the paint row.
+///
+/// Content, not surface — this is what a child paints *with*, and it
+/// deliberately does not come from `PixiePalette`. It lives here rather
+/// than beside the palette widget because the canvas needs it too, and a
+/// controller should not have to import a widget to know its own default.
+const List<Color> kPaletteColors = [
+  Color(0xFFE53935), // rot
+  Color(0xFFFF7043), // orange
+  Color(0xFFFFC107), // gelb
+  Color(0xFF9CCC65), // hellgrün
+  Color(0xFF43A047), // grün
+  Color(0xFF26A69A), // türkis
+  Color(0xFF29B6F6), // hellblau
+  Color(0xFF1E88E5), // blau
+  Color(0xFF5E35B1), // lila
+  Color(0xFFEC407A), // pink
+  Color(0xFFF8BBD0), // rosa
+  Color(0xFF8D6E63), // braun
+  Color(0xFFF1C27D), // hautton
+  Color(0xFF90A4AE), // grau
+  Color(0xFF000000), // schwarz
+  Color(0xFFFFFFFF), // weiß
+];
+
 /// Hues of the big color grid, one column each (red → pink).
 const List<double> kGridHues = [0, 30, 55, 120, 175, 210, 265, 320];
 

@@ -74,7 +74,7 @@ class CanvasController extends ChangeNotifier {
 
   ToolKind tool = ToolKind.brush;
   double brushSize = 28;
-  Color color = const Color(0xFFE53935);
+  Color color = kPaletteColors.first;
   String stampEmoji = '⭐';
 
   /// A custom sticker selected as the stamp motif; when set, it wins over

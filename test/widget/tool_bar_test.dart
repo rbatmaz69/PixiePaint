@@ -6,6 +6,7 @@ import 'package:pixiepaint/models/tool.dart';
 import 'package:pixiepaint/ui/pop_in.dart';
 import 'package:pixiepaint/ui/selection_cradle.dart';
 import 'package:pixiepaint/ui/pixie_palette.dart';
+import 'package:pixiepaint/util/color_utils.dart';
 import 'package:pixiepaint/widgets/color_palette.dart';
 import 'package:pixiepaint/widgets/tool_bar.dart';
 

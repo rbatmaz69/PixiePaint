@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../ui/motion.dart';
-import 'color_palette.dart';
+import '../util/color_utils.dart';
 
 /// How big a moment this is.
 ///

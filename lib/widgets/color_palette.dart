@@ -9,25 +9,6 @@ import '../ui/selection_cradle.dart';
 import '../util/color_utils.dart';
 import 'color_picker_sheet.dart';
 
-const List<Color> kPaletteColors = [
-  Color(0xFFE53935), // rot
-  Color(0xFFFF7043), // orange
-  Color(0xFFFFC107), // gelb
-  Color(0xFF9CCC65), // hellgrün
-  Color(0xFF43A047), // grün
-  Color(0xFF26A69A), // türkis
-  Color(0xFF29B6F6), // hellblau
-  Color(0xFF1E88E5), // blau
-  Color(0xFF5E35B1), // lila
-  Color(0xFFEC407A), // pink
-  Color(0xFFF8BBD0), // rosa
-  Color(0xFF8D6E63), // braun
-  Color(0xFFF1C27D), // hautton
-  Color(0xFF90A4AE), // grau
-  Color(0xFF000000), // schwarz
-  Color(0xFFFFFFFF), // weiß
-];
-
 /// Width of one swatch slot. Fixed, and that is what lets the selection
 /// cradle find its target by arithmetic instead of by measuring.
 const double kSwatchSlot = 56;
