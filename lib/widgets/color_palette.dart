@@ -92,14 +92,7 @@ class ColorPalette extends StatelessWidget {
               // positioned, so the Row below is what sizes this Stack.
               SelectionCradle(
                 slot: selectedSlot,
-                // Not the raw colour: a white dish casting a white shadow
-                // on cream paper is no dish at all, so white and the very
-                // light tones borrow ink. The swatch used to handle this
-                // itself and the handling was lost when the shadow moved
-                // out here.
-                accent: needsBorder(controller.color)
-                    ? PixiePalette.ink
-                    : controller.color,
+                accent: cradleAccent(controller.color),
                 slotWidth: kSwatchSlot,
                 size: 50,
               ),

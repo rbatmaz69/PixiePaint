@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../util/color_utils.dart';
 import 'app_theme.dart';
 import 'motion.dart';
+import 'pixie_palette.dart';
+
+/// The accent a dish may wear for [c].
+///
+/// A white dish casting a white shadow on cream paper is no dish at all,
+/// so white and the very light tones borrow ink instead. This lives beside
+/// [SelectionCradle] rather than inside it: the dish stays dumb — it tints
+/// what it is given — and the rule its callers share stays in one place.
+Color cradleAccent(Color c) => needsBorder(c) ? PixiePalette.ink : c;
 
 /// The white dish the chosen thing sits in, which slides from slot to slot
 /// instead of appearing in one and disappearing from another.

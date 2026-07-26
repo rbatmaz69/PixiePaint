@@ -5,7 +5,6 @@ import '../ui/bouncy.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/motion.dart';
 import '../ui/selection_cradle.dart';
-import '../util/color_utils.dart';
 
 /// Color-by-number palette: one numbered swatch per color. Solved numbers
 /// get a check badge; [hintNumber] pulses to point at the right swatch
@@ -47,12 +46,10 @@ class CbnPalette extends StatelessWidget {
             // what "picked" looks like.
             SelectionCradle(
               slot: picked != null && picked >= 0 ? picked : null,
+              // A picture's palette can hold a near-white, so the same rule
+              // as the paint palette applies — and it is the same call.
               accent: switch (selectedNumber) {
-                // Same reason as the paint palette: a picture's palette can
-                // hold a near-white, and its dish has to stay visible.
-                final int n when needsBorder(spec.colorOf[n]!) =>
-                  PixiePalette.ink,
-                final int n => spec.colorOf[n]!,
+                final int n => cradleAccent(spec.colorOf[n]!),
                 _ => PixiePalette.ink,
               },
               slotWidth: _slot,

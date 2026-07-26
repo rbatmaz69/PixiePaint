@@ -9,6 +9,7 @@ import '../ui/bouncy.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/pop_in.dart';
+import '../util/color_utils.dart';
 import 'fill_pattern_picker.dart';
 import 'shape_picker.dart' as shapes;
 import 'size_picker.dart';
@@ -676,7 +677,9 @@ class _SizeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWhite = color == const Color(0xFFFFFFFF);
+    // Not just white: rosa is one of the sixteen, and a mixed colour can be
+    // lighter still. The same rule the two palettes and the size sheet use.
+    final light = needsBorder(color);
     // Map the canvas-unit size onto a readable 10–30 px preview dot.
     final t = (brushSize - kMinBrushSize) / (kMaxBrushSize - kMinBrushSize);
     final previewDiameter = 10.0 + t.clamp(0.0, 1.0) * 20.0;
@@ -701,7 +704,7 @@ class _SizeButton extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: color,
                 border: Border.all(
-                  color: isWhite ? Colors.black26 : Colors.transparent,
+                  color: light ? Colors.black26 : Colors.transparent,
                   width: 1.5,
                 ),
               ),
