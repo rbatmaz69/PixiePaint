@@ -156,27 +156,27 @@ abstract final class PixieGradients {
   static const LinearGradient homeBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [PixiePalette.paper, Color(0xFFFFF0E4)],
+    colors: [PixiePalette.paper, PixiePalette.paperWarm],
   );
   static const LinearGradient canvasBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [PixiePalette.paper, Color(0xFFF0EBFA)],
+    colors: [PixiePalette.paper, PixiePalette.paperViolet],
   );
   static const LinearGradient pickerBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [PixiePalette.paper, Color(0xFFFFF3D9)],
+    colors: [PixiePalette.paper, PixiePalette.paperSun],
   );
   static const LinearGradient galleryBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [PixiePalette.paper, Color(0xFFE9F7EE)],
+    colors: [PixiePalette.paper, PixiePalette.paperMint],
   );
   static const LinearGradient photoBg = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [PixiePalette.paper, Color(0xFFFFEBE0)],
+    colors: [PixiePalette.paper, PixiePalette.paperPeach],
   );
 }
 
@@ -238,8 +238,17 @@ class PixiePageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
+/// The seed Material 3 derives its whole scheme from.
+///
+/// The one color in the app that is never painted — only divided into
+/// tones — which is why it stays here instead of joining [PixiePalette].
+/// It is a shade off [PixiePalette.grape] on purpose: pulling it onto the
+/// palette value would move every derived tone (buttons, slider, tabbar)
+/// with it.
+const Color _seed = Color(0xFF7C4DFF);
+
 ThemeData buildPixieTheme() {
-  final scheme = ColorScheme.fromSeed(seedColor: const Color(0xFF7C4DFF));
+  final scheme = ColorScheme.fromSeed(seedColor: _seed);
   final base = ThemeData(useMaterial3: true, colorScheme: scheme);
 
   // Real type scale (not stock M3 sizes): bigger, friendlier headlines,

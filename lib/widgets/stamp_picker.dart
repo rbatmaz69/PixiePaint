@@ -267,7 +267,7 @@ class _MakeStickerTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: PixiePalette.paperDeep,
             borderRadius: BorderRadius.circular(PixieTokens.rTile),
-            border: Border.all(color: const Color(0xFFDBD2C3), width: 2),
+            border: Border.all(color: PixiePalette.paperEdge, width: 2),
           ),
           child: const Center(
             child: Text('➕', style: TextStyle(fontSize: 28)),

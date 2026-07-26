@@ -38,12 +38,38 @@ abstract final class PixiePalette {
   /// content colors do not live here.
   static const Color gold = Color(0xFFFFE082);
 
+  // Five more tool accents. Nine of the fourteen tools already took their
+  // highlight from here; these five sat in `tool_bar.dart` as bare values,
+  // which made the accent set look smaller than it is.
+  /// The trail pen.
+  static const Color raspberry = Color(0xFFE91E63);
+
+  /// The dotted pen.
+  static const Color indigo = Color(0xFF5C6BC0);
+
+  /// The twin pen.
+  ///
+  /// Byte-identical to türkis in the paint palette, and [slate] to grau —
+  /// same deal as [gold]: one of the two is surface, the other is content,
+  /// and content colors do not live here. They only happen to agree.
+  static const Color teal = Color(0xFF26A69A);
+
+  /// The eraser.
+  static const Color slate = Color(0xFF90A4AE);
+
+  /// The eyedropper.
+  static const Color pine = Color(0xFF00A28C);
+
   /// A shade below [paper]: the resting fill of an unpicked tile, where
   /// plain white would read as "selected".
   static const Color paperDeep = Color(0xFFF5F0E8);
 
   /// A shade above [paper]: dialogs and sheets, which sit *on* the paper.
   static const Color paperCard = Color(0xFFFFFDF8);
+
+  /// The hairline around a tile that is already filled with [paperDeep] —
+  /// the one edge in the app that has to show against its own fill.
+  static const Color paperEdge = Color(0xFFDBD2C3);
 
   // Light derivations for card gradients, tints and blobs.
   static const Color sunshineLight = Color(0xFFFFE9A8);
@@ -53,7 +79,28 @@ abstract final class PixiePalette {
   static const Color skyLight = Color(0xFFC9ECFF);
   static const Color mintLight = Color(0xFFCCF3E0);
 
+  // Three more light tints, so that all ten picture categories take their
+  // tone from one place instead of seven.
+  /// Weltraum.
+  static const Color periwinkleLight = Color(0xFFE2E0FF);
+
+  /// Bauernhof — the only warm-neutral tint, and the reason it needs its
+  /// own name: nothing else in here is that close to hay.
+  static const Color strawLight = Color(0xFFE8E3CF);
+
+  /// Jahreszeiten.
+  static const Color berryLight = Color(0xFFFFE0DC);
+
   /// Two mid-tones that exist only as the far end of a gradient.
   static const Color blushLight = Color(0xFFFFB7CF);
   static const Color grapeMid = Color(0xFFC5A8F2);
+
+  // The five whispers of paper. Each is the far end of one screen
+  // background, where [paper] fades into a hint of that screen's feature
+  // tint — never used alone, and never anywhere else.
+  static const Color paperWarm = Color(0xFFFFF0E4);
+  static const Color paperViolet = Color(0xFFF0EBFA);
+  static const Color paperSun = Color(0xFFFFF3D9);
+  static const Color paperMint = Color(0xFFE9F7EE);
+  static const Color paperPeach = Color(0xFFFFEBE0);
 }

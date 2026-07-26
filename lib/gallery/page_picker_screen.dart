@@ -27,10 +27,10 @@ Color _categoryTint(String category) => switch (category) {
   'Fahrzeuge' => PixiePalette.skyLight,
   'Fantasie' => PixiePalette.grapeLight,
   'Leckereien' => PixiePalette.bubblegumLight,
-  'Weltraum' => const Color(0xFFE2E0FF),
-  'Bauernhof' => const Color(0xFFE8E3CF),
+  'Weltraum' => PixiePalette.periwinkleLight,
+  'Bauernhof' => PixiePalette.strawLight,
   'Zahlen' => PixiePalette.tangerineLight,
-  'Jahreszeiten' => const Color(0xFFFFE0DC),
+  'Jahreszeiten' => PixiePalette.berryLight,
   _ => PixiePalette.paperDeep,
 };
 

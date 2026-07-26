@@ -9,6 +9,13 @@ import 'shape_renderer.dart';
 import 'stroke_renderer.dart';
 import 'symmetry.dart';
 
+/// Ring and digit of a number-picture chip.
+///
+/// Stays out of [PixiePalette] because the chips are painted *onto the
+/// picture*, over the child's own paint — that makes them content, and
+/// content colors do not live in the palette.
+const Color _chipInk = Color(0xFF3A3A3A);
+
 class CanvasPainter extends CustomPainter {
   CanvasPainter(this.controller) : super(repaint: controller.repaint);
 
@@ -114,7 +121,7 @@ class CanvasPainter extends CustomPainter {
         pos,
         36,
         Paint()
-          ..color = const Color(0xFF3A3A3A)
+          ..color = _chipInk
           ..style = PaintingStyle.stroke
           ..strokeWidth = 3);
     final tp = TextPainter(
@@ -124,7 +131,7 @@ class CanvasPainter extends CustomPainter {
           fontFamily: 'Fredoka',
           fontWeight: FontWeight.w700,
           fontSize: 42,
-          color: Color(0xFF3A3A3A),
+          color: _chipInk,
         ),
       ),
       textDirection: TextDirection.ltr,

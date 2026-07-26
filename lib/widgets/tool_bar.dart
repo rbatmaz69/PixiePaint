@@ -24,13 +24,13 @@ Color toolAccent(ToolKind tool) => switch (tool) {
   ToolKind.rainbow => PixiePalette.berry,
   ToolKind.glitter => PixiePalette.bubblegum,
   ToolKind.neon => PixiePalette.amber,
-  ToolKind.trail => const Color(0xFFE91E63),
-  ToolKind.dotted => const Color(0xFF5C6BC0),
-  ToolKind.twin => const Color(0xFF26A69A),
-  ToolKind.eraser => const Color(0xFF90A4AE),
+  ToolKind.trail => PixiePalette.raspberry,
+  ToolKind.dotted => PixiePalette.indigo,
+  ToolKind.twin => PixiePalette.teal,
+  ToolKind.eraser => PixiePalette.slate,
   ToolKind.fill => PixiePalette.jade,
   ToolKind.stamp => PixiePalette.amber,
-  ToolKind.eyedropper => const Color(0xFF00A28C),
+  ToolKind.eyedropper => PixiePalette.pine,
   ToolKind.shape => PixiePalette.periwinkle,
 };
 
