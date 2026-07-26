@@ -131,6 +131,45 @@ void main() {
       expect(identical(c.activeStroke, stroke), isTrue);
     });
 
+    // A second finger — a resting thumb, a sibling's hand — used to erase
+    // the line being drawn, silently and with nothing to undo. Committing
+    // costs one tap to take back; discarding cost the whole stroke.
+    test('a pinch keeps the stroke that was being drawn', () {
+      c.pointerDown(down(const Offset(10, 10)));
+      c.pointerMove(move(const Offset(40, 40)));
+      expect(c.isEmpty, isTrue);
+
+      c.beginViewGesture();
+
+      expect(c.activeStroke, isNull, reason: 'the stroke is finished, not live');
+      expect(c.isEmpty, isFalse, reason: 'and it is on the layer');
+      expect(c.canUndo, isTrue, reason: 'so the child can take it back');
+    });
+
+    test('a pinch keeps the shape that was being dragged', () {
+      c.selectTool(ToolKind.shape);
+      c.pointerDown(down(const Offset(50, 50)));
+      c.pointerMove(move(const Offset(90, 90)));
+
+      c.beginViewGesture();
+
+      expect(c.shapeCenter, isNull);
+      expect(c.isEmpty, isFalse);
+      expect(c.canUndo, isTrue);
+    });
+
+    test('a pinch drops a stamp that was never placed', () {
+      c.selectTool(ToolKind.stamp);
+      c.pointerDown(down(const Offset(50, 50)));
+      expect(c.pendingStampPos, isNotNull);
+
+      c.beginViewGesture();
+
+      expect(c.pendingStampPos, isNull);
+      expect(c.isEmpty, isTrue, reason: 'nothing was drawn, so nothing is lost');
+      expect(c.canUndo, isFalse);
+    });
+
     test('a resting palm does not draw while the stylus is down', () {
       c.pointerDown(down(const Offset(10, 10), kind: PointerDeviceKind.stylus));
       // The hand lands next to the pen.

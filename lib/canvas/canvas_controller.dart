@@ -176,16 +176,26 @@ class CanvasController extends ChangeNotifier {
   /// ignore pinches from a resting hand).
   bool get stylusDown => _stylusDown;
 
-  /// Called by the viewport when a two-finger pinch starts. A half-drawn
-  /// first-finger stroke is discarded (like palm rejection), never
-  /// committed.
+  /// Called by the viewport when a two-finger pinch starts.
+  ///
+  /// What is already **visible** gets committed; what is only *pending*
+  /// falls away. A half-drawn stroke used to be discarded here, which meant
+  /// a second finger — a resting thumb, a sibling's hand — erased the line
+  /// a child was drawing with no sound, no message and nothing to undo,
+  /// because nothing was ever written. Committing is recoverable in one
+  /// tap; discarding is not recoverable at all.
+  ///
+  /// A pending stamp or eyedropper tap has drawn nothing yet, so there is
+  /// nothing to lose and it still falls away.
   void beginViewGesture() {
-    if ((activeStroke != null ||
-            pendingStampPos != null ||
-            pendingPickPos != null ||
-            shapeCenter != null) &&
-        !_activeIsStylus) {
-      _cancelActiveStroke();
+    if (!_activeIsStylus) {
+      if (activeStroke != null) {
+        _commitActiveStroke();
+      } else if (shapeCenter != null) {
+        _commitShape();
+      } else if (pendingStampPos != null || pendingPickPos != null) {
+        _cancelActiveStroke();
+      }
     }
     _viewGestureActive = true;
   }
