@@ -188,6 +188,8 @@ Diese Runde hat der Bewegung Tokens gegeben und ein paar Stellen ergänzt. Die w
 - [ ] Eine Farbe über „Mehr Farben" mischen: die Schale landet auf dem zusätzlichen Feld ganz rechts
 - [ ] **Ein Zahlenbild öffnen:** dieselbe Schale gleitet dort zwischen den nummerierten Feldern. Die Kachel selbst wächst nicht mehr mit — nur der *Hinweis* nach mehreren Fehlversuchen wippt noch groß heraus, und der Haken für „fertig" bleibt
 - [ ] **Größen-Blatt öffnen:** Regler, Daumen und Aura tragen die aktuelle Malfarbe. Bei Weiß und Rosa bleibt der Regler trotzdem erkennbar
+- [ ] **Eine ganz helle Farbe aus der obersten Reihe des Farb-Sheets wählen** (blassgelb, blassgrün): der Punkt auf dem Größenknopf in der Leiste behält seine dünne Kontur. Vorher bekam nur reines Weiß eine
+- [ ] **Bildschirm-Hintergründe querlesen** (Startseite, Leinwand, Bildauswahl, Galerie, Foto): jeder hat unten noch seinen eigenen warmen Hauch — fünf Werte sind umgezogen, keiner sollte sich geändert haben
 - [ ] **Einstellungen:** jeder eingeschaltete Schalter hat einen Haken im Daumen
 - [ ] **Von der Startseite in einen Bildschirm gehen:** die Startseite tritt dabei zurück und dunkelt leicht ab — es gibt ein Vorne und ein Hinten. Beim Zurück umgekehrt
 - [ ] **Ausmalbild antippen:** das Bild behält während des Fluges runde Ecken und einen Schatten. Vorher war es unterwegs ein nacktes Rechteck. Auch auf dem Rückweg prüfen
@@ -204,6 +206,8 @@ Diese Runde hat der Bewegung Tokens gegeben und ein paar Stellen ergänzt. Die w
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
 - [ ] Werkzeugleiste durchwischen: jedes Werkzeug wird benannt, das aktive zusätzlich als „ausgewählt"
 - [ ] Farbpalette durchwischen: die Farben heißen „Rot", „Blau" usw., nicht 16-mal dasselbe
+- [ ] **„Mehr Farben" öffnen und durch das große Raster wischen:** jedes Feld wird nach seiner Spalte benannt („Rot", „Türkis"), nicht 43-mal „Eigene Farbe". Eine Spalte trägt fünfmal denselben Namen — das ist gewollt, es sind fünf Rot
+- [ ] **Eine Farbe mit der Pipette vom Bild aufnehmen:** sie wird mit dem nächstliegenden der sechzehn Namen angesagt. Der zusätzliche Platz ganz rechts in der Palette heißt weiterhin „Eigene Farbe", weil er das Sheet öffnet und keine Farbe wählt
 - [ ] Der Malbereich wird als eine Fläche angesagt, nicht Pixel für Pixel
 - [ ] Zeitraffer: der Tempo-Knopf wird benannt (war bis v8.5 für Screenreader gar nicht vorhanden)
 - [ ] Diashow: die Punktreihe wird als „4 / 17" angesagt, nicht als Reihe namenloser Punkte
