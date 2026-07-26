@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -62,6 +63,51 @@ List<List<Color>> kidColorGrid() => [
 /// Light colors need a subtle border to stay visible on light surfaces —
 /// same rule the palette uses for white.
 bool needsBorder(Color c) => c.computeLuminance() > 0.7;
+
+/// Which of the sixteen names each grid column borrows, in the order of
+/// [kGridHues]: rot · orange · gelb · grün · türkis · blau · lila · pink.
+///
+/// The grid is *generated*, so its colors never have to be guessed at — a
+/// swatch knows which hue it was built from, and the whole column shares
+/// that name honestly. Five reds in a column is five reds; it is only the
+/// exact shade that goes unsaid, and no name is ever wrong.
+const List<int> kGridHueNames = [0, 1, 2, 4, 5, 7, 8, 9];
+
+/// The same for the neutrals row, in the order of [kGridNeutrals]:
+/// weiß · hautton · hautton · braun · braun · grau · grau · schwarz.
+const List<int> kGridNeutralNames = [15, 12, 12, 11, 11, 13, 13, 14];
+
+/// Index into [kPaletteColors] of the color [c] comes closest to.
+///
+/// For what *cannot* be traced back to a column: the recently-used row and
+/// anything the eyedropper lifted off the picture. Hue leads, because a
+/// name is a family and not a shade — plain RGB or Lab distance both send
+/// a pale blue to "grau", which is perceptually defensible and useless to
+/// a child. Saturation and lightness only break ties, which is what tells
+/// rosa from pink and braun from orange.
+///
+/// A palette color is its own nearest neighbour at distance zero, so exact
+/// matches still answer exactly.
+int nearestPaletteIndex(Color c) {
+  final a = HSLColor.fromColor(c);
+  var best = 0;
+  var bestDistance = double.infinity;
+  for (var i = 0; i < kPaletteColors.length; i++) {
+    final b = HSLColor.fromColor(kPaletteColors[i]);
+    var dh = (a.hue - b.hue).abs();
+    if (dh > 180) dh = 360 - dh;
+    // Weighted by the *lesser* of the two saturations: hue means nothing
+    // on a grey, so grey stops competing for colorful names and vice versa.
+    final d = (dh / 180) * 3.0 * math.min(a.saturation, b.saturation) +
+        (a.saturation - b.saturation).abs() * 0.8 +
+        (a.lightness - b.lightness).abs() * 1.2;
+    if (d < bestDistance) {
+      bestDistance = d;
+      best = i;
+    }
+  }
+  return best;
+}
 
 /// Most-recent-first list of ARGB values: dedups, caps at [max].
 List<int> pushRecentArgb(List<int> recents, int argb, {int max = 8}) {

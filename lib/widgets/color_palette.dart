@@ -18,15 +18,14 @@ const double kSwatchSlot = 56;
 /// swatch itself (42, 51 when selected) never needed the rest.
 const double kPaletteHeight = 66;
 
-/// Spoken name for a palette color, in the same order as [kPaletteColors].
+/// The sixteen spoken names, in the order of [kPaletteColors].
 ///
-/// A swatch is pure color with no text in it, so without this a screen
-/// reader announces sixteen identical buttons. Colors mixed in the picker
-/// sheet or lifted with the eyedropper fall back to a generic name — there
-/// is no honest word for #7A3B91.
-String paletteColorLabel(BuildContext context, Color color) {
+/// A swatch is pure color with no text in it, so without these a screen
+/// reader announces sixteen identical buttons — and in the big sheet,
+/// which is mostly mixed tones, it announced forty-three identical ones.
+List<String> paletteColorNames(BuildContext context) {
   final l10n = context.l10n;
-  final names = [
+  return [
     l10n.colorRed,
     l10n.colorOrange,
     l10n.colorYellow,
@@ -44,9 +43,18 @@ String paletteColorLabel(BuildContext context, Color color) {
     l10n.colorBlack,
     l10n.colorWhite,
   ];
-  final i = kPaletteColors.indexOf(color);
-  return i >= 0 && i < names.length ? names[i] : l10n.colorCustom;
 }
+
+/// Spoken name for a color that has no known origin: the recently-used row
+/// and anything the eyedropper lifted.
+///
+/// It borrows the name of the palette color it comes closest to. There is
+/// still no honest word for #7A3B91, but "Lila" is nearer the truth than
+/// "eigene Farbe" said eight times over — the family instead of the exact
+/// tone. Where the origin *is* known, don't come here: the big grid names
+/// its swatches from the hue they were built out of, which cannot be off.
+String paletteColorLabel(BuildContext context, Color color) =>
+    paletteColorNames(context)[nearestPaletteIndex(color)];
 
 class ColorPalette extends StatelessWidget {
   const ColorPalette({super.key, required this.controller});
@@ -93,6 +101,10 @@ class ColorPalette extends StatelessWidget {
                       color: controller.color,
                       selected: true,
                       cradled: true,
+                      // The one swatch that does not pick a color: it
+                      // reopens the sheet. Naming it after its tone would
+                      // promise a choice this button does not make.
+                      label: context.l10n.colorCustom,
                       onTap: () => showColorPickerSheet(context, controller),
                     ),
                   _MoreColorsSwatch(
@@ -120,6 +132,7 @@ class PixieColorSwatch extends StatelessWidget {
     this.slotWidth = kSwatchSlot,
     this.slotHeight = 54,
     this.cradled = false,
+    this.label,
   });
 
   final Color color;
@@ -127,6 +140,10 @@ class PixieColorSwatch extends StatelessWidget {
   final VoidCallback onTap;
   final double slotWidth;
   final double slotHeight;
+
+  /// Overrides the spoken name. For the one swatch whose tap does something
+  /// other than choose the color it shows.
+  final String? label;
 
   /// A [SelectionCradle] slides behind this row and carries the selection.
   ///
@@ -146,7 +163,7 @@ class PixieColorSwatch extends StatelessWidget {
       onTap: onTap,
       playTick: false,
       minSize: 0,
-      semanticLabel: paletteColorLabel(context, color),
+      semanticLabel: label ?? paletteColorLabel(context, color),
       semanticSelected: selected,
       child: SizedBox(
         width: slotWidth,

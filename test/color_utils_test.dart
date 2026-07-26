@@ -31,6 +31,60 @@ void main() {
     });
   });
 
+  group('grid names', () {
+    test('there is a name for every column and every neutral', () {
+      expect(kGridHueNames.length, kGridHues.length);
+      expect(kGridNeutralNames.length, kGridNeutrals.length);
+      for (final i in [...kGridHueNames, ...kGridNeutralNames]) {
+        expect(i, inInclusiveRange(0, kPaletteColors.length - 1));
+      }
+    });
+
+    test('the neutrals are named after themselves where they are one of '
+        'the sixteen', () {
+      // White, brown, grey and black sit in both lists; a name assigned by
+      // hand must not disagree with the color it is stuck to.
+      for (var i = 0; i < kGridNeutrals.length; i++) {
+        final exact = kPaletteColors.indexOf(kGridNeutrals[i]);
+        if (exact >= 0) expect(kGridNeutralNames[i], exact);
+      }
+    });
+  });
+
+  group('nearestPaletteIndex', () {
+    test('every palette color is its own nearest neighbour', () {
+      for (var i = 0; i < kPaletteColors.length; i++) {
+        expect(nearestPaletteIndex(kPaletteColors[i]), i,
+            reason: 'palette color $i must answer exactly');
+      }
+    });
+
+    test('a mixed color lands in the right family', () {
+      // Hand-checked: the family, not the shade.
+      expect(nearestPaletteIndex(const Color(0xFF7A3B91)), 8); // lila
+      expect(nearestPaletteIndex(const Color(0xFF0D47A1)), 7); // blau
+      expect(nearestPaletteIndex(const Color(0xFFB2FF59)), 3); // hellgrün
+      expect(nearestPaletteIndex(const Color(0xFF5D4037)), 11); // braun
+      expect(nearestPaletteIndex(const Color(0xFF455A64)), 13); // grau
+    });
+
+    test('a near-white is not called white', () {
+      // The failure the whole thing exists to avoid: a pale tone collapsing
+      // onto a neutral because lightness outweighed hue.
+      expect(nearestPaletteIndex(const Color(0xFFB8D9F9)),
+          isNot(15)); // pale blue
+      expect(nearestPaletteIndex(const Color(0xFFD3B8F9)),
+          isNot(15)); // pale purple
+    });
+
+    test('answers for every color in the grid', () {
+      for (final c in kidColorGrid().expand((r) => r)) {
+        expect(nearestPaletteIndex(c),
+            inInclusiveRange(0, kPaletteColors.length - 1));
+      }
+    });
+  });
+
   group('needsBorder', () {
     test('white needs a border, black does not', () {
       expect(needsBorder(const Color(0xFFFFFFFF)), isTrue);

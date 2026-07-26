@@ -31,6 +31,7 @@ class _ColorPickerBody extends StatelessWidget {
         .map((v) => Color(v))
         .toList(growable: false);
     final grid = kidColorGrid();
+    final names = paletteColorNames(context);
 
     void pick(Color c) {
       controller.selectColor(c);
@@ -73,17 +74,24 @@ class _ColorPickerBody extends StatelessWidget {
                 ),
                 const SizedBox(height: PixieTokens.gapSmall),
               ],
-              for (final row in grid)
+              // The grid is generated, so every swatch here knows what it
+              // was built from and is named after that column rather than
+              // after a guess. The last row is the neutrals, which have
+              // their own list of names.
+              for (var r = 0; r < grid.length; r++)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (final c in row)
+                    for (var i = 0; i < grid[r].length; i++)
                       PixieColorSwatch(
-                        color: c,
-                        selected: controller.color == c,
-                        onTap: () => pick(c),
+                        color: grid[r][i],
+                        selected: controller.color == grid[r][i],
+                        onTap: () => pick(grid[r][i]),
                         slotWidth: slot,
                         slotHeight: 50,
+                        label: names[r == grid.length - 1
+                            ? kGridNeutralNames[i]
+                            : kGridHueNames[i]],
                       ),
                   ],
                 ),

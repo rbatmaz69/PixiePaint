@@ -124,6 +124,67 @@ void main() {
     handle.dispose();
   });
 
+  // f830c2a fixed this for the cradle and bde5fb2 for the size sheet, both
+  // through needsBorder. The preview dot was the fourth place and still
+  // asked "is it white?" — but the question is how *light* a colour is,
+  // and the big sheet's top row is full of tones that clear the bar
+  // without being white.
+  testWidgets('the size preview dot keeps its outline on any light colour',
+      (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+
+    Border? dotBorder() {
+      final container = tester.widgetList<AnimatedContainer>(
+        find.descendant(
+          of: find.bySemanticsLabel('Pinselgröße'),
+          matching: find.byType(AnimatedContainer),
+        ),
+      ).first;
+      return (container.decoration as BoxDecoration).border as Border?;
+    }
+
+    await pumpToolBar(tester);
+    expect(dotBorder()?.top.color, Colors.transparent,
+        reason: 'red is dark enough to show on its own');
+
+    // The lightest row of the picker sheet — pale yellow, pale green. Not
+    // white, and invisible without an outline.
+    for (final light in kidColorGrid().first.where(needsBorder)) {
+      controller.selectColor(light);
+      await tester.pumpAndSettle();
+      expect(dotBorder()?.top.color, Colors.black26,
+          reason: '$light is light enough to need an outline');
+    }
+
+    controller.selectColor(const Color(0xFFFFFFFF));
+    await tester.pumpAndSettle();
+    expect(dotBorder()?.top.color, Colors.black26);
+  });
+
+  testWidgets('the extra slot promises a sheet, not a colour', (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+    final handle = tester.ensureSemantics();
+
+    // A mixed colour, so the seventeenth swatch appears. It reopens the
+    // sheet instead of picking, so it must not be announced as a colour —
+    // even though it now has a name it could borrow.
+    controller.selectColor(const Color(0xFF7A3B91));
+    await pumpPixie(
+      tester,
+      Scaffold(body: Center(child: ColorPalette(controller: controller))),
+      size: const Size(900, 300),
+    );
+
+    expect(find.bySemanticsLabel('Eigene Farbe'), findsOneWidget);
+    // Exactly one: the real lila swatch. Two would mean the extra slot had
+    // borrowed the name of the tone it happens to be showing.
+    expect(find.bySemanticsLabel('Lila'), findsOneWidget);
+
+    handle.dispose();
+  });
+
   // Sixteen swatches each animating their own selection is sixteen things
   // changing at once. One dish gliding is the movement that answers "where
   // did my colour go?" — and it only works because the slots are a fixed
