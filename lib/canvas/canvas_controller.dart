@@ -39,6 +39,11 @@ class CanvasController extends ChangeNotifier {
   /// Position of the last committed stamp (drives the sparkle overlay).
   final ValueNotifier<Offset?> lastStamp = ValueNotifier<Offset?>(null);
 
+  /// Where a fill tap landed without filling anything — on a line, or in an
+  /// area that already had this colour. Drives a small "nothing here" ring,
+  /// because the answer to a tap must never be nothing at all.
+  final ValueNotifier<Offset?> missedFill = ValueNotifier<Offset?>(null);
+
   ui.Image? paintLayer;
   ui.Image? lineArt;
 
@@ -100,6 +105,11 @@ class CanvasController extends ChangeNotifier {
   Offset? pendingPickPos;
   Color? pickedPreview;
   Uint8List? _pickBuffer;
+
+  /// Where the finger was when it lifted before the pick buffer had landed.
+  /// Compositing 12 MB takes a moment, and a quick tap is the ordinary way
+  /// to use an eyedropper — it used to fall into that gap and do nothing.
+  Offset? _pickAwaitingBuffer;
   ToolKind _toolBeforePick = ToolKind.brush;
 
   late final UndoStack _undoStack =
@@ -519,6 +529,7 @@ class CanvasController extends ChangeNotifier {
     pendingPickPos = null;
     pickedPreview = null;
     _pickBuffer = null;
+    _pickAwaitingBuffer = null;
     shapeCenter = null;
     shapeCurrent = null;
     _activePointer = null;
@@ -552,8 +563,18 @@ class CanvasController extends ChangeNotifier {
     final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
     image.dispose();
     if (_disposed) return;
-    if (pendingPickPos == null) return; // gesture ended while compositing
+    // The gesture may already be over. A quick tap is the normal way to use
+    // an eyedropper, so "the finger lifted" is not the same as "never mind".
+    final waiting = pendingPickPos ?? _pickAwaitingBuffer;
+    if (waiting == null) return;
     _pickBuffer = data?.buffer.asUint8List();
+    if (pendingPickPos == null) {
+      pendingPickPos = waiting;
+      _pickAwaitingBuffer = null;
+      _samplePick();
+      _commitPick();
+      return;
+    }
     _samplePick();
     _tick();
   }
@@ -568,6 +589,7 @@ class CanvasController extends ChangeNotifier {
 
   void _commitPick() {
     final picked = pickedPreview;
+    final pos = pendingPickPos;
     pendingPickPos = null;
     pickedPreview = null;
     _pickBuffer = null;
@@ -579,6 +601,10 @@ class CanvasController extends ChangeNotifier {
       tool = _toolBeforePick;
       Sfx.instance.pop();
       notifyListeners();
+    } else if (pos != null) {
+      // Lifted before the composite landed. Hold on to the spot so the pick
+      // completes when it does, instead of the tap doing nothing at all.
+      _pickAwaitingBuffer = pos;
     }
     _tick();
   }
@@ -683,6 +709,11 @@ class CanvasController extends ChangeNotifier {
       width: canvasWidth,
       height: canvasHeight,
     );
+    // Drawing answers for itself — the line appears under the finger. The
+    // eraser is the exception: what it does is make something *stop* being
+    // there, and "did that work?" is hardest to answer where the answer is
+    // an absence.
+    if (stroke.kind == ToolKind.eraser) Sfx.instance.tick();
     Progress.instance.registerToolUsed(stroke.kind);
     _pushUndoAndReplace(newLayer, _strokeDirtyRect(stroke));
     _recordOp(StrokeOp(
@@ -749,6 +780,14 @@ class CanvasController extends ChangeNotifier {
         // Reset first so refilling the same spot still notifies.
         lastFill.value = null;
         lastFill.value = pos;
+      } else {
+        // The fill found nothing to do — the tap landed on a line, or the
+        // area already had this colour. Every other outcome in the app
+        // answers; this one used to be silence, which reads as "the app is
+        // broken" and invites tapping harder.
+        Sfx.instance.tick();
+        missedFill.value = null;
+        missedFill.value = pos;
       }
     } finally {
       if (!_disposed) {
@@ -782,6 +821,10 @@ class CanvasController extends ChangeNotifier {
 
   void clearAll() {
     if (paintLayer == null) return;
+    // The picture used to simply vanish: no sound, no movement, nothing to
+    // tell a child their tap was what did it. The biggest change on the
+    // screen was the one with the least to say about itself.
+    Sfx.instance.pop();
     _pushUndoAndReplace(null, _wholeCanvas);
     _recordOp(const ClearOp());
   }
@@ -813,6 +856,7 @@ class CanvasController extends ChangeNotifier {
     traceGuide?.dispose();
     stampImage?.dispose();
     lastFill.dispose();
+    missedFill.dispose();
     lastStamp.dispose();
     repaint.dispose();
     super.dispose();

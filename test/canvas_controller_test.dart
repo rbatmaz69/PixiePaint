@@ -258,6 +258,62 @@ void main() {
     });
   });
 
+  // Every other outcome in the app answers a tap. These four did not, and
+  // silence reads as "broken" to a child, who then taps harder.
+  group('a tap always gets an answer', () {
+    test('a fill that finds nothing to do says so', () async {
+      c.selectTool(ToolKind.fill);
+      var missed = 0;
+      c.missedFill.addListener(() {
+        if (c.missedFill.value != null) missed++;
+      });
+
+      // The first one works — with no line art in the way it floods the
+      // whole picture.
+      await c.tapFill(const Offset(50, 50));
+      expect(c.canUndo, isTrue);
+      final stepsAfterFirst = c.undoDepth;
+
+      // The second lands in an area that already has this colour, so there
+      // is nothing to do. That used to be complete silence.
+      await c.tapFill(const Offset(50, 50));
+
+      expect(missed, 1, reason: 'the tap must not vanish');
+      expect(c.undoDepth, stepsAfterFirst,
+          reason: 'nothing happened, so it is not a step to take back');
+    });
+
+    test('a quick eyedropper tap still picks up the colour', () async {
+      c.selectColor(const Color(0xFFE53935));
+      drawStroke(from: const Offset(40, 40), to: const Offset(160, 160));
+      final before = c.color;
+
+      c.selectTool(ToolKind.eyedropper);
+      // Down and straight back up — the composite cannot possibly be ready
+      // in between, which is exactly the gap the tap used to fall into.
+      c.pointerDown(down(const Offset(100, 100)));
+      c.pointerUp(up(const Offset(100, 100)));
+      expect(c.color, before, reason: 'nothing can have landed yet');
+
+      // Let the composite finish. It is a real 12 MB read-back, so a
+      // microtask yield is not enough.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(c.tool, isNot(ToolKind.eyedropper),
+          reason: 'the pick completed, so the previous tool is back');
+    });
+
+    test('clearing the picture is not silent', () {
+      drawStroke();
+      expect(c.isEmpty, isFalse);
+
+      c.clearAll();
+
+      expect(c.isEmpty, isTrue);
+      expect(c.canUndo, isTrue, reason: 'and it is still take-back-able');
+    });
+  });
+
   group('undo and redo', () {
     test('walks back and forward through several strokes', () {
       drawStroke(from: const Offset(10, 10), to: const Offset(20, 20));

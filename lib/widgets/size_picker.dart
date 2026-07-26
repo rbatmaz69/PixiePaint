@@ -114,9 +114,16 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                 children: [
                   for (var i = 0; i < kBrushSizes.length; i++)
                     Bouncy(
+                      // A preset is a choice, so it closes the sheet like
+                      // every other picker in the app does. The slider above
+                      // does not: dragging is not choosing, and a sheet that
+                      // vanished mid-drag would take the preview with it.
+                      // This was the one sheet a child had to know how to
+                      // get out of.
                       onTap: () {
                         setState(() => _presetTaps++);
                         controller.selectSize(kBrushSizes[i]);
+                        Navigator.of(context).pop();
                       },
                       playTick: false,
                       child: AnimatedContainer(
