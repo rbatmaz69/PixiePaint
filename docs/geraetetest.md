@@ -201,6 +201,36 @@ Diese Runde hat der Bewegung Tokens gegeben und ein paar Stellen ergänzt. Die w
 - [ ] **Teilen** (aus der Leinwand *und* aus der Galerie): beide geben jetzt dasselbe kleine Konfetti. Vorher warf die Leinwand die volle Party
 - [ ] **„Bewegung reduzieren" im System einschalten:** Karten stehen still, keine Parallaxe, die Farbschale springt sofort an ihren Platz statt zu gleiten, Bildschirme blenden nur noch ein. Konfetti bleibt aus, die Belohnung selbst erscheint weiterhin
 
+## Nichts geht verloren (neu in v8.7)
+
+Diese Runde behebt vier Wege, auf denen Arbeit **stumm** verschwand. Die Frage beim Prüfen ist nicht „sieht es gut aus", sondern: **ist noch da, was ich gemalt habe?**
+
+- [ ] **Mitten in einem langen Strich einen zweiten Finger auflegen** (Daumen der haltenden Hand). Der Strich muss **da bleiben** — vorher war er weg, ohne Ton und ohne Rückgängig. Danach einmal auf Rückgängig: er verschwindet, kommt mit Wiederholen zurück
+- [ ] Dasselbe mit einer Form, die gerade aufgezogen wird
+- [ ] Dasselbe mit einem Sticker, der noch nicht abgesetzt ist: der darf verfallen, es wurde ja nichts gezeichnet
+- [ ] **Zwanzig Striche malen und dann zwanzigmal auf Rückgängig tippen.** Alle zwanzig müssen zurückgehen. Vorher war bei drei Schluss
+- [ ] **Zwanzig Striche, App wegwischen, wiederkommen, zurückgehen.** Auch das muss weit zurückreichen — vorher blieb genau ein Schritt übrig
+- [ ] **Ein paar Flutfüllungen dazwischen**, dann zurückgehen: die kosten weiterhin viel und werden irgendwann verworfen. Das ist in Ordnung — geprüft wird, dass nichts *falsch* zurückkommt, also keine Reste stehen bleiben und kein Fleck an der falschen Stelle sitzt
+- [ ] **Beim Malen die Hand auflegen** (Tablet, flach auf dem Tisch): die Handfläche soll keinen Strich beginnen, die Fingerspitze danach schon. Auf Geräten, die die Kontaktfläche nicht messen, ändert sich nichts — dann ist dieser Punkt nicht prüfbar
+
+## Nichts liegt im Bild, nichts endet im Nichts (neu in v8.7)
+
+- [ ] **Hochformat, ganz oben ins Bild malen** — dort, wo vorher Zurück und Teilen lagen. Es muss ein Strich entstehen und kein Bildschirmwechsel. Beides auch **linkshändig** (Einstellungen) und im **Querformat**
+- [ ] **Das weiße Blatt ansehen:** es hat jetzt genau die Form des Bildes. Ober- und unterhalb ist Hintergrund, kein Papier. Ein Tipp dort malt nichts — vorher entstand eine harte Linie am Bildrand
+- [ ] **Der Dreh-Hinweis unten:** einen Strich beginnen, während er noch steht. Der Strich muss ankommen, statt als Wegtipp-Geste geschluckt zu werden
+- [ ] **Zwei-Maler öffnen** (Tablet): Zurück und Umdrehen sitzen auf der Falz in der Mitte, nicht in einem der beiden Bilder
+- [ ] **Erststart auf einem frisch installierten Gerät** (App-Daten löschen oder neu installieren): nach dem Willkommen kommt die Bildauswahl, und ihr Zurück-Pfeil führt auf die **Startseite**. Vorher war dort nichts, und Galerie, Erfolge, Profil und Einstellungen waren die ganze erste Sitzung lang unerreichbar
+- [ ] **Zeitraffer eines Bildes öffnen** (Galerie, Kachel lange drücken → 🎬): solange geladen wird, ist ein Zurück-Pfeil da
+
+## Jeder Tipp bekommt eine Antwort (neu in v8.7)
+
+- [ ] **Mit dem Farbeimer genau auf eine Linie tippen:** ein leiser Ton und ein kleiner Ring an der Tippstelle. Vorher passierte gar nichts, was sich wie „kaputt" liest
+- [ ] Zweimal an dieselbe Stelle füllen: beim zweiten Mal dieselbe kleine Antwort, und **kein** neuer Rückgängig-Schritt
+- [ ] **Pipette ganz kurz antippen** (Finger sofort wieder hoch): die Farbe wird trotzdem übernommen und das vorherige Werkzeug kommt zurück. Vorher war ein kurzer Tipp ein toter Tipp
+- [ ] **Alles löschen:** es gibt einen Ton, das Bild verschwindet nicht lautlos
+- [ ] **Radiergummi absetzen:** ein leiser Ton bestätigt, dass etwas passiert ist
+- [ ] **Größen-Blatt:** ein Tipp auf 🐜/🐈/🐘 schließt das Blatt wie jedes andere. Der Regler nicht — daran darf weiter gezogen werden
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
