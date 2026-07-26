@@ -170,6 +170,62 @@ void main() {
       expect(c.canUndo, isFalse);
     });
 
+    // Before this, the first contact always won — so a hand laid on the
+    // paper drew, and the fingertip that arrived after it was ignored as
+    // "an extra finger". Only devices that measure contact size can tell
+    // the difference; where they report 0, nothing changes.
+    test('a hand laid flat does not start a stroke', () {
+      c.pointerDown(PointerDownEvent(
+        pointer: 1,
+        kind: PointerDeviceKind.touch,
+        position: const Offset(50, 50),
+        radiusMajor: 90,
+      ));
+
+      expect(c.activeStroke, isNull);
+    });
+
+    test('a fingertip takes over from a palm that was already drawing', () {
+      c.pointerDown(PointerDownEvent(
+        pointer: 1,
+        kind: PointerDeviceKind.touch,
+        position: const Offset(50, 50),
+        radiusMajor: 20,
+      ));
+      // The hand settles into its full area only after touchdown.
+      c.pointerMove(PointerMoveEvent(
+        pointer: 1,
+        kind: PointerDeviceKind.touch,
+        position: const Offset(55, 55),
+        radiusMajor: 90,
+      ));
+      final palmStroke = c.activeStroke;
+      expect(palmStroke, isNotNull);
+
+      c.pointerDown(PointerDownEvent(
+        pointer: 2,
+        kind: PointerDeviceKind.touch,
+        position: const Offset(200, 200),
+        radiusMajor: 8,
+      ));
+
+      expect(c.activeStroke, isNotNull);
+      expect(identical(c.activeStroke, palmStroke), isFalse,
+          reason: 'the fingertip is what the child is pointing with');
+      expect(c.isEmpty, isTrue, reason: 'and the palm painted nothing');
+    });
+
+    test('a device that reports no contact size behaves as before', () {
+      // radiusMajor defaults to 0 on plenty of Android hardware. Two plain
+      // fingers must still mean "first one wins".
+      c.pointerDown(down(const Offset(10, 10), pointer: 1));
+      final stroke = c.activeStroke;
+      expect(stroke, isNotNull);
+      c.pointerDown(down(const Offset(80, 80), pointer: 2));
+
+      expect(identical(c.activeStroke, stroke), isTrue);
+    });
+
     test('a resting palm does not draw while the stylus is down', () {
       c.pointerDown(down(const Offset(10, 10), kind: PointerDeviceKind.stylus));
       // The hand lands next to the pen.

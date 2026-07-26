@@ -345,6 +345,24 @@ class CanvasController extends ChangeNotifier {
     PointerDeviceKind.mouse,
   };
 
+  /// Contact radius (device px) above which a touch is a hand, not a finger.
+  ///
+  /// A child's fingertip reports roughly 5–15; a palm or a forearm laid
+  /// across a tablet reports far more. The number is deliberately high: the
+  /// cost of rejecting a real finger is a line that never appears, which is
+  /// far worse than the occasional palm mark a child can undo.
+  ///
+  /// Only meaningful where the platform measures contacts at all. Plenty of
+  /// Android devices report 0 for every pointer, and there the two rules
+  /// below simply never fire — the behaviour stays exactly as it was.
+  static const double _palmRadius = 42;
+
+  static bool _looksLikePalm(PointerEvent e) =>
+      e.kind == PointerDeviceKind.touch && e.radiusMajor > _palmRadius;
+
+  /// Contact radius of the touch currently drawing, or 0 when unknown.
+  double _activeRadius = 0;
+
   void pointerDown(PointerDownEvent e) {
     if (isFilling || !_drawingKinds.contains(e.kind)) return;
     final isStylus = e.kind == PointerDeviceKind.stylus ||
@@ -357,16 +375,27 @@ class CanvasController extends ChangeNotifier {
         (_stylusDown || _viewGestureActive || Settings.instance.stylusOnly)) {
       return;
     }
+    // A hand laid flat on the paper is not a request to draw. Only ever the
+    // *start* of a stroke is judged this way — a contact that spreads while
+    // it draws is a child pressing harder, not a palm arriving.
+    if (_looksLikePalm(e) && activeStroke == null) return;
     if (isStylus) _stylusDown = true;
 
     if (activeStroke != null) {
-      if (isStylus && !_activeIsStylus) {
-        // A palm stroke started before the pen landed — discard it.
+      // The pen wins over the hand that was resting before it landed, and
+      // for the same reason a fingertip wins over a palm: whichever contact
+      // is smaller is the one the child is pointing with.
+      final fingerBeatsPalm = isTouch &&
+          _activeRadius > _palmRadius &&
+          e.radiusMajor > 0 &&
+          e.radiusMajor < _activeRadius / 2;
+      if ((isStylus && !_activeIsStylus) || fingerBeatsPalm) {
         _cancelActiveStroke();
       } else {
         return; // ignore extra fingers while drawing
       }
     }
+    _activeRadius = e.radiusMajor;
 
     final pos = _clamp(e.localPosition);
     if (tool == ToolKind.fill) {
@@ -415,6 +444,12 @@ class CanvasController extends ChangeNotifier {
   }
 
   void pointerMove(PointerMoveEvent e) {
+    // A palm often lands on a small edge and only then settles into its full
+    // area, so the widest it has ever been is the honest measure — otherwise
+    // a hand that spreads after touchdown would never be recognised as one.
+    if (e.pointer == _activePointer && e.radiusMajor > _activeRadius) {
+      _activeRadius = e.radiusMajor;
+    }
     if (pendingStampPos != null && e.pointer == _activePointer) {
       pendingStampPos = _clamp(e.localPosition);
       _tick();
