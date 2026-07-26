@@ -217,6 +217,11 @@ class PixieColorSwatch extends StatelessWidget {
 class _MoreColorsSwatch extends StatelessWidget {
   const _MoreColorsSwatch({required this.onTap});
 
+  /// Six of the sixteen, evenly around the wheel. Indices rather than the
+  /// values again: this circle is a promise about what is behind the "+",
+  /// and a promise that copies its subject can stop being true.
+  static const List<int> _wheel = [0, 2, 4, 6, 8, 9];
+
   final VoidCallback onTap;
 
   @override
@@ -235,15 +240,11 @@ class _MoreColorsSwatch extends StatelessWidget {
             height: 42,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const SweepGradient(
+              gradient: SweepGradient(
                 colors: [
-                  Color(0xFFE53935),
-                  Color(0xFFFFC107),
-                  Color(0xFF43A047),
-                  Color(0xFF29B6F6),
-                  Color(0xFF5E35B1),
-                  Color(0xFFEC407A),
-                  Color(0xFFE53935),
+                  for (final i in _wheel) kPaletteColors[i],
+                  // Closes the circle where it began.
+                  kPaletteColors[_wheel.first],
                 ],
               ),
               boxShadow: [
