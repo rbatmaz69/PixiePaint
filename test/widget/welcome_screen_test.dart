@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pixiepaint/gallery/home_screen.dart';
+import 'package:pixiepaint/gallery/page_picker_screen.dart';
 import 'package:pixiepaint/gallery/welcome_screen.dart';
 import 'package:pixiepaint/util/settings.dart';
 
@@ -97,6 +99,29 @@ void main() {
     await settle(tester);
 
     expect(Settings.instance.welcomeSeen, isTrue);
+  });
+
+  // The welcome used to *replace* itself with the picture picker, which made
+  // the picker the root: its back arrow popped the last route and left an
+  // empty navigator, and the gallery, the rewards, the profile, the music
+  // and "carry on painting" — all of which live on the home screen — were
+  // unreachable for the whole first session.
+  testWidgets('leaves a home screen behind the pictures', (tester) async {
+    await start(tester);
+
+    await tester.tap(find.text('Überspringen'));
+    await settle(tester);
+
+    expect(find.byType(PagePickerScreen), findsOneWidget,
+        reason: 'the first thing a child sees is still pictures');
+
+    // Back out of the picker: there has to be something under it.
+    await tester.tap(find.bySemanticsLabel('Zurück').first);
+    await settle(tester);
+
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byType(WelcomeScreen), findsNothing,
+        reason: 'and the welcome does not come back');
   });
 
   testWidgets('it survives the largest text scale the app allows',

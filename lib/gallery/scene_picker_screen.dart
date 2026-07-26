@@ -39,7 +39,17 @@ class ScenePickerScreen extends StatelessWidget {
                   builder: (context, snapshot) {
                     final scenes = snapshot.data;
                     if (scenes == null) {
-                      return const Center(child: LoadingPixie());
+                      // Inside the screen's own scaffold: the header, and so
+                      // the way back, is already above this.
+                      return Center(
+                        child: snapshot.hasError
+                            ? Text(context.l10n.oopsTitle,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleMedium)
+                            : LoadingPixie(
+                                emoji: '🏞️',
+                                label: context.l10n.canvasLoading),
+                      );
                     }
                     // Inside the loaded branch: the cascade starts when the
                     // stages are there, not while they load.

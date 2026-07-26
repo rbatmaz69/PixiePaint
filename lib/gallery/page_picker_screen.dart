@@ -9,7 +9,7 @@ import '../ui/blob_background.dart';
 import '../ui/bouncy.dart';
 import '../ui/entrance.dart';
 import '../ui/hero_tags.dart';
-import '../ui/loading_pixie.dart';
+import '../ui/wait_screen.dart';
 import '../ui/motion.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
@@ -48,11 +48,13 @@ class _PagePickerScreenState extends State<PagePickerScreen> {
       future: ColoringPage.loadAll(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Scaffold(
-            body: BlobBackground(
-              gradient: PixieGradients.pickerBg,
-              builder: (context, _) => const Center(child: LoadingPixie()),
-            ),
+          return PixieWaitScreen(
+            emoji: '🖍️',
+            title: context.l10n.pickerTitle,
+            accent: PixiePalette.sunshine,
+            gradient: PixieGradients.pickerBg,
+            label: context.l10n.canvasLoading,
+            failed: snapshot.hasError,
           );
         }
         final pages = snapshot.data!;

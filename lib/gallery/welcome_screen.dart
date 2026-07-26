@@ -13,6 +13,7 @@ import '../ui/pop_in.dart';
 import '../ui/sticker.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
+import 'home_screen.dart';
 import 'page_picker_screen.dart';
 
 /// Shown once, before the home screen ever appears.
@@ -22,6 +23,13 @@ import 'page_picker_screen.dart';
 /// making them sit through. The last card hands over to the picture picker
 /// rather than the home screen — the first impression should be painting,
 /// not a menu.
+///
+/// It does so by putting the home screen underneath and the picker on top,
+/// which is not the same as replacing the welcome with the picker. That is
+/// what it used to do, and the picker became the *root*: its back arrow
+/// popped the last route and left an empty navigator, and the gallery, the
+/// rewards, the profile chip, the music toggle, the settings and "carry on
+/// painting" were unreachable for the whole first session.
 ///
 /// The third card is for the adult who will be handed the tablet, and is
 /// the only text on this screen written in a grown-up register.
@@ -44,10 +52,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.dispose();
   }
 
-  Future<void> _finish() async {
-    await Settings.instance.markWelcomeSeen();
-    if (!mounted) return;
-    unawaited(Navigator.of(context).pushReplacement(
+  void _finish() {
+    // The flag is set before the write starts, so nothing waits on the disk
+    // to get out of here — a child who has tapped "let's paint" should not
+    // be held at a welcome screen by a file write.
+    unawaited(Settings.instance.markWelcomeSeen());
+    final navigator = Navigator.of(context);
+    // Home first, so there is something to go back *to*, then the pictures
+    // on top of it — which is what the child sees.
+    unawaited(navigator.pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+    ));
+    unawaited(navigator.push(
       MaterialPageRoute<void>(builder: (_) => const PagePickerScreen()),
     ));
   }

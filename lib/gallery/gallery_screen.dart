@@ -318,7 +318,15 @@ class _GalleryScreenState extends State<GalleryScreen>
       future: _future,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: LoadingPixie());
+          // Inside the screen's own scaffold, so the header above it — and
+          // with it the way back — is already on screen.
+          return Center(
+            child: snapshot.hasError
+                ? Text(context.l10n.oopsTitle,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium)
+                : LoadingPixie(emoji: '🖼️', label: context.l10n.canvasLoading),
+          );
         }
         final artworks = snapshot.data!;
         if (artworks.isEmpty) {

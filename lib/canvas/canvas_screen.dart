@@ -456,9 +456,19 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// it. Worded for the parent who will be handed the tablet, and offering
   /// the retry first, because freeing storage in another app and coming back
   /// is the fix.
+  ///
+  /// It used to retry forever: a modal that could not be dismissed, under a
+  /// `PopScope` that would not pop, inside a `while (true)`. If the storage
+  /// stayed full the child was simply kept on this screen, and the only way
+  /// out was a grey word they could not read. So the loop counts, and after
+  /// the second failure "leave anyway" stops being the quiet option and
+  /// becomes a real button — by then retrying is not what is going to work.
+  static const int _saveRetries = 2;
+
   Future<bool> _confirmLeaveUnsaved() async {
-    while (true) {
+    for (var attempt = 0;; attempt++) {
       if (!mounted) return false;
+      final givingUp = attempt >= _saveRetries;
       final retry = await showKidDialog<bool>(
         context: context,
         barrierDismissible: false,
@@ -470,15 +480,23 @@ class _CanvasScreenState extends State<CanvasScreen>
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: (pop) => [
-          KidDialogButton(
-            label: context.l10n.saveFailedRetry,
-            emoji: '🔄',
-            onTap: () => Navigator.pop(pop, true),
-          ),
-          KidDialogTextButton(
-            label: context.l10n.saveFailedLeave,
-            onTap: () => Navigator.pop(pop, false),
-          ),
+          if (givingUp)
+            KidDialogButton(
+              label: context.l10n.saveFailedLeave,
+              emoji: '👋',
+              onTap: () => Navigator.pop(pop, false),
+            )
+          else ...[
+            KidDialogButton(
+              label: context.l10n.saveFailedRetry,
+              emoji: '🔄',
+              onTap: () => Navigator.pop(pop, true),
+            ),
+            KidDialogTextButton(
+              label: context.l10n.saveFailedLeave,
+              onTap: () => Navigator.pop(pop, false),
+            ),
+          ],
         ],
       );
       if (retry != true) return true;

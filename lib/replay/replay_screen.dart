@@ -11,7 +11,7 @@ import '../models/tool.dart';
 import '../photo/photo_lineart.dart';
 import '../ui/app_theme.dart';
 import '../ui/bouncy.dart';
-import '../ui/loading_pixie.dart';
+import '../ui/wait_screen.dart';
 import '../ui/motion.dart';
 import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
@@ -40,7 +40,21 @@ class _ReplayScreenState extends State<ReplayScreen> {
     _load();
   }
 
+  /// The story could not be read — a truncated op log, a missing file.
+  /// Without this the screen waited for a controller that was never coming,
+  /// and the back button lived in the *loaded* branch, so there was nothing
+  /// to tap at all.
+  bool _failed = false;
+
   Future<void> _load() async {
+    try {
+      await _loadStory();
+    } catch (_) {
+      if (mounted) setState(() => _failed = true);
+    }
+  }
+
+  Future<void> _loadStory() async {
     final artwork = widget.artwork;
     final ops = decodeOps(await artwork.opsFile.readAsString());
 
@@ -83,13 +97,21 @@ class _ReplayScreenState extends State<ReplayScreen> {
   @override
   Widget build(BuildContext context) {
     final c = controller;
+    if (c == null) {
+      return PixieWaitScreen(
+        emoji: '🎬',
+        title: context.l10n.replayAction,
+        accent: PixiePalette.grape,
+        gradient: PixieGradients.canvasBg,
+        label: context.l10n.canvasLoading,
+        failed: _failed,
+      );
+    }
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
         child: SafeArea(
-          child: c == null
-              ? Center(child: LoadingPixie(label: context.l10n.canvasLoading))
-              : Stack(
+          child: Stack(
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
