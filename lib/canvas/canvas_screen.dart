@@ -2,6 +2,7 @@ import 'dart:async';
 import '../ui/celebrate.dart';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,6 +56,38 @@ import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
 const int kCanvasHeight = 1536;
+
+/// Height reserved for the floating controls when the picture would
+/// otherwise fill its area edge to edge.
+const double kCanvasControlBand = 56;
+
+/// Where the paper actually lies inside an area of [area].
+///
+/// The picture is always 4:3 and the viewport letterboxes it, so on a phone
+/// held upright there is a wide empty band above and below it. Until v8.7
+/// the white sheet was painted across the *whole* area, which made that band
+/// look like paper — so Back and Share sat on it (drawing near the top of
+/// the picture left the screen or opened the parental gate), and a tap in it
+/// still painted, clamped into a hard line down the edge of the picture.
+///
+/// Sizing the sheet to the picture turns the band into a real margin: the
+/// controls get somewhere to live that is not the drawing, at no cost to the
+/// paper — it was never larger than this. [reserveTop] is for the one case
+/// where the area is itself about 4:3 and there is no band to borrow; then
+/// the picture does give up a strip, because a control over the drawing is
+/// worse than a slightly smaller drawing.
+Rect paperRect(Size area, {double reserveTop = 0}) {
+  final height = math.max(0.0, area.height - reserveTop);
+  final scale = math.min(area.width / kCanvasWidth, height / kCanvasHeight);
+  final w = kCanvasWidth * scale;
+  final h = kCanvasHeight * scale;
+  return Rect.fromLTWH(
+    (area.width - w) / 2,
+    reserveTop + (height - h) / 2,
+    w,
+    h,
+  );
+}
 
 /// The drawing screen: pass [page] to color a bundled picture, [resume] to
 /// continue a saved artwork, [photoPath] to paint over a picked photo,
@@ -660,137 +693,177 @@ class _CanvasScreenState extends State<CanvasScreen>
     final leftHanded = Settings.instance.leftHanded;
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Stack(
-        children: [
-          // The canvas as a sheet of "paper": rounded, softly shadowed.
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(PixieTokens.rTile),
-                boxShadow: [
-                  BoxShadow(
-                    color: PixiePalette.ink.withValues(alpha: 0.12),
-                    blurRadius: 18,
-                    offset: const Offset(0, 6),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final area = Size(constraints.maxWidth, constraints.maxHeight);
+          var paper = paperRect(area);
+          // Upright there is almost always a band to borrow; an area that is
+          // itself about 4:3 is the one case where the picture has to give a
+          // strip up rather than wear its controls.
+          if (portrait && paper.top < kCanvasControlBand) {
+            paper = paperRect(area, reserveTop: kCanvasControlBand);
+          }
+          // Above the picture upright, beside it on its side. Only if the
+          // margin is genuinely big enough — a control half on the paper
+          // would be the problem all over again.
+          final aboveFits = paper.top >= kCanvasControlBand;
+          final besideFits = paper.left >= kCanvasControlBand;
+          final rowTop = aboveFits ? paper.top - 52 : 8.0;
+          // Distance from the area's edge to the paper's, on whichever side
+          // this child's hand is not.
+          final nearEdge = leftHanded ? area.width - paper.right : paper.left;
+          final inset = besideFits && !aboveFits ? (nearEdge - 52).clamp(0.0, 8.0) : 8.0;
+
+          return Stack(
+            children: [
+              // The canvas as a sheet of "paper": rounded, softly shadowed.
+              // Exactly the picture's shape, so everything outside it is
+              // margin rather than something that looks drawable.
+              Positioned.fromRect(
+                rect: paper,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(PixieTokens.rTile),
+                    boxShadow: [
+                      BoxShadow(
+                        color: PixiePalette.ink.withValues(alpha: 0.12),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
                   ),
-                ],
+                  clipBehavior: Clip.antiAlias,
+                  child: CanvasViewport(
+                    viewport: viewport,
+                    controller: controller,
+                    child: PaintingCanvas(controller: controller),
+                  ),
+                ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: CanvasViewport(
-                viewport: viewport,
-                controller: controller,
-                child: PaintingCanvas(controller: controller),
-              ),
-            ),
-          ),
-          // Phones only: the pictures are 4:3 across, so upright the paper
-          // uses barely half the height. Tablets are wide enough either way.
-          if (portrait &&
-              _rotateHintPending &&
-              MediaQuery.sizeOf(context).shortestSide < 600)
-            Positioned(
-              bottom: 12,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: _RotateHint(
-                  onDone: () {
-                    if (mounted) setState(() => _rotateHintPending = false);
+              // Phones only: the pictures are 4:3 across, so upright the
+              // paper uses barely half the height. Tablets are wide enough
+              // either way. It sits in the band *below* the picture, where
+              // its dismiss tap cannot swallow the start of a stroke.
+              if (portrait &&
+                  _rotateHintPending &&
+                  MediaQuery.sizeOf(context).shortestSide < 600)
+                Positioned(
+                  top: area.height - paper.bottom >= 44
+                      ? paper.bottom + 6
+                      : null,
+                  bottom: area.height - paper.bottom >= 44 ? null : 12,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: _RotateHint(
+                      onDone: () {
+                        if (mounted) setState(() => _rotateHintPending = false);
+                      },
+                    ),
+                  ),
+                ),
+              if (portrait) ...[
+                Positioned(
+                  top: rowTop,
+                  left: leftHanded ? null : inset,
+                  right: leftHanded ? inset : null,
+                  child: StickerCircleButton(
+                    icon: Icons.arrow_back_rounded,
+                    tooltip: context.l10n.back,
+                    onTap: _leave,
+                    accent: PixiePalette.grape,
+                  ),
+                ),
+                Positioned(
+                  top: rowTop,
+                  left: leftHanded ? null : inset + 52,
+                  right: leftHanded ? inset + 52 : null,
+                  child: StickerCircleButton(
+                    icon: Icons.ios_share_rounded,
+                    tooltip: context.l10n.shareForParents,
+                    onTap: _share,
+                    accent: PixiePalette.grape,
+                  ),
+                ),
+              ],
+              Positioned(
+                top: rowTop,
+                left: leftHanded ? inset : null,
+                right: leftHanded ? null : inset,
+                child: ListenableBuilder(
+                  listenable: viewport,
+                  builder: (context, _) {
+                    final zoomed = viewport.isZoomed;
+                    // Always mounted: pops in with overshoot, shrinks out
+                    // fast.
+                    return IgnorePointer(
+                      ignoring: !zoomed,
+                      child: AnimatedOpacity(
+                        opacity: zoomed ? 1 : 0,
+                        duration: PixieMotion.select,
+                        child: AnimatedScale(
+                          scale: zoomed ? 1 : 0.3,
+                          duration: PixieMotion.select,
+                          curve:
+                              zoomed ? PixieCurves.spring : PixieCurves.exit,
+                          child: StickerCircleButton(
+                            icon: Icons.fit_screen_rounded,
+                            tooltip: context.l10n.resetView,
+                            onTap: viewport.reset,
+                            accent: PixiePalette.grape,
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
-            ),
-          if (portrait) ...[
-            Positioned(
-              top: 8,
-              left: leftHanded ? null : 8,
-              right: leftHanded ? 8 : null,
-              child: StickerCircleButton(
-                icon: Icons.arrow_back_rounded,
-                tooltip: context.l10n.back,
-                onTap: _leave,
-                accent: PixiePalette.grape,
-              ),
-            ),
-            Positioned(
-              top: 8,
-              left: leftHanded ? 60 : null,
-              right: leftHanded ? null : 60,
-              child: StickerCircleButton(
-                icon: Icons.ios_share_rounded,
-                tooltip: context.l10n.shareForParents,
-                onTap: _share,
-                accent: PixiePalette.grape,
-              ),
-            ),
-          ],
-          Positioned(
-            top: 8,
-            left: leftHanded ? 8 : null,
-            right: leftHanded ? null : 8,
-            child: ListenableBuilder(
-              listenable: viewport,
-              builder: (context, _) {
-                final zoomed = viewport.isZoomed;
-                // Always mounted: pops in with overshoot, shrinks out fast.
-                return IgnorePointer(
-                  ignoring: !zoomed,
-                  child: AnimatedOpacity(
-                    opacity: zoomed ? 1 : 0,
-                    duration: PixieMotion.select,
-                    child: AnimatedScale(
-                      scale: zoomed ? 1 : 0.3,
-                      duration: PixieMotion.select,
-                      curve: zoomed ? PixieCurves.spring : PixieCurves.exit,
-                      child: StickerCircleButton(
-                        icon: Icons.fit_screen_rounded,
-                        tooltip: context.l10n.resetView,
-                        onTap: viewport.reset,
-                        accent: PixiePalette.grape,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          // Confirmation chip after a tool change (emoji carries the info
-          // for kids who can't read yet).
-          Positioned(
-            top: 12,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: IgnorePointer(child: _ToolChip(controller: controller)),
-            ),
-          ),
-          ListenableBuilder(
-            listenable: controller,
-            builder: (context, _) => AnimatedSwitcher(
-              duration: PixieMotion.select,
-              transitionBuilder: (child, anim) => FadeTransition(
-                opacity: anim,
-                child: ScaleTransition(
-                  scale: Tween(begin: 0.7, end: 1.0).animate(
-                    CurvedAnimation(parent: anim, curve: PixieCurves.spring),
-                  ),
-                  child: child,
+              // Confirmation chip after a tool change (emoji carries the
+              // info for kids who can't read yet). It takes no pointers, so
+              // it may sit over the picture.
+              Positioned(
+                top: paper.top + 12,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: IgnorePointer(child: _ToolChip(controller: controller)),
                 ),
               ),
-              child: controller.isFilling
-                  ? const Align(
-                      key: ValueKey('filling'),
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 56),
-                        child: LoadingPixie(emoji: '🪣'),
+              Positioned.fromRect(
+                rect: paper,
+                child: IgnorePointer(
+                  child: ListenableBuilder(
+                    listenable: controller,
+                    builder: (context, _) => AnimatedSwitcher(
+                      duration: PixieMotion.select,
+                      transitionBuilder: (child, anim) => FadeTransition(
+                        opacity: anim,
+                        child: ScaleTransition(
+                          scale: Tween(begin: 0.7, end: 1.0).animate(
+                            CurvedAnimation(
+                                parent: anim, curve: PixieCurves.spring),
+                          ),
+                          child: child,
+                        ),
                       ),
-                    )
-                  : const SizedBox.shrink(key: ValueKey('idle')),
-            ),
-          ),
-        ],
+                      child: controller.isFilling
+                          ? const Align(
+                              key: ValueKey('filling'),
+                              alignment: Alignment.topCenter,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 56),
+                                child: LoadingPixie(emoji: '🪣'),
+                              ),
+                            )
+                          : const SizedBox.shrink(key: ValueKey('idle')),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

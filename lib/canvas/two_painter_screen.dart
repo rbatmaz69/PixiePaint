@@ -132,56 +132,14 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
           child: CustomPaint(
             painter: const DoodlePainter(0.12, alpha: 0.04),
             child: SafeArea(
-            child: Stack(
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(child: _pane(_left, flipped: _leftFlipped)),
-                    // A drawn fold rather than a flat rule: this is one
-                    // sheet of paper being shared, not two screens.
-                    Container(
-                      width: 3,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            PixiePalette.grape.withValues(alpha: 0.05),
-                            PixiePalette.grape.withValues(alpha: 0.28),
-                            PixiePalette.grape.withValues(alpha: 0.05),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(child: _pane(_right, flipped: false)),
-                  ],
+                Expanded(child: _pane(_left, flipped: _leftFlipped)),
+                _Fold(
+                  onBack: _leave,
+                  onFlip: () => setState(() => _leftFlipped = !_leftFlipped),
                 ),
-                Positioned(
-                  top: 8,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        StickerCircleButton(
-                          icon: Icons.arrow_back_rounded,
-                          tooltip: context.l10n.back,
-                          accent: PixiePalette.grape,
-                          onTap: _leave,
-                        ),
-                        const SizedBox(width: PixieTokens.gapSmall),
-                        StickerCircleButton(
-                          icon: Icons.flip_rounded,
-                          tooltip: context.l10n.twoPainterFlip,
-                          accent: PixiePalette.grape,
-                          onTap: () =>
-                              setState(() => _leftFlipped = !_leftFlipped),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                Expanded(child: _pane(_right, flipped: false)),
               ],
             ),
             ),
@@ -240,6 +198,69 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
           child: ColorPalette(controller: controller),
         ),
       ],
+    );
+  }
+}
+
+/// The fold between the two halves, and the two controls that belong to
+/// neither of them.
+///
+/// Back and Flip used to float centred at the top of the screen, which put
+/// them inside both children's drawings at once — and upside down for the
+/// one sitting opposite, because only the canvas is rotated, not the
+/// buttons. On the fold they are out of both pictures, and equally far from
+/// each child.
+class _Fold extends StatelessWidget {
+  const _Fold({required this.onBack, required this.onFlip});
+
+  final VoidCallback onBack;
+  final VoidCallback onFlip;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 60,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // A drawn fold rather than a flat rule: this is one sheet of paper
+          // being shared, not two screens.
+          Center(
+            child: Container(
+              width: 3,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    PixiePalette.grape.withValues(alpha: 0.05),
+                    PixiePalette.grape.withValues(alpha: 0.28),
+                    PixiePalette.grape.withValues(alpha: 0.05),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StickerCircleButton(
+                icon: Icons.arrow_back_rounded,
+                tooltip: context.l10n.back,
+                accent: PixiePalette.grape,
+                onTap: onBack,
+              ),
+              const SizedBox(height: PixieTokens.gapSmall),
+              StickerCircleButton(
+                icon: Icons.flip_rounded,
+                tooltip: context.l10n.twoPainterFlip,
+                accent: PixiePalette.grape,
+                onTap: onFlip,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
