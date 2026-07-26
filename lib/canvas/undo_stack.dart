@@ -113,13 +113,27 @@ class UndoStack {
     );
   }
 
-  /// Hands back everything the history can spare — called when the app goes
-  /// to the background, where holding tens of megabytes is what gets a
-  /// process killed. The picture itself is already saved by then; only the
-  /// ability to step back through it gets shorter.
-  void trimToMinimum() {
+  /// What the history is allowed to hold while the app is in the background.
+  ///
+  /// Small enough not to be worth reclaiming, and — now that a step is a
+  /// patch rather than a copy of the picture — large enough for a normal
+  /// afternoon of drawing.
+  static const int backgroundBudgetBytes = 8 * 1024 * 1024;
+
+  /// Hands back the memory the history can spare — called when the app goes
+  /// to the background, which is when Android decides which process to
+  /// reclaim. The picture itself is already saved by then.
+  ///
+  /// This used to cut down to a single step, because a step was 12.58 MB and
+  /// five of them were reason enough to kill the process. A child who gets
+  /// called away for a minute, or whose parent takes a phone call, would
+  /// come back to a picture they could no longer walk back through — and
+  /// nothing said so. Patches are small, so trimming to a budget keeps the
+  /// history intact in every ordinary case and still gives back anything
+  /// that was genuinely large.
+  void trimToBackgroundBudget({int bytes = backgroundBudgetBytes}) {
     _dropRedo();
-    while (_undo.length > 1) {
+    while (_bytes > bytes && _undo.length > 1) {
       _disposeAt(_undo.removeAt(0));
     }
   }

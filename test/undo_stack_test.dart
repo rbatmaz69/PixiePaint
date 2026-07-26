@@ -179,29 +179,63 @@ void main() {
     });
   });
 
-  group('trimToMinimum', () {
-    test('keeps one step and drops the whole redo side', () {
+  group('going to the background', () {
+    // A child called away for a minute used to come back to a picture with
+    // exactly one step of history, silently. And the irony of it: that one
+    // step was a full 12.58 MB copy, so the whole 8 MB budget kept here now
+    // is *less* memory than the old rule left behind — for dozens of steps
+    // instead of one.
+    test('an afternoon of ordinary strokes survives', () {
+      final stack = UndoStack(width: 2048, height: 1536);
+      final layer = image(2048, 1536);
+      for (var i = 0; i < 40; i++) {
+        stack.push(layer, ui.Rect.fromLTWH(i * 8.0, 0, 250, 250));
+      }
+
+      stack.trimToBackgroundBudget();
+
+      expect(stack.depth, greaterThan(25));
+      expect(stack.bytesInUse,
+          lessThan(2048 * 1536 * 4), // one old-style snapshot
+          reason: 'and it costs less than the single step it replaced');
+      layer.dispose();
+      stack.dispose();
+    });
+
+    test('but a history full of flood fills is given back', () {
+      final stack = stackOf();
+      final layer = canvas();
+      for (var i = 0; i < 20; i++) {
+        stack.push(layer, whole()); // 1 MB each on this canvas
+      }
+
+      stack.trimToBackgroundBudget(bytes: 4 * mb);
+
+      expect(stack.bytesInUse, lessThanOrEqualTo(4 * mb));
+      expect(stack.canUndo, isTrue, reason: 'one step back must survive');
+      layer.dispose();
+      stack.dispose();
+    });
+
+    test('drops the whole redo side either way', () {
       final stack = stackOf();
       final layer = canvas();
       for (var i = 0; i < 5; i++) {
         stack.push(layer, whole());
       }
       stack.undo(canvas())?.dispose();
-      stack.undo(canvas())?.dispose();
       expect(stack.canRedo, isTrue);
 
-      stack.trimToMinimum();
+      stack.trimToBackgroundBudget();
 
       expect(stack.canRedo, isFalse);
-      expect(stack.canUndo, isTrue, reason: 'one step back must survive');
-      expect(stack.depth, 1);
       layer.dispose();
       stack.dispose();
     });
 
     test('is safe on an empty stack', () {
       final stack = stackOf();
-      stack.trimToMinimum();
+      stack.trimToBackgroundBudget();
       expect(stack.canUndo, isFalse);
       expect(stack.bytesInUse, 0);
     });

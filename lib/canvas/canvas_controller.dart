@@ -751,13 +751,16 @@ class CanvasController extends ChangeNotifier {
     _recordOp(const ClearOp());
   }
 
-  /// Hands the undo history's memory back, keeping one step. Called when the
-  /// app goes to the background: that is when Android decides which process
-  /// to reclaim, and up to 50 MB of history is exactly the kind of thing
-  /// that decides it. The picture is saved by then — only the ability to
-  /// step back through it gets shorter.
+  /// Hands the undo history's spare memory back. Called when the app goes to
+  /// the background: that is when Android decides which process to reclaim,
+  /// and tens of megabytes of history is exactly the kind of thing that
+  /// decides it. The picture is saved by then.
+  ///
+  /// Since v8.7 this trims to a budget instead of down to one step — a step
+  /// is a patch now, so an ordinary afternoon of drawing survives being
+  /// interrupted.
   void releaseMemory() {
-    _undoStack.trimToMinimum();
+    _undoStack.trimToBackgroundBudget();
     notifyListeners();
   }
 
