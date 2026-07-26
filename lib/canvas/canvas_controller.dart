@@ -102,9 +102,32 @@ class CanvasController extends ChangeNotifier {
   Uint8List? _pickBuffer;
   ToolKind _toolBeforePick = ToolKind.brush;
 
-  final UndoStack _undoStack = UndoStack();
+  late final UndoStack _undoStack =
+      UndoStack(width: canvasWidth, height: canvasHeight);
   bool get canUndo => _undoStack.canUndo;
   bool get canRedo => _undoStack.canRedo;
+
+  /// How many steps back are actually available. The screen does not need
+  /// it; the tests that guard the patch stack do.
+  @visibleForTesting
+  int get undoDepth => _undoStack.depth;
+
+  ui.Rect get _wholeCanvas => _bounds;
+
+  /// Area a stroke can reach.
+  ///
+  /// Generous on purpose: neon glows and glitter scatter well past the
+  /// nominal width, and a rect one pixel too small leaves stale pixels
+  /// behind on undo. Over-reporting only costs a few kilobytes of history —
+  /// `test/undo_patch_test.dart` is what says whether it is enough.
+  ui.Rect _strokeDirtyRect(Stroke stroke) {
+    if (symmetryFolds > 1 || stroke.points.isEmpty) return _wholeCanvas;
+    var box = ui.Rect.fromCircle(center: stroke.points.first.pos, radius: 0);
+    for (final p in stroke.points) {
+      box = box.expandToInclude(ui.Rect.fromCircle(center: p.pos, radius: 0));
+    }
+    return box.inflate(stroke.baseWidth * 2 + 48);
+  }
 
   // ----------------------------------------------------------------- op log
 
@@ -544,7 +567,12 @@ class CanvasController extends ChangeNotifier {
     );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.stamp);
-    _pushUndoAndReplace(newLayer);
+    _pushUndoAndReplace(
+      newLayer,
+      symmetryFolds > 1
+          ? _wholeCanvas
+          : ui.Rect.fromCircle(center: pos, radius: stampSizeFor(brushSize)),
+    );
     _recordOp(StampOp(
       emoji: stampImage == null ? stampEmoji : null,
       imagePath: stampImagePath,
@@ -587,7 +615,15 @@ class CanvasController extends ChangeNotifier {
     );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.shape);
-    _pushUndoAndReplace(newLayer);
+    _pushUndoAndReplace(
+      newLayer,
+      symmetryFolds > 1
+          ? _wholeCanvas
+          : ui.Rect.fromCircle(
+              center: center,
+              radius: radius + brushSize * 0.4,
+            ).inflate(48),
+    );
     _recordOp(ShapeOp(
       kind: shapeKind,
       x: center.dx,
@@ -613,7 +649,7 @@ class CanvasController extends ChangeNotifier {
       height: canvasHeight,
     );
     Progress.instance.registerToolUsed(stroke.kind);
-    _pushUndoAndReplace(newLayer);
+    _pushUndoAndReplace(newLayer, _strokeDirtyRect(stroke));
     _recordOp(StrokeOp(
       toolKind: stroke.kind,
       color: stroke.color.toARGB32(),
@@ -627,8 +663,11 @@ class CanvasController extends ChangeNotifier {
     onStrokeCommitted?.call(stroke);
   }
 
-  void _pushUndoAndReplace(ui.Image? newLayer) {
-    _undoStack.push(paintLayer?.clone());
+  /// [dirtyRect] is the area the new layer differs from the old one in — the
+  /// only part the history has to remember. Pass [_wholeCanvas] where that
+  /// cannot be bounded honestly.
+  void _pushUndoAndReplace(ui.Image? newLayer, ui.Rect dirtyRect) {
+    _undoStack.push(paintLayer, dirtyRect);
     paintLayer?.dispose();
     paintLayer = newLayer;
     dirty = true;
@@ -663,7 +702,9 @@ class CanvasController extends ChangeNotifier {
       if (newLayer != null) {
         Sfx.instance.pop();
         Progress.instance.registerToolUsed(ToolKind.fill);
-        _pushUndoAndReplace(newLayer);
+        // A flood fill runs until it hits a barrier: it can reach anywhere,
+        // and saying so costs less than guessing wrong.
+        _pushUndoAndReplace(newLayer, _wholeCanvas);
         _recordOp(FillOp(
           x: pos.dx,
           y: pos.dy,
@@ -706,7 +747,7 @@ class CanvasController extends ChangeNotifier {
 
   void clearAll() {
     if (paintLayer == null) return;
-    _pushUndoAndReplace(null);
+    _pushUndoAndReplace(null, _wholeCanvas);
     _recordOp(const ClearOp());
   }
 

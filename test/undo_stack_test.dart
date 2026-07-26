@@ -7,7 +7,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   /// A real image of the given size — the stack budgets by pixel count, so
-  /// null snapshots (which cost nothing) cannot exercise that at all.
+  /// null layers (which cost nothing) cannot exercise that at all.
   ui.Image image(int w, int h) {
     final recorder = ui.PictureRecorder();
     ui.Canvas(recorder).drawColor(const ui.Color(0xFF00FF00), ui.BlendMode.src);
@@ -17,21 +17,28 @@ void main() {
     return img;
   }
 
-  /// One megabyte's worth of pixels, give or take: 512×512×4 = 1 MB exactly.
-  ui.Image oneMb() => image(512, 512);
   const mb = 1024 * 1024;
+
+  /// A 512×512 canvas, so one full-canvas patch is exactly 1 MB and the
+  /// arithmetic below stays readable.
+  const side = 512;
+  ui.Image canvas() => image(side, side);
+  ui.Rect whole() => const ui.Rect.fromLTWH(0, 0, 512, 512);
+
+  UndoStack stackOf({int budget = 48 * mb, int min = 3}) =>
+      UndoStack(width: side, height: side, budgetBytes: budget, minEntries: min);
 
   group('UndoStack', () {
     test('starts empty', () {
-      final stack = UndoStack();
+      final stack = stackOf();
       expect(stack.canUndo, false);
       expect(stack.canRedo, false);
       expect(stack.bytesInUse, 0);
     });
 
     test('push enables undo, undo enables redo', () {
-      final stack = UndoStack();
-      stack.push(null);
+      final stack = stackOf();
+      stack.push(null, whole());
       expect(stack.canUndo, true);
       stack.undo(null);
       expect(stack.canUndo, false);
@@ -42,135 +49,172 @@ void main() {
     });
 
     test('new push clears the redo stack', () {
-      final stack = UndoStack();
-      stack.push(null);
+      final stack = stackOf();
+      stack.push(null, whole());
       stack.undo(null);
       expect(stack.canRedo, true);
-      stack.push(null);
+      stack.push(null, whole());
       expect(stack.canRedo, false);
     });
   });
 
   group('memory budget', () {
-    test('bytesInUse counts raw RGBA, and a blank canvas is free', () {
-      final stack = UndoStack();
-      stack.push(null);
-      expect(stack.bytesInUse, 0, reason: 'an empty canvas holds no pixels');
+    test('a step costs its rect, not the canvas', () {
+      // The whole point of patches: a stroke in one corner must not cost
+      // what a stroke across the picture costs.
+      final stack = stackOf();
+      final layer = canvas();
 
-      stack.push(oneMb());
-      expect(stack.bytesInUse, mb);
-      stack.push(image(1024, 512));
-      expect(stack.bytesInUse, 3 * mb);
+      stack.push(layer, const ui.Rect.fromLTWH(0, 0, 64, 64));
+      expect(stack.bytesInUse, 64 * 64 * 4);
+
+      stack.push(layer, whole());
+      expect(stack.bytesInUse, 64 * 64 * 4 + mb);
+
+      layer.dispose();
+      stack.dispose();
+    });
+
+    test('an empty canvas holds no pixels', () {
+      final stack = stackOf();
+      stack.push(null, whole());
+      expect(stack.bytesInUse, 0);
+    });
+
+    test('push does not take the caller\'s layer', () {
+      // It used to be handed a `clone()`; now it copies out what it needs,
+      // and the caller keeps disposing its own image.
+      final stack = stackOf();
+      final layer = canvas();
+      stack.push(layer, whole());
+      expect(layer.debugDisposed, isFalse);
+      layer.dispose();
+      stack.dispose();
     });
 
     test('the oldest steps are evicted once the budget is exceeded', () {
-      final stack = UndoStack(budgetBytes: 4 * mb, minEntries: 1);
+      final stack = stackOf(budget: 4 * mb, min: 1);
+      final layer = canvas();
       for (var i = 0; i < 10; i++) {
-        stack.push(oneMb());
+        stack.push(layer, whole());
       }
 
       expect(stack.bytesInUse, lessThanOrEqualTo(4 * mb));
-      var steps = 0;
-      while (stack.canUndo) {
-        stack.undo(null)?.dispose();
-        steps++;
-      }
-      expect(steps, 4);
+      expect(stack.depth, 4);
+      layer.dispose();
+      stack.dispose();
     });
 
     test('minEntries wins against the budget', () {
-      // Every snapshot on its own already blows the budget — the guarantee
-      // is that a kid can still step back more than once.
-      final stack = UndoStack(budgetBytes: 1, minEntries: 3);
+      // Every patch on its own already blows the budget — the guarantee is
+      // that a kid can still step back more than once.
+      final stack = stackOf(budget: 1, min: 3);
+      final layer = canvas();
       for (var i = 0; i < 8; i++) {
-        stack.push(oneMb());
+        stack.push(layer, whole());
       }
 
-      var steps = 0;
-      while (stack.canUndo) {
-        stack.undo(null)?.dispose();
-        steps++;
-      }
-      expect(steps, 3);
+      expect(stack.depth, 3);
+      layer.dispose();
+      stack.dispose();
     });
 
     test('the redo side counts against the same budget', () {
-      final stack = UndoStack(budgetBytes: 100 * mb, minEntries: 1);
-      stack.push(oneMb());
-      stack.push(oneMb());
+      final stack = stackOf(budget: 100 * mb, min: 1);
+      final layer = canvas();
+      stack.push(layer, whole());
+      stack.push(layer, whole());
       expect(stack.bytesInUse, 2 * mb);
 
-      // Undoing moves a snapshot across, it does not create one.
-      final restored = stack.undo(oneMb());
+      // Undoing moves a patch across and mints its mirror, so the cost of
+      // the pair stays put.
+      stack.undo(canvas())?.dispose();
       expect(stack.bytesInUse, 2 * mb);
-      restored?.dispose();
+      layer.dispose();
+      stack.dispose();
     });
 
-    test('an evicted snapshot is really freed', () {
-      final stack = UndoStack(budgetBytes: 2 * mb, minEntries: 1);
-      final first = oneMb();
-      stack.push(first);
-      for (var i = 0; i < 4; i++) {
-        stack.push(oneMb());
+    test('an evicted patch is really freed', () {
+      final stack = stackOf(budget: 2 * mb, min: 1);
+      final layer = canvas();
+      for (var i = 0; i < 5; i++) {
+        stack.push(layer, whole());
       }
-
-      // Disposing an already-disposed image throws — which is exactly the
-      // assertion: the stack got there first.
-      expect(first.debugDisposed, isTrue);
+      expect(stack.bytesInUse, 2 * mb,
+          reason: 'three of the five patches were released');
+      layer.dispose();
+      stack.dispose();
     });
 
-    test('the real canvas sizes stay under the default budget', () {
-      // 2048×1536 is the painting canvas, 1024×1536 one two-painter pane.
-      final main = UndoStack();
-      for (var i = 0; i < 30; i++) {
-        main.push(image(2048, 1536));
+    // The number this whole rebuild was about. On the painting canvas a
+    // full-layer snapshot was 12.58 MB, so the 48 MB budget held exactly
+    // three steps — a child who scribbled over their picture could walk
+    // back three strokes and no further.
+    test('the painting canvas keeps dozens of ordinary steps', () {
+      final stack = UndoStack(width: 2048, height: 1536);
+      final layer = image(2048, 1536);
+      // A stroke-sized rect: a few hundred canvas pixels across.
+      for (var i = 0; i < 60; i++) {
+        stack.push(layer, ui.Rect.fromLTWH(i * 10.0, 0, 300, 300));
       }
-      expect(main.bytesInUse, lessThanOrEqualTo(main.budgetBytes),
-          reason: 'the painting canvas must respect the budget');
-      main.dispose();
 
-      final pane = UndoStack();
+      expect(stack.bytesInUse, lessThanOrEqualTo(stack.budgetBytes));
+      expect(stack.depth, 60, reason: 'not one of them had to be evicted');
+      layer.dispose();
+      stack.dispose();
+    });
+
+    test('full-canvas steps still respect the budget', () {
+      // Flood fills and clears cannot be bounded, so they still cost 12.58 MB
+      // each and still get evicted.
+      final stack = UndoStack(width: 2048, height: 1536);
+      final layer = image(2048, 1536);
       for (var i = 0; i < 30; i++) {
-        pane.push(image(1024, 1536));
+        stack.push(layer, const ui.Rect.fromLTWH(0, 0, 2048, 1536));
       }
-      expect(pane.bytesInUse, lessThanOrEqualTo(pane.budgetBytes));
-      pane.dispose();
+
+      expect(stack.bytesInUse, lessThanOrEqualTo(stack.budgetBytes));
+      layer.dispose();
+      stack.dispose();
     });
   });
 
   group('trimToMinimum', () {
     test('keeps one step and drops the whole redo side', () {
-      final stack = UndoStack();
+      final stack = stackOf();
+      final layer = canvas();
       for (var i = 0; i < 5; i++) {
-        stack.push(oneMb());
+        stack.push(layer, whole());
       }
-      stack.undo(oneMb())?.dispose();
-      stack.undo(oneMb())?.dispose();
+      stack.undo(canvas())?.dispose();
+      stack.undo(canvas())?.dispose();
       expect(stack.canRedo, isTrue);
 
       stack.trimToMinimum();
 
       expect(stack.canRedo, isFalse);
       expect(stack.canUndo, isTrue, reason: 'one step back must survive');
-      expect(stack.bytesInUse, mb);
+      expect(stack.depth, 1);
+      layer.dispose();
+      stack.dispose();
     });
 
     test('is safe on an empty stack', () {
-      final stack = UndoStack();
+      final stack = stackOf();
       stack.trimToMinimum();
       expect(stack.canUndo, isFalse);
       expect(stack.bytesInUse, 0);
     });
 
     test('dispose leaves nothing behind', () {
-      final stack = UndoStack();
-      final held = oneMb();
-      stack.push(held);
+      final stack = stackOf();
+      final layer = canvas();
+      stack.push(layer, whole());
       stack.dispose();
 
-      expect(held.debugDisposed, isTrue);
       expect(stack.bytesInUse, 0);
       expect(stack.canUndo, isFalse);
+      layer.dispose();
     });
   });
 }
