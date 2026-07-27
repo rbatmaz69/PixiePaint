@@ -378,11 +378,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les outils passent à droite pour que la main qui dessine ne les cache pas.';
 
   @override
-  String get soundsTitle => 'Sons et vibrations';
+  String get soundsTitle => 'Sons du dessin';
 
   @override
   String get soundsSubtitle =>
-      'Petits sons pendant le coloriage et les tampons.';
+      'Petits sons pendant le coloriage et les tampons';
 
   @override
   String get musicTitle => 'Musique de fond';

@@ -378,10 +378,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Araçlar sağ tarafa geçer, böylece çizen el onları kapatmaz.';
 
   @override
-  String get soundsTitle => 'Sesler ve titreşim';
+  String get soundsTitle => 'Boyama sesleri';
 
   @override
-  String get soundsSubtitle => 'Boyarken ve damga vururken yumuşak sesler.';
+  String get soundsSubtitle => 'Boyarken ve damga vururken yumuşak sesler';
 
   @override
   String get musicTitle => 'Arka plan müziği';

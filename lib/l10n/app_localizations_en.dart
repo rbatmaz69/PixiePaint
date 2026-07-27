@@ -379,10 +379,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tools move to the right side so the drawing hand never covers them.';
 
   @override
-  String get soundsTitle => 'Sounds & vibration';
+  String get soundsTitle => 'Painting sounds';
 
   @override
-  String get soundsSubtitle => 'Soft sounds while painting and stamping.';
+  String get soundsSubtitle => 'Soft sounds while painting and stamping';
 
   @override
   String get musicTitle => 'Background music';

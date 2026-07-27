@@ -835,13 +835,13 @@ abstract class AppLocalizations {
   /// No description provided for @soundsTitle.
   ///
   /// In de, this message translates to:
-  /// **'Töne & Vibration'**
+  /// **'Mal-Geräusche'**
   String get soundsTitle;
 
   /// No description provided for @soundsSubtitle.
   ///
   /// In de, this message translates to:
-  /// **'Leise Geräusche beim Malen und Stempeln.'**
+  /// **'Leise Töne beim Malen und Stempeln'**
   String get soundsSubtitle;
 
   /// No description provided for @musicTitle.

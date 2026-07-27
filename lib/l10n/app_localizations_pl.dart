@@ -378,11 +378,10 @@ class AppLocalizationsPl extends AppLocalizations {
       'Narzędzia przechodzą na prawą stronę, żeby rysująca ręka ich nie zasłaniała.';
 
   @override
-  String get soundsTitle => 'Dźwięki i wibracje';
+  String get soundsTitle => 'Dźwięki malowania';
 
   @override
-  String get soundsSubtitle =>
-      'Ciche dźwięki podczas malowania i stemplowania.';
+  String get soundsSubtitle => 'Ciche dźwięki podczas malowania i stemplowania';
 
   @override
   String get musicTitle => 'Muzyka w tle';

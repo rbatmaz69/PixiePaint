@@ -381,10 +381,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.';
 
   @override
-  String get soundsTitle => 'Töne & Vibration';
+  String get soundsTitle => 'Mal-Geräusche';
 
   @override
-  String get soundsSubtitle => 'Leise Geräusche beim Malen und Stempeln.';
+  String get soundsSubtitle => 'Leise Töne beim Malen und Stempeln';
 
   @override
   String get musicTitle => 'Hintergrund-Musik';

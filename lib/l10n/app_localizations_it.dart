@@ -379,10 +379,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Gli strumenti passano a destra, così la mano che disegna non li copre.';
 
   @override
-  String get soundsTitle => 'Suoni e vibrazione';
+  String get soundsTitle => 'Suoni del disegno';
 
   @override
-  String get soundsSubtitle => 'Suoni delicati mentre colori e usi i timbri.';
+  String get soundsSubtitle => 'Suoni delicati mentre colori e usi i timbri';
 
   @override
   String get musicTitle => 'Musica di sottofondo';

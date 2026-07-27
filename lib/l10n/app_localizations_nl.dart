@@ -379,11 +379,11 @@ class AppLocalizationsNl extends AppLocalizations {
       'Het gereedschap gaat naar rechts, zodat je tekenhand het niet bedekt.';
 
   @override
-  String get soundsTitle => 'Geluiden en trillen';
+  String get soundsTitle => 'Tekengeluidjes';
 
   @override
   String get soundsSubtitle =>
-      'Zachte geluidjes tijdens het kleuren en stempelen.';
+      'Zachte geluidjes tijdens het kleuren en stempelen';
 
   @override
   String get musicTitle => 'Achtergrondmuziek';
