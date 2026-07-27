@@ -202,6 +202,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get toolShapes => 'Formes';
 
   @override
+  String get toolText => 'Lettres';
+
+  @override
+  String get textPickerTitle => 'Qu\'est-ce qui doit être écrit ?';
+
+  @override
+  String get textPickerHint => 'Ton prénom';
+
+  @override
+  String get textPickerPlace => 'Mettre sur le dessin';
+
+  @override
   String get shapeCircle => 'Cercle';
 
   @override

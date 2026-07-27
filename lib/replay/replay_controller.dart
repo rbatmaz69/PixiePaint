@@ -86,6 +86,8 @@ class ReplayController extends ChangeNotifier {
           await _playStamp(op);
         case ShapeOp():
           await _playShape(op);
+        case TextOp():
+          await _playText(op);
         case FillOp():
           await _playFill(op);
         case ClearOp():
@@ -212,6 +214,23 @@ class ReplayController extends ChangeNotifier {
       strokeWidth: op.strokeWidth,
       angle: op.angle,
       outline: op.outline,
+      width: width,
+      height: height,
+    );
+    layer?.dispose();
+    layer = newLayer;
+    _tick();
+    await _delay(const Duration(milliseconds: 400));
+  }
+
+  Future<void> _playText(TextOp op) async {
+    final newLayer = applyText(
+      layer: layer,
+      text: op.text,
+      pos: ui.Offset(op.x, op.y),
+      size: op.size,
+      color: Color(op.color),
+      symmetryFolds: op.symmetryFolds,
       width: width,
       height: height,
     );

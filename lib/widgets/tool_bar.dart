@@ -14,6 +14,7 @@ import 'fill_pattern_picker.dart';
 import 'shape_picker.dart' as shapes;
 import 'size_picker.dart';
 import 'stamp_picker.dart';
+import 'text_picker.dart';
 import 'symmetry_picker.dart' as symmetry;
 
 /// Accent color per tool — used for the selected highlight so every tool
@@ -33,6 +34,7 @@ Color toolAccent(ToolKind tool) => switch (tool) {
   ToolKind.stamp => PixiePalette.amber,
   ToolKind.eyedropper => PixiePalette.pine,
   ToolKind.shape => PixiePalette.periwinkle,
+  ToolKind.text => PixiePalette.indigo,
 };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -55,6 +57,7 @@ String toolEmoji(
   ToolKind.stamp => stampEmoji,
   ToolKind.eyedropper => '💧',
   ToolKind.shape => shapeEmoji,
+  ToolKind.text => '🔤',
 };
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
@@ -72,6 +75,7 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
   ToolKind.stamp => context.l10n.toolSticker,
   ToolKind.eyedropper => context.l10n.toolEyedropper,
   ToolKind.shape => context.l10n.toolShapes,
+  ToolKind.text => context.l10n.toolText,
 };
 
 /// The shell every toolbar button that can be *picked* wears: a tooltip, a
@@ -384,6 +388,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
             ToolKind.twin,
             ToolKind.stamp,
             ToolKind.shape,
+            ToolKind.text,
             if (widget.showFill) ToolKind.fill,
             ToolKind.eyedropper,
             ToolKind.eraser,
@@ -398,6 +403,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
             size: size,
             onTap: switch (tool) {
               ToolKind.stamp => () => showStampPicker(context, controller),
+              ToolKind.text => () => showTextPicker(context, controller),
               ToolKind.shape => () => shapes.showShapePicker(
                 context,
                 controller,

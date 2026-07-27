@@ -206,6 +206,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get toolShapes => 'Kształty';
 
   @override
+  String get toolText => 'Litery';
+
+  @override
+  String get textPickerTitle => 'Co ma być napisane?';
+
+  @override
+  String get textPickerHint => 'Twoje imię';
+
+  @override
+  String get textPickerPlace => 'Umieść na obrazku';
+
+  @override
   String get shapeCircle => 'Koło';
 
   @override

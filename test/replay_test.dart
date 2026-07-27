@@ -69,6 +69,19 @@ void main() {
           );
           layer?.dispose();
           layer = next;
+        case TextOp():
+          final next = applyText(
+            layer: layer,
+            text: op.text,
+            pos: Offset(op.x, op.y),
+            size: op.size,
+            color: Color(op.color),
+            symmetryFolds: op.symmetryFolds,
+            width: w,
+            height: h,
+          );
+          layer?.dispose();
+          layer = next;
         case StampOp():
           final next = applyStamp(
             layer: layer,
@@ -89,6 +102,8 @@ void main() {
             radius: op.radius,
             color: Color(op.color),
             strokeWidth: op.strokeWidth,
+            angle: op.angle,
+            outline: op.outline,
             width: w,
             height: h,
           );
@@ -199,6 +214,27 @@ void main() {
           strokeWidth: 5,
         ),
         StampOp(emoji: '⭐', x: 30, y: 55, size: 24, symmetryFolds: 1),
+      ];
+      final painted = await paint(ops);
+      final replayed = await replay(ops);
+
+      expect(await diff(painted!, replayed!), 0);
+      painted.dispose();
+      replayed.dispose();
+    });
+
+    test('a word written on the picture', () async {
+      // The letters tool is the one op whose payload is a string. If the
+      // replay wrote a different word, a different colour or a different
+      // size, this is where it would show.
+      final ops = [
+        TextOp(
+            text: 'Mia',
+            x: 60,
+            y: 40,
+            size: 26,
+            color: 0xFF1E88E5,
+            symmetryFolds: 1),
       ];
       final painted = await paint(ops);
       final replayed = await replay(ops);

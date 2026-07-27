@@ -96,6 +96,11 @@ class CanvasController extends ChangeNotifier {
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
 
+  /// The word the letters tool will write, chosen in its sheet. Null until
+  /// a child has typed something — the tool then behaves like the sticker
+  /// tool with a word instead of an emoji.
+  String? stampText;
+
   /// Center and current drag position of a shape being placed.
   Offset? shapeCenter;
   Offset? shapeCurrent;
@@ -429,6 +434,17 @@ class CanvasController extends ChangeNotifier {
       _tick();
       return;
     }
+    if (tool == ToolKind.text) {
+      // Nothing typed yet, so there is nothing to place. Silently doing
+      // nothing is the one answer this app does not give — the sheet is
+      // opened from the toolbar, and a stray tap here should not paint.
+      if ((stampText ?? '').isEmpty) return;
+      _activePointer = e.pointer;
+      _activeIsStylus = isStylus;
+      pendingTextPos = pos;
+      _tick();
+      return;
+    }
     if (tool == ToolKind.eyedropper) {
       _activePointer = e.pointer;
       _activeIsStylus = isStylus;
@@ -469,6 +485,11 @@ class CanvasController extends ChangeNotifier {
     if (e.pointer == _activePointer && e.radiusMajor > _activeRadius) {
       _activeRadius = e.radiusMajor;
     }
+    if (pendingTextPos != null && e.pointer == _activePointer) {
+      pendingTextPos = _clamp(e.localPosition);
+      _tick();
+      return;
+    }
     if (pendingStampPos != null && e.pointer == _activePointer) {
       pendingStampPos = _clamp(e.localPosition);
       _tick();
@@ -506,6 +527,10 @@ class CanvasController extends ChangeNotifier {
       _cancelActiveStroke();
       return;
     }
+    if (pendingTextPos != null) {
+      _commitText();
+      return;
+    }
     if (pendingStampPos != null) {
       _commitStamp();
       return;
@@ -535,6 +560,7 @@ class CanvasController extends ChangeNotifier {
   void _cancelActiveStroke() {
     activeStroke = null;
     pendingStampPos = null;
+    pendingTextPos = null;
     pendingPickPos = null;
     pickedPreview = null;
     _pickBuffer = null;
@@ -654,6 +680,55 @@ class CanvasController extends ChangeNotifier {
     // Reset first so re-stamping the same spot still notifies.
     lastStamp.value = null;
     lastStamp.value = pos;
+  }
+
+  /// Where the word will land while the finger is still down.
+  Offset? pendingTextPos;
+
+  /// Cap height of the word, tied to the brush size the way a sticker is.
+  double textSizeFor(double brush) => brush * 2.4;
+
+  void _commitText() {
+    final pos = pendingTextPos;
+    final text = stampText;
+    pendingTextPos = null;
+    _activePointer = null;
+    _activeIsStylus = false;
+    if (pos == null || text == null || text.isEmpty) return;
+
+    final size = textSizeFor(brushSize);
+    final newLayer = applyText(
+      layer: paintLayer,
+      text: text,
+      pos: pos,
+      size: size,
+      color: color,
+      symmetryFolds: symmetryFolds,
+      width: canvasWidth,
+      height: canvasHeight,
+    );
+    Sfx.instance.pop();
+    Progress.instance.registerToolUsed(ToolKind.text);
+    _pushUndoAndReplace(
+      newLayer,
+      symmetryFolds > 1
+          ? _wholeCanvas
+          // A word is wide, not square: the dirty box has to cover the whole
+          // line or the last letters are left behind on an undo.
+          : ui.Rect.fromCenter(
+              center: pos,
+              width: size * text.length + size,
+              height: size * 2,
+            ),
+    );
+    _recordOp(TextOp(
+      text: text,
+      x: pos.dx,
+      y: pos.dy,
+      size: size,
+      color: color.toARGB32(),
+      symmetryFolds: symmetryFolds,
+    ));
   }
 
   /// Radius of the shape currently being dragged. A bare tap still yields

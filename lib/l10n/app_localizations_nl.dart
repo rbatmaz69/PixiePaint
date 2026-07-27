@@ -203,6 +203,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get toolShapes => 'Vormen';
 
   @override
+  String get toolText => 'Letters';
+
+  @override
+  String get textPickerTitle => 'Wat moet er komen te staan?';
+
+  @override
+  String get textPickerHint => 'Jouw naam';
+
+  @override
+  String get textPickerPlace => 'Op de tekening zetten';
+
+  @override
   String get shapeCircle => 'Cirkel';
 
   @override

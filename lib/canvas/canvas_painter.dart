@@ -77,6 +77,19 @@ class CanvasPainter extends CustomPainter {
       }
     }
 
+    // The word under the finger, before it is let go.
+    final textPos = controller.pendingTextPos;
+    final pendingText = controller.stampText;
+    if (textPos != null && pendingText != null && pendingText.isNotEmpty) {
+      StrokeRenderer.drawText(
+        canvas,
+        pendingText,
+        textPos,
+        controller.textSizeFor(controller.brushSize),
+        controller.color.withValues(alpha: 0.7),
+      );
+    }
+
     // Semi-transparent live preview of the shape being dragged out.
     final shapeCenter = controller.shapeCenter;
     if (shapeCenter != null) {

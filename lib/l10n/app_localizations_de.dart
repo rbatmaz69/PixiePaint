@@ -204,6 +204,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get toolShapes => 'Formen';
 
   @override
+  String get toolText => 'Buchstaben';
+
+  @override
+  String get textPickerTitle => 'Was soll auf dem Bild stehen?';
+
+  @override
+  String get textPickerHint => 'Dein Name';
+
+  @override
+  String get textPickerPlace => 'Aufs Bild setzen';
+
+  @override
   String get shapeCircle => 'Kreis';
 
   @override

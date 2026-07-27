@@ -48,6 +48,15 @@ sealed class DrawOp {
           angle: (json['a'] as num?)?.toDouble() ?? 0,
           outline: json['o'] as bool? ?? false,
         );
+      case 'x':
+        return TextOp(
+          text: json['tx'] as String? ?? '',
+          x: (json['x'] as num?)?.toDouble() ?? 0,
+          y: (json['y'] as num?)?.toDouble() ?? 0,
+          size: (json['s'] as num?)?.toDouble() ?? 80,
+          color: json['c'] as int? ?? 0xFF000000,
+          symmetryFolds: json['sy'] as int? ?? 1,
+        );
       case 'f':
         return FillOp(
           x: (json['x'] as num?)?.toDouble() ?? 0,
@@ -177,6 +186,39 @@ class ShapeOp extends DrawOp {
         // a replay log is written once per stroke and read back whole.
         if (angle != 0) 'a': _round1(angle * 1000) / 1000,
         if (outline) 'o': true,
+      };
+}
+
+/// A word written onto the picture.
+///
+/// Its own op rather than a StampOp with letters in it: a stamp is sized in
+/// one number because it is square, while a word is as wide as it is long,
+/// and the replay has to write the same string with the same colour.
+class TextOp extends DrawOp {
+  TextOp({
+    required this.text,
+    required this.x,
+    required this.y,
+    required this.size,
+    required this.color,
+    required this.symmetryFolds,
+  });
+
+  final String text;
+  final double x, y, size;
+  final int color;
+  final int symmetryFolds;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        // 't' is the discriminator's own key, so the letter here is 'x'.
+        't': 'x',
+        'tx': text,
+        'x': _round1(x),
+        'y': _round1(y),
+        's': _round1(size),
+        'c': color,
+        if (symmetryFolds > 1) 'sy': symmetryFolds,
       };
 }
 

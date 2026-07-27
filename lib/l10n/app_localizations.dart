@@ -460,6 +460,30 @@ abstract class AppLocalizations {
   /// **'Formen'**
   String get toolShapes;
 
+  /// No description provided for @toolText.
+  ///
+  /// In de, this message translates to:
+  /// **'Buchstaben'**
+  String get toolText;
+
+  /// No description provided for @textPickerTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Was soll auf dem Bild stehen?'**
+  String get textPickerTitle;
+
+  /// No description provided for @textPickerHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Dein Name'**
+  String get textPickerHint;
+
+  /// No description provided for @textPickerPlace.
+  ///
+  /// In de, this message translates to:
+  /// **'Aufs Bild setzen'**
+  String get textPickerPlace;
+
   /// No description provided for @shapeCircle.
   ///
   /// In de, this message translates to:

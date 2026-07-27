@@ -202,6 +202,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get toolShapes => 'Şekiller';
 
   @override
+  String get toolText => 'Harfler';
+
+  @override
+  String get textPickerTitle => 'Resimde ne yazsın?';
+
+  @override
+  String get textPickerHint => 'Adın';
+
+  @override
+  String get textPickerPlace => 'Resme koy';
+
+  @override
   String get shapeCircle => 'Daire';
 
   @override

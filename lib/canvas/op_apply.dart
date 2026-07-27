@@ -79,6 +79,32 @@ ui.Image applyStamp({
   return result;
 }
 
+/// Writes a word onto the layer, mirrored by the magic mirror like a stamp.
+ui.Image applyText({
+  required ui.Image? layer,
+  required String text,
+  required Offset pos,
+  required double size,
+  required Color color,
+  required int symmetryFolds,
+  required int width,
+  required int height,
+}) {
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder, _bounds(width, height));
+  if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
+  for (final copy in symmetryCopies(symmetryFolds)) {
+    // Position mirrored, glyphs upright — exactly as for a stamp. A mirrored
+    // word is unreadable, and unreadable is not what a name is for.
+    final p = symmetryPoint(pos, _center(width, height), copy);
+    StrokeRenderer.drawText(canvas, text, p, size, color);
+  }
+  final picture = recorder.endRecording();
+  final result = picture.toImageSync(width, height);
+  picture.dispose();
+  return result;
+}
+
 /// Runs a flood fill in an isolate and returns the new layer, or null when
 /// the fill was a no-op (seed on a wall, region already that color).
 ///

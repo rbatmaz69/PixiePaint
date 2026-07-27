@@ -203,6 +203,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolShapes => 'Shapes';
 
   @override
+  String get toolText => 'Letters';
+
+  @override
+  String get textPickerTitle => 'What should the picture say?';
+
+  @override
+  String get textPickerHint => 'Your name';
+
+  @override
+  String get textPickerPlace => 'Put it on the picture';
+
+  @override
   String get shapeCircle => 'Circle';
 
   @override

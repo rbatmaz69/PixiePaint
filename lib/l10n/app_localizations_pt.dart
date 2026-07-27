@@ -203,6 +203,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get toolShapes => 'Formas';
 
   @override
+  String get toolText => 'Letras';
+
+  @override
+  String get textPickerTitle => 'O que queres escrever?';
+
+  @override
+  String get textPickerHint => 'O teu nome';
+
+  @override
+  String get textPickerPlace => 'Pôr no desenho';
+
+  @override
   String get shapeCircle => 'Círculo';
 
   @override

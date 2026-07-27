@@ -56,6 +56,7 @@ class StrokeRenderer {
       case ToolKind.stamp:
       case ToolKind.eyedropper:
       case ToolKind.shape:
+      case ToolKind.text:
         break; // not stroke-based
     }
   }
@@ -66,6 +67,29 @@ class StrokeRenderer {
       Canvas canvas, String emoji, Offset center, double size) {
     final tp = TextPainter(
       text: TextSpan(text: emoji, style: TextStyle(fontSize: size)),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
+    tp.dispose();
+  }
+
+  /// Writes [text] centred at [center] in the app's own hand.
+  ///
+  /// The same TextPainter the emoji stamp uses — a word is a stamp that
+  /// happens to be made of letters — only with Fredoka and the chosen
+  /// colour instead of a colour font's own.
+  static void drawText(
+      Canvas canvas, String text, Offset center, double size, Color color) {
+    final tp = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontFamily: 'Fredoka',
+          fontWeight: FontWeight.w700,
+          fontSize: size,
+          color: color,
+        ),
+      ),
       textDirection: TextDirection.ltr,
     )..layout();
     tp.paint(canvas, center - Offset(tp.width / 2, tp.height / 2));
