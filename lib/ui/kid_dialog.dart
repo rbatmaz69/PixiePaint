@@ -47,35 +47,42 @@ Future<T?> showKidDialog<T>({
     pageBuilder: (context, _, _) => Dialog(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              PopIn(
-                from: 0.4,
-                rotateFrom: -0.15,
-                delay: PixieMotion.emojiDelay,
-                child: Text(emoji,
+        // Scrolls when it has to. The column shrink-wraps as long as it
+        // fits, which is the normal case; at the largest system font a
+        // dialog with two sentences and a button is taller than a small
+        // phone, and until this was here it simply got clipped — the way
+        // out of the dialog was the part that fell off the bottom.
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                PopIn(
+                  from: 0.4,
+                  rotateFrom: -0.15,
+                  delay: PixieMotion.emojiDelay,
+                  child: Text(emoji,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 48)),
+                ),
+                const SizedBox(height: PixieTokens.gapSmall),
+                Text(title,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 48)),
-              ),
-              const SizedBox(height: PixieTokens.gapSmall),
-              Text(title,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge),
-              if (body != null) ...[
-                const SizedBox(height: PixieTokens.gap),
-                body,
+                    style: Theme.of(context).textTheme.titleLarge),
+                if (body != null) ...[
+                  const SizedBox(height: PixieTokens.gap),
+                  body,
+                ],
+                const SizedBox(height: PixieTokens.gapLarge),
+                for (final (i, action)
+                    in (actions?.call(context) ?? const <Widget>[]).indexed) ...[
+                  if (i > 0) const SizedBox(height: PixieTokens.gapSmall),
+                  action,
+                ],
               ],
-              const SizedBox(height: PixieTokens.gapLarge),
-              for (final (i, action)
-                  in (actions?.call(context) ?? const <Widget>[]).indexed) ...[
-                if (i > 0) const SizedBox(height: PixieTokens.gapSmall),
-                action,
-              ],
-            ],
+            ),
           ),
         ),
       ),
