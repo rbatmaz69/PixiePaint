@@ -544,7 +544,10 @@ class _PolaroidCardState extends State<_PolaroidCard>
               if (hasName)
                 Positioned(
                   left: 12,
-                  right: 12,
+                  // Clear of the menu handle in the corner below, which the
+                  // centered name would otherwise slide under once the
+                  // system font grows.
+                  right: 40,
                   bottom: 3,
                   child: Text(
                     artwork.name!,
@@ -588,6 +591,22 @@ class _PolaroidCardState extends State<_PolaroidCard>
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
+                ),
+              ),
+              // The handle on the picture menu. Everything a parent can do
+              // with a finished picture — share, print, save to photos — used
+              // to hang off a long press and nothing said so, which is a
+              // gesture a five-year-old does not have and an adult has no
+              // reason to try. The long press still works.
+              Positioned(
+                bottom: 2,
+                right: 2,
+                child: StickerCircleButton(
+                  onTap: widget.onLongPress,
+                  size: 36,
+                  icon: Icons.more_horiz_rounded,
+                  accent: PixiePalette.grape,
+                  semanticLabel: context.l10n.moreForPicture,
                 ),
               ),
             ],

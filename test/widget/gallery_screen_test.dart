@@ -90,6 +90,23 @@ void main() {
     await settle(tester);
   }
 
+  testWidgets('the corner handle opens the same sheet as the long press',
+      (tester) async {
+    root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+    await makeArtwork(tester, id: 'a1', name: 'Katze');
+
+    await start(tester);
+    // Nothing on the card announced the seven actions behind it until this
+    // button existed. A child does not long-press, and a parent looking for
+    // "print" has no reason to try.
+    await tester.tap(find.bySemanticsLabel('Mehr für dieses Bild'));
+    await settle(tester);
+
+    expect(find.text('Umbenennen'), findsOneWidget);
+    expect(find.textContaining('Teilen'), findsOneWidget);
+  });
+
   testWidgets('saved pictures show up, an empty gallery says so',
       (tester) async {
     root = await setUpPixieStorage(tester);

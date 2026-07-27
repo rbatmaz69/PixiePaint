@@ -88,6 +88,7 @@
   "patternChecker": "Checkers",
   "patternBubbles": "Bubbles",
   "galleryTitle": "My pictures",
+  "moreForPicture": "More for this picture",
   "galleryEmpty": "No pictures yet –\npaint one!",
   "continuePainting": "Keep painting",
   "slideshowTooltip": "Start slideshow",

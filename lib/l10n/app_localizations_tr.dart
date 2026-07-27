@@ -254,6 +254,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get galleryTitle => 'Resimlerim';
 
   @override
+  String get moreForPicture => 'Bu resim için daha fazlası';
+
+  @override
   String get galleryEmpty => 'Henüz resim yok –\nhadi bir tane boya!';
 
   @override

@@ -255,6 +255,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get galleryTitle => 'My pictures';
 
   @override
+  String get moreForPicture => 'More for this picture';
+
+  @override
   String get galleryEmpty => 'No pictures yet –\npaint one!';
 
   @override

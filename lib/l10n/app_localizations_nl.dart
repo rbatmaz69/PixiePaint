@@ -255,6 +255,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get galleryTitle => 'Mijn tekeningen';
 
   @override
+  String get moreForPicture => 'Meer voor deze tekening';
+
+  @override
   String get galleryEmpty => 'Nog geen tekeningen –\nmaak er een!';
 
   @override

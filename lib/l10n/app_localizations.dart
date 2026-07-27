@@ -598,6 +598,12 @@ abstract class AppLocalizations {
   /// **'Meine Bilder'**
   String get galleryTitle;
 
+  /// No description provided for @moreForPicture.
+  ///
+  /// In de, this message translates to:
+  /// **'Mehr für dieses Bild'**
+  String get moreForPicture;
+
   /// No description provided for @galleryEmpty.
   ///
   /// In de, this message translates to:
