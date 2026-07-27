@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/app_theme.dart';
+
 import '../canvas/canvas_controller.dart';
 import '../l10n/l10n.dart';
 import '../ui/bouncy.dart';
@@ -187,12 +189,12 @@ class PixieColorSwatch extends StatelessWidget {
                 border: Border.all(
                   color: self
                       ? Colors.white
-                      : (light ? Colors.black26 : Colors.transparent),
+                      : (light ? PixieTokens.hairline() : Colors.transparent),
                   width: self ? 3 : 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (light ? Colors.black26 : color)
+                    color: (light ? PixieTokens.hairline() : color)
                         .withValues(alpha: self ? 0.45 : 0.0),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
@@ -201,7 +203,7 @@ class PixieColorSwatch extends StatelessWidget {
               ),
               child: selected
                   ? Icon(Icons.check,
-                      color: light ? Colors.black54 : Colors.white, size: 24)
+                      color: light ? PixieTokens.hairline(0.54) : Colors.white, size: 24)
                   : null,
             ),
           ),

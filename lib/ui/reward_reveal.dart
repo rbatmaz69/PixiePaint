@@ -22,7 +22,7 @@ Future<void> showRewardReveal(
     context: context,
     barrierDismissible: false,
     barrierLabel: 'reward',
-    barrierColor: Colors.black.withValues(alpha: 0.72),
+    barrierColor: PixieTokens.scrim(0.72),
     transitionDuration: const Duration(milliseconds: 550),
     transitionBuilder: (context, anim, _, child) => FadeTransition(
       opacity: CurvedAnimation(parent: anim, curve: PixieCurves.enter),

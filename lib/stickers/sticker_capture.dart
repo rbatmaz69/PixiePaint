@@ -257,7 +257,7 @@ class _CapturePainter extends CustomPainter {
       ..addOval(Rect.fromCircle(center: center, radius: radius));
     final scrim = Path.combine(
         PathOperation.difference, Path()..addRect(dst), hole);
-    canvas.drawPath(scrim, Paint()..color = Colors.black.withValues(alpha: 0.55));
+    canvas.drawPath(scrim, Paint()..color = PixieTokens.scrim(0.55));
     // Circle outline with a soft glow.
     canvas.drawCircle(
         center,

@@ -60,6 +60,21 @@ abstract final class PixieTokens {
   static double stickerTilt(int index) =>
       (((index * 7) % 5) - 2) * 0.8 * math.pi / 180;
 
+  /// The hairline that keeps a pale swatch from disappearing into the white
+  /// under it.
+  ///
+  /// The palette says the app never paints plain black, and then six places
+  /// reached for `Colors.black26` anyway — the paint palette, the size
+  /// sheet and the size button, all drawing the same outline around the
+  /// same too-light colours. It is ink, quietly.
+  static Color hairline([double alpha = 0.26]) =>
+      PixiePalette.ink.withValues(alpha: alpha);
+
+  /// The dark behind a modal. Three of them, three different darks
+  /// (0.72, 0.54, 0.55) — and a scrim is one decision, not three.
+  static Color scrim([double alpha = 0.6]) =>
+      PixiePalette.ink.withValues(alpha: alpha);
+
   /// The lift under the white bars that float over the paper — the tool
   /// strip, the rail, the button pills inside them.
   ///

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/app_theme.dart';
+
 import '../models/cbn_spec.dart';
 import '../ui/bouncy.dart';
 import '../ui/pixie_palette.dart';
@@ -129,13 +131,13 @@ class _Swatch extends StatelessWidget {
             children: [
               Text(
                 '$number',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontWeight: FontWeight.w700,
                   fontSize: 24,
                   color: Colors.white,
                   shadows: [
-                    Shadow(color: Colors.black38, blurRadius: 4),
+                    Shadow(color: PixieTokens.hairline(0.38), blurRadius: 4),
                   ],
                 ),
               ),

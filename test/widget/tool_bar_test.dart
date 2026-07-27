@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' show Tristate;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pixiepaint/ui/app_theme.dart';
 import 'package:pixiepaint/canvas/canvas_controller.dart';
 import 'package:pixiepaint/models/tool.dart';
 import 'package:pixiepaint/ui/pop_in.dart';
@@ -153,13 +154,15 @@ void main() {
     for (final light in kidColorGrid().first.where(needsBorder)) {
       controller.selectColor(light);
       await tester.pumpAndSettle();
-      expect(dotBorder()?.top.color, Colors.black26,
+      expect(dotBorder()?.top.color, PixieTokens.hairline(),
           reason: '$light is light enough to need an outline');
     }
 
     controller.selectColor(const Color(0xFFFFFFFF));
     await tester.pumpAndSettle();
-    expect(dotBorder()?.top.color, Colors.black26);
+    // Against the token, not a literal: the point is that the outline is
+    // *there*, and which quiet dark it is belongs to the palette.
+    expect(dotBorder()?.top.color, PixieTokens.hairline());
   });
 
   testWidgets('the extra slot promises a sheet, not a colour', (tester) async {

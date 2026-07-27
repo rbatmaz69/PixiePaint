@@ -736,7 +736,7 @@ class _SizeButton extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: color,
                 border: Border.all(
-                  color: light ? Colors.black26 : Colors.transparent,
+                  color: light ? PixieTokens.hairline() : Colors.transparent,
                   width: 1.5,
                 ),
               ),

@@ -67,11 +67,11 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                         shape: BoxShape.circle,
                         color: controller.color,
                         border: light
-                            ? Border.all(color: Colors.black26, width: 1.5)
+                            ? Border.all(color: PixieTokens.hairline(), width: 1.5)
                             : null,
                         boxShadow: [
                           BoxShadow(
-                            color: (light ? Colors.black26 : controller.color)
+                            color: (light ? PixieTokens.hairline() : controller.color)
                                 .withValues(alpha: 0.35),
                             blurRadius: 14,
                             offset: const Offset(0, 4),
@@ -94,7 +94,7 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                   // sheet; they keep the theme's outline instead.
                   overlayColor: controller.color.withValues(alpha: 0.18),
                   inactiveTrackColor: light
-                      ? Colors.black12
+                      ? PixieTokens.hairline(0.12)
                       : controller.color.withValues(alpha: 0.22),
                 ),
                 child: Slider(

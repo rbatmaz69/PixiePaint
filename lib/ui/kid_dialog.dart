@@ -32,7 +32,7 @@ Future<T?> showKidDialog<T>({
     context: context,
     barrierDismissible: barrierDismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black54,
+    barrierColor: PixieTokens.scrim(0.54),
     transitionDuration: PixieMotion.enter,
     transitionBuilder: (context, anim, _, child) => FadeTransition(
       opacity: CurvedAnimation(parent: anim, curve: PixieCurves.enter),
