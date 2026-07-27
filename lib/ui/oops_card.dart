@@ -39,23 +39,28 @@ class OopsCard extends StatelessWidget {
           Text(
             l10n?.oopsTitle ?? 'Ups — hier ist etwas durcheinandergeraten.',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Fredoka',
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-              color: PixiePalette.ink,
-            ),
+            // The type scale, not a hand-set copy of it. This card can be
+            // built before a Theme exists — the fallback below is why the
+            // family and colour are still named here.
+            style: Theme.of(context).textTheme.titleMedium ??
+                const TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: PixiePalette.ink,
+                ),
           ),
           const SizedBox(height: PixieTokens.gapSmall),
           Text(
             l10n?.oopsBody ?? 'Geh einen Schritt zurück und probier es nochmal.',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Fredoka',
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-              color: PixiePalette.ink,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium ??
+                const TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  color: PixiePalette.ink,
+                ),
           ),
         ],
       ),

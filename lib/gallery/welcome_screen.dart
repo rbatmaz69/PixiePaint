@@ -114,7 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text(
                       l10n.welcomeSkip,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: PixiePalette.ink.withValues(alpha: 0.6)),
+                          color: PixieTokens.quietInk),
                     ),
                   ),
                 ),

@@ -125,7 +125,7 @@ class _Summary extends StatelessWidget {
                       ? l10n.albumStreak(streak)
                       : l10n.albumStreakNone,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: PixiePalette.ink.withValues(alpha: 0.7)),
+                      color: PixieTokens.quietInk),
                 ),
               ],
             ),

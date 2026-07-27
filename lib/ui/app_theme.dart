@@ -75,6 +75,21 @@ abstract final class PixieTokens {
   static Color scrim([double alpha = 0.6]) =>
       PixiePalette.ink.withValues(alpha: alpha);
 
+  /// The second line: a caption, a subtitle, the sentence under a heading.
+  ///
+  /// Eight places wrote `ink.withValues(alpha: 0.7)` and two more reached
+  /// for 0.6 to say the same thing. The alpha ladder as a whole is not worth
+  /// naming — most of those numbers are one-offs with a reason — but this
+  /// one is a role the app plays over and over.
+  static Color get quietInk => PixiePalette.ink.withValues(alpha: 0.7);
+
+  /// Border widths, in the three jobs they actually do: the hairline that
+  /// outlines a pale swatch, the ordinary edge, and the ring that marks a
+  /// selection. [stickerBorder] is the fourth and thickest.
+  static const double strokeHair = 1.5;
+  static const double strokeEdge = 2.0;
+  static const double strokeSelect = 2.5;
+
   /// The lift under the white bars that float over the paper — the tool
   /// strip, the rail, the button pills inside them.
   ///
@@ -329,8 +344,10 @@ ThemeData buildPixieTheme() {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(64, 52),
-        textStyle: const TextStyle(
-            fontFamily: 'Fredoka', fontSize: 17, fontWeight: FontWeight.w600),
+        // From the ladder, not beside it. Setting a size here was what kept
+        // labelLarge — a rung with its own tracking, written for exactly
+        // this — from ever being used by anything.
+        textStyle: textTheme.labelLarge,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(PixieTokens.rSmall)),
       ),
@@ -338,8 +355,7 @@ ThemeData buildPixieTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         minimumSize: const Size(64, 48),
-        textStyle: const TextStyle(
-            fontFamily: 'Fredoka', fontSize: 15, fontWeight: FontWeight.w500),
+        textStyle: textTheme.bodyMedium,
       ),
     ),
     // Dialogs and sheets are stickers themselves: paper fill + thick white

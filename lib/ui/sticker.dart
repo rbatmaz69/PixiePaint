@@ -96,7 +96,7 @@ BoxDecoration stickerSelectionDecoration({
     borderRadius: BorderRadius.circular(radius),
     border: Border.all(
       color: selected ? accent : Colors.transparent,
-      width: 2.5,
+      width: PixieTokens.strokeSelect,
     ),
     // Zero-alpha rather than null: every caller wraps this in an
     // [AnimatedContainer], and a shadow tweened against nothing is the
@@ -193,7 +193,7 @@ class StickerCircleButton extends StatelessWidget {
                 icon,
                 size: size * 0.5,
                 color: enabled
-                    ? PixiePalette.ink.withValues(alpha: 0.7)
+                    ? PixieTokens.quietInk
                     : PixiePalette.ink.withValues(alpha: 0.3),
               ));
     Widget button = Bouncy(

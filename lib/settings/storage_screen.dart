@@ -160,7 +160,7 @@ class _StorageScreenState extends State<StorageScreen> {
                       formatBytes(_usage.stickerBytes),
                     ),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: PixiePalette.ink.withValues(alpha: 0.7)),
+                        color: PixieTokens.quietInk),
                   ),
                 ],
               ),

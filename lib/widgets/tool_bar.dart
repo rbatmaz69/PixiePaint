@@ -136,7 +136,7 @@ class _PickableButton extends StatelessWidget {
                 BorderRadius.circular(selected ? PixieTokens.rTile : size / 2),
             border: Border.all(
               color: selected ? accent : Colors.transparent,
-              width: 2.5,
+              width: PixieTokens.strokeSelect,
             ),
             boxShadow:
                 PixieTokens.softShadow(accent, strength: selected ? 1 : 0),
@@ -610,7 +610,8 @@ class _ToolButton extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: controller.color,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
+                    border: Border.all(
+                        color: Colors.white, width: PixieTokens.strokeHair),
                   ),
                 ),
               ),
@@ -737,7 +738,7 @@ class _SizeButton extends StatelessWidget {
                 color: color,
                 border: Border.all(
                   color: light ? PixieTokens.hairline() : Colors.transparent,
-                  width: 1.5,
+                  width: PixieTokens.strokeHair,
                 ),
               ),
             ),
@@ -801,7 +802,7 @@ class _ActionButton extends StatelessWidget {
           icon,
           size: size * 0.54,
           color: enabled
-              ? PixiePalette.ink.withValues(alpha: 0.7)
+              ? PixieTokens.quietInk
               : PixiePalette.ink.withValues(alpha: 0.3),
         ),
       ),

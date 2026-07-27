@@ -67,7 +67,9 @@ class _SizePickerBodyState extends State<_SizePickerBody> {
                         shape: BoxShape.circle,
                         color: controller.color,
                         border: light
-                            ? Border.all(color: PixieTokens.hairline(), width: 1.5)
+                            ? Border.all(
+                                color: PixieTokens.hairline(),
+                                width: PixieTokens.strokeHair)
                             : null,
                         boxShadow: [
                           BoxShadow(

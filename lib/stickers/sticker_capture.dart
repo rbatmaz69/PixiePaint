@@ -188,7 +188,7 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                               Icons.check_rounded,
                               key: const ValueKey('idle'),
                               size: 24,
-                              color: PixiePalette.ink.withValues(alpha: 0.7),
+                              color: PixieTokens.quietInk,
                             ),
                     ),
                   ),
