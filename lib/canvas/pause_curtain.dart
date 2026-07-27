@@ -45,7 +45,12 @@ class _PauseCurtainState extends State<_PauseCurtain> {
   Future<void> _continue() async {
     if (_checking) return;
     setState(() => _checking = true);
-    final passed = await ParentalGate.show(context);
+    // The one caller that opts out of the gate's three-minute memory.
+    // Everywhere else the gate is a handle on a parent's door and asking
+    // five times in a row is friction; here it *is* the lock. A break the
+    // child can walk through because a parent solved a sum two minutes ago
+    // is not a break.
+    final passed = await ParentalGate.show(context, remember: false);
     if (!mounted) return;
     setState(() => _checking = false);
     if (passed) Navigator.of(context).pop();

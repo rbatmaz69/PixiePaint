@@ -25,18 +25,25 @@ void main() {
   /// gate's future in [answer] for the test to await *after* it is done
   /// driving the tester — awaiting it earlier would deadlock, since the
   /// future only completes once the dialog is dismissed.
-  Future<void> openGate(WidgetTester tester) async {
+  Future<void> openGate(WidgetTester tester, {bool remember = true}) async {
     await pumpPixie(
       tester,
       Builder(
         builder: (context) => Center(
           child: ElevatedButton(
-            onPressed: () => answer = ParentalGate.show(context),
+            onPressed: () =>
+                answer = ParentalGate.show(context, remember: remember),
             child: const Text('open'),
           ),
         ),
       ),
     );
+    await tester.tap(find.text('open'));
+    await settle(tester);
+  }
+
+  /// Asks a second time on the button [openGate] already put on screen.
+  Future<void> askAgain(WidgetTester tester) async {
     await tester.tap(find.text('open'));
     await settle(tester);
   }
@@ -107,6 +114,55 @@ void main() {
     await tester.tap(find.text('Abbrechen'));
     await settle(tester);
 
+    expect(await answer, isFalse);
+  });
+
+  testWidgets('a solved question stands for the next few minutes',
+      (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+
+    await openGate(tester);
+    await submit(tester, '${expectedAnswer(tester)}');
+    expect(await answer, isTrue);
+
+    // A parent tidying the gallery hits four or five gates in a row.
+    await askAgain(tester);
+    expect(find.byType(TextField), findsNothing,
+        reason: 'the second ask should not put up a dialog at all');
+    expect(await answer, isTrue);
+  });
+
+  testWidgets('the painting break asks every time, memory or not',
+      (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+
+    // First, earn the memory the ordinary way.
+    await openGate(tester);
+    await submit(tester, '${expectedAnswer(tester)}');
+    expect(await answer, isTrue);
+
+    // The break opts out: here the gate is the lock, not a door handle.
+    await openGate(tester, remember: false);
+    expect(find.byType(TextField), findsOneWidget);
+    await submit(tester, '${expectedAnswer(tester)}');
+    expect(await answer, isTrue);
+  });
+
+  testWidgets('a refused gate is not remembered', (tester) async {
+    final root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+
+    await openGate(tester);
+    await tester.tap(find.text('Abbrechen'));
+    await settle(tester);
+    expect(await answer, isFalse);
+
+    await askAgain(tester);
+    expect(find.byType(TextField), findsOneWidget);
+    await tester.tap(find.text('Abbrechen'));
+    await settle(tester);
     expect(await answer, isFalse);
   });
 }

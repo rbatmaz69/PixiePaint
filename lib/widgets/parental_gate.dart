@@ -9,13 +9,41 @@ import '../ui/kid_dialog.dart';
 /// Simple multiplication question that small children can't answer.
 /// Returns true if the adult solved it (3 attempts allowed).
 class ParentalGate {
-  static Future<bool> show(BuildContext context) async {
+  /// How long one solved question stays good for.
+  ///
+  /// Fifteen places ask, and a parent tidying up the gallery hits four or
+  /// five of them in a row: share this one, print that one, throw the blurry
+  /// one away. Doing the arithmetic every time is where people give up on a
+  /// feature. Three minutes is short enough that the child who wandered off
+  /// and came back does not walk through an open door.
+  static const Duration _memory = Duration(minutes: 3);
+
+  static DateTime? _passedAt;
+
+  /// [remember] false asks every single time and leaves no trace — for the
+  /// one caller where the gate is the lock itself rather than the handle on
+  /// a parent's door. See `showPauseCurtain`.
+  static Future<bool> show(BuildContext context, {bool remember = true}) async {
+    if (remember) {
+      final passed = _passedAt;
+      if (passed != null && DateTime.now().difference(passed) < _memory) {
+        return true;
+      }
+    }
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => const _GateDialog(),
     );
+    if (result == true && remember) _passedAt = DateTime.now();
     return result ?? false;
   }
+
+  /// Back to a fresh install, like `Settings.resetForTest`. Without it one
+  /// test's solved question makes the next test's gate wave everything
+  /// through, and a test that means to prove the gate stands there passes
+  /// for the wrong reason.
+  @visibleForTesting
+  static void resetForTest() => _passedAt = null;
 }
 
 class _GateDialog extends StatefulWidget {

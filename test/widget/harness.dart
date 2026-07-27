@@ -10,6 +10,7 @@ import 'package:pixiepaint/util/error_log.dart';
 import 'package:pixiepaint/util/profiles.dart';
 import 'package:pixiepaint/util/progress.dart';
 import 'package:pixiepaint/util/settings.dart';
+import 'package:pixiepaint/widgets/parental_gate.dart';
 
 /// Shared setup for the widget tests.
 ///
@@ -114,6 +115,7 @@ Future<void> tearDownPixieStorage(WidgetTester tester, Directory root) async {
   Settings.instance.resetForTest();
   ProfileStore.instance.resetForTest();
   Progress.instance.resetForTest();
+  ParentalGate.resetForTest();
   if (root.existsSync()) root.deleteSync(recursive: true);
 }
 
