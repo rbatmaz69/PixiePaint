@@ -75,7 +75,6 @@ class ScenePickerScreen extends StatelessWidget {
                           ),
                           child: StickerCard(
                             color: Colors.white,
-                            radius: 24,
                             tiltIndex: i,
                             padding: const EdgeInsets.all(10),
                             child: Column(

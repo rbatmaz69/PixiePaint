@@ -275,7 +275,6 @@ class _PageGrid extends StatelessWidget {
             ).push(MaterialPageRoute(builder: (_) => CanvasScreen(page: page))),
             child: StickerCard(
               color: tint,
-              radius: 24,
               tiltIndex: i,
               padding: const EdgeInsets.all(10),
               child: Column(

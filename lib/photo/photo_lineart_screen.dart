@@ -125,7 +125,6 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
                           constraints: const BoxConstraints(maxWidth: 480),
                           child: StickerCard(
                             color: Colors.white,
-                            radius: 24,
                             shadowColor: PixiePalette.tangerine,
                             tiltIndex: 0,
                             // The card here *is* the photograph, edge to
@@ -269,7 +268,6 @@ class _DetailPill extends StatelessWidget {
           selected: selected,
           accent: PixiePalette.tangerine,
           restColor: Colors.white.withValues(alpha: 0.6),
-          radius: 22,
         ),
         child: Text(
           label,

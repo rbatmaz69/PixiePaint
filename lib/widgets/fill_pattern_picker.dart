@@ -76,7 +76,6 @@ class _PatternTile extends StatelessWidget {
           selected: selected,
           accent: PixiePalette.jade,
           restColor: PixiePalette.paperDeep,
-          radius: 24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

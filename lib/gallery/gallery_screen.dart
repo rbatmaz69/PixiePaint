@@ -699,7 +699,6 @@ class _FilterChip extends StatelessWidget {
           selected: selected,
           accent: PixiePalette.mint,
           restColor: Colors.white.withValues(alpha: 0.6),
-          radius: 22,
         ),
         child: Text(
           label,

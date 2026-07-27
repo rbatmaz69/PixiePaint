@@ -99,7 +99,6 @@ class _Summary extends StatelessWidget {
     final l10n = context.l10n;
     return StickerCard(
       color: Colors.white,
-      radius: 24,
       shadowColor: PixiePalette.sunshine,
       padding: const EdgeInsets.all(18),
       child: Row(

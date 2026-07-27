@@ -494,7 +494,6 @@ class _Section extends StatelessWidget {
         ),
         StickerCard(
           color: Colors.white,
-          radius: 24,
           shadowColor: accent,
           tiltIndex: tiltIndex,
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),

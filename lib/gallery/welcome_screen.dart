@@ -194,7 +194,6 @@ class _Card extends StatelessWidget {
             const SizedBox(height: PixieTokens.gapXl),
             StickerCard(
               color: Colors.white,
-              radius: 24,
               shadowColor: accent,
               padding: const EdgeInsets.all(22),
               child: Column(

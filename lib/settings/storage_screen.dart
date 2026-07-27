@@ -143,7 +143,6 @@ class _StorageScreenState extends State<StorageScreen> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
             child: StickerCard(
               color: Colors.white,
-              radius: 24,
               shadowColor: PixiePalette.mint,
               padding: const EdgeInsets.all(18),
               child: Column(
@@ -238,7 +237,6 @@ class _Tile extends StatelessWidget {
         decoration: stickerSelectionDecoration(
           selected: selected,
           accent: PixiePalette.berry,
-          radius: 18,
           restColor: Colors.white,
         ),
         padding: const EdgeInsets.all(6),

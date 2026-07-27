@@ -105,7 +105,6 @@ class _ErrorLogScreenState extends State<ErrorLogScreen> {
                       slot: 0,
                       child: StickerCard(
                         color: Colors.white,
-                        radius: 24,
                         shadowColor: PixiePalette.sky,
                         padding: const EdgeInsets.all(18),
                         child: Column(
@@ -221,7 +220,9 @@ class _EntryCardState extends State<_EntryCard> {
         minSize: 0,
         child: StickerCard(
           color: Colors.white,
-          radius: 18,
+          // A row in a list, not a card of its own — the tile rung, the same
+          // one the picker chips sit on.
+          radius: PixieTokens.rTile,
           shadowColor: PixiePalette.grape,
           padding: const EdgeInsets.all(14),
           child: Column(

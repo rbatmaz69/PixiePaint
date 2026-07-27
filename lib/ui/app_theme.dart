@@ -9,7 +9,14 @@ import 'pixie_palette.dart';
 /// shadows used app-wide.
 abstract final class PixieTokens {
   static const double rSmall = 16;
-  static const double rCard = 28;
+
+  /// Sticker cards.
+  ///
+  /// It was 28, and eleven of the twelve places that build a [StickerCard]
+  /// passed a number instead — nine of them 24, the rest 22 and 18. The
+  /// token was not wrong so much as ignored, so it now says what the app
+  /// actually looks like rather than what it was once meant to.
+  static const double rCard = 24;
 
   /// Picker tiles, chips and the paper sheet.
   static const double rTile = 20;

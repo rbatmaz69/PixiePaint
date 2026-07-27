@@ -113,7 +113,6 @@ class _TraceGrid extends StatelessWidget {
           ),
           child: StickerCard(
             color: Colors.white,
-            radius: 22,
             tiltIndex: i,
             padding: EdgeInsets.zero,
             child: Stack(
