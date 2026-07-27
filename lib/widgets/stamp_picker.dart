@@ -378,7 +378,6 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       playTick: false,
       onTap: _onTap,
@@ -406,7 +405,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
               Text('❓',
                   style: TextStyle(
                       fontSize: 32,
-                      color: scheme.onSurfaceVariant.withValues(alpha: 0.7))),
+                      color: PixieTokens.quietInk.withValues(alpha: 0.7))),
               const Positioned(
                 right: 6,
                 bottom: 6,
@@ -437,7 +436,7 @@ class _LockedRewardTileState extends State<_LockedRewardTile>
             context.l10n
                 .rewardProgress(progressFor(reward, snapshot), reward.target),
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant),
+                color: PixieTokens.quietInk),
           ),
         ],
       ),

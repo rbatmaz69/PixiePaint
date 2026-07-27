@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
+import '../ui/pixie_surfaces.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../canvas/canvas_screen.dart';
@@ -160,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.homeBg,
+        gradient: context.surfaces.homeBg,
         parallax: _scrollY,
         builder: (context, wave) => SafeArea(
           child: Stack(
@@ -340,7 +342,7 @@ class _ProfileChip extends StatelessWidget {
                   const SizedBox(width: 4),
                   Icon(Icons.expand_more_rounded,
                       size: 18,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      color: PixieTokens.quietInk),
                 ],
               ),
             ),

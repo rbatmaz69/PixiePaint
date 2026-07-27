@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
@@ -100,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     final isLast = _index == _cardCount - 1;
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.homeBg,
+        gradient: context.surfaces.homeBg,
         builder: (context, _) => SafeArea(
           child: Column(
             children: [
@@ -114,7 +116,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text(
                       l10n.welcomeSkip,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: PixieTokens.quietInk),
+                          color: context.surfaces.onGround
+                              .withValues(alpha: 0.7)),
                     ),
                   ),
                 ),

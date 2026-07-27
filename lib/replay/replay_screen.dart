@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../canvas/stroke_renderer.dart';
 import '../canvas/symmetry.dart';
 import '../l10n/l10n.dart';
@@ -102,14 +104,14 @@ class _ReplayScreenState extends State<ReplayScreen> {
         emoji: '🎬',
         title: context.l10n.replayAction,
         accent: PixiePalette.grape,
-        gradient: PixieGradients.canvasBg,
+        gradient: context.surfaces.canvasBg,
         label: context.l10n.canvasLoading,
         failed: _failed,
       );
     }
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
+        decoration: BoxDecoration(gradient: context.surfaces.canvasBg),
         child: SafeArea(
           child: Stack(
                   children: [

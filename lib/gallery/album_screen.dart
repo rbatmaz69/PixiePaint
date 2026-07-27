@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../l10n/l10n.dart';
 import '../models/reward.dart';
 import '../ui/app_theme.dart';
@@ -30,7 +32,7 @@ class AlbumScreen extends StatelessWidget {
     final l10n = context.l10n;
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.homeBg,
+        gradient: context.surfaces.homeBg,
         builder: (context, _) => SafeArea(
           child: ListenableBuilder(
             listenable: Progress.instance,
@@ -229,7 +231,7 @@ class _RewardTile extends StatelessWidget {
               l10n.rewardProgress(
                   progressFor(reward, snapshot), reward.target),
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  color: PixieTokens.quietInk),
             ),
           ],
         ],

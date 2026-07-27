@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import '../ui/pixie_surfaces.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/l10n.dart';
@@ -127,10 +129,12 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
       },
       child: Scaffold(
         body: DecoratedBox(
-          decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
+          decoration: BoxDecoration(gradient: context.surfaces.canvasBg),
           // The same still, faint paper as the single canvas.
           child: CustomPaint(
-            painter: const DoodlePainter(0.12, alpha: 0.04),
+            painter: DoodlePainter(0.12,
+                alpha: context.surfaces.doodleAlpha,
+                color: context.surfaces.onGround),
             child: SafeArea(
             child: Row(
               children: [

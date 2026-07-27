@@ -201,7 +201,7 @@ class KidDialogTextButton extends StatelessWidget {
     return TextButton(
       onPressed: onTap,
       style: TextButton.styleFrom(
-        foregroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        foregroundColor: PixieTokens.quietInk,
       ),
       child: Text(label),
     );

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart' show Color;
+import 'package:flutter/material.dart' show Color, ThemeMode;
 import 'package:path_provider/path_provider.dart';
 
 import 'color_utils.dart';
@@ -35,6 +35,19 @@ class Settings extends ChangeNotifier {
 
   /// Which background-music loop plays next (cycled by Music on each start).
   int musicTrack = 0;
+
+  /// 0 = follow the device, 1 = always light, 2 = evening.
+  ///
+  /// An int rather than a string, the way [musicTrack] already is: it is
+  /// written to JSON on every change, and a stored name that stops matching
+  /// an enum is a migration nobody wants for a preference this small.
+  int themeModeIndex = 0;
+
+  ThemeMode get themeMode => switch (themeModeIndex) {
+        1 => ThemeMode.light,
+        2 => ThemeMode.dark,
+        _ => ThemeMode.system,
+      };
 
   /// Whether the one-time welcome has been shown. Everything else here is a
   /// preference; this is a flag the app sets itself.
@@ -90,6 +103,7 @@ class Settings extends ChangeNotifier {
     musicOn = json['musicOn'] as bool? ?? false;
     hapticsOn = json['hapticsOn'] as bool? ?? true;
     musicTrack = json['musicTrack'] as int? ?? 0;
+    themeModeIndex = json['themeModeIndex'] as int? ?? 0;
     pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
     welcomeSeen = json['welcomeSeen'] as bool? ?? false;
     rotateHintSeen = json['rotateHintSeen'] as bool? ?? false;
@@ -109,6 +123,7 @@ class Settings extends ChangeNotifier {
       bool? hapticsOn,
       bool? musicOn,
       int? musicTrack,
+      int? themeModeIndex,
       bool? leftHanded,
       int? pauseAfterMinutes}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
@@ -117,6 +132,7 @@ class Settings extends ChangeNotifier {
     if (hapticsOn != null) this.hapticsOn = hapticsOn;
     if (musicOn != null) this.musicOn = musicOn;
     if (musicTrack != null) this.musicTrack = musicTrack;
+    if (themeModeIndex != null) this.themeModeIndex = themeModeIndex;
     if (leftHanded != null) this.leftHanded = leftHanded;
     if (pauseAfterMinutes != null) {
       this.pauseAfterMinutes = pauseAfterMinutes;
@@ -151,6 +167,7 @@ class Settings extends ChangeNotifier {
       'hapticsOn': hapticsOn,
       'musicOn': musicOn,
       'musicTrack': musicTrack,
+      'themeModeIndex': themeModeIndex,
       'leftHanded': leftHanded,
       'pauseAfterMinutes': pauseAfterMinutes,
       'welcomeSeen': welcomeSeen,
@@ -211,6 +228,7 @@ class Settings extends ChangeNotifier {
     hapticsOn = true;
     musicOn = false;
     musicTrack = 0;
+    themeModeIndex = 0;
     leftHanded = false;
     pauseAfterMinutes = 0;
     welcomeSeen = false;

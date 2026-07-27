@@ -982,6 +982,42 @@ abstract class AppLocalizations {
   /// **'Sanfte Spieluhr-Musik beim Malen.'**
   String get musicSubtitle;
 
+  /// No description provided for @themeTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Aussehen'**
+  String get themeTitle;
+
+  /// No description provided for @themeSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Hell, dunkel oder wie das Gerät'**
+  String get themeSubtitle;
+
+  /// No description provided for @themeDuskSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Am Abend wird der Hintergrund dunkler – Papier und Bilder bleiben hell'**
+  String get themeDuskSubtitle;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In de, this message translates to:
+  /// **'Wie das Gerät'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In de, this message translates to:
+  /// **'Immer hell'**
+  String get themeLight;
+
+  /// No description provided for @themeDusk.
+  ///
+  /// In de, this message translates to:
+  /// **'Abendmodus'**
+  String get themeDusk;
+
   /// No description provided for @aboutTitle.
   ///
   /// In de, this message translates to:

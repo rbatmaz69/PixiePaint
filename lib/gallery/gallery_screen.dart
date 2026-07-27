@@ -3,6 +3,8 @@ import '../ui/celebrate.dart';
 
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
@@ -293,7 +295,7 @@ class _GalleryScreenState extends State<GalleryScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.galleryBg,
+        gradient: context.surfaces.galleryBg,
         builder: (context, _) => SafeArea(
           child: Column(
             children: [
@@ -687,7 +689,6 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       onTap: onTap,
       playTick: false,
@@ -703,7 +704,7 @@ class _FilterChip extends StatelessWidget {
         child: Text(
           label,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: selected ? PixiePalette.ink : scheme.onSurfaceVariant,
+            color: selected ? PixiePalette.ink : PixieTokens.quietInk,
           ),
         ),
       ),

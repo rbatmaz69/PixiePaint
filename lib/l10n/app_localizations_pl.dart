@@ -477,6 +477,25 @@ class AppLocalizationsPl extends AppLocalizations {
       'Delikatne melodie z pozytywki podczas malowania.';
 
   @override
+  String get themeTitle => 'Wygląd';
+
+  @override
+  String get themeSubtitle => 'Jasny, ciemny albo jak urządzenie';
+
+  @override
+  String get themeDuskSubtitle =>
+      'Wieczorem tło ciemnieje – papier i obrazki pozostają jasne';
+
+  @override
+  String get themeSystem => 'Jak urządzenie';
+
+  @override
+  String get themeLight => 'Zawsze jasny';
+
+  @override
+  String get themeDusk => 'Tryb wieczorny';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

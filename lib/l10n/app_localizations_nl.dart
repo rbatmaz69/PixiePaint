@@ -474,6 +474,25 @@ class AppLocalizationsNl extends AppLocalizations {
   String get musicSubtitle => 'Rustige muziekdoosdeuntjes tijdens het kleuren.';
 
   @override
+  String get themeTitle => 'Uiterlijk';
+
+  @override
+  String get themeSubtitle => 'Licht, donker of zoals het apparaat';
+
+  @override
+  String get themeDuskSubtitle =>
+      '\'s Avonds wordt de achtergrond donker – papier en tekeningen blijven licht';
+
+  @override
+  String get themeSystem => 'Zoals het apparaat';
+
+  @override
+  String get themeLight => 'Altijd licht';
+
+  @override
+  String get themeDusk => 'Avondmodus';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

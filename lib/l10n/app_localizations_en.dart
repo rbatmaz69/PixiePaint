@@ -473,6 +473,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicSubtitle => 'Gentle music-box tunes while painting.';
 
   @override
+  String get themeTitle => 'Look';
+
+  @override
+  String get themeSubtitle => 'Light, dark, or follow the device';
+
+  @override
+  String get themeDuskSubtitle =>
+      'In the evening the backdrop turns dark – paper and pictures stay light';
+
+  @override
+  String get themeSystem => 'Follow the device';
+
+  @override
+  String get themeLight => 'Always light';
+
+  @override
+  String get themeDusk => 'Evening mode';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

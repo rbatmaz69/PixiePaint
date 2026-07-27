@@ -5,6 +5,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
@@ -102,7 +104,7 @@ class _PhotoLineArtScreenState extends State<PhotoLineArtScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: PixieGradients.photoBg),
+        decoration: BoxDecoration(gradient: context.surfaces.photoBg),
         child: SafeArea(
           child: Column(
             children: [
@@ -257,7 +259,6 @@ class _DetailPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Bouncy(
       onTap: onTap,
       child: AnimatedContainer(
@@ -272,7 +273,7 @@ class _DetailPill extends StatelessWidget {
         child: Text(
           label,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: selected ? PixiePalette.ink : scheme.onSurfaceVariant,
+            color: selected ? PixiePalette.ink : PixieTokens.quietInk,
           ),
         ),
       ),

@@ -474,6 +474,25 @@ class AppLocalizationsFr extends AppLocalizations {
       'De douces mélodies de boîte à musique pendant le coloriage.';
 
   @override
+  String get themeTitle => 'Apparence';
+
+  @override
+  String get themeSubtitle => 'Clair, sombre ou comme l\'appareil';
+
+  @override
+  String get themeDuskSubtitle =>
+      'Le soir, le fond devient sombre – le papier et les dessins restent clairs';
+
+  @override
+  String get themeSystem => 'Comme l\'appareil';
+
+  @override
+  String get themeLight => 'Toujours clair';
+
+  @override
+  String get themeDusk => 'Mode soirée';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

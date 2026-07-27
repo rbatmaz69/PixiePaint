@@ -41,7 +41,7 @@ const kDoodles = [
 ];
 
 class DoodlePainter extends CustomPainter {
-  const DoodlePainter(this.t, {this.alpha = 0.07});
+  const DoodlePainter(this.t, {this.alpha = 0.07, this.color = PixiePalette.ink});
 
   /// Position on the drift loop, 0..1. Hold it constant and the marks
   /// simply sit still.
@@ -51,6 +51,10 @@ class DoodlePainter extends CustomPainter {
   /// screens use; the canvas asks for less, because whatever is drawn on
   /// top has to stay the loudest thing on screen.
   final double alpha;
+
+  /// The mark's own colour. Ink on paper; chalk in the evening, where ink
+  /// on dusk is a scribble nobody can see.
+  final Color color;
 
   // Unit paths (fit roughly into -0.5..0.5), built once and reused.
   static final Path _star = _makeStar();
@@ -109,7 +113,7 @@ class DoodlePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = PixiePalette.ink.withValues(alpha: alpha)
+      ..color = color.withValues(alpha: alpha)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round
@@ -131,5 +135,6 @@ class DoodlePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DoodlePainter old) => old.t != t || old.alpha != alpha;
+  bool shouldRepaint(DoodlePainter old) =>
+      old.t != t || old.alpha != alpha || old.color != color;
 }

@@ -473,6 +473,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get musicSubtitle => 'Dolci melodie da carillon mentre colori.';
 
   @override
+  String get themeTitle => 'Aspetto';
+
+  @override
+  String get themeSubtitle => 'Chiaro, scuro o come il dispositivo';
+
+  @override
+  String get themeDuskSubtitle =>
+      'La sera lo sfondo si scurisce – la carta e i disegni restano chiari';
+
+  @override
+  String get themeSystem => 'Come il dispositivo';
+
+  @override
+  String get themeLight => 'Sempre chiaro';
+
+  @override
+  String get themeDusk => 'Modalità sera';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

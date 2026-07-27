@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../ui/pixie_surfaces.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../canvas/canvas_screen.dart';
@@ -23,7 +25,7 @@ class ScenePickerScreen extends StatelessWidget {
     final lang = Localizations.localeOf(context).languageCode;
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.pickerBg,
+        gradient: context.surfaces.pickerBg,
         builder: (context, _) => SafeArea(
           child: Column(
             children: [

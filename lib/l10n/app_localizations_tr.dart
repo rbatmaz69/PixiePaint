@@ -472,6 +472,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get musicSubtitle => 'Boyarken yumuşak müzik kutusu ezgileri.';
 
   @override
+  String get themeTitle => 'Görünüm';
+
+  @override
+  String get themeSubtitle => 'Açık, koyu ya da cihaz gibi';
+
+  @override
+  String get themeDuskSubtitle =>
+      'Akşamları arka plan koyulaşır – kâğıt ve resimler açık kalır';
+
+  @override
+  String get themeSystem => 'Cihaz gibi';
+
+  @override
+  String get themeLight => 'Her zaman açık';
+
+  @override
+  String get themeDusk => 'Akşam modu';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override

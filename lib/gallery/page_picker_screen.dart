@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../ui/pixie_surfaces.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../canvas/canvas_screen.dart';
@@ -99,7 +101,7 @@ class _PagePickerScreenState extends State<PagePickerScreen> with RouteAware {
             emoji: '🖍️',
             title: context.l10n.pickerTitle,
             accent: PixiePalette.sunshine,
-            gradient: PixieGradients.pickerBg,
+            gradient: context.surfaces.pickerBg,
             label: context.l10n.canvasLoading,
             failed: snapshot.hasError,
           );
@@ -157,7 +159,7 @@ class _PagePickerScreenState extends State<PagePickerScreen> with RouteAware {
           length: orderedCats.length + (hasFavorites ? 2 : 1),
           child: Scaffold(
             body: BlobBackground(
-              gradient: PixieGradients.pickerBg,
+              gradient: context.surfaces.pickerBg,
               builder: (context, _) => SafeArea(
                 child: Column(
                   children: [
@@ -180,8 +182,8 @@ class _PagePickerScreenState extends State<PagePickerScreen> with RouteAware {
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
                       labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-                      labelColor: scheme.primary,
-                      unselectedLabelColor: scheme.onSurfaceVariant,
+                      labelColor: PixiePalette.ink,
+                      unselectedLabelColor: context.surfaces.onGround,
                       splashBorderRadius: BorderRadius.circular(PixieTokens.rPill),
                       tabs: [
                         if (hasFavorites) const Tab(text: '💖'),

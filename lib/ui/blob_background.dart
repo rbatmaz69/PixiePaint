@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
+import 'pixie_surfaces.dart';
+
 import 'motion.dart';
 
 import 'paper_doodles.dart';
@@ -130,9 +132,12 @@ class _BlobBackgroundState extends State<BlobBackground>
               offset: Offset(
                   0, -(_calm ? 0.0 : (widget.parallax?.value ?? 0)) * 0.06),
               child: CustomPaint(
-                painter: _BlobPainter(_c.value),
+                painter: _BlobPainter(_c.value, context.surfaces.blobAlpha),
                 foregroundPainter:
-                    widget.showDoodles ? DoodlePainter(_c.value) : null,
+                    widget.showDoodles
+                        ? DoodlePainter(_c.value,
+                            color: context.surfaces.onGround)
+                        : null,
               ),
             ),
           ),
@@ -161,9 +166,13 @@ const _blobs = [
 ];
 
 class _BlobPainter extends CustomPainter {
-  const _BlobPainter(this.t);
+  const _BlobPainter(this.t, this.alpha);
 
   final double t;
+
+  /// Scales the whole layer. Bright colour on a dark ground reads as a
+  /// spill rather than as light, so the evening mode turns these down.
+  final double alpha;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -176,12 +185,15 @@ class _BlobPainter extends CustomPainter {
       final rect = Rect.fromCircle(center: Offset(cx, cy), radius: r);
       final paint = Paint()
         ..shader = RadialGradient(
-          colors: [b.color.withValues(alpha: 0.4), b.color.withValues(alpha: 0)],
+          colors: [
+            b.color.withValues(alpha: 0.4 * alpha),
+            b.color.withValues(alpha: 0),
+          ],
         ).createShader(rect);
       canvas.drawCircle(Offset(cx, cy), r, paint);
     }
   }
 
   @override
-  bool shouldRepaint(_BlobPainter old) => old.t != t;
+  bool shouldRepaint(_BlobPainter old) => old.t != t || old.alpha != alpha;
 }

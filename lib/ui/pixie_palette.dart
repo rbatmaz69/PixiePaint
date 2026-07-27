@@ -103,4 +103,35 @@ abstract final class PixiePalette {
   static const Color paperSun = Color(0xFFFFF3D9);
   static const Color paperMint = Color(0xFFE9F7EE);
   static const Color paperPeach = Color(0xFFFFEBE0);
+
+  // ---------------------------------------------------------------------
+  // Dusk: the evening face of the *ground* only.
+  //
+  // Deliberately not a dark theme. The white sheet a child paints on is
+  // picture, not surface — every export is laid on white, the sixty-eight
+  // line drawings are black, and a gallery thumbnail is a white rectangle.
+  // Turning those dark would mean a child paints yellow on navy and shares
+  // yellow on white, which is not a mode but a bug.
+  //
+  // So only the backdrop changes, and the stickers on it stay white. They
+  // read *better* in the evening, not worse.
+
+  /// The evening ground, in place of [paper].
+  static const Color dusk = Color(0xFF2A2337);
+
+  /// A shade below [dusk], for the far end of a gradient.
+  static const Color duskDeep = Color(0xFF1E1929);
+
+  /// The five whispers of dusk, one per screen — the same five features as
+  /// the paper ones above, at the same distance from their ground.
+  static const Color duskWarm = Color(0xFF322638);
+  static const Color duskViolet = Color(0xFF2E2743);
+  static const Color duskSun = Color(0xFF332B31);
+  static const Color duskMint = Color(0xFF242C35);
+  static const Color duskPeach = Color(0xFF34262F);
+
+  /// What [ink] is on paper, chalk is on dusk: the colour of text and marks
+  /// lying directly on the ground. Never pure white, for the same reason
+  /// [ink] is never pure black.
+  static const Color chalk = Color(0xFFF3EDF7);
 }

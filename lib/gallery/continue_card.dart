@@ -142,9 +142,7 @@ class _ContinueCardState extends State<ContinueCard> with RouteAware {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: PixieTokens.quietInk,
                             ),
                       ),
                   ],

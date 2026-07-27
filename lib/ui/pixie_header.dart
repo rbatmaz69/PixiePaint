@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'pixie_surfaces.dart';
 import 'app_theme.dart';
 
 import '../l10n/l10n.dart';
@@ -53,7 +55,7 @@ class PixieHeader extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headlineSmall
-                      ?.copyWith(color: PixiePalette.ink),
+                      ?.copyWith(color: context.surfaces.onGround),
                 ),
                 // A short crayon underline in the screen's own color. It is
                 // the one mark that says "you are here" without any reading

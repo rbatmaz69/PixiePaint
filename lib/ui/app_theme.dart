@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'motion.dart';
 import 'pixie_palette.dart';
+import 'pixie_surfaces.dart';
 
 /// Design tokens: radii, spacing, sticker geometry and the soft colored
 /// shadows used app-wide.
@@ -284,8 +285,9 @@ class PixiePageTransitionsBuilder extends PageTransitionsBuilder {
 /// with it.
 const Color _seed = Color(0xFF7C4DFF);
 
-ThemeData buildPixieTheme() {
-  final scheme = ColorScheme.fromSeed(seedColor: _seed);
+ThemeData buildPixieTheme({Brightness brightness = Brightness.light}) {
+  final dark = brightness == Brightness.dark;
+  final scheme = ColorScheme.fromSeed(seedColor: _seed, brightness: brightness);
   final base = ThemeData(useMaterial3: true, colorScheme: scheme);
 
   // Real type scale (not stock M3 sizes): bigger, friendlier headlines,
@@ -299,6 +301,11 @@ ThemeData buildPixieTheme() {
         fontSize: size,
         letterSpacing: spacing,
         height: height,
+        // Ink in both modes, and that is on purpose. Almost every word in
+        // this app is written inside something white — a sticker card, a
+        // dialog, the tool bar — and those stay white in the evening. The
+        // handful of places where text lies directly on the backdrop ask
+        // for `context.surfaces.onGround` instead.
         color: PixiePalette.ink,
       );
 
@@ -334,6 +341,7 @@ ThemeData buildPixieTheme() {
   return base.copyWith(
     textTheme: textTheme,
     visualDensity: VisualDensity.comfortable,
+    extensions: [dark ? PixieSurfaces.dusk : PixieSurfaces.day],
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: PixiePageTransitionsBuilder(),

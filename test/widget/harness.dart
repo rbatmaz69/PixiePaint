@@ -135,6 +135,7 @@ Future<void> pumpPixie(
   Size size = const Size(400, 800),
   double textScale = 1.0,
   bool reduceMotion = false,
+  Brightness brightness = Brightness.light,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
@@ -145,7 +146,7 @@ Future<void> pumpPixie(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: const [Locale('de'), Locale('en')],
       locale: const Locale('de'),
-      theme: buildPixieTheme(),
+      theme: buildPixieTheme(brightness: brightness),
       builder: (context, inner) => MediaQuery.withClampedTextScaling(
         maxScaleFactor: 1.3,
         child: MediaQuery(

@@ -35,11 +35,13 @@ Future<void> _startUp() async {
   // its own layers are 12 MB apiece.
   PaintingBinding.instance.imageCache.maximumSizeBytes = 32 * 1024 * 1024;
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  // Only the transparency is decided here. Which way the icons face depends
+  // on how dark the backdrop is, and that is a theme question — the app
+  // answers it per build. Setting it to dark once at startup left a phone
+  // in evening mode with near-invisible status icons.
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarIconBrightness: Brightness.dark,
   ));
   // Before the stores: it reads its own file and takes over the entries
   // buffered so far, so a failure in any load() below is already recorded.

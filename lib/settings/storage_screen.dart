@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../gallery/artwork_store.dart';
 import '../l10n/l10n.dart';
 import '../models/artwork.dart';
@@ -96,7 +98,7 @@ class _StorageScreenState extends State<StorageScreen> {
     final l10n = context.l10n;
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.homeBg,
+        gradient: context.surfaces.homeBg,
         builder: (context, _) => SafeArea(
           child: Column(
             children: [

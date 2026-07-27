@@ -5,6 +5,8 @@ import 'dart:isolate';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
+import '../ui/pixie_surfaces.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -599,14 +601,16 @@ class _CanvasScreenState extends State<CanvasScreen>
       },
       child: Scaffold(
         body: DecoratedBox(
-          decoration: const BoxDecoration(gradient: PixieGradients.canvasBg),
+          decoration: BoxDecoration(gradient: context.surfaces.canvasBg),
           // The same doodled paper as every other screen — but standing
           // still and fainter. A drifting mark behind a drawing hand is
           // exactly what a child painting a line does not need, so this
           // painter has no ticker at all: one fixed phase, painted once,
           // behind everything.
           child: CustomPaint(
-            painter: const DoodlePainter(0.12, alpha: 0.04),
+            painter: DoodlePainter(0.12,
+                alpha: context.surfaces.doodleAlpha,
+                color: context.surfaces.onGround),
             child: SafeArea(
             child: AnimatedSwitcher(
               duration: PixieMotion.select,
@@ -786,12 +790,19 @@ class _CanvasScreenState extends State<CanvasScreen>
           // this child's hand is not.
           final nearEdge = leftHanded ? area.width - paper.right : paper.left;
           final inset = besideFits && !aboveFits ? (nearEdge - 52).clamp(0.0, 8.0) : 8.0;
+          final dark = Theme.of(context).brightness == Brightness.dark;
 
           return Stack(
             children: [
               // The canvas as a sheet of "paper": rounded, softly shadowed.
               // Exactly the picture's shape, so everything outside it is
               // margin rather than something that looks drawable.
+              //
+              // **White in both modes, and never from the theme.** This is
+              // the picture, not a surface: the export is laid on white
+              // (`image_io.dart`), the line drawings are black, and a child
+              // who painted yellow here has to see yellow in the photos app
+              // afterwards. The evening mode darkens what is *around* it.
               Positioned.fromRect(
                 rect: paper,
                 child: Container(
@@ -800,7 +811,12 @@ class _CanvasScreenState extends State<CanvasScreen>
                     borderRadius: BorderRadius.circular(PixieTokens.rTile),
                     boxShadow: [
                       BoxShadow(
-                        color: PixiePalette.ink.withValues(alpha: 0.12),
+                        // Ink on cream reads as a shadow; on dusk it is
+                        // invisible, so in the evening the sheet lifts on a
+                        // faint light instead of a dark.
+                        color: dark
+                            ? Colors.white.withValues(alpha: 0.10)
+                            : PixiePalette.ink.withValues(alpha: 0.12),
                         blurRadius: 18,
                         offset: const Offset(0, 6),
                       ),
@@ -1137,7 +1153,7 @@ class _LeftRail extends StatelessWidget {
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 28,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: PixieTokens.quietInk,
               ),
             ),
           ),
@@ -1160,7 +1176,7 @@ class _LeftRail extends StatelessWidget {
               child: Icon(
                 Icons.ios_share_rounded,
                 size: 26,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: PixieTokens.quietInk,
               ),
             ),
           ),

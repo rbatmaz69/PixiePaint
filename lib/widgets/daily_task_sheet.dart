@@ -62,7 +62,7 @@ Future<void> showDailyTaskSheet(BuildContext context, DailyTask task) async {
               context.l10n.dailyTaskAlreadyDone,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  color: PixieTokens.quietInk),
             ),
         ],
       ),
@@ -112,9 +112,7 @@ class DailyTaskBanner extends StatelessWidget {
                         context.l10n.dailyTaskTitle,
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant),
+                                color: PixieTokens.quietInk),
                       ),
                       Text(
                         task.titleFor(lang),

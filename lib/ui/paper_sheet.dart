@@ -43,6 +43,8 @@ class PaperSheet extends StatelessWidget {
           aspectRatio: aspectRatio,
           child: Container(
             decoration: BoxDecoration(
+              // White in both modes. This is the picture, not a surface —
+              // see the same note on the live canvas.
               color: Colors.white,
               borderRadius: BorderRadius.circular(radius),
               boxShadow: PixieTokens.softShadow(PixiePalette.ink),

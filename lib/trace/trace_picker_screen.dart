@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../canvas/canvas_screen.dart';
 import '../canvas/shape_renderer.dart';
 import '../l10n/l10n.dart';
@@ -21,7 +23,6 @@ class TracePickerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final letters = [
       for (final t in kTraceTemplates)
         if (t.kind == TraceKind.letter) t
@@ -38,7 +39,7 @@ class TracePickerScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         body: BlobBackground(
-          gradient: PixieGradients.pickerBg,
+          gradient: context.surfaces.pickerBg,
           builder: (context, _) => SafeArea(
             child: Column(
               children: [
@@ -56,8 +57,8 @@ class TracePickerScreen extends StatelessWidget {
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicatorPadding: const EdgeInsets.symmetric(vertical: 6),
-                  labelColor: scheme.primary,
-                  unselectedLabelColor: scheme.onSurfaceVariant,
+                  labelColor: PixiePalette.ink,
+                  unselectedLabelColor: context.surfaces.onGround,
                   splashBorderRadius: BorderRadius.circular(PixieTokens.rPill),
                   tabs: [
                     Tab(text: context.l10n.traceTabLetters),

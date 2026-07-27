@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../ui/pixie_surfaces.dart';
+
 import '../gallery/welcome_screen.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
@@ -49,8 +51,10 @@ class _SettingsScreenState extends State<SettingsScreen>
       bool? hapticsOn,
       bool? musicOn,
       bool? leftHanded,
+      int? themeModeIndex,
       int? pauseAfterMinutes}) async {
     await Settings.instance.update(
+        themeModeIndex: themeModeIndex,
         stylusOnly: stylusOnly,
         deleteNeedsGate: deleteNeedsGate,
         soundsOn: soundsOn,
@@ -136,6 +140,38 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
     if (chosen == null) return;
     await _update(pauseAfterMinutes: chosen);
+    if (mounted) setState(() {});
+  }
+
+  String _themeLabel(BuildContext context, int index) => switch (index) {
+        1 => context.l10n.themeLight,
+        2 => context.l10n.themeDusk,
+        _ => context.l10n.themeSystem,
+      };
+
+  Future<void> _pickTheme() async {
+    final chosen = await showKidSheet<int>(
+      context: context,
+      emoji: '🌙',
+      title: context.l10n.themeTitle,
+      builder: (sheetContext) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final (i, emoji) in ['📱', '☀️', '🌙'].indexed)
+            _KidRow(
+              emoji: emoji,
+              tint: PixiePalette.bubblegumLight,
+              title: _themeLabel(context, i),
+              subtitle: i == 2
+                  ? context.l10n.themeDuskSubtitle
+                  : context.l10n.themeSubtitle,
+              onTap: () => Navigator.pop(sheetContext, i),
+            ),
+        ],
+      ),
+    );
+    if (chosen == null) return;
+    await _update(themeModeIndex: chosen);
     if (mounted) setState(() {});
   }
 
@@ -237,7 +273,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     final settings = Settings.instance;
     return Scaffold(
       body: BlobBackground(
-        gradient: PixieGradients.homeBg,
+        gradient: context.surfaces.homeBg,
         builder: (context, _) => SafeArea(
           child: Column(
             children: [
@@ -352,6 +388,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                               subtitle: context.l10n.musicSubtitle,
                               value: settings.musicOn,
                               onChanged: (v) => _update(musicOn: v),
+                            ),
+                            _KidRow(
+                              emoji: '🌙',
+                              tint: PixiePalette.bubblegumLight,
+                              title: context.l10n.themeTitle,
+                              subtitle: context.l10n.themeSubtitle,
+                              trailingText: _themeLabel(
+                                  context, settings.themeModeIndex),
+                              onTap: _pickTheme,
                             ),
                           ],
                         ),
@@ -483,10 +528,12 @@ class _Section extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
+                  // On the backdrop, not inside the card below it — one of
+                  // the handful of places that has to follow the evening.
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
-                      ?.copyWith(color: PixiePalette.ink),
+                      ?.copyWith(color: context.surfaces.onGround),
                 ),
               ),
             ],
@@ -531,7 +578,6 @@ class _KidRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final row = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
@@ -558,7 +604,7 @@ class _KidRow extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
-                      ?.copyWith(color: scheme.onSurfaceVariant),
+                      ?.copyWith(color: PixieTokens.quietInk),
                 ),
               ],
             ),
@@ -580,7 +626,7 @@ class _KidRow extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Icon(Icons.chevron_right_rounded,
-                color: scheme.onSurfaceVariant),
+                color: PixieTokens.quietInk),
           ],
           if (onChanged != null) ...[
             const SizedBox(width: PixieTokens.gapSmall),

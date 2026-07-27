@@ -475,6 +475,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get musicSubtitle => 'Sanfte Spieluhr-Musik beim Malen.';
 
   @override
+  String get themeTitle => 'Aussehen';
+
+  @override
+  String get themeSubtitle => 'Hell, dunkel oder wie das Gerät';
+
+  @override
+  String get themeDuskSubtitle =>
+      'Am Abend wird der Hintergrund dunkler – Papier und Bilder bleiben hell';
+
+  @override
+  String get themeSystem => 'Wie das Gerät';
+
+  @override
+  String get themeLight => 'Immer hell';
+
+  @override
+  String get themeDusk => 'Abendmodus';
+
+  @override
   String get aboutTitle => 'PixiePaint';
 
   @override
