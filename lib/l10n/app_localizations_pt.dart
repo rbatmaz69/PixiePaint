@@ -399,6 +399,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Uma aplicação para colorir feita para crianças. Sem publicidade, sem recolha de dados – todos os desenhos ficam neste dispositivo.';
 
   @override
+  String get welcomeAgainTitle => 'Ver as boas-vindas outra vez';
+
+  @override
+  String get welcomeAgainSubtitle => 'Vê os três cartões do primeiro arranque';
+
+  @override
   String get rateApp => 'Avaliar a aplicação';
 
   @override

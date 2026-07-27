@@ -398,6 +398,13 @@ class AppLocalizationsPl extends AppLocalizations {
       'Kolorowanka dla dzieci. Bez reklam, bez zbierania danych – wszystkie obrazki zostają na tym urządzeniu.';
 
   @override
+  String get welcomeAgainTitle => 'Powitanie jeszcze raz';
+
+  @override
+  String get welcomeAgainSubtitle =>
+      'Obejrzyj trzy karty z pierwszego uruchomienia';
+
+  @override
   String get rateApp => 'Oceń aplikację';
 
   @override

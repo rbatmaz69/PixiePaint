@@ -398,6 +398,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'A coloring book app for kids. No ads, no data collection – all pictures stay on this device.';
 
   @override
+  String get welcomeAgainTitle => 'Show the welcome again';
+
+  @override
+  String get welcomeAgainSubtitle =>
+      'Look at the three cards from the first start';
+
+  @override
   String get rateApp => 'Rate the app';
 
   @override

@@ -398,6 +398,12 @@ class AppLocalizationsIt extends AppLocalizations {
       'Un\'app da colorare per bambini. Senza pubblicità, senza raccolta di dati: tutti i disegni restano su questo dispositivo.';
 
   @override
+  String get welcomeAgainTitle => 'Rivedi il benvenuto';
+
+  @override
+  String get welcomeAgainSubtitle => 'Guarda le tre schede del primo avvio';
+
+  @override
   String get rateApp => 'Valuta l\'app';
 
   @override

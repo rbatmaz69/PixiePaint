@@ -397,6 +397,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'Çocuklar için bir boyama kitabı uygulaması. Reklam yok, veri toplama yok – tüm resimler bu cihazda kalır.';
 
   @override
+  String get welcomeAgainTitle => 'Karşılamayı yeniden göster';
+
+  @override
+  String get welcomeAgainSubtitle => 'İlk açılıştaki üç kartı yeniden gör';
+
+  @override
   String get rateApp => 'Uygulamayı değerlendir';
 
   @override

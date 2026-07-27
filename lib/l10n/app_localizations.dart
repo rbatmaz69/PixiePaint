@@ -868,6 +868,18 @@ abstract class AppLocalizations {
   /// **'Eine Malbuch-App für Kinder. Keine Werbung, keine Datensammlung – alle Bilder bleiben auf diesem Gerät.'**
   String get aboutBody;
 
+  /// No description provided for @welcomeAgainTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Begrüßung noch einmal'**
+  String get welcomeAgainTitle;
+
+  /// No description provided for @welcomeAgainSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Die drei Karten vom ersten Start ansehen'**
+  String get welcomeAgainSubtitle;
+
   /// No description provided for @rateApp.
   ///
   /// In de, this message translates to:

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../gallery/welcome_screen.dart';
 import '../l10n/l10n.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
@@ -404,6 +405,25 @@ class _SettingsScreenState extends State<SettingsScreen>
                           accent: PixiePalette.grape,
                           tiltIndex: 1,
                           children: [
+                            // The three welcome cards are the only place the
+                            // app explains itself — including the one line
+                            // about the parental gate — and until now they
+                            // ran once and were gone. A parent setting up a
+                            // second device, or coming back months later,
+                            // had no way to read them again short of
+                            // reinstalling.
+                            _KidRow(
+                              emoji: '🧚',
+                              tint: PixiePalette.grapeLight,
+                              title: context.l10n.welcomeAgainTitle,
+                              subtitle: context.l10n.welcomeAgainSubtitle,
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) =>
+                                      const WelcomeScreen(asReplay: true),
+                                ),
+                              ),
+                            ),
                             _KidRow(
                               emoji: '⭐',
                               tint: PixiePalette.grapeLight,

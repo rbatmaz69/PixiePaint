@@ -400,6 +400,12 @@ class AppLocalizationsDe extends AppLocalizations {
       'Eine Malbuch-App für Kinder. Keine Werbung, keine Datensammlung – alle Bilder bleiben auf diesem Gerät.';
 
   @override
+  String get welcomeAgainTitle => 'Begrüßung noch einmal';
+
+  @override
+  String get welcomeAgainSubtitle => 'Die drei Karten vom ersten Start ansehen';
+
+  @override
   String get rateApp => 'App bewerten';
 
   @override

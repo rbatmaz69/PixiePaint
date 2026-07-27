@@ -399,6 +399,13 @@ class AppLocalizationsNl extends AppLocalizations {
       'Een kleurboek-app voor kinderen. Geen reclame, geen gegevensverzameling – alle tekeningen blijven op dit apparaat.';
 
   @override
+  String get welcomeAgainTitle => 'Welkom nog een keer';
+
+  @override
+  String get welcomeAgainSubtitle =>
+      'Bekijk de drie kaarten van de eerste start';
+
+  @override
   String get rateApp => 'App beoordelen';
 
   @override

@@ -124,6 +124,45 @@ void main() {
         reason: 'and the welcome does not come back');
   });
 
+  // Opened a second time from the settings, the cards are just cards: they
+  // must give the parent back the screen they came from rather than build a
+  // fresh navigator stack on top of it.
+  testWidgets('the replay goes back where it came from, and records nothing',
+      (tester) async {
+    root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+    await pumpPixie(
+      tester,
+      Builder(
+        builder: (context) => Center(
+          child: ElevatedButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const WelcomeScreen(asReplay: true),
+              ),
+            ),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+      size: const Size(420, 860),
+    );
+    await tester.tap(find.text('open'));
+    await settle(tester);
+    expect(find.byType(WelcomeScreen), findsOneWidget);
+
+    await tester.tap(find.text('Überspringen'));
+    await settle(tester);
+
+    expect(find.byType(WelcomeScreen), findsNothing);
+    expect(find.text('open'), findsOneWidget,
+        reason: 'the settings screen underneath must survive');
+    expect(find.byType(PagePickerScreen), findsNothing,
+        reason: 'a replay is not a first run and must not open the pictures');
+    expect(Settings.instance.welcomeSeen, isFalse,
+        reason: 'a replay writes nothing — the flag is not its business');
+  });
+
   testWidgets('it survives the largest text scale the app allows',
       (tester) async {
     root = await setUpPixieStorage(tester);

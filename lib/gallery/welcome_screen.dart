@@ -33,8 +33,15 @@ import 'page_picker_screen.dart';
 ///
 /// The third card is for the adult who will be handed the tablet, and is
 /// the only text on this screen written in a grown-up register.
+///
+/// [asReplay] is the same three cards opened deliberately from the settings.
+/// It only ever goes back where it came from: the first-run version has to
+/// build a navigator stack because there is none yet, and doing that from
+/// the settings would replace the screen the parent was standing on.
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
+  const WelcomeScreen({super.key, this.asReplay = false});
+
+  final bool asReplay;
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -53,6 +60,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   void _finish() {
+    if (widget.asReplay) {
+      // Opened from the settings: give the parent their screen back and
+      // touch nothing. The flag is already set, and re-reading the cards is
+      // not a first run.
+      Navigator.of(context).pop();
+      return;
+    }
     // The flag is set before the write starts, so nothing waits on the disk
     // to get out of here — a child who has tapped "let's paint" should not
     // be held at a welcome screen by a file write.

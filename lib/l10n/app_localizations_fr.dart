@@ -399,6 +399,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une application de coloriage pour enfants. Sans publicité, sans collecte de données – toutes les images restent sur cet appareil.';
 
   @override
+  String get welcomeAgainTitle => 'Revoir le message d\'accueil';
+
+  @override
+  String get welcomeAgainSubtitle =>
+      'Revoir les trois cartes du premier lancement';
+
+  @override
   String get rateApp => 'Noter l\'application';
 
   @override
