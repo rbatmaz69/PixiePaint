@@ -71,7 +71,15 @@ class _BouncyState extends State<Bouncy> {
       child = ConstrainedBox(
         constraints: BoxConstraints(
             minWidth: widget.minSize, minHeight: widget.minSize),
-        child: Center(child: child),
+        // The factors are what keep this from being a layout change rather
+        // than a hit-area one. A plain Center fills whatever room it is
+        // offered, and a Bouncy sits inside almost every control in the app
+        // — in a Wrap that meant each card claimed the entire row, so the
+        // home screen quietly rendered as one column on every phone while
+        // the code above it was busy computing two. With the factors the
+        // box hugs its child, and the minimum still lifts a small one to
+        // 48 because the incoming constraint says so.
+        child: Center(widthFactor: 1, heightFactor: 1, child: child),
       );
     }
     return Semantics(
