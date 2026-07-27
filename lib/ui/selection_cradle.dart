@@ -23,8 +23,17 @@ Color cradleAccent(Color c) => needsBorder(c) ? PixiePalette.ink : c;
 /// The trick that makes it cheap is the only thing it demands: **every slot
 /// must be the same width**. The target is then `slot * slotWidth` — no
 /// keys, no measuring, no extra layout pass. Both palettes that use it
-/// qualify (56 dp in the paint palette, 64 in the numbered one); the
-/// toolbar rail does not, which is why it does not have one.
+/// qualify: 56 dp in the paint palette, 64 in the numbered one.
+///
+/// The toolbar rail does not have one, and the reason is not the slots —
+/// v8.8 put its size, mirror and action buttons on the tools' width, and a
+/// vertical variant of this was built and fitted. It was then taken out
+/// again after looking at it: the palettes lie on cream paper, where a
+/// white dish reads, while the rail stands on a white bar, where it is a
+/// white tile on white and only its shadow shows. Same lesson as the
+/// vanishing dish under a white swatch in v8.6 — a dish needs a ground that
+/// is not already the dish's colour. The rail keeps its per-button accent
+/// ring, which is legible there.
 ///
 /// Put it in a [Stack] *before* the row, so it paints behind, and inside
 /// the scroll view's content, so it travels with the row rather than

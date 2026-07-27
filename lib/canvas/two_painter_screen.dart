@@ -189,6 +189,7 @@ class _TwoPainterScreenState extends State<TwoPainterScreen>
               ToolActionCluster(
                 controller: controller,
                 direction: Axis.horizontal,
+                buttonSize: 50,
               ),
             ],
           ),

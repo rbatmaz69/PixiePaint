@@ -742,6 +742,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       controller: controller,
       direction: Axis.horizontal,
       onBar: true,
+      buttonSize: 50,
     );
     return Column(
       children: [

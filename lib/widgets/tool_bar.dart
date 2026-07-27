@@ -191,6 +191,7 @@ class ToolActionCluster extends StatefulWidget {
     required this.controller,
     this.direction = Axis.vertical,
     this.onBar = false,
+    this.buttonSize = 52,
   });
 
   final CanvasController controller;
@@ -198,6 +199,11 @@ class ToolActionCluster extends StatefulWidget {
 
   /// True where a white bar is already behind the buttons — see [_pill].
   final bool onBar;
+
+  /// Slot width, matched to the rail beside it. Undo and redo used to be
+  /// hard-wired to 48 while the tools next to them were 50 or 52, which is
+  /// two pixels of drift you cannot name but can see.
+  final double buttonSize;
 
   @override
   State<ToolActionCluster> createState() => _ToolActionClusterState();
@@ -226,6 +232,7 @@ class _ToolActionClusterState extends State<ToolActionCluster> {
           child: _ActionButton(
             icon: Icons.undo_rounded,
             enabled: controller.canUndo,
+            size: widget.buttonSize,
             filled: true,
             label: context.l10n.undoAction,
             onTap: () {
@@ -240,6 +247,7 @@ class _ToolActionClusterState extends State<ToolActionCluster> {
           child: _ActionButton(
             icon: Icons.redo_rounded,
             enabled: controller.canRedo,
+            size: widget.buttonSize,
             filled: true,
             label: context.l10n.redoAction,
             onTap: () {
@@ -406,6 +414,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
           _SizeButton(
             brushSize: controller.brushSize,
             color: controller.color,
+            size: size,
             onTap: () => showSizePicker(context, controller),
           ),
           // Thick or thin is half the fun and needs no reading, so the size
@@ -414,6 +423,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
           if (!widget.simple)
             _SymmetryButton(
               controller: controller,
+              size: size,
               onTap: () => symmetry.showSymmetryPicker(context, controller),
             ),
         ], widget.direction, onBar: widget.onBar),
@@ -421,6 +431,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
         _ActionButton(
           icon: Icons.delete_sweep_outlined,
           enabled: !controller.isEmpty,
+          size: size,
           label: context.l10n.clearAction,
           onTap: () => _confirmClear(context, controller),
         ),
@@ -640,10 +651,19 @@ class _SelectionScale extends StatelessWidget {
 /// Magic-mirror button: shows the active mode's motif (🦋/🌸/❄️), or a dimmed
 /// butterfly when symmetry is off. Opens the symmetry picker sheet.
 class _SymmetryButton extends StatelessWidget {
-  const _SymmetryButton({required this.controller, required this.onTap});
+  const _SymmetryButton({
+    required this.controller,
+    required this.onTap,
+    required this.size,
+  });
 
   final CanvasController controller;
   final VoidCallback onTap;
+
+  /// The rail's slot width. Hard-wired to 52 until v8.8, which put it half a
+  /// tool out of step with the buttons beside it in the portrait bar and a
+  /// whole one in the simple toolbar.
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -652,7 +672,7 @@ class _SymmetryButton extends StatelessWidget {
       label: context.l10n.symmetryTitle,
       accent: PixiePalette.periwinkle,
       selected: active,
-      size: 52,
+      size: size,
       onTap: onTap,
       child: Center(
         child: _SelectionScale(
@@ -662,7 +682,7 @@ class _SymmetryButton extends StatelessWidget {
           restOpacity: 0.4,
           child: Text(
             active ? symmetry.symmetryEmoji(controller.symmetryFolds) : '🦋',
-            style: const TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: size * 0.46),
           ),
         ),
       ),
@@ -677,11 +697,15 @@ class _SizeButton extends StatelessWidget {
     required this.brushSize,
     required this.color,
     required this.onTap,
+    required this.size,
   });
 
   final double brushSize;
   final Color color;
   final VoidCallback onTap;
+
+  /// The rail's slot width — see [_SymmetryButton.size].
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -696,8 +720,8 @@ class _SizeButton extends StatelessWidget {
       playTick: false,
       semanticLabel: context.l10n.sizeTitle,
       child: Container(
-        width: 48,
-        height: 48,
+        width: size,
+        height: size,
         margin: const EdgeInsets.all(1),
         alignment: Alignment.center,
         child: Stack(
@@ -741,6 +765,7 @@ class _ActionButton extends StatelessWidget {
     required this.enabled,
     required this.onTap,
     required this.label,
+    required this.size,
     this.filled = false,
   });
 
@@ -752,6 +777,9 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final bool filled;
 
+  /// The rail's slot width — see [_SymmetryButton.size].
+  final double size;
+
   @override
   Widget build(BuildContext context) {
     return Bouncy(
@@ -760,8 +788,8 @@ class _ActionButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: PixieMotion.snap,
         curve: PixieCurves.settle,
-        width: 48,
-        height: 48,
+        width: size,
+        height: size,
         margin: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: filled && enabled ? Colors.white : Colors.transparent,
@@ -771,7 +799,7 @@ class _ActionButton extends StatelessWidget {
         ),
         child: Icon(
           icon,
-          size: 26,
+          size: size * 0.54,
           color: enabled
               ? PixiePalette.ink.withValues(alpha: 0.7)
               : PixiePalette.ink.withValues(alpha: 0.3),
