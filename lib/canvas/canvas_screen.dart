@@ -300,6 +300,13 @@ class _CanvasScreenState extends State<CanvasScreen>
     _trace = session;
     controller.setTraceGuide(session.guide);
     controller.onStrokeCommitted = _onTraceStroke;
+    _showModeIntro(
+      seen: Settings.instance.traceIntroSeen,
+      mark: Settings.instance.markTraceIntroSeen,
+      emoji: '✏️',
+      title: (l10n) => l10n.traceIntroTitle,
+      body: (l10n) => l10n.traceIntroBody,
+    );
   }
 
   /// Color-by-number setup: labels the enclosed regions of the rasterized
@@ -333,6 +340,43 @@ class _CanvasScreenState extends State<CanvasScreen>
       ..lastFill.addListener(_onCbnFill);
     controller.selectCbnColor(spec.colorOf[session.selected]!);
     controller.setCbnLabels(session.labels());
+    _showModeIntro(
+      seen: Settings.instance.cbnIntroSeen,
+      mark: Settings.instance.markCbnIntroSeen,
+      emoji: '🔢',
+      title: (l10n) => l10n.cbnIntroTitle,
+      body: (l10n) => l10n.cbnIntroBody,
+    );
+  }
+
+  /// The one-time card that says what the rules are, for the two modes that
+  /// have any.
+  ///
+  /// Only ever for those two — never for free painting. Its modal barrier
+  /// would sit over the very things the reach and text-scale tests measure,
+  /// and there is nothing to explain there anyway.
+  ///
+  /// Posted after the frame because the loader that calls this is still
+  /// building the screen underneath.
+  void _showModeIntro({
+    required bool seen,
+    required Future<void> Function() mark,
+    required String emoji,
+    required String Function(AppLocalizations) title,
+    required String Function(AppLocalizations) body,
+  }) {
+    if (seen) return;
+    unawaited(mark());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(showKidNotice(
+        context,
+        emoji: emoji,
+        title: title(context.l10n),
+        body: body(context.l10n),
+        okLabel: context.l10n.okAction,
+      ));
+    });
   }
 
   /// Regions to persist: the live session once it exists, otherwise the

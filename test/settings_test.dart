@@ -153,6 +153,22 @@ void main() {
     expect(settings.rotateHintSeen, isTrue);
   });
 
+  test('the rules of the two modes are explained once each', () async {
+    await load();
+    expect(settings.cbnIntroSeen, isFalse);
+    expect(settings.traceIntroSeen, isFalse);
+
+    await settings.markCbnIntroSeen();
+    await settings.flush();
+    expect(onDisk()['cbnIntroSeen'], isTrue);
+    expect(onDisk()['traceIntroSeen'], isFalse,
+        reason: 'the two modes are explained independently');
+
+    await settings.loadFrom(JsonStore(file));
+    expect(settings.cbnIntroSeen, isTrue);
+    expect(settings.traceIntroSeen, isFalse);
+  });
+
   test('a settings file from before v8.0 has not seen the rotate nudge',
       () async {
     file.writeAsStringSync('{"soundsOn": true}');

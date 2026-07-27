@@ -700,6 +700,30 @@ abstract class AppLocalizations {
   /// **'Okay!'**
   String get okAction;
 
+  /// No description provided for @cbnIntroTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'So geht Malen nach Zahlen'**
+  String get cbnIntroTitle;
+
+  /// No description provided for @cbnIntroBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Unten siehst du eine Zahl. Suche sie im Bild und tippe hinein – dann wird das Feld bunt.'**
+  String get cbnIntroBody;
+
+  /// No description provided for @traceIntroTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'So geht Nachspuren'**
+  String get traceIntroTitle;
+
+  /// No description provided for @traceIntroBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Fahre mit dem Finger die Punkte nach. Fang beim grünen Punkt an.'**
+  String get traceIntroBody;
+
   /// No description provided for @deleteAction.
   ///
   /// In de, this message translates to:

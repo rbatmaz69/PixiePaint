@@ -45,6 +45,17 @@ class Settings extends ChangeNotifier {
   /// itself, not a parent choosing something.
   bool rotateHintSeen = false;
 
+  /// Whether the rules of the two modes that have rules have been explained
+  /// once. Same family as [rotateHintSeen].
+  ///
+  /// Both used to start in silence. In a numbered picture a tap on the wrong
+  /// region does nothing but a quiet tick, and the pulsing hint only appears
+  /// on the *second* wrong try — so a child taps, nothing happens, taps
+  /// again, and the app never says that the number in the picture has to
+  /// match the number under the palette.
+  bool cbnIntroSeen = false;
+  bool traceIntroSeen = false;
+
   /// Minutes of painting before the app suggests a break, or 0 for never.
   /// Only the values in [kPauseChoices] are offered.
   int pauseAfterMinutes = 0;
@@ -82,6 +93,8 @@ class Settings extends ChangeNotifier {
     pauseAfterMinutes = json['pauseAfterMinutes'] as int? ?? 0;
     welcomeSeen = json['welcomeSeen'] as bool? ?? false;
     rotateHintSeen = json['rotateHintSeen'] as bool? ?? false;
+    cbnIntroSeen = json['cbnIntroSeen'] as bool? ?? false;
+    traceIntroSeen = json['traceIntroSeen'] as bool? ?? false;
     leftHanded = json['leftHanded'] as bool? ?? false;
     shareCount = json['shareCount'] as int? ?? 0;
     reviewRequested = json['reviewRequested'] as bool? ?? false;
@@ -142,6 +155,8 @@ class Settings extends ChangeNotifier {
       'pauseAfterMinutes': pauseAfterMinutes,
       'welcomeSeen': welcomeSeen,
       'rotateHintSeen': rotateHintSeen,
+      'cbnIntroSeen': cbnIntroSeen,
+      'traceIntroSeen': traceIntroSeen,
       'shareCount': shareCount,
       'reviewRequested': reviewRequested,
       'recentColors': recentColors,
@@ -167,6 +182,21 @@ class Settings extends ChangeNotifier {
     await _persist();
   }
 
+  /// Same rule as [markRotateHintSeen]: written when the card appears.
+  Future<void> markCbnIntroSeen() async {
+    if (cbnIntroSeen) return;
+    cbnIntroSeen = true;
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> markTraceIntroSeen() async {
+    if (traceIntroSeen) return;
+    traceIntroSeen = true;
+    notifyListeners();
+    await _persist();
+  }
+
   /// Waits until every queued write reached the disk.
   Future<void> flush() async => _store?.flush();
 
@@ -185,6 +215,8 @@ class Settings extends ChangeNotifier {
     pauseAfterMinutes = 0;
     welcomeSeen = false;
     rotateHintSeen = false;
+    cbnIntroSeen = false;
+    traceIntroSeen = false;
     shareCount = 0;
     reviewRequested = false;
     recentColors = [];

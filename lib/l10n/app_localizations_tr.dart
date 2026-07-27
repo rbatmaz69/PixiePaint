@@ -306,6 +306,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get okAction => 'Tamam!';
 
   @override
+  String get cbnIntroTitle => 'Sayılarla boyama nasıl yapılır';
+
+  @override
+  String get cbnIntroBody =>
+      'Aşağıda bir sayı var. Onu resimde bul ve içine dokun — orası renklenir.';
+
+  @override
+  String get traceIntroTitle => 'Üzerinden geçme nasıl yapılır';
+
+  @override
+  String get traceIntroBody =>
+      'Noktaları parmağınla takip et. Yeşil noktadan başla.';
+
+  @override
   String get deleteAction => 'At';
 
   @override

@@ -306,6 +306,20 @@ class AppLocalizationsPl extends AppLocalizations {
   String get okAction => 'Dobrze!';
 
   @override
+  String get cbnIntroTitle => 'Jak działa malowanie według numerów';
+
+  @override
+  String get cbnIntroBody =>
+      'Na dole widzisz liczbę. Znajdź ją na obrazku i dotknij w środku – pole się zamaluje.';
+
+  @override
+  String get traceIntroTitle => 'Jak działa rysowanie po śladzie';
+
+  @override
+  String get traceIntroBody =>
+      'Prowadź palcem po kropkach. Zacznij od zielonej kropki.';
+
+  @override
   String get deleteAction => 'Wyrzuć';
 
   @override

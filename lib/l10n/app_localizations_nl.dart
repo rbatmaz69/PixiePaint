@@ -307,6 +307,20 @@ class AppLocalizationsNl extends AppLocalizations {
   String get okAction => 'Oké!';
 
   @override
+  String get cbnIntroTitle => 'Zo werkt kleuren op nummer';
+
+  @override
+  String get cbnIntroBody =>
+      'Onderaan staat een getal. Zoek het in de tekening en tik erin — dat vlak wordt gekleurd.';
+
+  @override
+  String get traceIntroTitle => 'Zo werkt overtrekken';
+
+  @override
+  String get traceIntroBody =>
+      'Volg de stipjes met je vinger. Begin bij het groene stipje.';
+
+  @override
   String get deleteAction => 'Weggooien';
 
   @override

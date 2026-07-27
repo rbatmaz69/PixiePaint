@@ -306,6 +306,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get okAction => '¡Vale!';
 
   @override
+  String get cbnIntroTitle => 'Cómo funciona pintar por números';
+
+  @override
+  String get cbnIntroBody =>
+      'Abajo ves un número. Búscalo en el dibujo y toca dentro: esa zona se llena de color.';
+
+  @override
+  String get traceIntroTitle => 'Cómo funciona repasar';
+
+  @override
+  String get traceIntroBody =>
+      'Sigue los puntos con el dedo. Empieza por el punto verde.';
+
+  @override
   String get deleteAction => 'Tirar';
 
   @override

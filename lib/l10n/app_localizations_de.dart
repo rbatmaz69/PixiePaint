@@ -308,6 +308,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get okAction => 'Okay!';
 
   @override
+  String get cbnIntroTitle => 'So geht Malen nach Zahlen';
+
+  @override
+  String get cbnIntroBody =>
+      'Unten siehst du eine Zahl. Suche sie im Bild und tippe hinein – dann wird das Feld bunt.';
+
+  @override
+  String get traceIntroTitle => 'So geht Nachspuren';
+
+  @override
+  String get traceIntroBody =>
+      'Fahre mit dem Finger die Punkte nach. Fang beim grünen Punkt an.';
+
+  @override
   String get deleteAction => 'Wegwerfen';
 
   @override

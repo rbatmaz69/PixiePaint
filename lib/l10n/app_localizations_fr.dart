@@ -306,6 +306,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get okAction => 'D\'accord !';
 
   @override
+  String get cbnIntroTitle => 'Comment fonctionne le coloriage par numéros';
+
+  @override
+  String get cbnIntroBody =>
+      'Un chiffre s\'affiche en bas. Trouve-le dans le dessin et touche l\'intérieur : la zone se colore.';
+
+  @override
+  String get traceIntroTitle => 'Comment fonctionne le traçage';
+
+  @override
+  String get traceIntroBody =>
+      'Suis les points avec ton doigt. Commence par le point vert.';
+
+  @override
   String get deleteAction => 'Jeter';
 
   @override

@@ -307,6 +307,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get okAction => 'Okay!';
 
   @override
+  String get cbnIntroTitle => 'How painting by numbers works';
+
+  @override
+  String get cbnIntroBody =>
+      'There\'s a number at the bottom. Find it in the picture and tap inside — that patch turns colorful.';
+
+  @override
+  String get traceIntroTitle => 'How tracing works';
+
+  @override
+  String get traceIntroBody =>
+      'Follow the dots with your finger. Start at the green dot.';
+
+  @override
   String get deleteAction => 'Throw away';
 
   @override
