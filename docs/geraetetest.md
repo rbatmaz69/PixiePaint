@@ -280,6 +280,23 @@ Die sichtbarste Änderung der ganzen Runde steht zuerst.
 - [ ] Mit „Mal-Geräusche" aus ist es weg
 - [ ] **Zeitraffer** eines Bildes mit Wort, Umriss und schräger Linie: der Film zeigt dasselbe wie das Bild
 
+## Abendmodus (neu in v9.0)
+
+Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Gerät" ist der Standard.
+
+- [ ] **Auf „Abendmodus" stellen:** der Hintergrund wird dunkel, alle weißen Karten, Blätter und Leisten bleiben weiß
+- [ ] **Malbildschirm:** das Papier ist weiterhin strahlend weiß. Das ist der Punkt, an dem der Modus scheitern würde
+- [ ] Ein Bild im Abendmodus malen, verlassen, **in Fotos speichern** und dort ansehen: die Farben sind dieselben wie auf dem Papier
+- [ ] **Einstellungen im Abendmodus:** die Untertitel unter jeder Zeile sind lesbar (dunkel auf Weiß), die Abschnittstitel darüber hell auf dem Grund
+- [ ] **Bildauswahl:** die Reiter sind lesbar; der ausgewählte sitzt auf einer weißen Pille mit dunkler Schrift
+- [ ] **Galerie:** die Bilderkarten heben sich vom dunklen Grund ab
+- [ ] Die Statusleiste oben (Uhrzeit, Akku) ist im Abendmodus **hell**, im Hellmodus dunkel
+- [ ] Auf „Wie das Gerät" stellen und das Gerät zwischen Hell und Dunkel umschalten: die App folgt
+- [ ] Auf „Immer hell" stellen und das Gerät auf Dunkel: die App bleibt hell
+- [ ] Der Wechsel selbst blendet über, er springt nicht
+
+**Ehrlich dazu:** der Modus senkt die Helligkeit nicht dramatisch — die weißen Flächen bleiben. Falls er im Dunkeln zu hell wirkt, ist das kein Fehler, sondern die Entscheidung dahinter. Die Alternative wäre dunkles Papier, und dann stimmte das gespeicherte Bild nicht mehr mit dem überein, was beim Malen zu sehen war.
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt

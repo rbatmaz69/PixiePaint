@@ -76,6 +76,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
 - Problembericht: was die App zuletzt an Fehlern mitbekommen hat — lesbar, teilbar, löschbar, und bis dahin nur auf dem Gerät
 - Linkshänder-Modus, „nur mit Stift malen", Töne, **Vibration** und Musik einzeln abschaltbar
+- **Abendmodus**: der Hintergrund wird dunkel, Papier und Bilder bleiben hell — wahlweise fest eingestellt oder dem Gerät folgend
 - Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Vorhang (standardmäßig aus)
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
 - Neun Sprachen: Deutsch, Englisch, Französisch, Italienisch, Niederländisch, Polnisch, Portugiesisch, Spanisch, Türkisch
