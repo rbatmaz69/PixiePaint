@@ -886,6 +886,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Sadece fırça, doldurma, çıkartma ve silgi – en küçükler için';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Sadece fırça, doldurma, çıkartma ve silgi – $name için';
+  }
+
+  @override
   String get favoritePageAction => 'En sevdiğim resim';
 
   @override

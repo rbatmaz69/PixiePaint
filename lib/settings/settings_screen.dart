@@ -248,7 +248,11 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               Expanded(
                 child: ListenableBuilder(
-                  listenable: settings,
+                  // Not just the settings: the simple-tools row below belongs
+                  // to the active child, and flipping it has to redraw this
+                  // list too.
+                  listenable:
+                      Listenable.merge([settings, ProfileStore.instance]),
                   builder: (context, _) => ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
@@ -292,6 +296,23 @@ class _SettingsScreenState extends State<SettingsScreen>
                               trailingText:
                                   _pauseLabel(context, settings.pauseAfterMinutes),
                               onTap: _pickPause,
+                            ),
+                            // The single most useful adjustment for a
+                            // three-year-old — fourteen tools down to four —
+                            // and it lived five levels deep in the profile
+                            // editor, where nobody who was not already
+                            // renaming a child would ever meet it. It is a
+                            // per-child setting, so the subtitle says whose.
+                            _KidRow(
+                              emoji: '🧸',
+                              tint: PixiePalette.skyLight,
+                              title: context.l10n.simpleToolsTitle,
+                              subtitle: context.l10n.simpleToolsForChild(
+                                  ProfileStore.instance.active.name),
+                              value: ProfileStore.instance.active.simpleTools,
+                              onChanged: (v) => ProfileStore.instance
+                                  .updateProfile(ProfileStore.instance.active.id,
+                                      simpleTools: v),
                             ),
                           ],
                         ),

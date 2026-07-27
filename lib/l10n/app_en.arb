@@ -385,6 +385,7 @@
   "rotateHint": "Turn me sideways for more room to paint",
   "simpleToolsTitle": "Simple tools",
   "simpleToolsSubtitle": "Just brush, fill, stickers and eraser – for the littlest ones",
+  "simpleToolsForChild": "Just brush, fill, stickers and eraser – applies to {name}",
   "favoritePageAction": "Favourite picture",
   "hapticsTitle": "Vibration",
   "hapticsSubtitle": "Buttons answer with a little buzz"

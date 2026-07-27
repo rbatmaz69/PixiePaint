@@ -889,6 +889,11 @@ class AppLocalizationsIt extends AppLocalizations {
       'Solo pennello, riempimento, adesivi e gomma: per i più piccoli';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Solo pennello, riempimento, adesivi e gomma – per $name';
+  }
+
+  @override
   String get favoritePageAction => 'Disegno preferito';
 
   @override

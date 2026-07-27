@@ -385,6 +385,7 @@
   "rotateHint": "Tourne-moi sur le côté pour peindre plus grand",
   "simpleToolsTitle": "Outils simples",
   "simpleToolsSubtitle": "Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits",
+  "simpleToolsForChild": "Juste pinceau, remplissage, autocollants et gomme – pour {name}",
   "favoritePageAction": "Dessin préféré",
   "hapticsTitle": "Vibration",
   "hapticsSubtitle": "Les boutons répondent par une petite vibration"

@@ -890,6 +890,11 @@ class AppLocalizationsDe extends AppLocalizations {
       'Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Nur Pinsel, Füllen, Sticker und Radierer – gilt für $name';
+  }
+
+  @override
   String get favoritePageAction => 'Lieblingsbild';
 
   @override

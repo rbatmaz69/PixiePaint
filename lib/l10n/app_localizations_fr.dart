@@ -889,6 +889,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Juste le pinceau, le pot, les autocollants et la gomme – pour les tout-petits';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Juste pinceau, remplissage, autocollants et gomme – pour $name';
+  }
+
+  @override
   String get favoritePageAction => 'Dessin préféré';
 
   @override

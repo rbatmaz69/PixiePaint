@@ -1600,6 +1600,12 @@ abstract class AppLocalizations {
   /// **'Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten'**
   String get simpleToolsSubtitle;
 
+  /// No description provided for @simpleToolsForChild.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur Pinsel, Füllen, Sticker und Radierer – gilt für {name}'**
+  String simpleToolsForChild(String name);
+
   /// Heart on a coloring-page tile in the picker (per child)
   ///
   /// In de, this message translates to:

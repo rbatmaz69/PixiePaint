@@ -890,6 +890,11 @@ class AppLocalizationsNl extends AppLocalizations {
       'Alleen kwast, vullen, stickers en gum – voor de allerkleinsten';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Alleen kwast, vullen, stickers en gum – geldt voor $name';
+  }
+
+  @override
   String get favoritePageAction => 'Lievelingsplaat';
 
   @override

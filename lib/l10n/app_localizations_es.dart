@@ -888,6 +888,11 @@ class AppLocalizationsEs extends AppLocalizations {
       'Solo pincel, relleno, pegatinas y goma: para los más pequeños';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Solo pincel, relleno, pegatinas y goma: para $name';
+  }
+
+  @override
   String get favoritePageAction => 'Dibujo favorito';
 
   @override

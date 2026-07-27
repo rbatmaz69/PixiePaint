@@ -912,6 +912,11 @@ class AppLocalizationsPl extends AppLocalizations {
       'Tylko pędzel, wypełnianie, naklejki i gumka – dla najmłodszych';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Tylko pędzel, wypełnianie, naklejki i gumka – dotyczy: $name';
+  }
+
+  @override
   String get favoritePageAction => 'Ulubiony obrazek';
 
   @override

@@ -888,6 +888,11 @@ class AppLocalizationsPt extends AppLocalizations {
       'Só pincel, balde, autocolantes e borracha – para os mais pequenos';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Só pincel, preenchimento, autocolantes e borracha – para $name';
+  }
+
+  @override
   String get favoritePageAction => 'Desenho preferido';
 
   @override

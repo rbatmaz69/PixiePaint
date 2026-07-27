@@ -385,6 +385,7 @@
   "rotateHint": "Draai me om, dan heb je meer ruimte om te tekenen",
   "simpleToolsTitle": "Eenvoudige gereedschappen",
   "simpleToolsSubtitle": "Alleen kwast, vullen, stickers en gum – voor de allerkleinsten",
+  "simpleToolsForChild": "Alleen kwast, vullen, stickers en gum – geldt voor {name}",
   "favoritePageAction": "Lievelingsplaat",
   "hapticsTitle": "Trillen",
   "hapticsSubtitle": "De knoppen geven een klein trilsignaal"

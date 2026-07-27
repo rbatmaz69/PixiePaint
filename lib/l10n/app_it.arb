@@ -385,6 +385,7 @@
   "rotateHint": "Girami di lato: avrai più spazio per dipingere",
   "simpleToolsTitle": "Strumenti semplici",
   "simpleToolsSubtitle": "Solo pennello, riempimento, adesivi e gomma: per i più piccoli",
+  "simpleToolsForChild": "Solo pennello, riempimento, adesivi e gomma – per {name}",
   "favoritePageAction": "Disegno preferito",
   "hapticsTitle": "Vibrazione",
   "hapticsSubtitle": "I pulsanti rispondono con un piccolo tocco"

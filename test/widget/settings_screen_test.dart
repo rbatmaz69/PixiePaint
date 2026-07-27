@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/settings/settings_screen.dart';
+import 'package:pixiepaint/util/profiles.dart';
 import 'package:pixiepaint/util/settings.dart';
 
 import 'harness.dart';
@@ -52,6 +53,29 @@ void main() {
     // That the flip also *reaches disk* is settings_test.dart's job: the
     // write is queued in JsonStore, whose future is created inside this
     // test's fake-async zone and would never complete here.
+  });
+
+  testWidgets('the simple-tools switch is here too, and belongs to the child',
+      (tester) async {
+    await start(tester);
+    expect(ProfileStore.instance.active.simpleTools, isFalse);
+    // The entrance stagger holds the rows behind an IgnorePointer while they
+    // fade in, and this row sits low enough to still be inside it.
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+
+    // It used to live five levels deep in the profile editor. Same setting,
+    // same store — only now a parent can find it.
+    final row = find.ancestor(
+      of: find.text('Einfache Werkzeuge'),
+      matching: find.byType(Row),
+    );
+    await tester
+        .tap(find.descendant(of: row.last, matching: find.byType(Switch)));
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(ProfileStore.instance.active.simpleTools, isTrue);
   });
 
   testWidgets('the parents section offers backup, restore and storage',

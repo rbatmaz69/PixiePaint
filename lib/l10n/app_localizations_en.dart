@@ -888,6 +888,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Just brush, fill, stickers and eraser – for the littlest ones';
 
   @override
+  String simpleToolsForChild(String name) {
+    return 'Just brush, fill, stickers and eraser – applies to $name';
+  }
+
+  @override
   String get favoritePageAction => 'Favourite picture';
 
   @override
