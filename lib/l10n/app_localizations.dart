@@ -274,6 +274,24 @@ abstract class AppLocalizations {
   /// **'Was soll mit den Bildern von diesem Kind passieren?'**
   String get profileRemoveBody;
 
+  /// No description provided for @profileRemoveCount.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =0{Dieses Kind hat noch keine Bilder gemalt. Was soll passieren?} =1{Dieses Kind hat ein Bild gemalt. Was soll damit passieren?} other{Dieses Kind hat {n} Bilder gemalt. Was soll damit passieren?}}'**
+  String profileRemoveCount(int n);
+
+  /// No description provided for @profileRemoveConfirmDelete.
+  ///
+  /// In de, this message translates to:
+  /// **'{n, plural, =1{Dieses eine Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}'**
+  String profileRemoveConfirmDelete(int n);
+
+  /// No description provided for @profileRemoveDeleteBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Sie sind dann für immer weg.'**
+  String get profileRemoveDeleteBody;
+
   /// No description provided for @profileRemoveKeepArt.
   ///
   /// In de, this message translates to:

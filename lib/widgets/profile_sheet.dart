@@ -184,12 +184,21 @@ class _ManageProfilesState extends State<_ManageProfiles> {
   /// Removing a kid asks the parent what happens to that kid's pictures:
   /// hand them to the primary profile, or delete them for good.
   Future<void> _remove(Profile profile) async {
+    // Counted before anything is asked. The storage screen has said the
+    // number for a while ("delete these 12 pictures?"); this dialog, which
+    // can destroy far more at once, only ever said "the pictures".
+    final theirs = [
+      for (final a in await ArtworkStore.list())
+        if (a.profileId == profile.id) a,
+    ];
+    if (!mounted) return;
     final choice = await showKidDialog<String>(
       context: context,
       emoji: '🗑️',
       title: context.l10n.profileRemoveTitle(
           profile.name.isEmpty ? context.l10n.profileDefaultName : profile.name),
-      body: Text(context.l10n.profileRemoveBody, textAlign: TextAlign.center),
+      body: Text(context.l10n.profileRemoveCount(theirs.length),
+          textAlign: TextAlign.center),
       actions: (pop) => [
         KidDialogButton(
           emoji: '📥',
@@ -207,9 +216,31 @@ class _ManageProfilesState extends State<_ManageProfiles> {
       ],
     );
     if (choice == null) return;
+    // Deleting is the one branch nothing can undo, so it asks a second time
+    // — with the number, the way the storage screen does.
+    if (choice == 'delete' && theirs.isNotEmpty) {
+      if (!mounted) return;
+      final sure = await showKidDialog<bool>(
+        context: context,
+        emoji: '🗑️',
+        title: context.l10n.profileRemoveConfirmDelete(theirs.length),
+        body: Text(context.l10n.profileRemoveDeleteBody, textAlign: TextAlign.center),
+        actions: (pop) => [
+          KidDialogButton(
+            emoji: '💖',
+            label: context.l10n.deleteKeep,
+            onTap: () => Navigator.pop(pop, false),
+          ),
+          KidDialogTextButton(
+            label: context.l10n.deleteAction,
+            onTap: () => Navigator.pop(pop, true),
+          ),
+        ],
+      );
+      if (sure != true) return;
+    }
     final primaryId = _store.primary.id;
-    for (final artwork in await ArtworkStore.list()) {
-      if (artwork.profileId != profile.id) continue;
+    for (final artwork in theirs) {
       if (choice == 'delete') {
         await ArtworkStore.delete(artwork);
       } else {

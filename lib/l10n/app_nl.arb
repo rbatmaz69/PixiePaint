@@ -34,6 +34,9 @@
     }
   },
   "profileRemoveBody": "Wat moet er met de tekeningen van dit kind gebeuren?",
+  "profileRemoveCount": "{n, plural, =0{Dit kind heeft nog niets getekend. Wat moet er gebeuren?} =1{Dit kind heeft één tekening gemaakt. Wat moet ermee gebeuren?} other{Dit kind heeft {n} tekeningen gemaakt. Wat moet ermee gebeuren?}}",
+  "profileRemoveConfirmDelete": "{n, plural, =1{Deze ene tekening echt weggooien?} other{Deze {n} tekeningen echt weggooien?}}",
+  "profileRemoveDeleteBody": "Ze zijn dan voorgoed weg.",
   "profileRemoveKeepArt": "Tekeningen bewaren",
   "profileRemoveDeleteArt": "Tekeningen ook verwijderen",
   "photoDialogTitle": "Wat doen we met de foto?",

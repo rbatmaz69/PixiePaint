@@ -34,6 +34,9 @@
     }
   },
   "profileRemoveBody": "Cosa facciamo con i disegni di questo bambino?",
+  "profileRemoveCount": "{n, plural, =0{Questo bambino non ha ancora disegnato nulla. Che si fa?} =1{Questo bambino ha fatto un disegno. Che ne facciamo?} other{Questo bambino ha fatto {n} disegni. Che ne facciamo?}}",
+  "profileRemoveConfirmDelete": "{n, plural, =1{Vuoi davvero eliminare questo disegno?} other{Vuoi davvero eliminare questi {n} disegni?}}",
+  "profileRemoveDeleteBody": "Saranno persi per sempre.",
   "profileRemoveKeepArt": "Tieni i disegni",
   "profileRemoveDeleteArt": "Cancella anche i disegni",
   "photoDialogTitle": "Cosa facciamo con la foto?",

@@ -86,7 +86,10 @@ void main() {
         .where((k) => (template[k] as String).contains('plural'))
         .toList();
 
-    expect(pluralKeys, hasLength(11));
+    // A hard number on purpose: adding a plural message without giving
+    // Polish its forms is exactly the mistake this test exists to catch, and
+    // a count that moves on its own would let it through.
+    expect(pluralKeys, hasLength(13));
     for (final key in pluralKeys) {
       final message = pl[key] as String;
       expect(message, contains('few{'), reason: '$key has no "few" form');

@@ -34,6 +34,11 @@
     }
   },
   "profileRemoveBody": "Was soll mit den Bildern von diesem Kind passieren?",
+  "profileRemoveCount": "{n, plural, =0{Dieses Kind hat noch keine Bilder gemalt. Was soll passieren?} =1{Dieses Kind hat ein Bild gemalt. Was soll damit passieren?} other{Dieses Kind hat {n} Bilder gemalt. Was soll damit passieren?}}",
+  "@profileRemoveCount": {"placeholders": {"n": {"type": "int"}}},
+  "profileRemoveConfirmDelete": "{n, plural, =1{Dieses eine Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}",
+  "@profileRemoveConfirmDelete": {"placeholders": {"n": {"type": "int"}}},
+  "profileRemoveDeleteBody": "Sie sind dann für immer weg.",
   "profileRemoveKeepArt": "Bilder behalten",
   "profileRemoveDeleteArt": "Bilder auch löschen",
   "photoDialogTitle": "Was machen wir mit dem Foto?",

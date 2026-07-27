@@ -92,6 +92,36 @@ class AppLocalizationsPl extends AppLocalizations {
   String get profileRemoveBody => 'Co zrobić z obrazkami tego dziecka?';
 
   @override
+  String profileRemoveCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'To dziecko namalowało $n obrazka. Co z nimi zrobić?',
+      many: 'To dziecko namalowało $n obrazków. Co z nimi zrobić?',
+      few: 'To dziecko namalowało $n obrazki. Co z nimi zrobić?',
+      one: 'To dziecko namalowało jeden obrazek. Co z nim zrobić?',
+      zero: 'To dziecko nie namalowało jeszcze nic. Co zrobić?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileRemoveConfirmDelete(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Na pewno usunąć te $n obrazka?',
+      many: 'Na pewno usunąć tych $n obrazków?',
+      few: 'Na pewno usunąć te $n obrazki?',
+      one: 'Na pewno usunąć ten jeden obrazek?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileRemoveDeleteBody => 'Znikną na zawsze.';
+
+  @override
   String get profileRemoveKeepArt => 'Zachowaj obrazki';
 
   @override

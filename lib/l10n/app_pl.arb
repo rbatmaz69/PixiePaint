@@ -34,6 +34,9 @@
     }
   },
   "profileRemoveBody": "Co zrobić z obrazkami tego dziecka?",
+  "profileRemoveCount": "{n, plural, =0{To dziecko nie namalowało jeszcze nic. Co zrobić?} =1{To dziecko namalowało jeden obrazek. Co z nim zrobić?} few{To dziecko namalowało {n} obrazki. Co z nimi zrobić?} many{To dziecko namalowało {n} obrazków. Co z nimi zrobić?} other{To dziecko namalowało {n} obrazka. Co z nimi zrobić?}}",
+  "profileRemoveConfirmDelete": "{n, plural, =1{Na pewno usunąć ten jeden obrazek?} few{Na pewno usunąć te {n} obrazki?} many{Na pewno usunąć tych {n} obrazków?} other{Na pewno usunąć te {n} obrazka?}}",
+  "profileRemoveDeleteBody": "Znikną na zawsze.",
   "profileRemoveKeepArt": "Zachowaj obrazki",
   "profileRemoveDeleteArt": "Usuń też obrazki",
   "photoDialogTitle": "Co zrobimy ze zdjęciem?",

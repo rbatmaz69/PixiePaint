@@ -92,6 +92,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String get profileRemoveBody => '¿Qué hacemos con los dibujos de este niño?';
 
   @override
+  String profileRemoveCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Esta criatura pintó $n dibujos. ¿Qué hacemos con ellos?',
+      one: 'Esta criatura pintó un dibujo. ¿Qué hacemos con él?',
+      zero: 'Esta criatura aún no ha pintado nada. ¿Qué hacemos?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String profileRemoveConfirmDelete(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '¿Seguro que quieres borrar estos $n dibujos?',
+      one: '¿Seguro que quieres borrar este dibujo?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get profileRemoveDeleteBody => 'Se perderán para siempre.';
+
+  @override
   String get profileRemoveKeepArt => 'Guardar los dibujos';
 
   @override

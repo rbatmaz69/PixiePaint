@@ -34,6 +34,9 @@
     }
   },
   "profileRemoveBody": "Bu çocuğun resimleri ne olsun?",
+  "profileRemoveCount": "{n, plural, =0{Bu çocuk henüz bir şey boyamadı. Ne yapalım?} =1{Bu çocuk bir resim boyadı. Ona ne yapalım?} other{Bu çocuk {n} resim boyadı. Onlara ne yapalım?}}",
+  "profileRemoveConfirmDelete": "{n, plural, =1{Bu resim gerçekten silinsin mi?} other{Bu {n} resim gerçekten silinsin mi?}}",
+  "profileRemoveDeleteBody": "Sonsuza dek kaybolurlar.",
   "profileRemoveKeepArt": "Resimleri sakla",
   "profileRemoveDeleteArt": "Resimleri de sil",
   "photoDialogTitle": "Fotoğrafla ne yapalım?",

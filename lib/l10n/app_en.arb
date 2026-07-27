@@ -34,6 +34,9 @@
     }
   },
   "profileRemoveBody": "What should happen to this child's pictures?",
+  "profileRemoveCount": "{n, plural, =0{This child hasn't painted anything yet. What should happen?} =1{This child painted one picture. What should happen to it?} other{This child painted {n} pictures. What should happen to them?}}",
+  "profileRemoveConfirmDelete": "{n, plural, =1{Really delete this one picture?} other{Really delete these {n} pictures?}}",
+  "profileRemoveDeleteBody": "They will be gone for good.",
   "profileRemoveKeepArt": "Keep the pictures",
   "profileRemoveDeleteArt": "Delete the pictures too",
   "photoDialogTitle": "What shall we do with the photo?",

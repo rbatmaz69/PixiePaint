@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pixiepaint/gallery/artwork_store.dart';
 import 'package:pixiepaint/util/profiles.dart';
 import 'package:pixiepaint/widgets/profile_sheet.dart';
 
@@ -64,6 +66,21 @@ void main() {
     await passGate(tester);
   }
 
+  /// Opens the removal dialog for the last kid in the list.
+  ///
+  /// Inside runAsync: the dialog counts that child's pictures off disk
+  /// before it can say how many there are, and a future created in the
+  /// fake-async zone never completes.
+  Future<void> openRemoval(WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.tap(find.byIcon(Icons.delete_outline_rounded).last);
+      await tester.pump();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await tester.pump();
+    });
+    await settle(tester);
+  }
+
   testWidgets('the sheet shows the kids who paint on this device',
       (tester) async {
     await start(tester);
@@ -99,10 +116,11 @@ void main() {
     await openManage(tester);
 
     // The manage list offers a remove per kid; the primary must not have one.
-    await tester.tap(find.byIcon(Icons.delete_outline_rounded).last);
-    await settle(tester);
+    await openRemoval(tester);
 
     expect(find.textContaining('Mia entfernen?'), findsOneWidget);
+    // And it says how many pictures are at stake — this child has none.
+    expect(find.textContaining('noch keine Bilder gemalt'), findsOneWidget);
     // Three answers, and the destructive one is not the eye-catcher.
     expect(find.text('Bilder behalten'), findsOneWidget);
     expect(find.text('Bilder auch löschen'), findsOneWidget);
@@ -116,14 +134,67 @@ void main() {
     await settle(tester);
     await openManage(tester);
 
-    await tester.tap(find.byIcon(Icons.delete_outline_rounded).last);
-    await settle(tester);
+    await openRemoval(tester);
     await tester.tap(find.text('Abbrechen'));
     await settle(tester);
 
     expect(ProfileStore.instance.profiles, hasLength(2),
         reason: 'backing out of a removal must remove nothing');
     expect(ProfileStore.instance.profiles.map((p) => p.name), contains('Mia'));
+  });
+
+  testWidgets('deleting a kid\'s pictures names the number and asks twice',
+      (tester) async {
+    await start(tester);
+    late String miaId;
+    await tester.runAsync(() async {
+      final mia =
+          await ProfileStore.instance.addProfile(name: 'Mia', emoji: '🐸');
+      miaId = mia.id;
+      final png = Uint8List.fromList(List.filled(32, 3));
+      for (final id in ['a1', 'a2', 'a3']) {
+        await ArtworkStore.save(
+          id: id,
+          pageId: 'cat',
+          profileId: miaId,
+          width: 64,
+          height: 48,
+          paintPng: png,
+          thumbPng: png,
+        );
+      }
+    });
+    await settle(tester);
+    await openManage(tester);
+    await openRemoval(tester);
+
+    // The count, where the dialog used to say only "the pictures".
+    expect(find.textContaining('3 Bilder gemalt'), findsOneWidget);
+
+    // Still inside runAsync: _remove was started there, so its continuation
+    // after the first dialog only ever runs there. Pumping in fake time
+    // closes the card on screen but leaves the code behind it parked.
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Bilder auch löschen'));
+      for (var i = 0; i < 8; i++) {
+        await tester.pump(const Duration(milliseconds: 150));
+        await Future<void>.delayed(Duration.zero);
+      }
+    });
+
+    // Nothing irreversible has happened yet: it asks again, with the number.
+    expect(find.textContaining('Diese 3 Bilder wirklich löschen?'),
+        findsOneWidget);
+    await tester.runAsync(() async {
+      await tester.tap(find.text('Behalten!'));
+      for (var i = 0; i < 8; i++) {
+        await tester.pump(const Duration(milliseconds: 150));
+        await Future<void>.delayed(Duration.zero);
+      }
+    });
+
+    expect(ProfileStore.instance.profiles, hasLength(2),
+        reason: 'backing out of the second question removes nothing at all');
   });
 
   testWidgets('the main profile has no remove button at all', (tester) async {
