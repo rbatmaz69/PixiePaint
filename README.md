@@ -33,9 +33,10 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
 - 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
 - Füllen mit 8 Mustern (einfarbig, Punkte, Streifen, Regenbogen, Herzen, Sterne, Karo, Seifenblasen), läuft in einem Isolate
-- Formen aufziehen: Kreis, Quadrat, Herz, Stern, Regenbogen — mit Live-Vorschau
+- Formen aufziehen: Kreis, Quadrat, Herz, Stern, Regenbogen, Linie, Dreieck, Ei — mit Live-Vorschau, wahlweise ausgemalt oder als Umriss
 - Zauber-Spiegel: 2-, 4- und 6-fache Symmetrie
-- 20 Emoji-Sticker in 8 Paketen, davon mehrere freischaltbar, plus eigene Sticker aus eigenen Bildern
+- 20 Emoji-Sticker in 8 Paketen, davon mehrere freischaltbar, plus eigene Sticker aus eigenen Bildern — als Kreis, Herz oder Stern ausgeschnitten
+- Buchstaben: den eigenen Namen aufs Bild setzen (bis 12 Zeichen, in der Malfarbe)
 - Pipette: Farbe direkt vom Bild aufnehmen
 - Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo — **Rückgängig und Wiederholen stehen fest neben der Werkzeugleiste** und scrollen nie mit weg
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung

@@ -266,6 +266,20 @@ Die sichtbarste Änderung der ganzen Runde steht zuerst.
 
 **Geschmacksfrage fürs Gerät:** Die gleitende Auswahl-Schale, die es in beiden Paletten gibt, wurde für die Werkzeugleiste gebaut und wieder ausgebaut — auf der weißen Leiste ist eine weiße Schale unsichtbar. Falls die Auswahl in der Leiste zu leise wirkt, wäre der nächste Versuch eine **getönte** Schale statt einer weißen (`SelectionCradle`).
 
+## Neue Werkzeuge (neu in v8.9)
+
+- [ ] **Formen-Blatt:** acht Motive statt fünf. Linie, Dreieck und Ei sind neu
+- [ ] **Linie:** sie folgt der Richtung, in die gezogen wurde — schräg ziehen ergibt eine schräge Linie
+- [ ] Unten im Formen-Blatt: „Ausgemalt" / „Nur Rand". Umschalten ändert sofort die Vorschau auf allen Kacheln
+- [ ] Ein Umriss behält die gewählte Farbe (eine ausgemalte Form bekommt eine dunklere Kante)
+- [ ] **Buchstaben (🔤):** Namen tippen, aufs Bild tippen — das Wort hängt unter dem Finger und wird beim Loslassen gesetzt
+- [ ] Mit eingeschaltetem Zauberspiegel: das Wort erscheint mehrfach, aber **lesbar**, nicht spiegelverkehrt
+- [ ] Ein gesetztes Wort lässt sich in **einem** Schritt rückgängig machen — auch die letzten Buchstaben verschwinden
+- [ ] **Eigener Sticker:** über dem Foto stehen drei Knöpfe (Kreis, Herz, Stern). Die Vorschau zeigt dieselbe Form, die anschließend herauskommt
+- [ ] **Malgeräusch:** ein leises Geräusch beim Ansetzen eines Strichs. Schnell hintereinander tupfen rattert **nicht**
+- [ ] Mit „Mal-Geräusche" aus ist es weg
+- [ ] **Zeitraffer** eines Bildes mit Wort, Umriss und schräger Linie: der Film zeigt dasselbe wie das Bild
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
