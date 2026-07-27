@@ -335,6 +335,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gateWrong => 'Pas tout à fait, réessaie.';
 
   @override
+  String get gateGaveUpTitle => 'Ce n\'était pas la bonne réponse';
+
+  @override
+  String get gateGaveUp =>
+      'Redemande à un adulte — tu peux réessayer tout de suite.';
+
+  @override
   String get gateCancel => 'Annuler';
 
   @override

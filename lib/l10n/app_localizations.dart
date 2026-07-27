@@ -754,6 +754,18 @@ abstract class AppLocalizations {
   /// **'Leider falsch, versuch es noch einmal.'**
   String get gateWrong;
 
+  /// No description provided for @gateGaveUpTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Das war nicht richtig'**
+  String get gateGaveUpTitle;
+
+  /// No description provided for @gateGaveUp.
+  ///
+  /// In de, this message translates to:
+  /// **'Frag noch einmal ein Erwachsener — du kannst es gleich wieder versuchen.'**
+  String get gateGaveUp;
+
   /// No description provided for @gateCancel.
   ///
   /// In de, this message translates to:

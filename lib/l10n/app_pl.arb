@@ -124,6 +124,8 @@
   },
   "gateHint": "Odpowiedź",
   "gateWrong": "Nie tym razem, spróbuj jeszcze raz.",
+  "gateGaveUpTitle": "To nie było poprawne",
+  "gateGaveUp": "Poproś jeszcze raz osobę dorosłą — możesz spróbować od razu ponownie.",
   "gateCancel": "Anuluj",
   "gateContinue": "Dalej",
   "pickerTitle": "Wybierz obrazek!",

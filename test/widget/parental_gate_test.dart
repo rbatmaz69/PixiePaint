@@ -102,6 +102,12 @@ void main() {
       await submit(tester, '1');
     }
 
+    // It says so first — closing in silence is indistinguishable from a
+    // tap the app never noticed.
+    expect(find.text('Das war nicht richtig'), findsOneWidget);
+    await tester.tap(find.text('Okay!'));
+    await settle(tester);
+
     expect(await answer, isFalse);
     expect(find.byType(TextField), findsNothing);
   });

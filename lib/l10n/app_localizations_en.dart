@@ -336,6 +336,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gateWrong => 'Not quite, try again.';
 
   @override
+  String get gateGaveUpTitle => 'That wasn\'t right';
+
+  @override
+  String get gateGaveUp =>
+      'Ask a grown-up again — you can try once more right away.';
+
+  @override
   String get gateCancel => 'Cancel';
 
   @override

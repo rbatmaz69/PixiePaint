@@ -124,6 +124,8 @@
   },
   "gateHint": "Cevap",
   "gateWrong": "Olmadı, tekrar dene.",
+  "gateGaveUpTitle": "Bu doğru değildi",
+  "gateGaveUp": "Bir yetişkine tekrar sor — hemen yeniden deneyebilirsin.",
   "gateCancel": "Vazgeç",
   "gateContinue": "Devam",
   "pickerTitle": "Bir resim seç!",

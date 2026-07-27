@@ -124,6 +124,8 @@
   },
   "gateHint": "Antwoord",
   "gateWrong": "Net niet, probeer het nog eens.",
+  "gateGaveUpTitle": "Dat klopte niet",
+  "gateGaveUp": "Vraag het nog eens aan een volwassene — je kunt het meteen opnieuw proberen.",
   "gateCancel": "Annuleren",
   "gateContinue": "Doorgaan",
   "pickerTitle": "Kies een tekening!",

@@ -335,6 +335,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gateWrong => 'Olmadı, tekrar dene.';
 
   @override
+  String get gateGaveUpTitle => 'Bu doğru değildi';
+
+  @override
+  String get gateGaveUp =>
+      'Bir yetişkine tekrar sor — hemen yeniden deneyebilirsin.';
+
+  @override
   String get gateCancel => 'Vazgeç';
 
   @override

@@ -74,13 +74,25 @@ class _GateDialogState extends State<_GateDialog> {
     super.dispose();
   }
 
-  void _check() {
+  Future<void> _check() async {
     if (int.tryParse(controller.text.trim()) == a * b) {
       Navigator.of(context).pop(true);
       return;
     }
     attempts++;
     if (attempts >= 3) {
+      // Say so before closing. A parent who mistyped twice while a child
+      // pulled at their sleeve used to land back on the previous screen
+      // with no explanation at all, unable to tell a refusal from a tap
+      // the app had simply not noticed.
+      await showKidNotice(
+        context,
+        emoji: '🔒',
+        title: context.l10n.gateGaveUpTitle,
+        body: context.l10n.gateGaveUp,
+        okLabel: context.l10n.okAction,
+      );
+      if (!mounted) return;
       Navigator.of(context).pop(false);
       return;
     }

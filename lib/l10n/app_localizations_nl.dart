@@ -336,6 +336,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gateWrong => 'Net niet, probeer het nog eens.';
 
   @override
+  String get gateGaveUpTitle => 'Dat klopte niet';
+
+  @override
+  String get gateGaveUp =>
+      'Vraag het nog eens aan een volwassene — je kunt het meteen opnieuw proberen.';
+
+  @override
   String get gateCancel => 'Annuleren';
 
   @override
