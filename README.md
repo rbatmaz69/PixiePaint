@@ -28,7 +28,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 ## Features
 
 **Malen**
-- 68 Ausmalbilder in 9 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Zahlen, Jahreszeiten) — jedes Motiv in allen neun Sprachen benannt, mit Herz als **Lieblingsbild** je Kind (eigener Reiter ganz vorne)
+- 68 Ausmalbilder in 9 Kategorien (Tiere, Fahrzeuge, Fantasie, Natur, Leckereien, Weltraum, Bauernhof, Zahlen, Jahreszeiten) — jedes Motiv in allen neun Sprachen benannt, mit Herz als **Lieblingsbild** je Kind (eigener Reiter ganz vorne). Ein Stern zeigt, was dieses Kind schon gemalt hat; Zahlenbilder sind als solche gekennzeichnet, weil sie einen anderen Bildschirm öffnen
 - Freies Zeichnen auf leerer Leinwand
 - Eigene Fotos anmalen — oder per Kantenerkennung in ein Ausmalbild verwandeln
 - 9 Stifte: Pinsel, Filzstift, Buntstift, Regenbogen, Glitzer, Neon, Herzchen-Spur, Punkte-Stift, Doppellinie
@@ -42,12 +42,12 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Jedes angetippte Werkzeug hüpft an, die Farbplakette am Werkzeug bestätigt die Farbwahl vom anderen Ende des Bildschirms, und Rückgängig antwortet auf jeden angenommenen Tipp
 
 **Weitere Spielarten**
-- **Malen nach Zahlen** — 8 Bilder mit nummerierten Flächen und eigener Palette
-- **Nachspuren** — 44 Vorlagen (A–Z inkl. Umlaute, 0–9, 5 Formen), komplett ohne Assets aus der Schrift erzeugt
+- **Malen nach Zahlen** — 8 Bilder mit nummerierten Flächen und eigener Palette; beim ersten Mal erklärt eine Karte die Regel
+- **Nachspuren** — 44 Vorlagen (A–Z inkl. Umlaute, 0–9, 5 Formen), komplett ohne Assets aus der Schrift erzeugt; ebenfalls mit einmaliger Erklärung
 - **Sticker-Welt** — 8 Szenen als Bühne zum Bekleben
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
 - **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen, mit Fortschrittsleiste und umschaltbarem Tempo
-- **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt
+- **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt; über die Einstellungen jederzeit wieder ansehbar
 - **Tagesaufgabe** — 45 wechselnde Mal-Impulse, einer pro Tag, mit Serien-Zähler
 - **Jahreszeiten** — 12 Bilder zu Weihnachten, Ostern, Sommer, Herbst und Halloween; die Kategorie rutscht im Picker automatisch nach vorne, wenn ihr Anlass ansteht
 - **Erfolge-Album** — alle Belohnungs-Sticker und die Tagesaufgaben-Serie auf einen Blick
@@ -58,7 +58,8 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Favoriten, Umbenennen, Filter
 - Diashow über alle Bilder — Punkte zeigen, das wievielte von wie vielen läuft, und verschwinden mit der Bedienung
 - Das angetippte Bild fliegt in die Leinwand, statt dass der Bildschirm einfach ausgetauscht wird — aus der Galerie, aus der Bildauswahl, von der Weitermalen-Karte und aus der Szenenauswahl
-- Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke)
+- Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke) — mit sichtbarem Fortschritt und einer Meldung, wenn es schiefgeht
+- Alles, was man mit einem fertigen Bild machen kann, hängt an einem sichtbaren Knopf auf der Bildkarte (das lange Drücken funktioniert weiter)
 
 **Belohnungen**
 - 13 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
@@ -67,8 +68,9 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Rein lokal — keine Käufe, keine Accounts
 
 **Für Eltern**
-- Elternschranke (Rechenaufgabe) vor Foto-Import, Teilen, Drucken, Einstellungen, Speicherverwaltung und optional Löschen
-- Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt — je Kind umschaltbar auf **einfache Werkzeuge** (nur Pinsel, Füllen, Sticker, Radierer, dafür größer)
+- Elternschranke (Rechenaufgabe) vor Foto-Import, Teilen, Drucken, Einstellungen, Speicherverwaltung und optional Löschen — eine gelöste Aufgabe gilt drei Minuten, damit ein Aufräum-Durchgang nicht fünfmal rechnet; die Malzeit-Pause nimmt sich davon aus
+- Bis zu 4 Kinder-Profile mit getrennten Bildern und getrenntem Fortschritt — je Kind umschaltbar auf **einfache Werkzeuge** (nur Pinsel, Füllen, Sticker, Radierer, dafür größer), erreichbar direkt aus den Einstellungen
+- Ein Kind entfernen nennt die Anzahl seiner Bilder, und das Löschen fragt ein zweites Mal
 - Backup aller Bilder als ZIP — und Wiederherstellen daraus
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
 - Problembericht: was die App zuletzt an Fehlern mitbekommen hat — lesbar, teilbar, löschbar, und bis dahin nur auf dem Gerät

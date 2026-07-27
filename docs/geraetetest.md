@@ -231,6 +231,26 @@ Diese Runde behebt vier Wege, auf denen Arbeit **stumm** verschwand. Die Frage b
 - [ ] **Radiergummi absetzen:** ein leiser Ton bestätigt, dass etwas passiert ist
 - [ ] **Größen-Blatt:** ein Tipp auf 🐜/🐈/🐘 schließt das Blatt wie jedes andere. Der Regler nicht — daran darf weiter gezogen werden
 
+## Was da war, aber niemand fand (neu in v8.7)
+
+Diese Runde hat keine Funktion ergänzt, sondern vorhandene erreichbar gemacht. Beim Testen geht es also weniger um „geht das?" als um „findet man das, ohne es zu wissen?".
+
+- [ ] **Galerie:** unten rechts auf der Bildkarte sitzt ein Knopf mit drei Punkten. Er öffnet dasselbe Blatt wie das lange Drücken (Weitermalen, Film, Umbenennen, In Fotos, Teilen, Drucken, Wegwerfen)
+- [ ] Ein Bild mit langem Namen: der Name läuft **nicht** unter den Knopf, auch nicht bei größter Systemschrift
+- [ ] **Elternschranke:** eine Rechenaufgabe lösen, dann in der Galerie ein zweites Bild teilen — es wird **nicht** noch einmal gefragt. Nach etwa drei Minuten wieder schon
+- [ ] **Malzeit-Pause** (Einstellungen → Malzeit): Wenn der Vorhang fällt, wird **immer** gefragt, auch wenn kurz vorher eine Aufgabe gelöst wurde. Das ist Absicht
+- [ ] Dreimal falsch antworten: die App sagt es, statt sich wortlos zu schließen
+- [ ] **Einstellungen → Sicherheit:** „Einfache Werkzeuge" steht jetzt hier und nennt das aktive Kind. Umlegen und ein Bild öffnen: die Leiste zeigt vier Werkzeuge
+- [ ] **Einstellungen → Über:** „Begrüßung noch einmal" zeigt die drei Startkarten. Am Ende landet man **wieder in den Einstellungen**, nicht in der Bildauswahl
+- [ ] **Erstes Zahlenbild öffnen:** eine Karte erklärt die Regel. Beim zweiten Zahlenbild nicht mehr
+- [ ] **Erste Nachspur-Vorlage:** dasselbe mit dem grünen Startpunkt
+- [ ] **Bildauswahl:** Zahlenbilder tragen unten links ein „1·2·3". Ein Bild malen, zurückgehen — die Kachel trägt jetzt oben links einen Stern
+- [ ] Beide Marken bleiben bei größter Systemschrift klein (sie skalieren bewusst nicht mit)
+- [ ] **Teilen, Drucken, In Fotos:** es erscheint eine „Einen Moment"-Karte, solange gerechnet wird
+- [ ] **Drucken abbrechen oder ohne Drucker versuchen:** es kommt eine Meldung. Vorher passierte sichtbar nichts
+- [ ] **Kind entfernen** (Profil → Verwalten): der Text nennt die Anzahl der Bilder. „Bilder auch löschen" fragt ein **zweites** Mal
+- [ ] **Größte Systemschrift, irgendein Dialog mit zwei Sätzen:** der Knopf ist erreichbar — notfalls durch Scrollen im Dialog. Vorher fiel er unten heraus
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
