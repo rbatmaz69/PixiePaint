@@ -308,6 +308,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get okAction => 'Okay!';
 
   @override
+  String get exportWorking => 'Einen Moment …';
+
+  @override
+  String get printFailed => 'Das Drucken hat nicht geklappt';
+
+  @override
+  String get shareFailed => 'Das Teilen hat nicht geklappt';
+
+  @override
   String get cbnIntroTitle => 'So geht Malen nach Zahlen';
 
   @override

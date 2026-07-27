@@ -15,6 +15,7 @@ import '../ui/motion.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../ui/working_dialog.dart';
 import '../util/pdf_export.dart';
 import '../util/profiles.dart';
 import '../util/progress.dart';
@@ -259,9 +260,14 @@ class _PageGrid extends StatelessWidget {
         Widget card = GestureDetector(
           onLongPress: () async {
             if (!await ParentalGate.show(context)) return;
-            try {
-              await printColoringPage(page);
-            } catch (_) {}
+            if (!context.mounted) return;
+            await runWithWorkingDialog(
+              context: context,
+              emoji: '🖨️',
+              title: context.l10n.exportWorking,
+              failedTitle: context.l10n.printFailed,
+              work: () => printColoringPage(page),
+            );
           },
           child: Bouncy(
             onTap: () => Navigator.of(

@@ -700,6 +700,24 @@ abstract class AppLocalizations {
   /// **'Okay!'**
   String get okAction;
 
+  /// No description provided for @exportWorking.
+  ///
+  /// In de, this message translates to:
+  /// **'Einen Moment …'**
+  String get exportWorking;
+
+  /// No description provided for @printFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Drucken hat nicht geklappt'**
+  String get printFailed;
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Teilen hat nicht geklappt'**
+  String get shareFailed;
+
   /// No description provided for @cbnIntroTitle.
   ///
   /// In de, this message translates to:

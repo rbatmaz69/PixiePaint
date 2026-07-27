@@ -17,6 +17,7 @@ import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/motion.dart';
+import '../ui/working_dialog.dart';
 import '../ui/kid_sheet.dart';
 import '../ui/loading_pixie.dart';
 import '../util/pdf_export.dart';
@@ -119,8 +120,17 @@ class _GalleryScreenState extends State<GalleryScreen>
 
   Future<void> _saveToPhotos(Artwork artwork) async {
     if (!await ParentalGate.show(context)) return;
-    final ok = await saveArtworkToPhotos(artwork);
     if (!mounted) return;
+    final ok = await runWithWorkingDialog(
+      context: context,
+      emoji: '📷',
+      title: context.l10n.exportWorking,
+      failedTitle: context.l10n.saveToPhotosFailedTitle,
+      work: () => saveArtworkToPhotos(artwork),
+    );
+    if (!mounted) return;
+    // Null means the work threw and the helper has already said so.
+    if (ok == null) return;
     if (ok) {
       celebrate(context, level: Celebration.nod);
       await showKidNotice(
@@ -224,19 +234,31 @@ class _GalleryScreenState extends State<GalleryScreen>
 
   Future<void> _share(Artwork artwork) async {
     if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
     Sfx.instance.tada();
-    await share_util.shareSavedArtwork(artwork);
+    await runWithWorkingDialog(
+      context: context,
+      emoji: '💌',
+      title: context.l10n.exportWorking,
+      failedTitle: context.l10n.shareFailed,
+      work: () => share_util.shareSavedArtwork(artwork),
+    );
     if (mounted) celebrate(context, level: Celebration.nod, sound: false);
     await countShareAndMaybeReview();
   }
 
   Future<void> _print(Artwork artwork) async {
     if (!await ParentalGate.show(context)) return;
-    try {
-      await printSavedArtwork(artwork);
-    } catch (_) {
-      // The native print dialog can fail on odd printers — never crash.
-    }
+    if (!mounted) return;
+    // The native print dialog can fail on odd printers. It used to fail in
+    // complete silence — same picture as a tap that never landed.
+    await runWithWorkingDialog(
+      context: context,
+      emoji: '🖨️',
+      title: context.l10n.exportWorking,
+      failedTitle: context.l10n.printFailed,
+      work: () => printSavedArtwork(artwork),
+    );
   }
 
   Future<void> _delete(Artwork artwork) async {

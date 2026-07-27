@@ -306,6 +306,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get okAction => 'Tamam!';
 
   @override
+  String get exportWorking => 'Bir saniye …';
+
+  @override
+  String get printFailed => 'Yazdırma çalışmadı';
+
+  @override
+  String get shareFailed => 'Paylaşma çalışmadı';
+
+  @override
   String get cbnIntroTitle => 'Sayılarla boyama nasıl yapılır';
 
   @override

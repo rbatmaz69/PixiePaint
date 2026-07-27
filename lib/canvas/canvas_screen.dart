@@ -27,6 +27,7 @@ import '../ui/paper_doodles.dart';
 import '../ui/paper_sheet.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../ui/working_dialog.dart';
 import '../models/reward.dart';
 import '../trace/trace_session.dart';
 import '../trace/trace_template.dart';
@@ -473,13 +474,20 @@ class _CanvasScreenState extends State<CanvasScreen>
 
   Future<void> _share() async {
     if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
     Sfx.instance.tada();
-    await share_util.shareArtwork(
-      width: kCanvasWidth,
-      height: kCanvasHeight,
-      background: controller.backgroundImage,
-      paintLayer: controller.paintLayer,
-      lineArt: controller.lineArt,
+    await runWithWorkingDialog(
+      context: context,
+      emoji: '💌',
+      title: context.l10n.exportWorking,
+      failedTitle: context.l10n.shareFailed,
+      work: () => share_util.shareArtwork(
+        width: kCanvasWidth,
+        height: kCanvasHeight,
+        background: controller.backgroundImage,
+        paintLayer: controller.paintLayer,
+        lineArt: controller.lineArt,
+      ),
     );
     if (mounted) celebrate(context, level: Celebration.nod, sound: false);
     await countShareAndMaybeReview();

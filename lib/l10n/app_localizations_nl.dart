@@ -307,6 +307,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get okAction => 'Oké!';
 
   @override
+  String get exportWorking => 'Een momentje …';
+
+  @override
+  String get printFailed => 'Afdrukken is niet gelukt';
+
+  @override
+  String get shareFailed => 'Delen is niet gelukt';
+
+  @override
   String get cbnIntroTitle => 'Zo werkt kleuren op nummer';
 
   @override

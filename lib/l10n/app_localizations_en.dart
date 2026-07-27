@@ -307,6 +307,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get okAction => 'Okay!';
 
   @override
+  String get exportWorking => 'Just a moment …';
+
+  @override
+  String get printFailed => 'Printing didn\'t work';
+
+  @override
+  String get shareFailed => 'Sharing didn\'t work';
+
+  @override
   String get cbnIntroTitle => 'How painting by numbers works';
 
   @override

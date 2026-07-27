@@ -306,6 +306,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get okAction => 'Dobrze!';
 
   @override
+  String get exportWorking => 'Chwileczkę …';
+
+  @override
+  String get printFailed => 'Drukowanie się nie udało';
+
+  @override
+  String get shareFailed => 'Udostępnianie się nie udało';
+
+  @override
   String get cbnIntroTitle => 'Jak działa malowanie według numerów';
 
   @override

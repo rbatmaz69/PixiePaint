@@ -306,6 +306,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get okAction => 'D\'accord !';
 
   @override
+  String get exportWorking => 'Un instant …';
+
+  @override
+  String get printFailed => 'L\'impression n\'a pas fonctionné';
+
+  @override
+  String get shareFailed => 'Le partage n\'a pas fonctionné';
+
+  @override
   String get cbnIntroTitle => 'Comment fonctionne le coloriage par numéros';
 
   @override
