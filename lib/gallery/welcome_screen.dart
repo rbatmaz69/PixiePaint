@@ -182,7 +182,13 @@ class _Card extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-        child: Column(
+        // A ceiling, because this is running text. Sideways on a tablet the
+        // sentence ran the full window and became one very long line — the
+        // hardest shape to read, and the third card is the one an adult is
+        // actually meant to read.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             PopIn(
@@ -215,6 +221,7 @@ class _Card extends StatelessWidget {
               ),
             ),
           ],
+          ),
         ),
       ),
     );

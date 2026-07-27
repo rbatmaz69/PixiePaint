@@ -173,8 +173,19 @@ class _HomeScreenState extends State<HomeScreen>
                   // the narrowest phones (~360 dp), otherwise the clamp
                   // pushes the second card onto its own line and the grid
                   // collapses into a six-item list.
-                  final rowW = constraints.maxWidth - 48;
-                  final cardW = ((rowW - 20) / 2).clamp(128.0, 230.0);
+                  final available = constraints.maxWidth - 48;
+                  final cardW = ((available - 20) / 2).clamp(128.0, 230.0);
+                  // Everything on this page shares one column, and on a
+                  // tablet that column has to stop growing. The cards were
+                  // already capped at 230, but the row they sit in was not:
+                  // sideways on a 10" tablet the Wrap laid five across, and
+                  // "carry on painting" and the daily task became 1200 dp
+                  // ribbons with a 64 dp thumbnail parked at the far left.
+                  //
+                  // Three cards wide is the ceiling. Two would leave a
+                  // child's screen mostly empty; five stopped reading as a
+                  // page of stickers and started reading as a file list.
+                  final rowW = min(available, 3 * cardW + 2 * 20);
                   // The label grows with the system font, so the card has
                   // to. A fixed 0.9 * width overflowed at the largest text
                   // size the app allows — the tiles simply get taller, the
@@ -198,23 +209,29 @@ class _HomeScreenState extends State<HomeScreen>
                           _staggered(1, ContinueCard(width: rowW)),
                           _staggered(2, DailyTaskBanner(width: rowW)),
                           const SizedBox(height: PixieTokens.gapLarge),
-                          Wrap(
-                            spacing: 20,
-                            runSpacing: 20,
-                            alignment: WrapAlignment.center,
-                            children: [
-                              for (final (i, card)
-                                  in _cards(context).indexed)
-                                _staggered(
-                                  _firstCardSlot + i,
-                                  _BigCard(
-                                    spec: card,
-                                    width: cardW,
-                                    height: cardH,
-                                    wave: wave,
+                          // The Wrap follows the same ceiling; without the
+                          // box it would happily use the whole window while
+                          // the ribbons above it stayed narrow.
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: rowW),
+                            child: Wrap(
+                              spacing: 20,
+                              runSpacing: 20,
+                              alignment: WrapAlignment.center,
+                              children: [
+                                for (final (i, card)
+                                    in _cards(context).indexed)
+                                  _staggered(
+                                    _firstCardSlot + i,
+                                    _BigCard(
+                                      spec: card,
+                                      width: cardW,
+                                      height: cardH,
+                                      wave: wave,
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),

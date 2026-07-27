@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pixiepaint/gallery/home_screen.dart';
 import 'package:pixiepaint/ui/bouncy.dart';
+import 'package:pixiepaint/widgets/daily_task_sheet.dart';
 
 import 'harness.dart';
 
@@ -61,6 +62,21 @@ void main() {
 
     expect(cardWidth, lessThan(rowWidth / 2 + 1),
         reason: 'the entrance wrapper must hug the card, not the row');
+  });
+
+  testWidgets('on a tablet the column stops growing', (tester) async {
+    await start(tester, const Size(1280, 800));
+
+    final grid = rows(tester);
+    expect(grid.first, hasLength(3),
+        reason: 'five across stops reading as a page of stickers');
+
+    // The ribbons above the grid share the same ceiling. They used to take
+    // the whole window: a 1200 dp bar with a 64 dp thumbnail at the far
+    // left end of it.
+    final wrapWidth = tester.getSize(find.byType(Wrap)).width;
+    expect(wrapWidth, lessThan(800));
+    expect(tester.getSize(find.byType(DailyTaskBanner)).width, wrapWidth);
   });
 
   testWidgets('a Bouncy still guarantees its 48 px hit area', (tester) async {
