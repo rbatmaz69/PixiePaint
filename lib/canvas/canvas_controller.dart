@@ -475,7 +475,23 @@ class CanvasController extends ChangeNotifier {
       baseWidth: _baseWidth,
       seed: _rng.nextInt(1 << 31),
     )..points.add(StrokePoint(pos, _pressure(e)));
+    _drawSound();
     _tick();
+  }
+
+  /// Last time the drawing sound was allowed through.
+  ///
+  /// The throttle lives here rather than in [Sfx], which is deliberately
+  /// stateless. A child dotting the page taps faster than a sound lasts, and
+  /// without this it rattles.
+  DateTime? _lastDrawSound;
+
+  void _drawSound() {
+    final now = DateTime.now();
+    final last = _lastDrawSound;
+    if (last != null && now.difference(last).inMilliseconds < 150) return;
+    _lastDrawSound = now;
+    Sfx.instance.draw();
   }
 
   void pointerMove(PointerMoveEvent e) {

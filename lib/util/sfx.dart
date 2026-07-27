@@ -12,6 +12,7 @@ class Sfx {
 
   AudioPool? _pop;
   AudioPool? _tick;
+  AudioPool? _draw;
 
   /// Created in [init], never in a field initializer: constructing an
   /// `AudioPlayer` reaches for the platform channel straight away, and
@@ -27,6 +28,11 @@ class Sfx {
           path: 'sounds/pop.wav', maxPlayers: 2);
       _tick = await AudioPool.createFromAsset(
           path: 'sounds/tick.wav', maxPlayers: 2);
+      // Three players: strokes can start on top of each other with two
+      // fingers, and a fourth would only ever be the sound overlapping
+      // itself into a hiss.
+      _draw = await AudioPool.createFromAsset(
+          path: 'sounds/draw.wav', maxPlayers: 3);
     } catch (_) {
       // No audio backend (e.g. tests) — stay silent.
     }
@@ -52,6 +58,21 @@ class Sfx {
     try {
       if (_audible) _tick?.start(volume: 0.6);
       if (_tactile) HapticFeedback.selectionClick();
+    } catch (_) {}
+  }
+
+  /// A stroke has begun.
+  ///
+  /// One short sound at the start, not a tone held for the length of the
+  /// stroke. A held tone would need a looping player of its own, and on
+  /// Android it stutters audibly every time it is restarted — a lot of
+  /// machinery to buy something worse.
+  ///
+  /// No haptic: the drawing hand is already touching the screen, and a
+  /// buzz under a moving finger reads as the app snagging.
+  void draw() {
+    try {
+      if (_audible) _draw?.start(volume: 0.5);
     } catch (_) {}
   }
 
