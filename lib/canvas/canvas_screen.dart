@@ -735,11 +735,13 @@ class _CanvasScreenState extends State<CanvasScreen>
         fillOnly: _isCbn,
         buttonSize: 50,
         simple: _simpleTools,
+        onBar: true,
       ),
     );
     final actions = ToolActionCluster(
       controller: controller,
       direction: Axis.horizontal,
+      onBar: true,
     );
     return Column(
       children: [
@@ -1144,10 +1146,11 @@ class _LeftRail extends StatelessWidget {
               showFill: showFill,
               fillOnly: fillOnly,
               simple: simple,
+              onBar: true,
             ),
           ),
           // Outside the scrolling rail above — see [ToolActionCluster].
-          ToolActionCluster(controller: controller),
+          ToolActionCluster(controller: controller, onBar: true),
           Tooltip(
             message: context.l10n.shareForParents,
             child: Bouncy(

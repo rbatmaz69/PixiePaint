@@ -74,27 +74,16 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
   ToolKind.shape => context.l10n.toolShapes,
 };
 
-/// The glow under a selected toolbar button.
-///
-/// Always a shadow, never null: these buttons animate with
-/// [Curves.easeOutBack], which overshoots past both ends of the tween. A
-/// shadow tweened against *no* shadow has its blur radius pulled below zero
-/// on the undershoot, and `dart:ui` asserts on a negative blur — which is
-/// exactly what deselecting a tool used to do. Keeping the radius fixed and
-/// moving only the alpha (which [Color.lerp] clamps) keeps the same look
-/// with no way to reach an invalid value.
-List<BoxShadow> _selectionShadow(Color accent, bool selected) => [
-      BoxShadow(
-        color: accent.withValues(alpha: selected ? 0.25 : 0.0),
-        blurRadius: 8,
-        offset: const Offset(0, 3),
-      ),
-    ];
-
 /// The shell every toolbar button that can be *picked* wears: a tooltip, a
 /// bouncy tap target, and a container that grows a white fill, an accent
-/// border and [_selectionShadow] when it is the chosen one. Unselected it
-/// is a bare circle; selected it squares off into a rounded tile.
+/// border and a soft shadow when it is the chosen one. Unselected it is a
+/// bare circle; selected it squares off into a rounded tile.
+///
+/// The glow used to be a third shadow formula living here, written to dodge
+/// the negative-blur crash that [Curves.easeOutBack] causes when a shadow is
+/// tweened against nothing. [PixieTokens.softShadow] has handled that at the
+/// source since v8.6 — a shadow that is sometimes absent is faded out, not
+/// left off — so this now uses the same one as everything else.
 ///
 /// The tools and the magic mirror carried two copies of this, identical
 /// down to the timing and the scale. Only what sits inside differs, so
@@ -143,12 +132,14 @@ class _PickableButton extends StatelessWidget {
           margin: const EdgeInsets.all(1),
           decoration: BoxDecoration(
             color: selected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(selected ? 18 : size / 2),
+            borderRadius:
+                BorderRadius.circular(selected ? PixieTokens.rTile : size / 2),
             border: Border.all(
               color: selected ? accent : Colors.transparent,
               width: 2.5,
             ),
-            boxShadow: _selectionShadow(accent, selected),
+            boxShadow:
+                PixieTokens.softShadow(accent, strength: selected ? 1 : 0),
           ),
           child: child,
         ),
@@ -158,14 +149,23 @@ class _PickableButton extends StatelessWidget {
 }
 
 /// Rounded pill container around one group of buttons.
-Widget _pill(List<Widget> children, Axis direction) {
+///
+/// [onBar] drops the fill and the shadow for the case where the pill is
+/// already standing on a [PixieTokens.barDecoration] surface — both canvas
+/// layouts mount it that way, and two white sheets one on top of the other
+/// is a smudge, not a shape. The two-painter screen has no bar behind it,
+/// so there the pill stays the white one.
+///
+/// Padding and margin do not change either way: the reach test measures
+/// where undo lands.
+Widget _pill(List<Widget> children, Axis direction, {bool onBar = false}) {
   return Container(
     margin: const EdgeInsets.all(4),
     padding: const EdgeInsets.all(3),
     decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: 0.85),
+      color: onBar ? Colors.transparent : Colors.white.withValues(alpha: 0.85),
       borderRadius: BorderRadius.circular(PixieTokens.rPill),
-      boxShadow: PixieTokens.barShadow(),
+      boxShadow: onBar ? null : PixieTokens.barShadow(),
     ),
     child: direction == Axis.vertical
         ? Column(mainAxisSize: MainAxisSize.min, children: children)
@@ -190,10 +190,14 @@ class ToolActionCluster extends StatefulWidget {
     super.key,
     required this.controller,
     this.direction = Axis.vertical,
+    this.onBar = false,
   });
 
   final CanvasController controller;
   final Axis direction;
+
+  /// True where a white bar is already behind the buttons — see [_pill].
+  final bool onBar;
 
   @override
   State<ToolActionCluster> createState() => _ToolActionClusterState();
@@ -245,7 +249,7 @@ class _ToolActionClusterState extends State<ToolActionCluster> {
             },
           ),
         ),
-      ], widget.direction),
+      ], widget.direction, onBar: widget.onBar),
     );
   }
 }
@@ -259,6 +263,7 @@ class ToolBarRail extends StatefulWidget {
     this.direction = Axis.vertical,
     this.buttonSize = 52,
     this.simple = false,
+    this.onBar = false,
   });
 
   final CanvasController controller;
@@ -277,6 +282,9 @@ class ToolBarRail extends StatefulWidget {
   /// Edge length of one tool button. Portrait shaves a little off to give
   /// the paper more room; [Bouncy.minSize] keeps the tap target at 48.
   final double buttonSize;
+
+  /// True where a white bar is already behind the buttons — see [_pill].
+  final bool onBar;
 
   @override
   State<ToolBarRail> createState() => _ToolBarRailState();
@@ -392,7 +400,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
               _ => () => controller.selectTool(tool),
             },
           ),
-      ], widget.direction),
+      ], widget.direction, onBar: widget.onBar),
       if (!widget.fillOnly)
         _pill([
           _SizeButton(
@@ -408,7 +416,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
               controller: controller,
               onTap: () => symmetry.showSymmetryPicker(context, controller),
             ),
-        ], widget.direction),
+        ], widget.direction, onBar: widget.onBar),
       _pill([
         _ActionButton(
           icon: Icons.delete_sweep_outlined,
@@ -416,7 +424,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
           label: context.l10n.clearAction,
           onTap: () => _confirmClear(context, controller),
         ),
-      ], widget.direction),
+      ], widget.direction, onBar: widget.onBar),
     ];
   }
 }
