@@ -5,6 +5,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../canvas/canvas_controller.dart';
+import '../canvas/shape_renderer.dart';
+import '../widgets/shape_picker.dart' as shapes;
+import '../models/tool.dart';
 import '../l10n/l10n.dart';
 import '../ui/kid_dialog.dart';
 import '../ui/loading_pixie.dart';
@@ -60,6 +63,11 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
   Size _displaySize = Size.zero;
   bool _saving = false;
 
+  /// The outline the cut-out takes. A circle is still the default — it is
+  /// the shape a finger draws — but a heart or a star costs nothing here:
+  /// the paths already exist for the shape tool, and only the mask changes.
+  ShapeKind _mask = ShapeKind.circle;
+
   @override
   void dispose() {
     widget.image.dispose();
@@ -87,10 +95,10 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
     const size = Size(kStickerSize + 0.0, kStickerSize + 0.0);
     final canvas = Canvas(recorder, Offset.zero & size);
     final circle = Offset(size.width / 2, size.height / 2);
+    final maskPath = ShapeRenderer.shapePath(
+        _mask, circle, size.width / 2 - _rimWidth / 2);
     canvas.save();
-    canvas.clipPath(Path()
-      ..addOval(Rect.fromCircle(
-          center: circle, radius: size.width / 2 - _rimWidth / 2)));
+    canvas.clipPath(maskPath);
     canvas.drawImageRect(
       widget.image,
       Rect.fromCenter(center: Offset(cx, cy), width: r * 2, height: r * 2),
@@ -98,13 +106,15 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
       Paint()..filterQuality = FilterQuality.high,
     );
     canvas.restore();
-    // White sticker rim.
-    canvas.drawCircle(
-        circle,
-        size.width / 2 - _rimWidth / 2,
+    // White sticker rim, following the same path as the cut. A star's
+    // points are sharp, so the join is rounded — a mitre there grows a
+    // spike several times the rim's width.
+    canvas.drawPath(
+        maskPath,
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
+          ..strokeJoin = StrokeJoin.round
           ..strokeWidth = _rimWidth);
     final picture = recorder.endRecording();
     final sticker = picture.toImageSync(kStickerSize, kStickerSize);
@@ -221,7 +231,7 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                         }),
                         child: CustomPaint(
                           painter: _CapturePainter(
-                              widget.image, _center!, _radius),
+                              widget.image, _center!, _radius, _mask),
                           child: const SizedBox.expand(),
                         ),
                       );
@@ -230,7 +240,38 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: PixieTokens.gapMedium),
+            // The three outlines, over the dark backdrop rather than in a
+            // sheet: which shape the cut takes is something to try while
+            // looking at the photo, not to decide beforehand.
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: PixieTokens.gapMedium,
+                  vertical: PixieTokens.gap),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final kind in const [
+                    ShapeKind.circle,
+                    ShapeKind.heart,
+                    ShapeKind.star,
+                  ]) ...[
+                    StickerCircleButton(
+                      onTap: () => setState(() => _mask = kind),
+                      accent: _mask == kind
+                          ? PixiePalette.mint
+                          : PixiePalette.grape,
+                      semanticLabel: shapes.shapeLabel(context, kind),
+                      child: Opacity(
+                        opacity: _mask == kind ? 1 : 0.45,
+                        child: Text(shapes.shapeEmoji(kind),
+                            style: const TextStyle(fontSize: 22)),
+                      ),
+                    ),
+                    const SizedBox(width: PixieTokens.gap),
+                  ],
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -239,11 +280,15 @@ class _StickerCaptureScreenState extends State<_StickerCaptureScreen> {
 }
 
 class _CapturePainter extends CustomPainter {
-  const _CapturePainter(this.image, this.center, this.radius);
+  const _CapturePainter(this.image, this.center, this.radius, this.mask);
 
   final ui.Image image;
   final Offset center;
   final double radius;
+
+  /// The same outline [_confirm] cuts with. If these two ever disagree the
+  /// preview shows a circle and the sticker comes out a heart.
+  final ShapeKind mask;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -253,18 +298,17 @@ class _CapturePainter extends CustomPainter {
     canvas.drawImageRect(
         image, src, dst, Paint()..filterQuality = FilterQuality.medium);
     // Dark scrim outside the circle.
-    final hole = Path()
-      ..addOval(Rect.fromCircle(center: center, radius: radius));
+    final hole = ShapeRenderer.shapePath(mask, center, radius);
     final scrim = Path.combine(
         PathOperation.difference, Path()..addRect(dst), hole);
     canvas.drawPath(scrim, Paint()..color = PixieTokens.scrim(0.55));
-    // Circle outline with a soft glow.
-    canvas.drawCircle(
-        center,
-        radius,
+    // The outline of the cut, in white.
+    canvas.drawPath(
+        hole,
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
+          ..strokeJoin = StrokeJoin.round
           ..strokeWidth = 4);
     // Little size handle hint at the bottom right of the circle.
     final handle = center + Offset(cos(pi / 4), sin(pi / 4)) * radius;
@@ -273,5 +317,6 @@ class _CapturePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_CapturePainter old) =>
+      old.mask != mask ||
       old.center != center || old.radius != radius || old.image != image;
 }

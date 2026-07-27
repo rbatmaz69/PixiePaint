@@ -22,6 +22,46 @@ void main() {
       }
     });
 
+    test('a mask shape holds the middle and leaves the corners', () {
+      // What the sticker cut-out relies on: clipping to a heart or a star
+      // keeps the middle of the photo and drops the corners of its box. A
+      // path that failed this would produce a sticker with clipped edges or
+      // no transparency at all.
+      for (final kind in [ShapeKind.heart, ShapeKind.star]) {
+        final path = ShapeRenderer.shapePath(kind, center, radius);
+        expect(path.contains(center), isTrue, reason: '$kind loses its middle');
+        for (final corner in [
+          center + const Offset(-radius, -radius),
+          center + const Offset(radius, -radius),
+          center + const Offset(-radius, radius),
+          center + const Offset(radius, radius),
+        ]) {
+          expect(path.contains(corner), isFalse,
+              reason: '$kind reaches into the corner at $corner');
+        }
+      }
+    });
+
+    test('a line is a line, not an area', () {
+      final path = ShapeRenderer.shapePath(ShapeKind.line, center, radius);
+      expect(path.contains(center + const Offset(0, 40)), isFalse,
+          reason: 'an open path must enclose nothing');
+      expect(ShapeRenderer.isOpen(ShapeKind.line), isTrue);
+      expect(ShapeRenderer.isOpen(ShapeKind.triangle), isFalse);
+    });
+
+    test('the line follows the angle it is given', () {
+      final flat = ShapeRenderer.shapePath(ShapeKind.line, center, radius)
+          .getBounds();
+      expect(flat.height, lessThan(1), reason: 'no angle means flat');
+
+      final upright = ShapeRenderer.shapePath(ShapeKind.line, center, radius,
+              angle: 1.5707963)
+          .getBounds();
+      expect(upright.width, lessThan(1));
+      expect(upright.height, closeTo(radius * 2, 1));
+    });
+
     test('heart and star are horizontally symmetric around the center', () {
       for (final kind in [ShapeKind.heart, ShapeKind.star]) {
         final bounds =
