@@ -251,6 +251,21 @@ Diese Runde hat keine Funktion ergänzt, sondern vorhandene erreichbar gemacht. 
 - [ ] **Kind entfernen** (Profil → Verwalten): der Text nennt die Anzahl der Bilder. „Bilder auch löschen" fragt ein **zweites** Mal
 - [ ] **Größte Systemschrift, irgendein Dialog mit zwei Sätzen:** der Knopf ist erreichbar — notfalls durch Scrollen im Dialog. Vorher fiel er unten heraus
 
+## Konsistenz und Tablet (neu in v8.8)
+
+Die sichtbarste Änderung der ganzen Runde steht zuerst.
+
+- [ ] **Startseite auf dem Telefon:** die Karten stehen **zwei nebeneinander**. Vorher lag jede allein in ihrer Zeile, auf jedem Gerät — die Seite war doppelt so lang wie nötig
+- [ ] **Startseite auf dem Tablet quer:** drei Karten pro Reihe, mittig, und „Weitermalen" sowie die Tagesaufgabe sind genauso breit wie das Kartenraster. Vorher waren das 1200 dp breite Bänder
+- [ ] **Willkommen auf dem Tablet quer:** der Text läuft nicht mehr über die volle Fensterbreite
+- [ ] **Malbildschirm, hoch und quer:** unter den Werkzeugknöpfen liegt **eine** weiße Fläche, nicht zwei übereinander
+- [ ] **Zwei-Maler-Modus:** dort trägt die Knopfgruppe weiterhin ihr eigenes Weiß — sonst stünde sie auf nichts
+- [ ] Werkzeuge, Größenknopf, Zauberspiegel und Rückgängig sind gleich breit — in der normalen Leiste und im Einfach-Modus
+- [ ] Ecken: alle Sticker-Karten (Einstellungen, Speicher, Szenen, Bildauswahl, Album, Foto) haben denselben Radius
+- [ ] **Farbpalette und Größen-Blatt:** ein helles Feld (Weiß, Hellgelb, Rosa) hat weiterhin eine sichtbare Kontur
+
+**Geschmacksfrage fürs Gerät:** Die gleitende Auswahl-Schale, die es in beiden Paletten gibt, wurde für die Werkzeugleiste gebaut und wieder ausgebaut — auf der weißen Leiste ist eine weiße Schale unsichtbar. Falls die Auswahl in der Leiste zu leise wirkt, wäre der nächste Versuch eine **getönte** Schale statt einer weißen (`SelectionCradle`).
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
