@@ -133,6 +133,8 @@
   "gateCancel": "Anuluj",
   "gateContinue": "Dalej",
   "pickerTitle": "Wybierz obrazek!",
+  "pageAlreadyPainted": "Już pomalowane",
+  "pageColorByNumber": "Malowanie według numerów",
   "categoryAll": "Wszystkie",
   "settingsTitle": "Ustawienia",
   "stylusOnlyTitle": "Rysuj tylko rysikiem",

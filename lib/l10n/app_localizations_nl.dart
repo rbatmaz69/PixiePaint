@@ -366,6 +366,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get pickerTitle => 'Kies een tekening!';
 
   @override
+  String get pageAlreadyPainted => 'Al gekleurd';
+
+  @override
+  String get pageColorByNumber => 'Kleuren op nummer';
+
+  @override
   String get categoryAll => 'Alles';
 
   @override

@@ -133,6 +133,8 @@
   "gateCancel": "Annulla",
   "gateContinue": "Continua",
   "pickerTitle": "Scegli un disegno!",
+  "pageAlreadyPainted": "Già colorato",
+  "pageColorByNumber": "Colora con i numeri",
   "categoryAll": "Tutti",
   "settingsTitle": "Impostazioni",
   "stylusOnlyTitle": "Disegna solo con la penna",

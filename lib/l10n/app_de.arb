@@ -133,6 +133,8 @@
   "gateCancel": "Abbrechen",
   "gateContinue": "Weiter",
   "pickerTitle": "Such dir ein Bild aus!",
+  "pageAlreadyPainted": "Schon gemalt",
+  "pageColorByNumber": "Malen nach Zahlen",
   "categoryAll": "Alle",
   "settingsTitle": "Einstellungen",
   "stylusOnlyTitle": "Nur mit Stift malen",

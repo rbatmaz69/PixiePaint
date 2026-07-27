@@ -365,6 +365,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pickerTitle => '¡Elige un dibujo!';
 
   @override
+  String get pageAlreadyPainted => 'Ya pintado';
+
+  @override
+  String get pageColorByNumber => 'Pintar por números';
+
+  @override
   String get categoryAll => 'Todos';
 
   @override

@@ -133,6 +133,8 @@
   "gateCancel": "Cancelar",
   "gateContinue": "Continuar",
   "pickerTitle": "Escolhe um desenho!",
+  "pageAlreadyPainted": "Já pintado",
+  "pageColorByNumber": "Pintar por números",
   "categoryAll": "Todos",
   "settingsTitle": "Definições",
   "stylusOnlyTitle": "Desenhar só com caneta",

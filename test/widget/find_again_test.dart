@@ -98,6 +98,74 @@ void main() {
     });
   });
 
+  group('marks on a picture tile', () {
+    /// The picker resolves two futures in sequence — the pictures, then the
+    /// gallery it derives the stars from — so it needs a second real-time
+    /// window after [start] before the marks are on screen.
+    Future<void> settleBadges(WidgetTester tester) async {
+      await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 200)));
+      await settle(tester);
+    }
+
+    testWidgets('a numbered picture says so, an ordinary one does not',
+        (tester) async {
+      root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await start(tester, const PagePickerScreen(), const Size(500, 900));
+      await settleBadges(tester);
+
+      // On "Alle" the numbered pictures sit at index 38 and further, well
+      // below what a lazily built grid has made yet.
+      expect(find.bySemanticsLabel('Malen nach Zahlen'), findsNothing);
+
+      // Eight of the sixty-eight open into a different screen — bucket
+      // forced, palette replaced by numbers, most tools switched off — and
+      // their tiles used to look exactly like the rest.
+      //
+      // Driven through the controller rather than by tapping the tab: with
+      // eleven categories the strip scrolls, and "Zahlen" is off its right
+      // edge at this window size.
+      final tabs = tester.widgetList<Tab>(find.byType(Tab)).toList();
+      final controller =
+          DefaultTabController.of(tester.element(find.byType(TabBarView)));
+      controller.index = tabs.indexWhere((t) => t.text == 'Zahlen');
+      await settleBadges(tester);
+
+      expect(find.bySemanticsLabel('Malen nach Zahlen'), findsWidgets);
+    });
+
+    testWidgets('a picture this child has painted gets a star',
+        (tester) async {
+      root = await setUpPixieStorage(tester);
+      addTearDown(() => tearDownPixieStorage(tester, root));
+
+      await start(tester, const PagePickerScreen(), const Size(500, 900));
+      await settleBadges(tester);
+      expect(find.bySemanticsLabel('Schon gemalt'), findsNothing);
+
+      // makeArtwork saves against pageId 'cat', which is the first tile.
+      // Pumping the picker again reuses the same State, so the reload has
+      // to be asked for the way returning from the canvas asks for it.
+      await makeArtwork(tester, id: 'a1');
+      // All of it inside runAsync: didPopNext starts a real disk read, a
+      // future created in the fake-async zone would never complete, and the
+      // frame in between is what lets the FutureBuilder subscribe to the
+      // new future while there is still real time left to finish it.
+      await tester.runAsync(() async {
+        (tester.state(find.byType(PagePickerScreen)) as RouteAware)
+            .didPopNext();
+        await tester.pump();
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+        await tester.pump();
+      });
+      await settle(tester);
+
+      expect(find.bySemanticsLabel('Schon gemalt'), findsOneWidget);
+    });
+  });
+
   group('the keep-painting card', () {
     const card = Scaffold(body: Center(child: ContinueCard(width: 300)));
 

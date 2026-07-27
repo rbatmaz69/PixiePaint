@@ -365,6 +365,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pickerTitle => 'Bir resim seç!';
 
   @override
+  String get pageAlreadyPainted => 'Zaten boyandı';
+
+  @override
+  String get pageColorByNumber => 'Sayılarla boyama';
+
+  @override
   String get categoryAll => 'Hepsi';
 
   @override

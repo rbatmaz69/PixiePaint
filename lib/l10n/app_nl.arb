@@ -133,6 +133,8 @@
   "gateCancel": "Annuleren",
   "gateContinue": "Doorgaan",
   "pickerTitle": "Kies een tekening!",
+  "pageAlreadyPainted": "Al gekleurd",
+  "pageColorByNumber": "Kleuren op nummer",
   "categoryAll": "Alles",
   "settingsTitle": "Instellingen",
   "stylusOnlyTitle": "Alleen met pen tekenen",

@@ -808,6 +808,18 @@ abstract class AppLocalizations {
   /// **'Such dir ein Bild aus!'**
   String get pickerTitle;
 
+  /// No description provided for @pageAlreadyPainted.
+  ///
+  /// In de, this message translates to:
+  /// **'Schon gemalt'**
+  String get pageAlreadyPainted;
+
+  /// No description provided for @pageColorByNumber.
+  ///
+  /// In de, this message translates to:
+  /// **'Malen nach Zahlen'**
+  String get pageColorByNumber;
+
   /// No description provided for @categoryAll.
   ///
   /// In de, this message translates to:

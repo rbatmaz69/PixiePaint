@@ -368,6 +368,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pickerTitle => 'Such dir ein Bild aus!';
 
   @override
+  String get pageAlreadyPainted => 'Schon gemalt';
+
+  @override
+  String get pageColorByNumber => 'Malen nach Zahlen';
+
+  @override
   String get categoryAll => 'Alle';
 
   @override

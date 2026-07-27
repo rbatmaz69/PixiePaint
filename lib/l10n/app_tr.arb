@@ -133,6 +133,8 @@
   "gateCancel": "Vazgeç",
   "gateContinue": "Devam",
   "pickerTitle": "Bir resim seç!",
+  "pageAlreadyPainted": "Zaten boyandı",
+  "pageColorByNumber": "Sayılarla boyama",
   "categoryAll": "Hepsi",
   "settingsTitle": "Ayarlar",
   "stylusOnlyTitle": "Sadece kalemle çiz",

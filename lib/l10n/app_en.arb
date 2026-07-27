@@ -133,6 +133,8 @@
   "gateCancel": "Cancel",
   "gateContinue": "Continue",
   "pickerTitle": "Pick a picture!",
+  "pageAlreadyPainted": "Already painted",
+  "pageColorByNumber": "Painting by numbers",
   "categoryAll": "All",
   "settingsTitle": "Settings",
   "stylusOnlyTitle": "Draw with stylus only",

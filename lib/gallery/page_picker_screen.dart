@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../canvas/canvas_screen.dart';
 import '../l10n/l10n.dart';
+import 'artwork_store.dart';
 import '../models/coloring_page.dart';
 import '../ui/app_theme.dart';
 import '../ui/blob_background.dart';
@@ -15,6 +16,7 @@ import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/pdf_export.dart';
+import '../util/profiles.dart';
 import '../util/progress.dart';
 import '../util/sfx.dart';
 import '../widgets/parental_gate.dart';
@@ -41,7 +43,51 @@ class PagePickerScreen extends StatefulWidget {
   State<PagePickerScreen> createState() => _PagePickerScreenState();
 }
 
-class _PagePickerScreenState extends State<PagePickerScreen> {
+class _PagePickerScreenState extends State<PagePickerScreen> with RouteAware {
+  /// Ids of the pages this child has already painted at least once.
+  ///
+  /// Derived from the gallery rather than stored: [Progress] never kept a
+  /// set for this, but every saved picture remembers which page it came
+  /// from, and that is the same fact.
+  ///
+  /// Re-read when the canvas is popped back off. The picker stays alive
+  /// underneath while a child paints, so without this the star for the
+  /// picture they just finished would not turn up until the next time the
+  /// screen was opened from scratch.
+  Future<Set<String>> _painted = _loadPainted();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null) pixieRouteObserver.subscribe(this, route);
+  }
+
+  @override
+  void didPopNext() {
+    // Block body on purpose: an arrow here hands setState the assignment's
+    // value, which is a Future, and setState refuses one.
+    setState(() {
+      _painted = _loadPainted();
+    });
+  }
+
+  @override
+  void dispose() {
+    pixieRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  static Future<Set<String>> _loadPainted() async {
+    final store = ProfileStore.instance;
+    final mine = store.active.id;
+    final all = await ArtworkStore.list();
+    return {
+      for (final a in all)
+        if (a.pageId != null && store.ownsArtwork(a.profileId, mine)) a.pageId!,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ColoringPage>>(
@@ -148,18 +194,31 @@ class _PagePickerScreenState extends State<PagePickerScreen> {
                     // while the list is still coming off disk.
                     Expanded(
                       child: EntranceGroup(
-                        child: TabBarView(
-                          children: [
-                            if (hasFavorites) _PageGrid(pages: favorites),
-                            _PageGrid(pages: pages),
-                            for (final c in orderedCats)
-                              _PageGrid(
-                                pages: [
-                                  for (final p in pages)
-                                    if (p.category == c) p,
-                                ],
-                              ),
-                          ],
+                        // The "already painted" stars come off disk a moment
+                        // later than the pictures do. They are decoration on
+                        // a tile that is otherwise complete, so the grid is
+                        // built without them and they appear when they are
+                        // known — nobody waits on a badge.
+                        child: FutureBuilder<Set<String>>(
+                          future: _painted,
+                          builder: (context, painted) {
+                            final done = painted.data ?? const <String>{};
+                            return TabBarView(
+                              children: [
+                                if (hasFavorites)
+                                  _PageGrid(pages: favorites, painted: done),
+                                _PageGrid(pages: pages, painted: done),
+                                for (final c in orderedCats)
+                                  _PageGrid(
+                                    pages: [
+                                      for (final p in pages)
+                                        if (p.category == c) p,
+                                    ],
+                                    painted: done,
+                                  ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -173,9 +232,12 @@ class _PagePickerScreenState extends State<PagePickerScreen> {
 }
 
 class _PageGrid extends StatelessWidget {
-  const _PageGrid({required this.pages});
+  const _PageGrid({required this.pages, required this.painted});
 
   final List<ColoringPage> pages;
+
+  /// Page ids this child has painted before.
+  final Set<String> painted;
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +322,61 @@ class _PageGrid extends StatelessWidget {
           children: [
             card,
             Positioned(top: 0, right: 0, child: _FavoriteHeart(page: page)),
+            // Two marks, both on the left: the heart owns the right corner.
+            //
+            // The number badge matters more than it looks. A numbered
+            // picture opens into a different screen — the tool is forced to
+            // the paint bucket, the palette becomes a row of numbers, and
+            // most of what a child can normally do is switched off — and
+            // until now its tile was indistinguishable from a picture you
+            // may draw on freely.
+            if (page.isColorByNumber)
+              Positioned(
+                bottom: 8,
+                left: 8,
+                // container + excludeSemantics: the badge reads as one
+                // thing ("painting by numbers"), not as the glyphs "1·2·3".
+                child: Semantics(
+                  label: context.l10n.pageColorByNumber,
+                  container: true,
+                  excludeSemantics: true,
+                  // Fixed size. These two marks are symbols on a tile whose
+                  // aspect ratio is fixed, not prose: at 1.6x they grew into
+                  // the picture and crowded the name. The screen reader gets
+                  // the sentence above either way.
+                  child: const MediaQuery(
+                    data: MediaQueryData(textScaler: TextScaler.noScaling),
+                    child: StickerPill(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: PixieTokens.gapSmall, vertical: 2),
+                      accent: PixiePalette.tangerine,
+                      child: Text('1·2·3',
+                          style: TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              color: PixiePalette.ink)),
+                    ),
+                  ),
+                ),
+              ),
+            // The same star the tracing picker uses for a finished template
+            // — a child who cannot read needs to recognise where they have
+            // already been.
+            if (painted.contains(page.id))
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Semantics(
+                  label: context.l10n.pageAlreadyPainted,
+                  container: true,
+                  excludeSemantics: true,
+                  child: const MediaQuery(
+                    data: MediaQueryData(textScaler: TextScaler.noScaling),
+                    child: Text('⭐', style: TextStyle(fontSize: 18)),
+                  ),
+                ),
+              ),
           ],
         );
         // Staggered on the way in, and still arriving further down the

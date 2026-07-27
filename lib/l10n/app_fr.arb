@@ -133,6 +133,8 @@
   "gateCancel": "Annuler",
   "gateContinue": "Continuer",
   "pickerTitle": "Choisis une image !",
+  "pageAlreadyPainted": "Déjà colorié",
+  "pageColorByNumber": "Coloriage par numéros",
   "categoryAll": "Tout",
   "settingsTitle": "Réglages",
   "stylusOnlyTitle": "Dessiner au stylet uniquement",
