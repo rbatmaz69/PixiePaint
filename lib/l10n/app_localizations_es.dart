@@ -217,6 +217,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shapeRainbow => 'Arcoíris';
 
   @override
+  String get shapeLine => 'Línea';
+
+  @override
+  String get shapeTriangle => 'Triángulo';
+
+  @override
+  String get shapeOval => 'Óvalo';
+
+  @override
+  String get shapeFilled => 'Relleno';
+
+  @override
+  String get shapeOutline => 'Solo el borde';
+
+  @override
   String get symmetryTitle => 'Espejo mágico';
 
   @override

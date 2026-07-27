@@ -219,6 +219,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get shapeRainbow => 'Regenbogen';
 
   @override
+  String get shapeLine => 'Linie';
+
+  @override
+  String get shapeTriangle => 'Dreieck';
+
+  @override
+  String get shapeOval => 'Ei';
+
+  @override
+  String get shapeFilled => 'Ausgemalt';
+
+  @override
+  String get shapeOutline => 'Nur Rand';
+
+  @override
   String get symmetryTitle => 'Zauber-Spiegel';
 
   @override

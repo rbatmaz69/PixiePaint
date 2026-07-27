@@ -490,6 +490,36 @@ abstract class AppLocalizations {
   /// **'Regenbogen'**
   String get shapeRainbow;
 
+  /// No description provided for @shapeLine.
+  ///
+  /// In de, this message translates to:
+  /// **'Linie'**
+  String get shapeLine;
+
+  /// No description provided for @shapeTriangle.
+  ///
+  /// In de, this message translates to:
+  /// **'Dreieck'**
+  String get shapeTriangle;
+
+  /// No description provided for @shapeOval.
+  ///
+  /// In de, this message translates to:
+  /// **'Ei'**
+  String get shapeOval;
+
+  /// No description provided for @shapeFilled.
+  ///
+  /// In de, this message translates to:
+  /// **'Ausgemalt'**
+  String get shapeFilled;
+
+  /// No description provided for @shapeOutline.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur Rand'**
+  String get shapeOutline;
+
   /// No description provided for @symmetryTitle.
   ///
   /// In de, this message translates to:

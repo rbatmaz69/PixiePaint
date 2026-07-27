@@ -131,11 +131,14 @@ ui.Image applyShape({
   required double strokeWidth,
   required int width,
   required int height,
+  double angle = 0,
+  bool outline = false,
 }) {
   final recorder = ui.PictureRecorder();
   final canvas = Canvas(recorder, _bounds(width, height));
   if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
-  ShapeRenderer.drawShape(canvas, kind, center, radius, color, strokeWidth);
+  ShapeRenderer.drawShape(canvas, kind, center, radius, color, strokeWidth,
+      angle: angle, outline: outline);
   final picture = recorder.endRecording();
   final image = picture.toImageSync(width, height);
   picture.dispose();

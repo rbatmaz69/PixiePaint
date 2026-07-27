@@ -158,6 +158,46 @@ void main() {
         );
       });
     }
+
+    // One stand-in rather than eight more images: outline is the same
+    // switch for every motif, and a heart shows both what it drops (the
+    // fill) and what it keeps (the chosen colour, now thicker).
+    testWidgets('heart as an outline', (tester) async {
+      final layer = applyShape(
+        layer: null,
+        kind: ShapeKind.heart,
+        center: const Offset(100, 60),
+        radius: 42,
+        color: const Color(0xFFD6356B),
+        strokeWidth: 6,
+        outline: true,
+        width: w,
+        height: h,
+      );
+      await expectLater(
+        await onWhite(layer),
+        matchesGoldenFile('goldens/shape_heart_outline.png'),
+      );
+    });
+
+    // The one motif whose look depends on which way the finger went.
+    testWidgets('a line follows the drag', (tester) async {
+      final layer = applyShape(
+        layer: null,
+        kind: ShapeKind.line,
+        center: const Offset(100, 60),
+        radius: 42,
+        color: const Color(0xFFD6356B),
+        strokeWidth: 6,
+        angle: -0.6,
+        width: w,
+        height: h,
+      );
+      await expectLater(
+        await onWhite(layer),
+        matchesGoldenFile('goldens/shape_line_angled.png'),
+      );
+    });
   });
 
   // Plain `test`, not `testWidgets`: applyFill hands the flood fill to an

@@ -210,6 +210,8 @@ class ReplayController extends ChangeNotifier {
       radius: op.radius,
       color: Color(op.color),
       strokeWidth: op.strokeWidth,
+      angle: op.angle,
+      outline: op.outline,
       width: width,
       height: height,
     );

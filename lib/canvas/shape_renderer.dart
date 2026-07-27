@@ -11,9 +11,18 @@ import '../models/tool.dart';
 /// distance is the radius — the same motion as placing a stamp, the easiest
 /// motor task for small hands. Aspect is always locked.
 class ShapeRenderer {
+  /// Whether [kind] is a line rather than an area — it can only be stroked,
+  /// and [outline] means nothing to it.
+  static bool isOpen(ShapeKind kind) =>
+      kind == ShapeKind.line || kind == ShapeKind.rainbow;
+
   /// Outline path of a shape inscribed in the circle (center, radius).
   /// The rainbow has no fill path — it is drawn as arcs in [drawShape].
-  static Path shapePath(ShapeKind kind, Offset c, double r) {
+  ///
+  /// [angle] is only read by [ShapeKind.line], which is the one motif whose
+  /// look depends on which way the finger went rather than only how far.
+  static Path shapePath(ShapeKind kind, Offset c, double r,
+      {double angle = 0}) {
     switch (kind) {
       case ShapeKind.circle:
         return Path()..addOval(Rect.fromCircle(center: c, radius: r));
@@ -31,7 +40,38 @@ class ShapeRenderer {
       case ShapeKind.rainbow:
         return Path()
           ..addArc(Rect.fromCircle(center: c, radius: r), pi, pi);
+      case ShapeKind.line:
+        // Through the centre, along the drag, out to the radius on both
+        // sides — so the motion is the same one every other shape uses and
+        // the line simply grows out of where the finger landed.
+        final d = Offset(cos(angle), sin(angle)) * r;
+        return Path()
+          ..moveTo(c.dx - d.dx, c.dy - d.dy)
+          ..lineTo(c.dx + d.dx, c.dy + d.dy);
+      case ShapeKind.triangle:
+        return _trianglePath(c, r);
+      case ShapeKind.oval:
+        // Wider than tall, so it is not mistaken for the circle beside it.
+        return Path()
+          ..addOval(Rect.fromCenter(
+              center: c, width: r * 2, height: r * 1.35));
     }
+  }
+
+  /// Equilateral, tip up, inscribed in the circle.
+  static Path _trianglePath(Offset c, double r) {
+    final path = Path();
+    for (var i = 0; i < 3; i++) {
+      final angle = -pi / 2 + i * 2 * pi / 3;
+      final p = c + Offset(cos(angle), sin(angle)) * r;
+      if (i == 0) {
+        path.moveTo(p.dx, p.dy);
+      } else {
+        path.lineTo(p.dx, p.dy);
+      }
+    }
+    path.close();
+    return path;
   }
 
   /// Two cubic béziers meeting in the bottom tip — a plump, kid-drawn heart.
@@ -84,25 +124,35 @@ class ShapeRenderer {
   /// color in already exist as coloring pages.
   static void drawShape(Canvas canvas, ShapeKind kind, Offset c, double r,
       Color color, double strokeWidth,
-      {double opacity = 1.0}) {
+      {double opacity = 1.0, double angle = 0, bool outline = false}) {
     if (kind == ShapeKind.rainbow) {
       _drawRainbowArc(canvas, c, r, opacity);
       return;
     }
-    final path = shapePath(kind, c, r);
-    canvas.drawPath(
-        path, Paint()..color = color.withValues(alpha: opacity));
+    final path = shapePath(kind, c, r, angle: angle);
+    final open = isOpen(kind);
+    if (!open && !outline) {
+      canvas.drawPath(
+          path, Paint()..color = color.withValues(alpha: opacity));
+    }
+    // Filled shapes get a slightly darker edge of the same hue so they pop
+    // off the paper. An outline is the drawing itself, so it keeps the
+    // colour that was picked and gets thicker — a hairline in the chosen
+    // colour would read as a mistake.
     final hsl = HSLColor.fromColor(color);
-    final outline = hsl
-        .withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0))
-        .toColor();
+    final edge = outline || open
+        ? color
+        : hsl.withLightness((hsl.lightness - 0.18).clamp(0.0, 1.0)).toColor();
     canvas.drawPath(
         path,
         Paint()
-          ..color = outline.withValues(alpha: opacity)
+          ..color = edge.withValues(alpha: opacity)
           ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
           ..strokeJoin = StrokeJoin.round
-          ..strokeWidth = strokeWidth.clamp(4.0, r * 0.25));
+          ..strokeWidth = outline || open
+              ? strokeWidth.clamp(6.0, r * 0.3)
+              : strokeWidth.clamp(4.0, r * 0.25));
   }
 
   /// Six concentric stroked half-arcs, ignoring the selected color.

@@ -217,6 +217,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shapeRainbow => 'Arc-en-ciel';
 
   @override
+  String get shapeLine => 'Ligne';
+
+  @override
+  String get shapeTriangle => 'Triangle';
+
+  @override
+  String get shapeOval => 'Ovale';
+
+  @override
+  String get shapeFilled => 'Rempli';
+
+  @override
+  String get shapeOutline => 'Contour seul';
+
+  @override
   String get symmetryTitle => 'Miroir magique';
 
   @override

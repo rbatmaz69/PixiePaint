@@ -221,6 +221,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get shapeRainbow => 'Tęcza';
 
   @override
+  String get shapeLine => 'Linia';
+
+  @override
+  String get shapeTriangle => 'Trójkąt';
+
+  @override
+  String get shapeOval => 'Owal';
+
+  @override
+  String get shapeFilled => 'Wypełniony';
+
+  @override
+  String get shapeOutline => 'Tylko obrys';
+
+  @override
   String get symmetryTitle => 'Magiczne lustro';
 
   @override

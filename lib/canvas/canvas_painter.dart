@@ -82,7 +82,9 @@ class CanvasPainter extends CustomPainter {
     if (shapeCenter != null) {
       ShapeRenderer.drawShape(canvas, controller.shapeKind, shapeCenter,
           controller.shapeRadius, controller.color, controller.brushSize * 0.4,
-          opacity: 0.7);
+          opacity: 0.7,
+          angle: controller.shapeAngle,
+          outline: controller.shapeOutline);
     }
 
     // Prefer the vector picture: it re-rasterizes under the viewport

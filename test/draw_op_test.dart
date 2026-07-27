@@ -49,6 +49,42 @@ void main() {
     expect(decoded[4], isA<ClearOp>());
   });
 
+  test('a line keeps its direction, an outline its emptiness', () {
+    final ops = [
+      ShapeOp(
+          kind: ShapeKind.line,
+          x: 10,
+          y: 20,
+          radius: 40,
+          color: 0xFF112233,
+          strokeWidth: 8,
+          angle: -0.6),
+      ShapeOp(
+          kind: ShapeKind.heart,
+          x: 1,
+          y: 2,
+          radius: 3,
+          color: 0xFF445566,
+          strokeWidth: 4,
+          outline: true),
+    ];
+    final decoded = decodeOps(encodeOps(ops));
+    expect((decoded[0] as ShapeOp).angle, closeTo(-0.6, 0.001));
+    expect((decoded[0] as ShapeOp).outline, isFalse);
+    expect((decoded[1] as ShapeOp).outline, isTrue);
+    expect((decoded[1] as ShapeOp).angle, 0);
+  });
+
+  test('a shape recorded before v8.9 replays filled and flat', () {
+    // The two new fields are written only when they carry information, so
+    // every log ever saved is missing them — and must not become a stack of
+    // empty tilted outlines because of it.
+    final ops = decodeOps(
+        '{"v":1,"ops":[{"t":"h","k":"star","x":1,"y":2,"r":3,"c":4,"w":5}]}');
+    expect((ops[0] as ShapeOp).angle, 0);
+    expect((ops[0] as ShapeOp).outline, isFalse);
+  });
+
   test('unknown tool/shape/pattern names fall back to safe defaults', () {
     final json =
         '{"v":1,"ops":[{"t":"s","k":"laserPen","c":1,"w":10,"sd":0,"p":[]},'

@@ -218,6 +218,21 @@ class AppLocalizationsNl extends AppLocalizations {
   String get shapeRainbow => 'Regenboog';
 
   @override
+  String get shapeLine => 'Lijn';
+
+  @override
+  String get shapeTriangle => 'Driehoek';
+
+  @override
+  String get shapeOval => 'Ovaal';
+
+  @override
+  String get shapeFilled => 'Ingekleurd';
+
+  @override
+  String get shapeOutline => 'Alleen de rand';
+
+  @override
   String get symmetryTitle => 'Toverspiegel';
 
   @override

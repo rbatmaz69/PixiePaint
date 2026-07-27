@@ -217,6 +217,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shapeRainbow => 'Gökkuşağı';
 
   @override
+  String get shapeLine => 'Çizgi';
+
+  @override
+  String get shapeTriangle => 'Üçgen';
+
+  @override
+  String get shapeOval => 'Oval';
+
+  @override
+  String get shapeFilled => 'Dolu';
+
+  @override
+  String get shapeOutline => 'Sadece kenar';
+
+  @override
   String get symmetryTitle => 'Sihirli ayna';
 
   @override

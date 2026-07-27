@@ -28,7 +28,9 @@ const List<ToolKind> kSimpleTools = [
 ];
 
 /// Drag-to-draw shape motifs for [ToolKind.shape].
-enum ShapeKind { circle, square, heart, star, rainbow }
+/// Append only, like [ToolKind]: a [ShapeOp] in a replay log stores the
+/// name, and reordering would turn every recorded star into a square.
+enum ShapeKind { circle, square, heart, star, rainbow, line, triangle, oval }
 
 /// Base stroke widths in canvas units (canvas is 2048 px wide). These are
 /// the S/M/L quick presets; the slider covers the full range below.

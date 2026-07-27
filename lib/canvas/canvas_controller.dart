@@ -100,6 +100,15 @@ class CanvasController extends ChangeNotifier {
   Offset? shapeCenter;
   Offset? shapeCurrent;
 
+  /// Whether shapes are drawn as an edge instead of a filled area. Chosen in
+  /// the shape sheet, not the toolbar: it belongs to the motif, and the rail
+  /// is already the longest strip on the screen.
+  bool shapeOutline = false;
+
+  /// [shapeAngle] frozen at the moment the drag ended — the drag state is
+  /// cleared before the shape is painted.
+  double shapeAngleAtCommit = 0;
+
   /// Live position of an eyedropper pick (finger still down) and the color
   /// currently under it — drives the loupe overlay.
   Offset? pendingPickPos;
@@ -655,10 +664,20 @@ class CanvasController extends ChangeNotifier {
     return max(20.0, (p - c).distance);
   }
 
+  /// Direction of the drag. Only the line uses it; a bare tap has no
+  /// direction and lies flat.
+  double get shapeAngle {
+    final c = shapeCenter, p = shapeCurrent;
+    if (c == null || p == null || (p - c).distance < 1) return 0;
+    return (p - c).direction;
+  }
+
   void _commitShape() {
     final center = shapeCenter;
     if (center == null) return;
     final radius = shapeRadius;
+    // Read before the drag state is cleared below.
+    shapeAngleAtCommit = shapeAngle;
     shapeCenter = null;
     shapeCurrent = null;
     _activePointer = null;
@@ -671,6 +690,8 @@ class CanvasController extends ChangeNotifier {
       radius: radius,
       color: color,
       strokeWidth: brushSize * 0.4,
+      angle: shapeAngleAtCommit,
+      outline: shapeOutline,
       width: canvasWidth,
       height: canvasHeight,
     );
@@ -692,6 +713,8 @@ class CanvasController extends ChangeNotifier {
       radius: radius,
       color: color.toARGB32(),
       strokeWidth: brushSize * 0.4,
+      angle: shapeAngleAtCommit,
+      outline: shapeOutline,
     ));
   }
 

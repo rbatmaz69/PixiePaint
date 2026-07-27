@@ -45,6 +45,8 @@ sealed class DrawOp {
           radius: (json['r'] as num?)?.toDouble() ?? 20,
           color: json['c'] as int? ?? 0xFF000000,
           strokeWidth: (json['w'] as num?)?.toDouble() ?? 11,
+          angle: (json['a'] as num?)?.toDouble() ?? 0,
+          outline: json['o'] as bool? ?? false,
         );
       case 'f':
         return FillOp(
@@ -146,12 +148,21 @@ class ShapeOp extends DrawOp {
     required this.radius,
     required this.color,
     required this.strokeWidth,
+    this.angle = 0,
+    this.outline = false,
   });
 
   final ShapeKind kind;
   final double x, y, radius;
   final int color;
   final double strokeWidth;
+
+  /// Direction of the drag, in radians. Only the line reads it — the other
+  /// motifs are drawn upright whichever way the finger went.
+  final double angle;
+
+  /// Drawn as an edge rather than a filled area.
+  final bool outline;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -162,6 +173,10 @@ class ShapeOp extends DrawOp {
         'r': _round1(radius),
         'c': color,
         'w': _round1(strokeWidth),
+        // Both omitted when they carry no information, the way 'sy' is —
+        // a replay log is written once per stroke and read back whole.
+        if (angle != 0) 'a': _round1(angle * 1000) / 1000,
+        if (outline) 'o': true,
       };
 }
 
