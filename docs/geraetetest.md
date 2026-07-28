@@ -356,6 +356,20 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Der Besen leert den Topf wieder
 - [ ] Mit Screenreader: die Schälchen heißen „Farbe wählen", das Ergebnis wird mit Farbnamen angesagt
 
+## Aufs Papier (neu in v9.3)
+
+- [ ] Galerie → Bildmenü → **Drucken**: erst die Elternfrage, **dann** die Auswahl (Bild / Grußkarte / Filmstreifen). Nicht umgekehrt
+- [ ] **Das Bild**: wie bisher, A4 quer
+- [ ] **Grußkarte**: A4 quer, gestrichelte Falz in der Mitte, Bild auf der rechten Hälfte. Ausdrucken und falten — das Bild ist vorne, innen ist Platz zum Schreiben
+- [ ] Hat das Bild einen Namen, steht er unter dem Bild auf der Karte
+- [ ] **Filmstreifen**: sechs nummerierte Bilder. Nummer 1 ist die leere Vorlage, die letzte das fertige Bild, dazwischen wird es sichtbar mehr
+- [ ] Bei einem Bild mit **wenigen** Strichen sind es entsprechend weniger Bilder — keine sechs Kopien desselben
+- [ ] Der Eintrag „Filmstreifen" fehlt bei alten Bildern ohne Op-Log (dieselben, die auch keinen Zeitraffer haben)
+- [ ] **Ein sehr vollgemaltes Bild:** der Filmstreifen rechnet spürbar (er malt das Bild sechsmal nach). Der Arbeits-Dialog muss die ganze Zeit stehen und die App danach normal weiterlaufen — wie lange es dauert, gehört notiert
+- [ ] Einstellungen → Für Eltern → **Sticker-Bogen drucken**: Elternfrage, dann ein A4-Bogen mit den eigenen Stickern in gestrichelten Kreisen
+- [ ] Ohne eigene Sticker sagt der Knopf „Noch keine eigenen Sticker", statt still nichts zu tun
+- [ ] Alle vier Drucke ohne Drucker ausprobieren: „Als PDF speichern" im Systemdialog liefert eine Datei, die sich öffnen lässt
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
