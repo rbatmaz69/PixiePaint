@@ -272,6 +272,21 @@ class AppLocalizationsNl extends AppLocalizations {
   String get colorRecent => 'Pas gebruikt';
 
   @override
+  String get colorMixTitle => 'Mengen';
+
+  @override
+  String get colorMixHint => 'Tik twee kleuren aan';
+
+  @override
+  String get colorMixSlot => 'Kies een kleur';
+
+  @override
+  String get colorMixTake => 'Deze neem ik!';
+
+  @override
+  String get colorMixClear => 'Potje leegmaken';
+
+  @override
   String get clearTitle => 'Alles wissen?';
 
   @override

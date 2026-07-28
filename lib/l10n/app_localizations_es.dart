@@ -271,6 +271,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get colorRecent => 'Usados hace poco';
 
   @override
+  String get colorMixTitle => 'Mezclar';
+
+  @override
+  String get colorMixHint => 'Toca dos colores';
+
+  @override
+  String get colorMixSlot => 'Elige un color';
+
+  @override
+  String get colorMixTake => '¡Cógelo!';
+
+  @override
+  String get colorMixClear => 'Vaciar el bote';
+
+  @override
   String get clearTitle => '¿Borrar todo?';
 
   @override

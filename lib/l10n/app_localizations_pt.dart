@@ -272,6 +272,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get colorRecent => 'Usadas há pouco';
 
   @override
+  String get colorMixTitle => 'Misturar';
+
+  @override
+  String get colorMixHint => 'Toca em duas cores';
+
+  @override
+  String get colorMixSlot => 'Escolhe uma cor';
+
+  @override
+  String get colorMixTake => 'Quero esta!';
+
+  @override
+  String get colorMixClear => 'Esvaziar o pote';
+
+  @override
   String get clearTitle => 'Apagar tudo?';
 
   @override

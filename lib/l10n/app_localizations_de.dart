@@ -273,6 +273,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get colorRecent => 'Zuletzt benutzt';
 
   @override
+  String get colorMixTitle => 'Mischen';
+
+  @override
+  String get colorMixHint => 'Zwei Farben antippen';
+
+  @override
+  String get colorMixSlot => 'Farbe wählen';
+
+  @override
+  String get colorMixTake => 'Nehmen!';
+
+  @override
+  String get colorMixClear => 'Topf leeren';
+
+  @override
   String get clearTitle => 'Alles wegwischen?';
 
   @override

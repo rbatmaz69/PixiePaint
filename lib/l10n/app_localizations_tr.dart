@@ -271,6 +271,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get colorRecent => 'Son kullanılan';
 
   @override
+  String get colorMixTitle => 'Karıştır';
+
+  @override
+  String get colorMixHint => 'İki renge dokun';
+
+  @override
+  String get colorMixSlot => 'Bir renk seç';
+
+  @override
+  String get colorMixTake => 'Bunu alıyorum!';
+
+  @override
+  String get colorMixClear => 'Kabı boşalt';
+
+  @override
   String get clearTitle => 'Her şey silinsin mi?';
 
   @override

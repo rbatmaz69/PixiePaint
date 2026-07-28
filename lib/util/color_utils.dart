@@ -109,6 +109,88 @@ int nearestPaletteIndex(Color c) {
   return best;
 }
 
+// ---------------------------------------------------------------- mixing
+
+/// Anchors of the paint colour wheel against the screen colour wheel, as
+/// (RGB hue, artistic hue) pairs.
+///
+/// Red, yellow and blue are opposite thirds on the wheel a child meets in
+/// every paint box; on a screen the primaries are red, *green* and blue and
+/// yellow is squeezed into a sixth of the circle. Mixing on the screen wheel
+/// is what produces the answer every adult remembers being wrong as a kid:
+/// blue and yellow give grey. So hues are carried over to the paint wheel,
+/// mixed there, and carried back.
+const List<(double, double)> _hueAnchors = [
+  (0, 0), // red
+  (30, 60), // orange
+  (60, 120), // yellow
+  (120, 180), // green
+  (240, 240), // blue
+  (300, 300), // purple
+  (360, 360),
+];
+
+double _mapHue(double hue, {required bool toArtistic}) {
+  final h = hue % 360;
+  for (var i = 0; i < _hueAnchors.length - 1; i++) {
+    final from = toArtistic ? _hueAnchors[i].$1 : _hueAnchors[i].$2;
+    final to = toArtistic ? _hueAnchors[i + 1].$1 : _hueAnchors[i + 1].$2;
+    if (h >= from && h <= to) {
+      final t = to == from ? 0.0 : (h - from) / (to - from);
+      final a = toArtistic ? _hueAnchors[i].$2 : _hueAnchors[i].$1;
+      final b = toArtistic ? _hueAnchors[i + 1].$2 : _hueAnchors[i + 1].$1;
+      return a + (b - a) * t;
+    }
+  }
+  return h;
+}
+
+/// Below this a colour has no hue worth mixing — it is white, black or a
+/// grey, and what it contributes is lightness.
+const double _greyish = 0.08;
+
+/// What you get when you stir [a] and [b] together on a palette.
+///
+/// Deliberately not the average of two RGB values: that is light mixing, and
+/// it answers blue + yellow with grey. This mixes on the paint wheel (see
+/// [_hueAnchors]), so blue and yellow give green, red and yellow orange, red
+/// and blue purple — the answers a child can check against a paint box.
+///
+/// Two further things real paint does and arithmetic does not:
+/// * a grey, white or black partner moves the *lightness* and leaves the hue
+///   alone, so red and white is pink rather than something rotated;
+/// * two colours far apart on the wheel dull each other. Mixing everything
+///   ends in mud, which is the honest answer and also the funny one.
+Color mixPaint(Color a, Color b) {
+  final x = HSLColor.fromColor(a);
+  final y = HSLColor.fromColor(b);
+  final lightness = (x.lightness + y.lightness) / 2;
+
+  if (x.saturation < _greyish && y.saturation < _greyish) {
+    return HSLColor.fromAHSL(1, 0, 0, lightness).toColor();
+  }
+  // One of them carries no hue: it tints or shades the other.
+  if (x.saturation < _greyish || y.saturation < _greyish) {
+    final coloured = x.saturation < _greyish ? y : x;
+    return HSLColor.fromAHSL(
+            1, coloured.hue, coloured.saturation * 0.75, lightness)
+        .toColor();
+  }
+
+  final ax = _mapHue(x.hue, toArtistic: true);
+  final ay = _mapHue(y.hue, toArtistic: true);
+  var delta = ay - ax;
+  // Round the short way: red and purple meet at magenta, not at green.
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  final mixed = _mapHue(ax + delta / 2, toArtistic: false);
+
+  final apart = delta.abs() / 180;
+  final saturation =
+      ((x.saturation + y.saturation) / 2 * (1 - 0.45 * apart)).clamp(0.0, 1.0);
+  return HSLColor.fromAHSL(1, mixed % 360, saturation, lightness).toColor();
+}
+
 /// Most-recent-first list of ARGB values: dedups, caps at [max].
 List<int> pushRecentArgb(List<int> recents, int argb, {int max = 8}) {
   final next = [argb, ...recents.where((v) => v != argb)];

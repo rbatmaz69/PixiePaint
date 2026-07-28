@@ -271,6 +271,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get colorRecent => 'Utilisées récemment';
 
   @override
+  String get colorMixTitle => 'Mélanger';
+
+  @override
+  String get colorMixHint => 'Touche deux couleurs';
+
+  @override
+  String get colorMixSlot => 'Choisis une couleur';
+
+  @override
+  String get colorMixTake => 'Je le prends !';
+
+  @override
+  String get colorMixClear => 'Vider le pot';
+
+  @override
   String get clearTitle => 'Tout effacer ?';
 
   @override

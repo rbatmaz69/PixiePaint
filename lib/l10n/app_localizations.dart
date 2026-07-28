@@ -598,6 +598,36 @@ abstract class AppLocalizations {
   /// **'Zuletzt benutzt'**
   String get colorRecent;
 
+  /// No description provided for @colorMixTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Mischen'**
+  String get colorMixTitle;
+
+  /// No description provided for @colorMixHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Zwei Farben antippen'**
+  String get colorMixHint;
+
+  /// No description provided for @colorMixSlot.
+  ///
+  /// In de, this message translates to:
+  /// **'Farbe wählen'**
+  String get colorMixSlot;
+
+  /// No description provided for @colorMixTake.
+  ///
+  /// In de, this message translates to:
+  /// **'Nehmen!'**
+  String get colorMixTake;
+
+  /// No description provided for @colorMixClear.
+  ///
+  /// In de, this message translates to:
+  /// **'Topf leeren'**
+  String get colorMixClear;
+
   /// No description provided for @clearTitle.
   ///
   /// In de, this message translates to:
