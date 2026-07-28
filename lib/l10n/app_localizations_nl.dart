@@ -27,6 +27,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cardTrace => 'Overtrekken';
 
   @override
+  String get cardScratch => 'Kraskaart';
+
+  @override
+  String get scratchIntroTitle => 'Kras de kleuren vrij!';
+
+  @override
+  String get scratchIntroBody =>
+      'Ga met de gum over het zwarte vel — daaronder wachten de kleuren.';
+
+  @override
   String get cardScenes => 'Stickerwereld';
 
   @override

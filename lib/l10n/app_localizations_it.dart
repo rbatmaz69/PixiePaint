@@ -27,6 +27,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cardTrace => 'Ripassa';
 
   @override
+  String get cardScratch => 'Foglio da grattare';
+
+  @override
+  String get scratchIntroTitle => 'Gratta via il nero!';
+
+  @override
+  String get scratchIntroBody =>
+      'Passa la gomma sul foglio nero: sotto ci sono i colori.';
+
+  @override
   String get cardScenes => 'Mondo degli adesivi';
 
   @override

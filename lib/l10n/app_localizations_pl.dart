@@ -27,6 +27,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get cardTrace => 'Po śladzie';
 
   @override
+  String get cardScratch => 'Zdrapka';
+
+  @override
+  String get scratchIntroTitle => 'Zdrap kolory!';
+
+  @override
+  String get scratchIntroBody =>
+      'Przejedź gumką po czarnej kartce — pod spodem czekają kolory.';
+
+  @override
   String get cardScenes => 'Świat naklejek';
 
   @override

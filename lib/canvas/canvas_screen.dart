@@ -55,6 +55,7 @@ import 'painting_canvas.dart';
 import 'pause_curtain.dart';
 import 'region_label.dart';
 import 'save_session.dart';
+import 'scratch.dart';
 import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
@@ -105,6 +106,7 @@ class CanvasScreen extends StatefulWidget {
     this.photoLineArt,
     this.traceTemplate,
     this.scene,
+    this.scratch = false,
   });
 
   final ColoringPage? page;
@@ -114,6 +116,10 @@ class CanvasScreen extends StatefulWidget {
 
   /// A ready-made stage rendered into the (eraser-proof) photo background.
   final Scene? scene;
+
+  /// Start as a scratch picture: colours under a cover, and the eraser in
+  /// hand as the scratching stick.
+  final bool scratch;
 
   /// Ownership passes to the canvas controller, which disposes it.
   final RasterizedLineArt? photoLineArt;
@@ -142,6 +148,7 @@ class _CanvasScreenState extends State<CanvasScreen>
   bool get _isCbn => _cbn != null;
   late bool hasPhoto;
   late bool hasPhotoLineArt;
+  late bool isScratch;
   bool loading = true;
 
   /// Owns the whole save pipeline — see [ArtworkSaveSession].
@@ -175,8 +182,13 @@ class _CanvasScreenState extends State<CanvasScreen>
     sceneId = widget.scene?.id ?? widget.resume?.sceneId;
     // A scene is persisted exactly like a photo background: rendered once,
     // saved as background.png, protected from the eraser.
+    // The scratch colour sheet is persisted exactly like a scene: rendered
+    // once into background.png, where the eraser cannot reach it — which is
+    // the whole trick.
+    isScratch = widget.scratch || (widget.resume?.scratch ?? false);
     hasPhoto = widget.photoPath != null ||
         widget.scene != null ||
+        isScratch ||
         (widget.resume?.hasPhoto ?? false);
     hasPhotoLineArt =
         widget.photoLineArt != null ||
@@ -192,8 +204,13 @@ class _CanvasScreenState extends State<CanvasScreen>
       traceId: traceId,
       sceneId: sceneId,
       cbnFilled: () => _cbnFilledForSave,
+      scratch: isScratch,
       resumed: widget.resume != null,
     );
+    // The scratching stick is the eraser. Nothing else has to change: the
+    // eraser has always been the one tool that takes paint away and cannot
+    // touch the background.
+    if (isScratch) controller.tool = ToolKind.eraser;
     // A tool the simple toolbar does not show would be unselectable and
     // unchangeable — the child would be stuck with it.
     if (_simpleTools && !kSimpleTools.contains(controller.tool)) {
@@ -252,7 +269,9 @@ class _CanvasScreenState extends State<CanvasScreen>
       controller.setLineArt(art);
     }
     final photoPath = widget.photoPath;
-    if (widget.scene != null) {
+    if (widget.scratch && widget.resume == null) {
+      _startScratchPicture();
+    } else if (widget.scene != null) {
       final image = await rasterizeSvgToImage(
           widget.scene!.assetPath, kCanvasWidth, kCanvasHeight);
       if (!mounted) return image.dispose();
@@ -287,6 +306,38 @@ class _CanvasScreenState extends State<CanvasScreen>
         controller.recordOps = false;
       }
     }
+  }
+
+  /// Lays the colour sheet down and covers it up.
+  ///
+  /// The cover is written into the op log as a plain fill in the cover
+  /// colour — through [CanvasController.loadOps], not as a recorded step, so
+  /// it is part of how the picture *arrived* rather than something the child
+  /// did. That keeps two things true at once: undo can never lift the cover
+  /// off (there is no step to undo), and the time-lapse still starts by
+  /// covering the page instead of on a sheet of colour that was never seen.
+  void _startScratchPicture() {
+    final seed = artworkId.hashCode;
+    controller.setBackground(
+        scratchColourSheet(kCanvasWidth, kCanvasHeight, seed));
+    controller.setPaintLayer(scratchCover(kCanvasWidth, kCanvasHeight));
+    controller.loadOps([
+      FillOp(x: 0, y: 0, color: kScratchCover.toARGB32(),
+          pattern: FillPattern.solid),
+    ]);
+    // Nothing has been drawn yet, but there is something to lose: without
+    // this the first autosave would skip the picture and a child who left
+    // straight away would come back to an uncovered sheet.
+    controller.dirty = true;
+    // A black page is the one screen in this app that looks like a mistake.
+    // Same card, same rule as the numbered pictures and the tracing sheets.
+    _showModeIntro(
+      seen: Settings.instance.scratchIntroSeen,
+      mark: Settings.instance.markScratchIntroSeen,
+      emoji: '🌈',
+      title: (l10n) => l10n.scratchIntroTitle,
+      body: (l10n) => l10n.scratchIntroBody,
+    );
   }
 
   /// Builds the trace guide and wires the commit hook. The guide is
@@ -693,6 +744,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       showFill: traceId == null,
       fillOnly: _isCbn,
       simple: _simpleTools,
+      allowClear: !isScratch,
       onBack: _leave,
       onShare: _share,
     );
@@ -739,6 +791,7 @@ class _CanvasScreenState extends State<CanvasScreen>
         fillOnly: _isCbn,
         buttonSize: 50,
         simple: _simpleTools,
+        allowClear: !isScratch,
         onBar: true,
       ),
     );
@@ -1124,6 +1177,7 @@ class _LeftRail extends StatelessWidget {
     this.showFill = true,
     this.fillOnly = false,
     this.simple = false,
+    this.allowClear = true,
   });
 
   final CanvasController controller;
@@ -1132,6 +1186,7 @@ class _LeftRail extends StatelessWidget {
   final bool showFill;
   final bool fillOnly;
   final bool simple;
+  final bool allowClear;
 
   @override
   Widget build(BuildContext context) {
@@ -1163,6 +1218,7 @@ class _LeftRail extends StatelessWidget {
               showFill: showFill,
               fillOnly: fillOnly,
               simple: simple,
+              allowClear: allowClear,
               onBar: true,
             ),
           ),

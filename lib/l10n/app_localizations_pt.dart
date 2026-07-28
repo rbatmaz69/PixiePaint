@@ -27,6 +27,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cardTrace => 'Contornar';
 
   @override
+  String get cardScratch => 'Raspadinha';
+
+  @override
+  String get scratchIntroTitle => 'Raspa as cores!';
+
+  @override
+  String get scratchIntroBody =>
+      'Passa a borracha na folha preta — as cores estão à espera por baixo.';
+
+  @override
   String get cardScenes => 'Mundo dos autocolantes';
 
   @override

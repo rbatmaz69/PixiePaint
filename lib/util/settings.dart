@@ -76,6 +76,7 @@ class Settings extends ChangeNotifier {
   /// match the number under the palette.
   bool cbnIntroSeen = false;
   bool traceIntroSeen = false;
+  bool scratchIntroSeen = false;
 
   /// Minutes of painting before the app suggests a break, or 0 for never.
   /// Only the values in [kPauseChoices] are offered.
@@ -117,6 +118,7 @@ class Settings extends ChangeNotifier {
     rotateHintSeen = json['rotateHintSeen'] as bool? ?? false;
     cbnIntroSeen = json['cbnIntroSeen'] as bool? ?? false;
     traceIntroSeen = json['traceIntroSeen'] as bool? ?? false;
+    scratchIntroSeen = json['scratchIntroSeen'] as bool? ?? false;
     leftHanded = json['leftHanded'] as bool? ?? false;
     magnifier = json['magnifier'] as bool? ?? true;
     shareCount = json['shareCount'] as int? ?? 0;
@@ -186,6 +188,7 @@ class Settings extends ChangeNotifier {
       'rotateHintSeen': rotateHintSeen,
       'cbnIntroSeen': cbnIntroSeen,
       'traceIntroSeen': traceIntroSeen,
+      'scratchIntroSeen': scratchIntroSeen,
       'shareCount': shareCount,
       'reviewRequested': reviewRequested,
       'recentColors': recentColors,
@@ -226,6 +229,13 @@ class Settings extends ChangeNotifier {
     await _persist();
   }
 
+  Future<void> markScratchIntroSeen() async {
+    if (scratchIntroSeen) return;
+    scratchIntroSeen = true;
+    notifyListeners();
+    await _persist();
+  }
+
   /// Waits until every queued write reached the disk.
   Future<void> flush() async => _store?.flush();
 
@@ -248,6 +258,7 @@ class Settings extends ChangeNotifier {
     rotateHintSeen = false;
     cbnIntroSeen = false;
     traceIntroSeen = false;
+    scratchIntroSeen = false;
     shareCount = 0;
     reviewRequested = false;
     recentColors = [];

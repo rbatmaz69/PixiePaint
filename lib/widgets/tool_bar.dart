@@ -282,6 +282,7 @@ class ToolBarRail extends StatefulWidget {
     this.direction = Axis.vertical,
     this.buttonSize = 52,
     this.simple = false,
+    this.allowClear = true,
     this.onBar = false,
   });
 
@@ -301,6 +302,14 @@ class ToolBarRail extends StatefulWidget {
   /// Edge length of one tool button. Portrait shaves a little off to give
   /// the paper more room; [Bouncy.minSize] keeps the tap target at 48.
   final double buttonSize;
+
+  /// Whether "clear everything" is offered at all.
+  ///
+  /// False on a scratch picture: there, clearing would take the cover off
+  /// and hand back the whole colour sheet at once — the opposite of what
+  /// the picture is for, and not something a child would think of undo as
+  /// the fix for.
+  final bool allowClear;
 
   /// True where a white bar is already behind the buttons — see [_pill].
   final bool onBar;
@@ -447,15 +456,16 @@ class _ToolBarRailState extends State<ToolBarRail> {
               onTap: () => symmetry.showSymmetryPicker(context, controller),
             ),
         ], widget.direction, onBar: widget.onBar),
-      _pill([
-        _ActionButton(
-          icon: Icons.delete_sweep_outlined,
-          enabled: !controller.isEmpty,
-          size: size,
-          label: context.l10n.clearAction,
-          onTap: () => _confirmClear(context, controller),
-        ),
-      ], widget.direction, onBar: widget.onBar),
+      if (widget.allowClear)
+        _pill([
+          _ActionButton(
+            icon: Icons.delete_sweep_outlined,
+            enabled: !controller.isEmpty,
+            size: size,
+            label: context.l10n.clearAction,
+            onTap: () => _confirmClear(context, controller),
+          ),
+        ], widget.direction, onBar: widget.onBar),
     ];
   }
 }

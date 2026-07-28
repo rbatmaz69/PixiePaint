@@ -27,6 +27,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cardTrace => 'Repasser';
 
   @override
+  String get cardScratch => 'Carte à gratter';
+
+  @override
+  String get scratchIntroTitle => 'Gratte les couleurs !';
+
+  @override
+  String get scratchIntroBody =>
+      'Passe la gomme sur la feuille noire — les couleurs attendent dessous.';
+
+  @override
   String get cardScenes => 'Monde des autocollants';
 
   @override

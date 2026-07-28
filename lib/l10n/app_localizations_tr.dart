@@ -27,6 +27,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cardTrace => 'Üzerinden geç';
 
   @override
+  String get cardScratch => 'Kazı kazan';
+
+  @override
+  String get scratchIntroTitle => 'Renkleri kazı çıkar!';
+
+  @override
+  String get scratchIntroBody =>
+      'Siyah sayfanın üzerinden silgiyle geç — altında renkler bekliyor.';
+
+  @override
   String get cardScenes => 'Çıkartma dünyası';
 
   @override

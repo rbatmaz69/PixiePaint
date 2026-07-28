@@ -25,6 +25,8 @@ const Map<String, String> _allowed = {
   'lib/canvas/canvas_controller.dart':
       'white as the paper an export is laid on',
   'lib/canvas/shape_renderer.dart': 'the rainbow bands of a shape',
+  'lib/canvas/scratch.dart':
+      'the colours under a scratch picture and the cover over them: content',
   'lib/canvas/stroke_renderer.dart': 'glitter, and the white a stroke fades into',
   'lib/trace/trace_template.dart': 'the tracing guide and its start dot',
   'lib/util/image_io.dart': 'white as the paper an export is laid on',

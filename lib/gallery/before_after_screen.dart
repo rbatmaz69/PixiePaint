@@ -25,9 +25,11 @@ import '../util/svg_raster.dart';
 ///
 /// It is not offered for a picture with no "before" worth seeing: free
 /// drawing starts on blank paper, and wiping a blank page over a painting
-/// is a magic trick with nothing up its sleeve.
+/// is a magic trick with nothing up its sleeve. A scratch picture is left
+/// out for the opposite reason — its "before" is the bare colour sheet,
+/// which is a page the child never saw.
 bool hasBeforeAfter(Artwork artwork) =>
-    artwork.pageId != null || artwork.hasPhoto;
+    !artwork.scratch && (artwork.pageId != null || artwork.hasPhoto);
 
 class BeforeAfterScreen extends StatefulWidget {
   const BeforeAfterScreen({super.key, required this.artwork});

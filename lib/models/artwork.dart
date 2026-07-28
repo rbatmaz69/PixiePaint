@@ -25,6 +25,15 @@ class Artwork {
   /// lives in background.png like a photo).
   final String? sceneId;
 
+  /// A scratch picture: colours under a cover, revealed with the eraser.
+  ///
+  /// The layers are ordinary ones (colour sheet in background.png, cover in
+  /// paint.png), so this flag exists only for the two places that have to
+  /// treat it differently — the toolbar, which must not offer "clear
+  /// everything" here, and the before/after wipe, whose "before" would be
+  /// the bare colour sheet, a page the child never saw.
+  final bool scratch;
+
   /// Which kid profile owns this picture. Null on artworks made before
   /// profiles existed — those belong to the first (primary) profile, which
   /// the gallery filter treats as the eternal fallback.
@@ -44,6 +53,7 @@ class Artwork {
     this.traceId,
     this.cbnFilled = const [],
     this.sceneId,
+    this.scratch = false,
     this.profileId,
   });
 
@@ -71,6 +81,7 @@ class Artwork {
         traceId: traceId,
         cbnFilled: cbnFilled,
         sceneId: sceneId,
+        scratch: scratch,
         profileId: profileId ?? this.profileId,
       );
 
@@ -87,6 +98,7 @@ class Artwork {
         if (traceId != null) 'traceId': traceId,
         if (cbnFilled.isNotEmpty) 'cbnFilled': cbnFilled,
         if (sceneId != null) 'sceneId': sceneId,
+        if (scratch) 'scratch': true,
         if (profileId != null) 'profileId': profileId,
       };
 
@@ -107,6 +119,7 @@ class Artwork {
             .whereType<int>()
             .toList(),
         sceneId: json['sceneId'] as String?,
+        scratch: json['scratch'] as bool? ?? false,
         profileId: json['profileId'] as String?,
       );
 }

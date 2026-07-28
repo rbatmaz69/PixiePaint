@@ -27,6 +27,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardTrace => 'Tracing';
 
   @override
+  String get cardScratch => 'Scratch art';
+
+  @override
+  String get scratchIntroTitle => 'Scratch the colours out!';
+
+  @override
+  String get scratchIntroBody =>
+      'Rub the black sheet with the eraser — the colours are waiting underneath.';
+
+  @override
   String get cardScenes => 'Sticker world';
 
   @override

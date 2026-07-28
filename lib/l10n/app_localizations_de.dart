@@ -27,6 +27,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardTrace => 'Nachspuren';
 
   @override
+  String get cardScratch => 'Kratzbild';
+
+  @override
+  String get scratchIntroTitle => 'Kratz die Farben frei!';
+
+  @override
+  String get scratchIntroBody =>
+      'Male mit dem Radierer über das schwarze Blatt — darunter warten die Farben.';
+
+  @override
   String get cardScenes => 'Sticker-Welt';
 
   @override

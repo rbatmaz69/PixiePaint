@@ -148,6 +148,24 @@ abstract class AppLocalizations {
   /// **'Nachspuren'**
   String get cardTrace;
 
+  /// No description provided for @cardScratch.
+  ///
+  /// In de, this message translates to:
+  /// **'Kratzbild'**
+  String get cardScratch;
+
+  /// No description provided for @scratchIntroTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Kratz die Farben frei!'**
+  String get scratchIntroTitle;
+
+  /// No description provided for @scratchIntroBody.
+  ///
+  /// In de, this message translates to:
+  /// **'Male mit dem Radierer über das schwarze Blatt — darunter warten die Farben.'**
+  String get scratchIntroBody;
+
   /// No description provided for @cardScenes.
   ///
   /// In de, this message translates to:

@@ -27,6 +27,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardTrace => 'Repasar';
 
   @override
+  String get cardScratch => 'Rascar';
+
+  @override
+  String get scratchIntroTitle => '¡Rasca los colores!';
+
+  @override
+  String get scratchIntroBody =>
+      'Pasa la goma por la lámina negra: debajo esperan los colores.';
+
+  @override
   String get cardScenes => 'Mundo de pegatinas';
 
   @override

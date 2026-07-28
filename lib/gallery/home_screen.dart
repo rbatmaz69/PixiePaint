@@ -126,6 +126,13 @@ class _HomeScreenState extends State<HomeScreen>
         onTap: () => _pickPhoto(context),
       ),
       _CardSpec(
+        emoji: '🌈',
+        label: context.l10n.cardScratch,
+        gradient: PixieGradients.rewards,
+        tiltIndex: 1,
+        onTap: () => open(() => const CanvasScreen(scratch: true)),
+      ),
+      _CardSpec(
         emoji: '✍️',
         label: context.l10n.cardTrace,
         gradient: PixieGradients.trace,

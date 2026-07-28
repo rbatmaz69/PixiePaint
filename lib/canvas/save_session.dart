@@ -32,6 +32,7 @@ class ArtworkSaveSession {
     this.pageId,
     this.traceId,
     this.sceneId,
+    this.scratch = false,
     bool resumed = false,
   })  : _everSaved = resumed,
         // A resumed artwork already has these on disk.
@@ -47,6 +48,7 @@ class ArtworkSaveSession {
   final String? pageId;
   final String? traceId;
   final String? sceneId;
+  final bool scratch;
 
   /// Read at save time, because a color-by-number page keeps filling
   /// regions while the session is alive.
@@ -114,6 +116,7 @@ class ArtworkSaveSession {
       pageId: pageId,
       traceId: traceId,
       sceneId: sceneId,
+      scratch: scratch,
       profileId: ProfileStore.instance.active.id,
       cbnFilled: cbnFilled(),
       hasPhoto: hasPhoto,
