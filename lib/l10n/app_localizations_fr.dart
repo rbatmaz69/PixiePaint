@@ -460,6 +460,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les outils passent à droite pour que la main qui dessine ne les cache pas.';
 
   @override
+  String get magnifierTitle => 'Loupe';
+
+  @override
+  String get magnifierSubtitle =>
+      'Montre en grand ce qui se trouve sous le doigt.';
+
+  @override
   String get soundsTitle => 'Sons du dessin';
 
   @override

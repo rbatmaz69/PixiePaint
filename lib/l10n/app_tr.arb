@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Resimler ancak yetişkin sorusundan sonra silinebilir.",
   "leftHandedTitle": "Solak modu",
   "leftHandedSubtitle": "Araçlar sağ tarafa geçer, böylece çizen el onları kapatmaz.",
+  "magnifierTitle": "Büyüteç",
+  "magnifierSubtitle": "Parmağın altında olanı büyüterek gösterir.",
   "soundsTitle": "Boyama sesleri",
   "soundsSubtitle": "Boyarken ve damga vururken yumuşak sesler",
   "musicTitle": "Arka plan müziği",

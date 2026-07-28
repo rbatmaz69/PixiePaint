@@ -461,6 +461,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tools move to the right side so the drawing hand never covers them.';
 
   @override
+  String get magnifierTitle => 'Magnifier';
+
+  @override
+  String get magnifierSubtitle =>
+      'Shows what is under the finger right now, enlarged.';
+
+  @override
   String get soundsTitle => 'Painting sounds';
 
   @override

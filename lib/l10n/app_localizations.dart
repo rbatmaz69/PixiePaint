@@ -958,6 +958,18 @@ abstract class AppLocalizations {
   /// **'Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.'**
   String get leftHandedSubtitle;
 
+  /// No description provided for @magnifierTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Lupe beim Malen'**
+  String get magnifierTitle;
+
+  /// No description provided for @magnifierSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Zeigt vergrößert, was gerade unter dem Finger liegt.'**
+  String get magnifierSubtitle;
+
   /// No description provided for @soundsTitle.
   ///
   /// In de, this message translates to:

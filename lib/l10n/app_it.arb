@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "I disegni si possono cancellare solo dopo la domanda per i grandi.",
   "leftHandedTitle": "Modalità mancini",
   "leftHandedSubtitle": "Gli strumenti passano a destra, così la mano che disegna non li copre.",
+  "magnifierTitle": "Lente",
+  "magnifierSubtitle": "Mostra ingrandito ciò che sta sotto il dito.",
   "soundsTitle": "Suoni del disegno",
   "soundsSubtitle": "Suoni delicati mentre colori e usi i timbri",
   "musicTitle": "Musica di sottofondo",

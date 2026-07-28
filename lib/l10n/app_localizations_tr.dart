@@ -460,6 +460,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'Araçlar sağ tarafa geçer, böylece çizen el onları kapatmaz.';
 
   @override
+  String get magnifierTitle => 'Büyüteç';
+
+  @override
+  String get magnifierSubtitle => 'Parmağın altında olanı büyüterek gösterir.';
+
+  @override
   String get soundsTitle => 'Boyama sesleri';
 
   @override

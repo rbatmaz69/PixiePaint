@@ -160,6 +160,8 @@
   "deleteGateSubtitle": "Bilder können nur nach der Eltern-Frage gelöscht werden.",
   "leftHandedTitle": "Linkshänder-Modus",
   "leftHandedSubtitle": "Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.",
+  "magnifierTitle": "Lupe beim Malen",
+  "magnifierSubtitle": "Zeigt vergrößert, was gerade unter dem Finger liegt.",
   "soundsTitle": "Mal-Geräusche",
   "soundsSubtitle": "Leise Töne beim Malen und Stempeln",
   "musicTitle": "Hintergrund-Musik",

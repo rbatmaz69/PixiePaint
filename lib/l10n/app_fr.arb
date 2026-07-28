@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Les images ne peuvent être supprimées qu'après la question pour les parents.",
   "leftHandedTitle": "Mode gaucher",
   "leftHandedSubtitle": "Les outils passent à droite pour que la main qui dessine ne les cache pas.",
+  "magnifierTitle": "Loupe",
+  "magnifierSubtitle": "Montre en grand ce qui se trouve sous le doigt.",
   "soundsTitle": "Sons du dessin",
   "soundsSubtitle": "Petits sons pendant le coloriage et les tampons",
   "musicTitle": "Musique de fond",

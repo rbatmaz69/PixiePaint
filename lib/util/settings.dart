@@ -29,6 +29,14 @@ class Settings extends ChangeNotifier {
   /// away the last feedback a child had that a tap had landed at all.
   bool hapticsOn = true;
 
+  /// Whether the lens follows the finger while painting.
+  ///
+  /// On by default: the hand covering the spot it works on is a problem
+  /// every child has, not an advanced feature. It is a switch all the same
+  /// because it is the one thing in the app that draws the picture twice —
+  /// on an old tablet that can be felt in a long stroke.
+  bool magnifier = true;
+
   /// Mirrors the canvas layout: tool rail on the right (landscape) and the
   /// floating buttons swapped, so a left drawing hand never crosses them.
   bool leftHanded = false;
@@ -110,6 +118,7 @@ class Settings extends ChangeNotifier {
     cbnIntroSeen = json['cbnIntroSeen'] as bool? ?? false;
     traceIntroSeen = json['traceIntroSeen'] as bool? ?? false;
     leftHanded = json['leftHanded'] as bool? ?? false;
+    magnifier = json['magnifier'] as bool? ?? true;
     shareCount = json['shareCount'] as int? ?? 0;
     reviewRequested = json['reviewRequested'] as bool? ?? false;
     recentColors =
@@ -125,6 +134,7 @@ class Settings extends ChangeNotifier {
       int? musicTrack,
       int? themeModeIndex,
       bool? leftHanded,
+      bool? magnifier,
       int? pauseAfterMinutes}) async {
     if (stylusOnly != null) this.stylusOnly = stylusOnly;
     if (deleteNeedsGate != null) this.deleteNeedsGate = deleteNeedsGate;
@@ -134,6 +144,7 @@ class Settings extends ChangeNotifier {
     if (musicTrack != null) this.musicTrack = musicTrack;
     if (themeModeIndex != null) this.themeModeIndex = themeModeIndex;
     if (leftHanded != null) this.leftHanded = leftHanded;
+    if (magnifier != null) this.magnifier = magnifier;
     if (pauseAfterMinutes != null) {
       this.pauseAfterMinutes = pauseAfterMinutes;
     }
@@ -169,6 +180,7 @@ class Settings extends ChangeNotifier {
       'musicTrack': musicTrack,
       'themeModeIndex': themeModeIndex,
       'leftHanded': leftHanded,
+      'magnifier': magnifier,
       'pauseAfterMinutes': pauseAfterMinutes,
       'welcomeSeen': welcomeSeen,
       'rotateHintSeen': rotateHintSeen,
@@ -230,6 +242,7 @@ class Settings extends ChangeNotifier {
     musicTrack = 0;
     themeModeIndex = 0;
     leftHanded = false;
+    magnifier = true;
     pauseAfterMinutes = 0;
     welcomeSeen = false;
     rotateHintSeen = false;

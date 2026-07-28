@@ -461,6 +461,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Gli strumenti passano a destra, così la mano che disegna non li copre.';
 
   @override
+  String get magnifierTitle => 'Lente';
+
+  @override
+  String get magnifierSubtitle =>
+      'Mostra ingrandito ciò che sta sotto il dito.';
+
+  @override
   String get soundsTitle => 'Suoni del disegno';
 
   @override

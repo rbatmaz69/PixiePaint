@@ -461,6 +461,13 @@ class AppLocalizationsNl extends AppLocalizations {
       'Het gereedschap gaat naar rechts, zodat je tekenhand het niet bedekt.';
 
   @override
+  String get magnifierTitle => 'Vergrootglas';
+
+  @override
+  String get magnifierSubtitle =>
+      'Laat vergroot zien wat er onder de vinger zit.';
+
+  @override
   String get soundsTitle => 'Tekengeluidjes';
 
   @override

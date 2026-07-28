@@ -460,6 +460,12 @@ class AppLocalizationsEs extends AppLocalizations {
       'Las herramientas pasan a la derecha para que la mano que dibuja no las tape.';
 
   @override
+  String get magnifierTitle => 'Lupa';
+
+  @override
+  String get magnifierSubtitle => 'Muestra ampliado lo que hay bajo el dedo.';
+
+  @override
   String get soundsTitle => 'Sonidos al pintar';
 
   @override

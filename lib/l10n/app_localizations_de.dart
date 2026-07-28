@@ -463,6 +463,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Werkzeuge wandern auf die rechte Seite, damit die malende Hand sie nicht verdeckt.';
 
   @override
+  String get magnifierTitle => 'Lupe beim Malen';
+
+  @override
+  String get magnifierSubtitle =>
+      'Zeigt vergrößert, was gerade unter dem Finger liegt.';
+
+  @override
   String get soundsTitle => 'Mal-Geräusche';
 
   @override

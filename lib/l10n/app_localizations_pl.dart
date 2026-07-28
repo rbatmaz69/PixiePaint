@@ -464,6 +464,13 @@ class AppLocalizationsPl extends AppLocalizations {
       'Narzędzia przechodzą na prawą stronę, żeby rysująca ręka ich nie zasłaniała.';
 
   @override
+  String get magnifierTitle => 'Lupa';
+
+  @override
+  String get magnifierSubtitle =>
+      'Pokazuje w powiększeniu to, co jest pod palcem.';
+
+  @override
   String get soundsTitle => 'Dźwięki malowania';
 
   @override

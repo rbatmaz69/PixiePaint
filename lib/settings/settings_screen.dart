@@ -51,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       bool? hapticsOn,
       bool? musicOn,
       bool? leftHanded,
+      bool? magnifier,
       int? themeModeIndex,
       int? pauseAfterMinutes}) async {
     await Settings.instance.update(
@@ -61,6 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         hapticsOn: hapticsOn,
         musicOn: musicOn,
         leftHanded: leftHanded,
+        magnifier: magnifier,
         pauseAfterMinutes: pauseAfterMinutes);
     if (musicOn != null) await Music.instance.setOn(musicOn);
     Sfx.instance.tick();
@@ -324,6 +326,14 @@ class _SettingsScreenState extends State<SettingsScreen>
                               subtitle: context.l10n.leftHandedSubtitle,
                               value: settings.leftHanded,
                               onChanged: (v) => _update(leftHanded: v),
+                            ),
+                            _KidRow(
+                              emoji: '🔍',
+                              tint: PixiePalette.skyLight,
+                              title: context.l10n.magnifierTitle,
+                              subtitle: context.l10n.magnifierSubtitle,
+                              value: settings.magnifier,
+                              onChanged: (v) => _update(magnifier: v),
                             ),
                             _KidRow(
                               emoji: '⏰',

@@ -461,6 +461,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'As ferramentas passam para a direita, para a mão que desenha não as tapar.';
 
   @override
+  String get magnifierTitle => 'Lupa';
+
+  @override
+  String get magnifierSubtitle => 'Mostra ampliado o que está debaixo do dedo.';
+
+  @override
   String get soundsTitle => 'Sons ao pintar';
 
   @override

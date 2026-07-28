@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Pictures can only be deleted after the parent question.",
   "leftHandedTitle": "Left-handed mode",
   "leftHandedSubtitle": "Tools move to the right side so the drawing hand never covers them.",
+  "magnifierTitle": "Magnifier",
+  "magnifierSubtitle": "Shows what is under the finger right now, enlarged.",
   "soundsTitle": "Painting sounds",
   "soundsSubtitle": "Soft sounds while painting and stamping",
   "musicTitle": "Background music",

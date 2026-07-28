@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Los dibujos solo se pueden borrar tras la pregunta para adultos.",
   "leftHandedTitle": "Modo zurdo",
   "leftHandedSubtitle": "Las herramientas pasan a la derecha para que la mano que dibuja no las tape.",
+  "magnifierTitle": "Lupa",
+  "magnifierSubtitle": "Muestra ampliado lo que hay bajo el dedo.",
   "soundsTitle": "Sonidos al pintar",
   "soundsSubtitle": "Sonidos suaves al pintar y al poner sellos",
   "musicTitle": "Música de fondo",

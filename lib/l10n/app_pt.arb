@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Os desenhos só podem ser apagados depois da pergunta para adultos.",
   "leftHandedTitle": "Modo canhoto",
   "leftHandedSubtitle": "As ferramentas passam para a direita, para a mão que desenha não as tapar.",
+  "magnifierTitle": "Lupa",
+  "magnifierSubtitle": "Mostra ampliado o que está debaixo do dedo.",
   "soundsTitle": "Sons ao pintar",
   "soundsSubtitle": "Sons suaves enquanto pintas e carimbas",
   "musicTitle": "Música de fundo",

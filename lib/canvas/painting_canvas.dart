@@ -4,6 +4,7 @@ import '../l10n/l10n.dart';
 import 'canvas_controller.dart';
 import 'canvas_painter.dart';
 import 'fill_burst.dart';
+import 'magnifier.dart';
 import 'stamp_burst.dart';
 
 /// The drawing surface at fixed canvas resolution. Sizing and zoom/pan are
@@ -56,6 +57,13 @@ class PaintingCanvas extends StatelessWidget {
           Positioned.fill(
             child: IgnorePointer(
               child: StampBurstOverlay(controller: controller),
+            ),
+          ),
+          // Topmost: the lens has to be over the paint, or it magnifies
+          // something the child is no longer looking at.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: MagnifierOverlay(controller: controller),
             ),
           ),
         ],

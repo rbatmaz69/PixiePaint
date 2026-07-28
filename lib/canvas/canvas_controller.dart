@@ -358,6 +358,20 @@ class CanvasController extends ChangeNotifier {
   Offset get canvasCenter =>
       Offset(canvasWidth / 2, canvasHeight / 2);
 
+  /// Where the finger is right now, or null when nothing is being placed or
+  /// drawn. What the magnifier follows.
+  ///
+  /// The eyedropper is deliberately absent: it brings its own loupe, and two
+  /// bubbles over one fingertip is a busy screen, not a helpful one.
+  Offset? get livePoint {
+    if (tool == ToolKind.eyedropper) return null;
+    final stroke = activeStroke;
+    if (stroke != null) {
+      return stroke.points.isEmpty ? null : stroke.points.last.pos;
+    }
+    return pendingStampPos ?? pendingTextPos ?? shapeCurrent;
+  }
+
   double get _baseWidth => brushSize;
 
   // ---------------------------------------------------------------- pointer

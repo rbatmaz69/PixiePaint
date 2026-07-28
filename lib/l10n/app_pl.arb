@@ -158,6 +158,8 @@
   "deleteGateSubtitle": "Obrazki można usunąć dopiero po pytaniu dla dorosłych.",
   "leftHandedTitle": "Tryb dla leworęcznych",
   "leftHandedSubtitle": "Narzędzia przechodzą na prawą stronę, żeby rysująca ręka ich nie zasłaniała.",
+  "magnifierTitle": "Lupa",
+  "magnifierSubtitle": "Pokazuje w powiększeniu to, co jest pod palcem.",
   "soundsTitle": "Dźwięki malowania",
   "soundsSubtitle": "Ciche dźwięki podczas malowania i stemplowania",
   "musicTitle": "Muzyka w tle",
