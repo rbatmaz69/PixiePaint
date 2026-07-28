@@ -161,6 +161,27 @@ class AppLocalizationsPl extends AppLocalizations {
   String get printForParents => 'Drukuj (dla dorosłych)';
 
   @override
+  String get printWhatTitle => 'Co drukujemy?';
+
+  @override
+  String get printThePicture => 'Obrazek';
+
+  @override
+  String get printTheCard => 'Kartkę';
+
+  @override
+  String get printTheStory => 'Taśmę filmową';
+
+  @override
+  String get stickerSheetTitle => 'Wydrukuj arkusz naklejek';
+
+  @override
+  String get stickerSheetSubtitle => 'Twoje naklejki do wycięcia';
+
+  @override
+  String get stickerSheetEmpty => 'Nie ma jeszcze własnych naklejek';
+
+  @override
   String get resetView => 'Resetuj widok';
 
   @override

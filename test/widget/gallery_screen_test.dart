@@ -261,6 +261,25 @@ void main() {
     expect(find.text('Frag deine Eltern!'), findsOneWidget);
   });
 
+  testWidgets('printing asks the parents before it asks what to print',
+      (tester) async {
+    // Three outputs live behind this one entry since v9.3 (picture, card,
+    // film strip). The gate has to stand in front of the *choice*, not
+    // between the choice and the printer — otherwise a child gets as far as
+    // picking something and is then stopped, which is the worst of both.
+    root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+    await makeArtwork(tester, id: 'a', name: 'Katze');
+
+    await start(tester);
+    await openSheet(tester, 'Katze');
+    await tester.tap(find.textContaining('Drucken'));
+    await settle(tester);
+
+    expect(find.text('Frag deine Eltern!'), findsOneWidget);
+    expect(find.text('Das Bild'), findsNothing);
+  });
+
   testWidgets('the rename dialog opens prefilled and takes a new name',
       (tester) async {
     root = await setUpPixieStorage(tester);

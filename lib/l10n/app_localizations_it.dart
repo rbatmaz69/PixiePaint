@@ -158,6 +158,27 @@ class AppLocalizationsIt extends AppLocalizations {
   String get printForParents => 'Stampa (per i grandi)';
 
   @override
+  String get printWhatTitle => 'Cosa stampiamo?';
+
+  @override
+  String get printThePicture => 'Il disegno';
+
+  @override
+  String get printTheCard => 'Un biglietto';
+
+  @override
+  String get printTheStory => 'La striscia';
+
+  @override
+  String get stickerSheetTitle => 'Stampa un foglio di adesivi';
+
+  @override
+  String get stickerSheetSubtitle => 'I tuoi adesivi da ritagliare';
+
+  @override
+  String get stickerSheetEmpty => 'Ancora nessun adesivo tuo';
+
+  @override
   String get resetView => 'Reimposta la vista';
 
   @override

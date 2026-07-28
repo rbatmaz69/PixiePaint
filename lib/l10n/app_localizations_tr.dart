@@ -157,6 +157,27 @@ class AppLocalizationsTr extends AppLocalizations {
   String get printForParents => 'Yazdır (yetişkinler için)';
 
   @override
+  String get printWhatTitle => 'Ne yazdıralım?';
+
+  @override
+  String get printThePicture => 'Resim';
+
+  @override
+  String get printTheCard => 'Tebrik kartı';
+
+  @override
+  String get printTheStory => 'Film şeridi';
+
+  @override
+  String get stickerSheetTitle => 'Çıkartma sayfası yazdır';
+
+  @override
+  String get stickerSheetSubtitle => 'Kendi çıkartmaların, kesmek için';
+
+  @override
+  String get stickerSheetEmpty => 'Henüz kendi çıkartman yok';
+
+  @override
   String get resetView => 'Görünümü sıfırla';
 
   @override

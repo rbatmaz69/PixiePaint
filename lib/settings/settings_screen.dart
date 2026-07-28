@@ -17,11 +17,14 @@ import '../ui/loading_pixie.dart';
 import '../ui/pixie_header.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
+import '../stickers/sticker_store.dart';
+import '../ui/working_dialog.dart';
 import '../util/backup.dart';
 import '../util/music.dart';
 import '../util/profiles.dart';
 import '../util/progress.dart';
 import '../util/review.dart';
+import '../util/pdf_export.dart';
 import '../util/settings.dart';
 import '../util/sfx.dart';
 import '../widgets/parental_gate.dart';
@@ -184,6 +187,35 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => const ErrorLogScreen()),
+    );
+  }
+
+  /// The child's own stickers as a cut-out sheet.
+  ///
+  /// In the parents' section rather than in the sticker picker: it starts a
+  /// printer, and everything that reaches a printer in this app is behind
+  /// the gate. It also answers when there is nothing to print, because a
+  /// button that does nothing reads as a broken one.
+  Future<void> _printStickerSheet() async {
+    if (!await ParentalGate.show(context)) return;
+    if (!mounted) return;
+    final stickers = await StickerStore.list();
+    if (!mounted) return;
+    if (stickers.isEmpty) {
+      await showKidNotice(
+        context,
+        emoji: '🩷',
+        title: context.l10n.stickerSheetEmpty,
+        okLabel: context.l10n.okAction,
+      );
+      return;
+    }
+    await runWithWorkingDialog(
+      context: context,
+      emoji: '🖨️',
+      title: context.l10n.exportWorking,
+      failedTitle: context.l10n.printFailed,
+      work: () => printStickerSheet(stickers),
     );
   }
 
@@ -433,6 +465,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                               title: context.l10n.restoreTitle,
                               subtitle: context.l10n.restoreSubtitle,
                               onTap: _restore,
+                            ),
+                            _KidRow(
+                              emoji: '🩷',
+                              tint: PixiePalette.mintLight,
+                              title: context.l10n.stickerSheetTitle,
+                              subtitle: context.l10n.stickerSheetSubtitle,
+                              onTap: _printStickerSheet,
                             ),
                             _KidRow(
                               emoji: '💽',

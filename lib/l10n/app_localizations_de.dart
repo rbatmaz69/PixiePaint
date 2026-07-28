@@ -159,6 +159,27 @@ class AppLocalizationsDe extends AppLocalizations {
   String get printForParents => 'Drucken (für Eltern)';
 
   @override
+  String get printWhatTitle => 'Was soll gedruckt werden?';
+
+  @override
+  String get printThePicture => 'Das Bild';
+
+  @override
+  String get printTheCard => 'Eine Grußkarte';
+
+  @override
+  String get printTheStory => 'Der Filmstreifen';
+
+  @override
+  String get stickerSheetTitle => 'Sticker-Bogen drucken';
+
+  @override
+  String get stickerSheetSubtitle => 'Eigene Sticker zum Ausschneiden';
+
+  @override
+  String get stickerSheetEmpty => 'Noch keine eigenen Sticker';
+
+  @override
   String get resetView => 'Ansicht zurücksetzen';
 
   @override

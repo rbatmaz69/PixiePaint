@@ -157,6 +157,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get printForParents => 'Imprimer (pour les parents)';
 
   @override
+  String get printWhatTitle => 'Qu\'est-ce qu\'on imprime ?';
+
+  @override
+  String get printThePicture => 'Le dessin';
+
+  @override
+  String get printTheCard => 'Une carte';
+
+  @override
+  String get printTheStory => 'La pellicule';
+
+  @override
+  String get stickerSheetTitle => 'Imprimer une planche d\'autocollants';
+
+  @override
+  String get stickerSheetSubtitle => 'Tes autocollants à découper';
+
+  @override
+  String get stickerSheetEmpty => 'Pas encore d\'autocollants à toi';
+
+  @override
   String get resetView => 'Réinitialiser la vue';
 
   @override

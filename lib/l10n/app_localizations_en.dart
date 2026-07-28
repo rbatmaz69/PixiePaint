@@ -158,6 +158,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get printForParents => 'Print (for parents)';
 
   @override
+  String get printWhatTitle => 'What shall we print?';
+
+  @override
+  String get printThePicture => 'The picture';
+
+  @override
+  String get printTheCard => 'A greeting card';
+
+  @override
+  String get printTheStory => 'The film strip';
+
+  @override
+  String get stickerSheetTitle => 'Print a sticker sheet';
+
+  @override
+  String get stickerSheetSubtitle => 'Your own stickers, to cut out';
+
+  @override
+  String get stickerSheetEmpty => 'No stickers of your own yet';
+
+  @override
   String get resetView => 'Reset view';
 
   @override

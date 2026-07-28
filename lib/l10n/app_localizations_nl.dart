@@ -158,6 +158,27 @@ class AppLocalizationsNl extends AppLocalizations {
   String get printForParents => 'Afdrukken (voor ouders)';
 
   @override
+  String get printWhatTitle => 'Wat gaan we printen?';
+
+  @override
+  String get printThePicture => 'De tekening';
+
+  @override
+  String get printTheCard => 'Een kaart';
+
+  @override
+  String get printTheStory => 'De filmstrip';
+
+  @override
+  String get stickerSheetTitle => 'Stickervel printen';
+
+  @override
+  String get stickerSheetSubtitle => 'Je eigen stickers om uit te knippen';
+
+  @override
+  String get stickerSheetEmpty => 'Nog geen eigen stickers';
+
+  @override
   String get resetView => 'Weergave herstellen';
 
   @override

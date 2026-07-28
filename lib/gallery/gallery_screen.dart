@@ -35,6 +35,9 @@ import '../util/share.dart' as share_util;
 import '../widgets/parental_gate.dart';
 import 'artwork_store.dart';
 
+/// The three things a printer can make out of one picture.
+enum _PrintKind { picture, card, story }
+
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
 
@@ -269,9 +272,56 @@ class _GalleryScreenState extends State<GalleryScreen>
     await countShareAndMaybeReview();
   }
 
+  /// What a printer can make out of one picture.
+  ///
+  /// Three outputs behind the one "print" entry rather than three entries in
+  /// the menu: they are all the same decision (this picture, on paper) taken
+  /// one step further, they are all for a parent, and the menu had already
+  /// grown past the bottom of the sheet once.
   Future<void> _print(Artwork artwork) async {
     if (!await ParentalGate.show(context)) return;
     if (!mounted) return;
+    final l10n = context.l10n;
+    final choice = await showKidSheet<_PrintKind>(
+      context: context,
+      emoji: '🖨️',
+      title: l10n.printWhatTitle,
+      builder: (sheetContext) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 4, 24, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            KidDialogButton(
+              emoji: '🖼️',
+              label: l10n.printThePicture,
+              gradient: PixieGradients.gallery,
+              onTap: () => Navigator.pop(sheetContext, _PrintKind.picture),
+            ),
+            const SizedBox(height: PixieTokens.gapSmall),
+            KidDialogButton(
+              emoji: '💌',
+              label: l10n.printTheCard,
+              gradient: PixieGradients.photo,
+              onTap: () => Navigator.pop(sheetContext, _PrintKind.card),
+            ),
+            // Only where there is a story to tell: pictures painted before
+            // the op log existed have none.
+            if (artwork.opsFile.existsSync()) ...[
+              const SizedBox(height: PixieTokens.gapSmall),
+              KidDialogButton(
+                emoji: '🎞️',
+                label: l10n.printTheStory,
+                gradient: PixieGradients.freeDraw,
+                onTap: () => Navigator.pop(sheetContext, _PrintKind.story),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+    if (choice == null || !mounted) return;
+    final title = artwork.name;
     // The native print dialog can fail on odd printers. It used to fail in
     // complete silence — same picture as a tap that never landed.
     await runWithWorkingDialog(
@@ -279,7 +329,11 @@ class _GalleryScreenState extends State<GalleryScreen>
       emoji: '🖨️',
       title: context.l10n.exportWorking,
       failedTitle: context.l10n.printFailed,
-      work: () => printSavedArtwork(artwork),
+      work: () => switch (choice) {
+        _PrintKind.picture => printSavedArtwork(artwork),
+        _PrintKind.card => printGreetingCard(artwork, title: title),
+        _PrintKind.story => printStoryStrip(artwork, title: title),
+      },
     );
   }
 

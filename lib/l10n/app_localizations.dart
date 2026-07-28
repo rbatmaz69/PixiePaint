@@ -370,6 +370,48 @@ abstract class AppLocalizations {
   /// **'Drucken (für Eltern)'**
   String get printForParents;
 
+  /// No description provided for @printWhatTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Was soll gedruckt werden?'**
+  String get printWhatTitle;
+
+  /// No description provided for @printThePicture.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Bild'**
+  String get printThePicture;
+
+  /// No description provided for @printTheCard.
+  ///
+  /// In de, this message translates to:
+  /// **'Eine Grußkarte'**
+  String get printTheCard;
+
+  /// No description provided for @printTheStory.
+  ///
+  /// In de, this message translates to:
+  /// **'Der Filmstreifen'**
+  String get printTheStory;
+
+  /// No description provided for @stickerSheetTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sticker-Bogen drucken'**
+  String get stickerSheetTitle;
+
+  /// No description provided for @stickerSheetSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Eigene Sticker zum Ausschneiden'**
+  String get stickerSheetSubtitle;
+
+  /// No description provided for @stickerSheetEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Noch keine eigenen Sticker'**
+  String get stickerSheetEmpty;
+
   /// No description provided for @resetView.
   ///
   /// In de, this message translates to:

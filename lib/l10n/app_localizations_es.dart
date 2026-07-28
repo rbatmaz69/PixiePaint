@@ -157,6 +157,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get printForParents => 'Imprimir (para adultos)';
 
   @override
+  String get printWhatTitle => '¿Qué imprimimos?';
+
+  @override
+  String get printThePicture => 'El dibujo';
+
+  @override
+  String get printTheCard => 'Una tarjeta';
+
+  @override
+  String get printTheStory => 'La tira de fotos';
+
+  @override
+  String get stickerSheetTitle => 'Imprimir hoja de pegatinas';
+
+  @override
+  String get stickerSheetSubtitle => 'Tus pegatinas para recortar';
+
+  @override
+  String get stickerSheetEmpty => 'Todavía no hay pegatinas propias';
+
+  @override
   String get resetView => 'Restablecer la vista';
 
   @override
