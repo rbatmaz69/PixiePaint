@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../models/draw_op.dart';
+import '../models/mask.dart';
 import '../models/tool.dart';
 import '../util/color_utils.dart';
 import '../util/progress.dart';
@@ -92,6 +93,23 @@ class CanvasController extends ChangeNotifier {
   /// Magic-mirror copies per gesture (1 = off, 2/4/6 = butterfly/flower/
   /// snowflake). Applies to strokes and stamps, not fill/eyedropper/shape.
   int symmetryFolds = 1;
+
+  /// The masking tape stuck on the paper, or null.
+  ///
+  /// Not a tool but a state of the paper: while it is there *every* tool
+  /// stops at its edge, including the eraser and the bucket. Sticking it
+  /// down is not an undo step — nothing is painted — so it is the one thing
+  /// on this screen that "undo" leaves alone, exactly like a chosen colour.
+  Mask? tape;
+
+  /// The motif and the side the next tape gets, chosen in its sheet.
+  ShapeKind tapeKind = ShapeKind.line;
+  bool tapeInverted = false;
+
+  /// Where a tape is being dragged out (finger still down).
+  Offset? tapeCenter;
+  Offset? tapeCurrent;
+  ToolKind _toolBeforeTape = ToolKind.brush;
 
   /// Live position of a stamp being placed (finger still down).
   Offset? pendingStampPos;
@@ -287,6 +305,9 @@ class CanvasController extends ChangeNotifier {
     if (t == ToolKind.eyedropper && tool != ToolKind.eyedropper) {
       _toolBeforePick = tool;
     }
+    if (t == ToolKind.tape && tool != ToolKind.tape) {
+      _toolBeforeTape = tool;
+    }
     tool = t;
     Sfx.instance.tick();
     notifyListeners();
@@ -369,7 +390,7 @@ class CanvasController extends ChangeNotifier {
     if (stroke != null) {
       return stroke.points.isEmpty ? null : stroke.points.last.pos;
     }
-    return pendingStampPos ?? pendingTextPos ?? shapeCurrent;
+    return pendingStampPos ?? pendingTextPos ?? shapeCurrent ?? tapeCurrent;
   }
 
   double get _baseWidth => brushSize;
@@ -443,6 +464,14 @@ class CanvasController extends ChangeNotifier {
     }
     if (tool == ToolKind.wand) {
       tapWand(pos);
+      return;
+    }
+    if (tool == ToolKind.tape) {
+      _activePointer = e.pointer;
+      _activeIsStylus = isStylus;
+      tapeCenter = pos;
+      tapeCurrent = pos;
+      _tick();
       return;
     }
     if (tool == ToolKind.stamp) {
@@ -540,6 +569,11 @@ class CanvasController extends ChangeNotifier {
       _tick();
       return;
     }
+    if (tapeCenter != null && e.pointer == _activePointer) {
+      tapeCurrent = _clamp(e.localPosition);
+      _tick();
+      return;
+    }
     final stroke = activeStroke;
     if (stroke == null || e.pointer != _activePointer) return;
     final pos = _clamp(e.localPosition);
@@ -577,6 +611,10 @@ class CanvasController extends ChangeNotifier {
       _commitShape();
       return;
     }
+    if (tapeCenter != null) {
+      _stickTape();
+      return;
+    }
     _commitActiveStroke();
   }
 
@@ -601,9 +639,85 @@ class CanvasController extends ChangeNotifier {
     _pickAwaitingBuffer = null;
     shapeCenter = null;
     shapeCurrent = null;
+    tapeCenter = null;
+    tapeCurrent = null;
     _activePointer = null;
     _activeIsStylus = false;
     _tick();
+  }
+
+  // -------------------------------------------------------------- the tape
+
+  /// Radius and direction of the tape being dragged out — the same motion as
+  /// a shape, so a child who can place a heart can place a stencil.
+  double get tapeRadius {
+    final c = tapeCenter, p = tapeCurrent;
+    if (c == null || p == null) return 0;
+    return max(60.0, (p - c).distance);
+  }
+
+  double get tapeAngle {
+    final c = tapeCenter, p = tapeCurrent;
+    if (c == null || p == null || (p - c).distance < 1) return 0;
+    return (p - c).direction;
+  }
+
+  /// The tape being dragged out right now, for the preview.
+  Mask? get pendingTape {
+    final c = tapeCenter;
+    if (c == null) return null;
+    return Mask(
+      kind: tapeKind,
+      x: c.dx,
+      y: c.dy,
+      radius: tapeRadius,
+      angle: tapeAngle,
+      inverted: tapeInverted,
+    );
+  }
+
+  void _stickTape() {
+    final placed = pendingTape;
+    tapeCenter = null;
+    tapeCurrent = null;
+    _activePointer = null;
+    _activeIsStylus = false;
+    if (placed == null) return;
+    tape = placed;
+    // Straight back to whatever was being drawn with: sticking tape down is
+    // a preparation, never the thing a child came to do.
+    tool = _toolBeforeTape;
+    Sfx.instance.pop();
+    _tick();
+    notifyListeners();
+  }
+
+  /// Pulls the tape off again. Nothing painted changes — that is the whole
+  /// promise of tape.
+  void peelTape() {
+    if (tape == null) return;
+    tape = null;
+    Sfx.instance.tick();
+    _tick();
+    notifyListeners();
+  }
+
+  void selectTapeKind(ShapeKind kind) {
+    tapeKind = kind;
+    tool = ToolKind.tape;
+    Sfx.instance.tick();
+    notifyListeners();
+  }
+
+  void selectTapeSide({required bool inverted}) {
+    tapeInverted = inverted;
+    // A tape already on the paper flips with the choice instead of having to
+    // be pulled off and stuck down again.
+    final current = tape;
+    if (current != null) tape = current.copyWith(inverted: inverted);
+    Sfx.instance.tick();
+    _tick();
+    notifyListeners();
   }
 
   // ------------------------------------------------------------- eyedropper
@@ -694,6 +808,7 @@ class CanvasController extends ChangeNotifier {
       symmetryFolds: symmetryFolds,
       width: canvasWidth,
       height: canvasHeight,
+      mask: tape,
     );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.stamp);
@@ -710,6 +825,7 @@ class CanvasController extends ChangeNotifier {
       y: pos.dy,
       size: stampSizeFor(brushSize),
       symmetryFolds: symmetryFolds,
+      mask: tape,
     ));
     // Reset first so re-stamping the same spot still notifies.
     lastStamp.value = null;
@@ -740,6 +856,7 @@ class CanvasController extends ChangeNotifier {
       symmetryFolds: symmetryFolds,
       width: canvasWidth,
       height: canvasHeight,
+      mask: tape,
     );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.text);
@@ -762,6 +879,7 @@ class CanvasController extends ChangeNotifier {
       size: size,
       color: color.toARGB32(),
       symmetryFolds: symmetryFolds,
+      mask: tape,
     ));
   }
 
@@ -803,6 +921,7 @@ class CanvasController extends ChangeNotifier {
       outline: shapeOutline,
       width: canvasWidth,
       height: canvasHeight,
+      mask: tape,
     );
     Sfx.instance.pop();
     Progress.instance.registerToolUsed(ToolKind.shape);
@@ -824,6 +943,7 @@ class CanvasController extends ChangeNotifier {
       strokeWidth: brushSize * 0.4,
       angle: shapeAngleAtCommit,
       outline: shapeOutline,
+      mask: tape,
     ));
   }
 
@@ -840,6 +960,7 @@ class CanvasController extends ChangeNotifier {
       symmetryFolds: symmetryFolds,
       width: canvasWidth,
       height: canvasHeight,
+      mask: tape,
     );
     // Drawing answers for itself — the line appears under the finger. The
     // eraser is the exception: what it does is make something *stop* being
@@ -857,6 +978,7 @@ class CanvasController extends ChangeNotifier {
       points: [
         for (final p in stroke.points) ...[p.pos.dx, p.pos.dy, p.pressure],
       ],
+      mask: tape,
     ));
     onStrokeCommitted?.call(stroke);
   }
@@ -891,6 +1013,7 @@ class CanvasController extends ChangeNotifier {
         pattern: pattern,
         width: canvasWidth,
         height: canvasHeight,
+        mask: tape,
       );
       // The screen can be gone by now — the isolate round-trip is slow.
       if (_disposed) {
@@ -908,6 +1031,7 @@ class CanvasController extends ChangeNotifier {
           y: pos.dy,
           color: c.toARGB32(),
           pattern: pattern,
+          mask: tape,
         ));
         // Reset first so refilling the same spot still notifies.
         lastFill.value = null;
@@ -947,6 +1071,7 @@ class CanvasController extends ChangeNotifier {
         color: c,
         width: canvasWidth,
         height: canvasHeight,
+        mask: tape,
       );
       if (_disposed) {
         newLayer?.dispose();
@@ -958,7 +1083,8 @@ class CanvasController extends ChangeNotifier {
         // A colour can sit anywhere on the paper, so the whole picture is
         // the honest dirty rect — same reasoning as the flood fill.
         _pushUndoAndReplace(newLayer, _wholeCanvas);
-        _recordOp(WandOp(x: pos.dx, y: pos.dy, color: c.toARGB32()));
+        _recordOp(
+            WandOp(x: pos.dx, y: pos.dy, color: c.toARGB32(), mask: tape));
         lastFill.value = null;
         lastFill.value = pos;
       } else {

@@ -203,6 +203,26 @@ class AppLocalizationsNl extends AppLocalizations {
   String get toolWand => 'Toverstaf';
 
   @override
+  String get toolTape => 'Afplaktape';
+
+  @override
+  String get tapeHint =>
+      'Sleep een vorm — verf komt alleen waar de tape het toelaat.';
+
+  @override
+  String get tapeStuckHint =>
+      'De tape zit vast. Schilder eroverheen of trek hem eraf.';
+
+  @override
+  String get tapeInside => 'Alleen binnenin';
+
+  @override
+  String get tapeOutside => 'Eromheen';
+
+  @override
+  String get tapePeel => 'Tape eraf halen';
+
+  @override
   String get toolShapes => 'Vormen';
 
   @override

@@ -202,6 +202,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get toolWand => 'Sihirli değnek';
 
   @override
+  String get toolTape => 'Maskeleme bandı';
+
+  @override
+  String get tapeHint =>
+      'Bir şekil çiz — boya yalnızca bandın izin verdiği yere gider.';
+
+  @override
+  String get tapeStuckHint => 'Bant yapıştı. Üzerini boya ya da bandı çıkar.';
+
+  @override
+  String get tapeInside => 'Sadece içi';
+
+  @override
+  String get tapeOutside => 'Etrafı';
+
+  @override
+  String get tapePeel => 'Bandı çıkar';
+
+  @override
   String get toolShapes => 'Şekiller';
 
   @override

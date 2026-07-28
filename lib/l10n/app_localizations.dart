@@ -460,6 +460,42 @@ abstract class AppLocalizations {
   /// **'Zauberstab'**
   String get toolWand;
 
+  /// No description provided for @toolTape.
+  ///
+  /// In de, this message translates to:
+  /// **'Klebeband'**
+  String get toolTape;
+
+  /// No description provided for @tapeHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Form aufziehen — gemalt wird nur dort, wo das Band es zulässt.'**
+  String get tapeHint;
+
+  /// No description provided for @tapeStuckHint.
+  ///
+  /// In de, this message translates to:
+  /// **'Das Band klebt. Male darüber — oder zieh es ab.'**
+  String get tapeStuckHint;
+
+  /// No description provided for @tapeInside.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur innen'**
+  String get tapeInside;
+
+  /// No description provided for @tapeOutside.
+  ///
+  /// In de, this message translates to:
+  /// **'Außen herum'**
+  String get tapeOutside;
+
+  /// No description provided for @tapePeel.
+  ///
+  /// In de, this message translates to:
+  /// **'Band abziehen'**
+  String get tapePeel;
+
   /// No description provided for @toolShapes.
   ///
   /// In de, this message translates to:

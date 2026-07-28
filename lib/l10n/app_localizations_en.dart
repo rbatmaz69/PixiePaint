@@ -203,6 +203,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolWand => 'Magic wand';
 
   @override
+  String get toolTape => 'Masking tape';
+
+  @override
+  String get tapeHint =>
+      'Drag out a shape — paint only lands where the tape lets it.';
+
+  @override
+  String get tapeStuckHint =>
+      'The tape is stuck down. Paint over it — or peel it off.';
+
+  @override
+  String get tapeInside => 'Inside only';
+
+  @override
+  String get tapeOutside => 'Around it';
+
+  @override
+  String get tapePeel => 'Peel it off';
+
+  @override
   String get toolShapes => 'Shapes';
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../canvas/fill_pattern.dart';
+import 'mask.dart';
 import 'tool.dart';
 
 /// Serializable drawing operations — the artwork's "story" for the
@@ -27,6 +28,7 @@ sealed class DrawOp {
             for (final v in (json['p'] as List? ?? const []))
               (v as num).toDouble()
           ],
+          mask: Mask.fromJson(json['m']),
         );
       case 'p':
         return StampOp(
@@ -36,6 +38,7 @@ sealed class DrawOp {
           y: (json['y'] as num?)?.toDouble() ?? 0,
           size: (json['s'] as num?)?.toDouble() ?? 220,
           symmetryFolds: json['sy'] as int? ?? 1,
+          mask: Mask.fromJson(json['m']),
         );
       case 'h':
         return ShapeOp(
@@ -47,6 +50,7 @@ sealed class DrawOp {
           strokeWidth: (json['w'] as num?)?.toDouble() ?? 11,
           angle: (json['a'] as num?)?.toDouble() ?? 0,
           outline: json['o'] as bool? ?? false,
+          mask: Mask.fromJson(json['m']),
         );
       case 'x':
         return TextOp(
@@ -56,6 +60,7 @@ sealed class DrawOp {
           size: (json['s'] as num?)?.toDouble() ?? 80,
           color: json['c'] as int? ?? 0xFF000000,
           symmetryFolds: json['sy'] as int? ?? 1,
+          mask: Mask.fromJson(json['m']),
         );
       case 'f':
         return FillOp(
@@ -63,12 +68,14 @@ sealed class DrawOp {
           y: (json['y'] as num?)?.toDouble() ?? 0,
           color: json['c'] as int? ?? 0xFF000000,
           pattern: _patternByName(json['pt'] as String?),
+          mask: Mask.fromJson(json['m']),
         );
       case 'w':
         return WandOp(
           x: (json['x'] as num?)?.toDouble() ?? 0,
           y: (json['y'] as num?)?.toDouble() ?? 0,
           color: json['c'] as int? ?? 0xFF000000,
+          mask: Mask.fromJson(json['m']),
         );
       case 'c':
         return const ClearOp();
@@ -97,6 +104,7 @@ class StrokeOp extends DrawOp {
     required this.seed,
     required this.symmetryFolds,
     required this.points,
+    this.mask,
   });
 
   final ToolKind toolKind;
@@ -107,6 +115,15 @@ class StrokeOp extends DrawOp {
 
   /// Flat [x, y, pressure, x, y, pressure, …], coordinates rounded.
   final List<double> points;
+
+  /// The masking tape that was on the paper, if any.
+  ///
+  /// Carried by the operation rather than recorded as an op of its own: a
+  /// tape is not a step in the story, it is a *condition* the next steps
+  /// happened under. As its own op it would also break the one rule the
+  /// replay cursor rests on — one op, one undo step — and the replay would
+  /// quietly end one stroke short.
+  final Mask? mask;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -123,6 +140,7 @@ class StrokeOp extends DrawOp {
             _round2(points[i + 2]),
           ],
         ],
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 
@@ -134,6 +152,7 @@ class StampOp extends DrawOp {
     required this.y,
     required this.size,
     required this.symmetryFolds,
+    this.mask,
   });
 
   /// Exactly one of [emoji] / [imagePath] is set; a deleted sticker file
@@ -142,6 +161,7 @@ class StampOp extends DrawOp {
   final String? imagePath;
   final double x, y, size;
   final int symmetryFolds;
+  final Mask? mask;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -152,6 +172,7 @@ class StampOp extends DrawOp {
         'y': _round1(y),
         's': _round1(size),
         if (symmetryFolds != 1) 'sy': symmetryFolds,
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 
@@ -165,6 +186,7 @@ class ShapeOp extends DrawOp {
     required this.strokeWidth,
     this.angle = 0,
     this.outline = false,
+    this.mask,
   });
 
   final ShapeKind kind;
@@ -179,6 +201,8 @@ class ShapeOp extends DrawOp {
   /// Drawn as an edge rather than a filled area.
   final bool outline;
 
+  final Mask? mask;
+
   @override
   Map<String, dynamic> toJson() => {
         't': 'h',
@@ -192,6 +216,7 @@ class ShapeOp extends DrawOp {
         // a replay log is written once per stroke and read back whole.
         if (angle != 0) 'a': _round1(angle * 1000) / 1000,
         if (outline) 'o': true,
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 
@@ -208,12 +233,14 @@ class TextOp extends DrawOp {
     required this.size,
     required this.color,
     required this.symmetryFolds,
+    this.mask,
   });
 
   final String text;
   final double x, y, size;
   final int color;
   final int symmetryFolds;
+  final Mask? mask;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -225,6 +252,7 @@ class TextOp extends DrawOp {
         's': _round1(size),
         'c': color,
         if (symmetryFolds > 1) 'sy': symmetryFolds,
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 
@@ -234,11 +262,13 @@ class FillOp extends DrawOp {
     required this.y,
     required this.color,
     required this.pattern,
+    this.mask,
   });
 
   final double x, y;
   final int color;
   final FillPattern pattern;
+  final Mask? mask;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -247,6 +277,7 @@ class FillOp extends DrawOp {
         'y': _round1(y),
         'c': color,
         if (pattern != FillPattern.solid) 'pt': pattern.name,
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 
@@ -257,10 +288,16 @@ class FillOp extends DrawOp {
 /// the same recolour over the same layer and arrives at the same picture,
 /// exactly as [FillOp] re-runs the same flood fill.
 class WandOp extends DrawOp {
-  WandOp({required this.x, required this.y, required this.color});
+  WandOp({
+    required this.x,
+    required this.y,
+    required this.color,
+    this.mask,
+  });
 
   final double x, y;
   final int color;
+  final Mask? mask;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -268,6 +305,7 @@ class WandOp extends DrawOp {
         'x': _round1(x),
         'y': _round1(y),
         'c': color,
+        if (mask != null) 'm': mask!.toJson(),
       };
 }
 

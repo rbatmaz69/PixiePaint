@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../ui/pixie_surfaces.dart';
 
+import '../canvas/mask_path.dart';
 import '../canvas/stroke_renderer.dart';
 import '../canvas/symmetry.dart';
 import '../l10n/l10n.dart';
@@ -300,12 +301,18 @@ class _ReplayPainter extends CustomPainter {
     if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
     if (stroke != null) {
       final center = Offset(size.width / 2, size.height / 2);
+      final mask = controller.activeMask;
+      if (mask != null) {
+        canvas.save();
+        canvas.clipPath(maskClipPath(mask, size));
+      }
       for (final copy in symmetryCopies(controller.activeSymmetryFolds)) {
         canvas.save();
         applySymmetryTransform(canvas, center, copy);
         StrokeRenderer.draw(canvas, stroke);
         canvas.restore();
       }
+      if (mask != null) canvas.restore();
     }
     if (erasing) canvas.restore();
     final lineArt = controller.lineArt;

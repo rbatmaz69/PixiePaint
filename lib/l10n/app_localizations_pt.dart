@@ -203,6 +203,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get toolWand => 'Varinha mágica';
 
   @override
+  String get toolTape => 'Fita de pintor';
+
+  @override
+  String get tapeHint =>
+      'Arrasta uma forma — a tinta só vai onde a fita deixa.';
+
+  @override
+  String get tapeStuckHint => 'A fita está colada. Pinta por cima ou tira-a.';
+
+  @override
+  String get tapeInside => 'Só por dentro';
+
+  @override
+  String get tapeOutside => 'À volta';
+
+  @override
+  String get tapePeel => 'Tirar a fita';
+
+  @override
   String get toolShapes => 'Formas';
 
   @override

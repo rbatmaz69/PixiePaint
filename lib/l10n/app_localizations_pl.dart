@@ -206,6 +206,26 @@ class AppLocalizationsPl extends AppLocalizations {
   String get toolWand => 'Różdżka';
 
   @override
+  String get toolTape => 'Taśma malarska';
+
+  @override
+  String get tapeHint =>
+      'Rozciągnij kształt — farba trafia tylko tam, gdzie pozwoli taśma.';
+
+  @override
+  String get tapeStuckHint =>
+      'Taśma jest przyklejona. Maluj po niej albo ją odklej.';
+
+  @override
+  String get tapeInside => 'Tylko w środku';
+
+  @override
+  String get tapeOutside => 'Dookoła';
+
+  @override
+  String get tapePeel => 'Odklej taśmę';
+
+  @override
   String get toolShapes => 'Kształty';
 
   @override

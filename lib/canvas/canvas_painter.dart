@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/tool.dart';
 import 'canvas_controller.dart';
+import 'mask_path.dart';
 import 'shape_renderer.dart';
 import 'stroke_renderer.dart';
 import 'symmetry.dart';
@@ -55,12 +56,17 @@ void paintCanvasPicture(
     canvas.drawImage(paintLayer, Offset.zero, Paint());
   }
   if (stroke != null) {
-    for (final copy in symmetryCopies(controller.symmetryFolds)) {
-      canvas.save();
-      applySymmetryTransform(canvas, controller.canvasCenter, copy);
-      StrokeRenderer.draw(canvas, stroke);
-      canvas.restore();
-    }
+    // Clipped exactly as the commit will be — a preview that ignored the
+    // tape would spill over the edge and then snap back when the finger
+    // lifts, which reads as the app taking something away.
+    _underTape(canvas, controller, size, () {
+      for (final copy in symmetryCopies(controller.symmetryFolds)) {
+        canvas.save();
+        applySymmetryTransform(canvas, controller.canvasCenter, copy);
+        StrokeRenderer.draw(canvas, stroke);
+        canvas.restore();
+      }
+    });
   }
   if (erasing) canvas.restore();
 
@@ -70,41 +76,52 @@ void paintCanvasPicture(
 
   final pendingStamp = controller.pendingStampPos;
   if (pendingStamp != null) {
-    for (final copy in symmetryCopies(controller.symmetryFolds)) {
-      final p = symmetryPoint(pendingStamp, controller.canvasCenter, copy);
-      final stampImage = controller.stampImage;
-      if (stampImage != null) {
-        StrokeRenderer.drawImageStamp(
-            canvas, stampImage, p, stampSizeFor(controller.brushSize));
-      } else {
-        StrokeRenderer.drawStamp(canvas, controller.stampEmoji, p,
-            stampSizeFor(controller.brushSize));
+    _underTape(canvas, controller, size, () {
+      for (final copy in symmetryCopies(controller.symmetryFolds)) {
+        final p = symmetryPoint(pendingStamp, controller.canvasCenter, copy);
+        final stampImage = controller.stampImage;
+        if (stampImage != null) {
+          StrokeRenderer.drawImageStamp(
+              canvas, stampImage, p, stampSizeFor(controller.brushSize));
+        } else {
+          StrokeRenderer.drawStamp(canvas, controller.stampEmoji, p,
+              stampSizeFor(controller.brushSize));
+        }
       }
-    }
+    });
   }
 
   // The word under the finger, before it is let go.
   final textPos = controller.pendingTextPos;
   final pendingText = controller.stampText;
   if (textPos != null && pendingText != null && pendingText.isNotEmpty) {
-    StrokeRenderer.drawText(
-      canvas,
-      pendingText,
-      textPos,
-      controller.textSizeFor(controller.brushSize),
-      controller.color.withValues(alpha: 0.7),
-    );
+    _underTape(canvas, controller, size, () {
+      StrokeRenderer.drawText(
+        canvas,
+        pendingText,
+        textPos,
+        controller.textSizeFor(controller.brushSize),
+        controller.color.withValues(alpha: 0.7),
+      );
+    });
   }
 
   // Semi-transparent live preview of the shape being dragged out.
   final shapeCenter = controller.shapeCenter;
   if (shapeCenter != null) {
-    ShapeRenderer.drawShape(canvas, controller.shapeKind, shapeCenter,
-        controller.shapeRadius, controller.color, controller.brushSize * 0.4,
-        opacity: 0.7,
-        angle: controller.shapeAngle,
-        outline: controller.shapeOutline);
+    _underTape(canvas, controller, size, () {
+      ShapeRenderer.drawShape(canvas, controller.shapeKind, shapeCenter,
+          controller.shapeRadius, controller.color, controller.brushSize * 0.4,
+          opacity: 0.7,
+          angle: controller.shapeAngle,
+          outline: controller.shapeOutline);
+    });
   }
+
+  // The tape lies on the paint and under the outlines, the way a real strip
+  // would: it covers what the child painted, not what the picture is.
+  final tape = controller.pendingTape ?? controller.tape;
+  if (tape != null) drawTape(canvas, tape, size);
 
   // Prefer the vector picture: it re-rasterizes under the viewport
   // transform, keeping outlines sharp at any zoom.
@@ -171,6 +188,20 @@ class CanvasPainter extends CustomPainter {
   @override
   bool shouldRepaint(CanvasPainter oldDelegate) =>
       oldDelegate.controller != controller;
+}
+
+/// Runs [body] clipped to the masking tape, if there is any.
+void _underTape(Canvas canvas, CanvasController controller, Size size,
+    void Function() body) {
+  final tape = controller.tape;
+  if (tape == null) {
+    body();
+    return;
+  }
+  canvas.save();
+  canvas.clipPath(maskClipPath(tape, size));
+  body();
+  canvas.restore();
 }
 
 /// Number chip for color-by-number: white bubble with the region number.

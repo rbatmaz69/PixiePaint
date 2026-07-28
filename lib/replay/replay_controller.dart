@@ -8,6 +8,7 @@ import 'package:flutter/painting.dart';
 import '../canvas/op_apply.dart';
 import '../canvas/stroke.dart';
 import '../models/draw_op.dart';
+import '../models/mask.dart';
 import '../util/image_io.dart';
 import '../util/svg_raster.dart';
 
@@ -41,6 +42,11 @@ class ReplayController extends ChangeNotifier {
   /// Prefix of the currently animating stroke.
   Stroke? activeStroke;
   int activeSymmetryFolds = 1;
+
+  /// The masking tape that was on the paper while this stroke was drawn.
+  /// The painter clips by it, so the film shows the stroke stopping at the
+  /// tape edge rather than crossing it and snapping back on commit.
+  Mask? activeMask;
 
   double speed = 2;
   bool get done => _done;
@@ -142,6 +148,7 @@ class ReplayController extends ChangeNotifier {
     }
     final durationMs = (length / 2.2).clamp(180.0, 1500.0);
     activeSymmetryFolds = op.symmetryFolds;
+    activeMask = op.mask;
     final watch = Stopwatch()..start();
     var shown = 0;
     while (shown < total && !_cancelled) {
@@ -163,10 +170,12 @@ class ReplayController extends ChangeNotifier {
       symmetryFolds: op.symmetryFolds,
       width: width,
       height: height,
+      mask: op.mask,
     );
     layer?.dispose();
     layer = newLayer;
     activeStroke = null;
+    activeMask = null;
     _tick();
   }
 
@@ -199,6 +208,7 @@ class ReplayController extends ChangeNotifier {
       symmetryFolds: op.symmetryFolds,
       width: width,
       height: height,
+      mask: op.mask,
     );
     layer?.dispose();
     layer = newLayer;
@@ -218,6 +228,7 @@ class ReplayController extends ChangeNotifier {
       outline: op.outline,
       width: width,
       height: height,
+      mask: op.mask,
     );
     layer?.dispose();
     layer = newLayer;
@@ -235,6 +246,7 @@ class ReplayController extends ChangeNotifier {
       symmetryFolds: op.symmetryFolds,
       width: width,
       height: height,
+      mask: op.mask,
     );
     layer?.dispose();
     layer = newLayer;
@@ -251,6 +263,7 @@ class ReplayController extends ChangeNotifier {
       pattern: op.pattern,
       width: width,
       height: height,
+      mask: op.mask,
     );
     // Checked after the await, not before it: the whole fill (isolate round
     // trip plus decode) can outlive the screen.
@@ -273,6 +286,7 @@ class ReplayController extends ChangeNotifier {
       color: Color(op.color),
       width: width,
       height: height,
+      mask: op.mask,
     );
     // Same rule as the fill above: the screen can be gone by now.
     if (_cancelled) {

@@ -4,11 +4,13 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/painting.dart';
 
+import '../models/mask.dart';
 import '../models/tool.dart';
 import '../util/image_io.dart';
 import 'fill_pattern.dart';
 import 'flood_fill.dart' as ff;
 import 'magic_wand.dart' as wand;
+import 'mask_path.dart';
 import 'shape_renderer.dart';
 import 'stroke.dart';
 import 'stroke_renderer.dart';
@@ -24,6 +26,23 @@ import 'symmetry.dart';
 ui.Rect _bounds(int w, int h) =>
     ui.Rect.fromLTWH(0, 0, w.toDouble(), h.toDouble());
 
+/// Confines everything drawn inside [body] to the masking tape.
+///
+/// Every operation goes through here, which is what makes the tape a
+/// property of the paper rather than a feature of one tool: whatever a child
+/// reaches for next, it stops at the same edge.
+void _masked(ui.Canvas canvas, Mask? mask, int width, int height,
+    void Function() body) {
+  if (mask == null) {
+    body();
+    return;
+  }
+  canvas.save();
+  canvas.clipPath(maskClipPath(mask, ui.Size(width.toDouble(), height.toDouble())));
+  body();
+  canvas.restore();
+}
+
 ui.Offset _center(int w, int h) => ui.Offset(w / 2, h / 2);
 
 ui.Image applyStroke({
@@ -32,18 +51,23 @@ ui.Image applyStroke({
   required int symmetryFolds,
   required int width,
   required int height,
+  Mask? mask,
 }) {
   final recorder = ui.PictureRecorder();
   final canvas = Canvas(recorder, _bounds(width, height));
   final erasing = stroke.kind == ToolKind.eraser;
   if (erasing) canvas.saveLayer(_bounds(width, height), Paint());
   if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
-  for (final copy in symmetryCopies(symmetryFolds)) {
-    canvas.save();
-    applySymmetryTransform(canvas, _center(width, height), copy);
-    StrokeRenderer.draw(canvas, stroke);
-    canvas.restore();
-  }
+  // The eraser is masked like everything else: with tape down, "rub it all
+  // out" spares what the tape covers, which is what tape is for.
+  _masked(canvas, mask, width, height, () {
+    for (final copy in symmetryCopies(symmetryFolds)) {
+      canvas.save();
+      applySymmetryTransform(canvas, _center(width, height), copy);
+      StrokeRenderer.draw(canvas, stroke);
+      canvas.restore();
+    }
+  });
   if (erasing) canvas.restore();
   final picture = recorder.endRecording();
   final image = picture.toImageSync(width, height);
@@ -61,19 +85,22 @@ ui.Image applyStamp({
   required int symmetryFolds,
   required int width,
   required int height,
+  Mask? mask,
 }) {
   final recorder = ui.PictureRecorder();
   final canvas = Canvas(recorder, _bounds(width, height));
   if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
-  for (final copy in symmetryCopies(symmetryFolds)) {
-    // Transform the position, not the canvas — motifs stay upright.
-    final p = symmetryPoint(pos, _center(width, height), copy);
-    if (image != null) {
-      StrokeRenderer.drawImageStamp(canvas, image, p, size);
-    } else {
-      StrokeRenderer.drawStamp(canvas, emoji ?? '⭐', p, size);
+  _masked(canvas, mask, width, height, () {
+    for (final copy in symmetryCopies(symmetryFolds)) {
+      // Transform the position, not the canvas — motifs stay upright.
+      final p = symmetryPoint(pos, _center(width, height), copy);
+      if (image != null) {
+        StrokeRenderer.drawImageStamp(canvas, image, p, size);
+      } else {
+        StrokeRenderer.drawStamp(canvas, emoji ?? '⭐', p, size);
+      }
     }
-  }
+  });
   final picture = recorder.endRecording();
   final result = picture.toImageSync(width, height);
   picture.dispose();
@@ -90,16 +117,20 @@ ui.Image applyText({
   required int symmetryFolds,
   required int width,
   required int height,
+  Mask? mask,
 }) {
   final recorder = ui.PictureRecorder();
   final canvas = Canvas(recorder, _bounds(width, height));
   if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
-  for (final copy in symmetryCopies(symmetryFolds)) {
-    // Position mirrored, glyphs upright — exactly as for a stamp. A mirrored
-    // word is unreadable, and unreadable is not what a name is for.
-    final p = symmetryPoint(pos, _center(width, height), copy);
-    StrokeRenderer.drawText(canvas, text, p, size, color);
-  }
+  _masked(canvas, mask, width, height, () {
+    for (final copy in symmetryCopies(symmetryFolds)) {
+      // Position mirrored, glyphs upright — exactly as for a stamp. A
+      // mirrored word is unreadable, and unreadable is not what a name is
+      // for.
+      final p = symmetryPoint(pos, _center(width, height), copy);
+      StrokeRenderer.drawText(canvas, text, p, size, color);
+    }
+  });
   final picture = recorder.endRecording();
   final result = picture.toImageSync(width, height);
   picture.dispose();
@@ -120,6 +151,7 @@ Future<ui.Image?> applyFill({
   required FillPattern pattern,
   required int width,
   required int height,
+  Mask? mask,
 }) async {
   Uint8List rgba;
   if (layer != null) {
@@ -146,7 +178,14 @@ Future<ui.Image?> applyFill({
         pattern: pattern,
       ));
   if (result == null) return null;
-  return rgbaToImage(result, width, height);
+  final filled = await rgbaToImage(result, width, height);
+  if (mask == null) return filled;
+  // The fill itself runs to the nearest line as it always does; the tape is
+  // applied to what came back. Making the tape a wall *inside* the isolate
+  // would change what the bucket does rather than what it covers, and the
+  // pixels along that wall would come out a different colour than the same
+  // fill without tape.
+  return _throughTape(layer, filled, mask, width, height);
 }
 
 /// Runs the magic wand in an isolate and returns the new layer, or null when
@@ -160,6 +199,7 @@ Future<ui.Image?> applyWand({
   required Color color,
   required int width,
   required int height,
+  Mask? mask,
 }) async {
   // No layer means nothing has been painted yet, and the wand only ever
   // touches paint.
@@ -179,7 +219,31 @@ Future<ui.Image?> applyWand({
         toB: (color.b * 255).round(),
       ));
   if (result == null) return null;
-  return rgbaToImage(result, width, height);
+  final recoloured = await rgbaToImage(result, width, height);
+  if (mask == null) return recoloured;
+  // Under tape the wand repairs only what the tape lets it reach — the same
+  // edge every other tool stops at.
+  return _throughTape(layer, recoloured, mask, width, height);
+}
+
+/// Lays [painted] over [layer], but only where the tape allows.
+///
+/// For the two tools that compute their result as a whole new layer in an
+/// isolate: they cannot be clipped while they work, so they are clipped
+/// afterwards.
+ui.Image _throughTape(
+    ui.Image? layer, ui.Image painted, Mask mask, int width, int height) {
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder, _bounds(width, height));
+  if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
+  _masked(canvas, mask, width, height, () {
+    canvas.drawImage(painted, Offset.zero, Paint());
+  });
+  final picture = recorder.endRecording();
+  final image = picture.toImageSync(width, height);
+  picture.dispose();
+  painted.dispose();
+  return image;
 }
 
 ui.Image applyShape({
@@ -193,12 +257,15 @@ ui.Image applyShape({
   required int height,
   double angle = 0,
   bool outline = false,
+  Mask? mask,
 }) {
   final recorder = ui.PictureRecorder();
   final canvas = Canvas(recorder, _bounds(width, height));
   if (layer != null) canvas.drawImage(layer, Offset.zero, Paint());
-  ShapeRenderer.drawShape(canvas, kind, center, radius, color, strokeWidth,
-      angle: angle, outline: outline);
+  _masked(canvas, mask, width, height, () {
+    ShapeRenderer.drawShape(canvas, kind, center, radius, color, strokeWidth,
+        angle: angle, outline: outline);
+  });
   final picture = recorder.endRecording();
   final image = picture.toImageSync(width, height);
   picture.dispose();

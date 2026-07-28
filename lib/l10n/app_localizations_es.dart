@@ -202,6 +202,26 @@ class AppLocalizationsEs extends AppLocalizations {
   String get toolWand => 'Varita mágica';
 
   @override
+  String get toolTape => 'Cinta adhesiva';
+
+  @override
+  String get tapeHint =>
+      'Arrastra una forma: la pintura solo cae donde la cinta lo permite.';
+
+  @override
+  String get tapeStuckHint =>
+      'La cinta está pegada. Pinta por encima o quítala.';
+
+  @override
+  String get tapeInside => 'Solo dentro';
+
+  @override
+  String get tapeOutside => 'Alrededor';
+
+  @override
+  String get tapePeel => 'Quitar la cinta';
+
+  @override
   String get toolShapes => 'Formas';
 
   @override

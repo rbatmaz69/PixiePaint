@@ -202,6 +202,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get toolWand => 'Baguette magique';
 
   @override
+  String get toolTape => 'Ruban de masquage';
+
+  @override
+  String get tapeHint =>
+      'Trace une forme : la peinture ne va que là où le ruban le permet.';
+
+  @override
+  String get tapeStuckHint =>
+      'Le ruban est collé. Peins par-dessus — ou décolle-le.';
+
+  @override
+  String get tapeInside => 'Dedans';
+
+  @override
+  String get tapeOutside => 'Autour';
+
+  @override
+  String get tapePeel => 'Décoller le ruban';
+
+  @override
   String get toolShapes => 'Formes';
 
   @override

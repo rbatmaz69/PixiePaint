@@ -17,6 +17,7 @@ enum ToolKind {
   twin,
   text,
   wand,
+  tape,
 }
 
 /// The four tools a profile in simple mode is offered — paint, fill,

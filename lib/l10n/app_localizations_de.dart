@@ -204,6 +204,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get toolWand => 'Zauberstab';
 
   @override
+  String get toolTape => 'Klebeband';
+
+  @override
+  String get tapeHint =>
+      'Form aufziehen — gemalt wird nur dort, wo das Band es zulässt.';
+
+  @override
+  String get tapeStuckHint => 'Das Band klebt. Male darüber — oder zieh es ab.';
+
+  @override
+  String get tapeInside => 'Nur innen';
+
+  @override
+  String get tapeOutside => 'Außen herum';
+
+  @override
+  String get tapePeel => 'Band abziehen';
+
+  @override
   String get toolShapes => 'Formen';
 
   @override

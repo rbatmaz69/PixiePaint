@@ -203,6 +203,26 @@ class AppLocalizationsIt extends AppLocalizations {
   String get toolWand => 'Bacchetta magica';
 
   @override
+  String get toolTape => 'Nastro adesivo';
+
+  @override
+  String get tapeHint =>
+      'Trascina una forma: il colore va solo dove il nastro lo lascia passare.';
+
+  @override
+  String get tapeStuckHint =>
+      'Il nastro è attaccato. Dipingici sopra oppure staccalo.';
+
+  @override
+  String get tapeInside => 'Solo dentro';
+
+  @override
+  String get tapeOutside => 'Tutt\'intorno';
+
+  @override
+  String get tapePeel => 'Stacca il nastro';
+
+  @override
   String get toolShapes => 'Forme';
 
   @override

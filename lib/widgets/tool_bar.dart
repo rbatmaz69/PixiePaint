@@ -16,6 +16,7 @@ import 'size_picker.dart';
 import 'stamp_picker.dart';
 import 'text_picker.dart';
 import 'symmetry_picker.dart' as symmetry;
+import 'tape_picker.dart';
 
 /// Accent color per tool — used for the selected highlight so every tool
 /// feels like its own little character. Harmonized with the PixiePalette.
@@ -36,6 +37,7 @@ Color toolAccent(ToolKind tool) => switch (tool) {
   ToolKind.shape => PixiePalette.periwinkle,
   ToolKind.text => PixiePalette.indigo,
   ToolKind.wand => PixiePalette.sunshine,
+  ToolKind.tape => PixiePalette.mint,
 };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -60,6 +62,7 @@ String toolEmoji(
   ToolKind.shape => shapeEmoji,
   ToolKind.text => '🔤',
   ToolKind.wand => '🪄',
+  ToolKind.tape => '🩹',
 };
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
@@ -79,6 +82,7 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
   ToolKind.shape => context.l10n.toolShapes,
   ToolKind.text => context.l10n.toolText,
   ToolKind.wand => context.l10n.toolWand,
+  ToolKind.tape => context.l10n.toolTape,
 };
 
 /// The shell every toolbar button that can be *picked* wears: a tooltip, a
@@ -391,6 +395,9 @@ class _ToolBarRailState extends State<ToolBarRail> {
             ToolKind.twin,
             ToolKind.stamp,
             ToolKind.shape,
+            // Next to the shapes: it is the same eight motifs and the same
+            // drag, only what comes out of it is a rule instead of paint.
+            ToolKind.tape,
             ToolKind.text,
             if (widget.showFill) ToolKind.fill,
             ToolKind.eyedropper,
@@ -414,6 +421,7 @@ class _ToolBarRailState extends State<ToolBarRail> {
                 context,
                 controller,
               ),
+              ToolKind.tape => () => showTapePicker(context, controller),
               ToolKind.fill => plainFill
                   ? () => controller.selectTool(ToolKind.fill)
                   : () => showFillPatternPicker(context, controller),
