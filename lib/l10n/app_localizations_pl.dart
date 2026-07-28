@@ -30,6 +30,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get cardScratch => 'Zdrapka';
 
   @override
+  String get cardSurprise => 'Niespodzianka';
+
+  @override
   String get scratchIntroTitle => 'Zdrap kolory!';
 
   @override

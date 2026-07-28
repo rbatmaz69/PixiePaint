@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardScratch => 'Scratch art';
 
   @override
+  String get cardSurprise => 'Surprise me';
+
+  @override
   String get scratchIntroTitle => 'Scratch the colours out!';
 
   @override

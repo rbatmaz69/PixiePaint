@@ -56,6 +56,7 @@ import 'pause_curtain.dart';
 import 'region_label.dart';
 import 'save_session.dart';
 import 'scratch.dart';
+import 'surprise.dart';
 import 'stroke.dart';
 
 const int kCanvasWidth = 2048;
@@ -107,6 +108,7 @@ class CanvasScreen extends StatefulWidget {
     this.traceTemplate,
     this.scene,
     this.scratch = false,
+    this.surprise = false,
   });
 
   final ColoringPage? page;
@@ -120,6 +122,10 @@ class CanvasScreen extends StatefulWidget {
   /// Start as a scratch picture: colours under a cover, and the eraser in
   /// hand as the scratching stick.
   final bool scratch;
+
+  /// Dealt by the dice: the picture came with a pen and a colour already
+  /// chosen. See `_openSurprise` on the home screen for why.
+  final bool surprise;
 
   /// Ownership passes to the canvas controller, which disposes it.
   final RasterizedLineArt? photoLineArt;
@@ -207,6 +213,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       scratch: isScratch,
       resumed: widget.resume != null,
     );
+    if (widget.surprise && !_simpleTools) _dealTool();
     // The scratching stick is the eraser. Nothing else has to change: the
     // eraser has always been the one tool that takes paint away and cannot
     // touch the background.
@@ -306,6 +313,13 @@ class _CanvasScreenState extends State<CanvasScreen>
         controller.recordOps = false;
       }
     }
+  }
+
+  /// The dice: a pen and a colour, dealt in [dealSurprise].
+  void _dealTool() {
+    final dealt = dealSurprise();
+    controller.tool = dealt.tool;
+    controller.color = dealt.color;
   }
 
   /// Lays the colour sheet down and covers it up.

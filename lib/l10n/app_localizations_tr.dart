@@ -30,6 +30,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cardScratch => 'Kazı kazan';
 
   @override
+  String get cardSurprise => 'Sürpriz';
+
+  @override
   String get scratchIntroTitle => 'Renkleri kazı çıkar!';
 
   @override

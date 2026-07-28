@@ -30,6 +30,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cardScratch => 'Kraskaart';
 
   @override
+  String get cardSurprise => 'Verrassing';
+
+  @override
   String get scratchIntroTitle => 'Kras de kleuren vrij!';
 
   @override

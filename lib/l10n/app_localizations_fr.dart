@@ -30,6 +30,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cardScratch => 'Carte à gratter';
 
   @override
+  String get cardSurprise => 'Surprise';
+
+  @override
   String get scratchIntroTitle => 'Gratte les couleurs !';
 
   @override

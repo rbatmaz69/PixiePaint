@@ -154,6 +154,12 @@ abstract class AppLocalizations {
   /// **'Kratzbild'**
   String get cardScratch;
 
+  /// No description provided for @cardSurprise.
+  ///
+  /// In de, this message translates to:
+  /// **'Überraschung'**
+  String get cardSurprise;
+
   /// No description provided for @scratchIntroTitle.
   ///
   /// In de, this message translates to:

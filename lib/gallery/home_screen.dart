@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../canvas/canvas_screen.dart';
 import '../canvas/two_painter_screen.dart';
 import '../l10n/l10n.dart';
+import '../models/coloring_page.dart';
 import '../photo/photo_lineart_screen.dart';
 import '../trace/trace_picker_screen.dart';
 import 'scene_picker_screen.dart';
@@ -21,6 +22,7 @@ import '../ui/motion.dart';
 import '../ui/pixie_palette.dart';
 import '../ui/sticker.dart';
 import '../util/music.dart';
+import '../util/sfx.dart';
 import '../util/profiles.dart';
 import '../util/settings.dart';
 import '../widgets/daily_task_sheet.dart';
@@ -138,6 +140,13 @@ class _HomeScreenState extends State<HomeScreen>
         gradient: PixieGradients.trace,
         tiltIndex: 5,
         onTap: () => open(TracePickerScreen.new),
+      ),
+      _CardSpec(
+        emoji: '🎲',
+        label: context.l10n.cardSurprise,
+        gradient: PixieGradients.scenes,
+        tiltIndex: 5,
+        onTap: () => _openSurprise(context),
       ),
       _CardSpec(
         emoji: '🖼️',
@@ -471,6 +480,34 @@ enum _PhotoMode { paintOver, lineArt }
 
 /// Photo painting leaves the kid-safe context (system photo picker), so it
 /// sits behind the parental gate.
+/// Deals a picture, a pen and a colour, all at once.
+///
+/// Two things it is actually for. Choosing is hard at four — sixty-eight
+/// pictures in nine categories is a lot of deciding before any painting
+/// happens, and a child who cannot decide often just stops. And the pens
+/// past the first three are barely ever picked; this is the only thing in
+/// the app that puts the dotted pen or the twin line into a child's hand
+/// without them having gone looking for it.
+///
+/// The tool is left alone in simple mode: that toolbar shows four things on
+/// purpose, and dealing a fifth would hand over one that cannot be put down.
+Future<void> _openSurprise(BuildContext context) async {
+  final pages = await ColoringPage.loadAll();
+  if (!context.mounted || pages.isEmpty) return;
+  final rng = Random();
+  // Numbered pictures are their own game with their own rules — being
+  // dropped into one by a dice roll would be a surprise of the wrong kind.
+  final choices = [for (final p in pages) if (!p.isColorByNumber) p];
+  if (choices.isEmpty) return;
+  Sfx.instance.pop();
+  await Navigator.of(context).push(MaterialPageRoute<void>(
+    builder: (_) => CanvasScreen(
+      page: choices[rng.nextInt(choices.length)],
+      surprise: true,
+    ),
+  ));
+}
+
 Future<void> _pickPhoto(BuildContext context) async {
   if (!await ParentalGate.show(context)) return;
   final file = await ImagePicker().pickImage(source: ImageSource.gallery);
