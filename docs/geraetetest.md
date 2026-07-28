@@ -370,6 +370,30 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Ohne eigene Sticker sagt der Knopf „Noch keine eigenen Sticker", statt still nichts zu tun
 - [ ] Alle vier Drucke ohne Drucker ausprobieren: „Als PDF speichern" im Systemdialog liefert eine Datei, die sich öffnen lässt
 
+## Kratzbild und Würfel (neu in v9.4)
+
+**Kratzbild (🌈)**
+
+- [ ] Startseite → „Kratzbild": beim ersten Mal erklärt eine Karte die Regel, danach nicht mehr
+- [ ] Das Blatt ist **ganz** schwarz — keine Lücke, kein durchscheinender Streifen am Rand
+- [ ] Der Radierer liegt schon in der Hand; einmal drüberziehen holt Farbe heraus
+- [ ] Zweimal über dieselbe Stelle bringt nichts Neues (unter den Farben ist nichts mehr)
+- [ ] Rückgängig legt die Decke wieder darüber
+- [ ] **„Alles wegwischen" fehlt in der Werkzeugleiste** — das ist Absicht
+- [ ] Malen (Pinsel, Sticker) funktioniert weiterhin, oben auf dem Schwarz
+- [ ] Bild verlassen und aus der Galerie wieder öffnen: Farben und Kratzer sind, wie sie waren
+- [ ] Sofort wieder verlassen, ohne zu kratzen: das Bild ist trotzdem da und **zugedeckt**, nicht offen
+- [ ] Zeitraffer eines Kratzbildes: der Film fängt damit an, die Seite zuzudecken, danach kommen die Kratzer
+- [ ] Vorher/Nachher wird für Kratzbilder **nicht** angeboten
+- [ ] Zwei Kratzbilder nacheinander haben verschiedene Farbverläufe
+
+**Würfel (🎲)**
+
+- [ ] Startseite → „Überraschung": ein Bild öffnet sich, mit einem Stift und einer Farbe, die schon gewählt sind
+- [ ] Zehnmal drücken: es kommen verschiedene Bilder, Stifte und Farben — und nie ein Zahlenbild
+- [ ] Die ausgeteilte Farbe ist auf dem weißen Papier immer zu sehen
+- [ ] Bei einem Kind mit **einfachen Werkzeugen** bleibt der Pinsel, nur Bild und Farbe wechseln
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
