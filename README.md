@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 8.6.0+37 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 9.4.0+38 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
