@@ -258,7 +258,9 @@ class CanvasController extends ChangeNotifier {
         _commitActiveStroke();
       } else if (shapeCenter != null) {
         _commitShape();
-      } else if (pendingStampPos != null || pendingPickPos != null) {
+      } else if (pendingStampPos != null ||
+          pendingPickPos != null ||
+          tapeCenter != null) {
         _cancelActiveStroke();
       }
     }

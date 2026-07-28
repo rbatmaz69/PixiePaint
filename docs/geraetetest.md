@@ -330,6 +330,32 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Mit „Bewegung reduzieren": kein Vorführen, der Griff steht von Anfang an in der Mitte
 - [ ] **Bildmenü auf einem kleinen Telefon mit großer Systemschrift:** die Liste lässt sich scrollen und „Wegwerfen" ist erreichbar
 
+## Kleben und Mischen (neu in v9.2)
+
+**Klebeband (🩹)**
+
+- [ ] Werkzeugleiste → 🩹: sieben Motive, dazu unten „Nur innen" / „Außen herum". Die Kacheln zeigen sofort, welche Seite abgedeckt wird
+- [ ] Ein Band aufziehen (dieselbe Bewegung wie beim Formen-Werkzeug): danach liegt **wieder der vorherige Stift** in der Hand
+- [ ] Quer über das Band malen: der Strich hört an der Bandkante auf — schon **während** des Ziehens, nicht erst beim Loslassen
+- [ ] Dasselbe mit Sticker, Buchstaben, Form und Eimer: alle halten an derselben Kante
+- [ ] **Radierer bei „Außen herum":** alles wegwischen — was unter dem Band liegt, bleibt stehen. Das ist der eigentliche Test
+- [ ] Auf „Nur innen" umschalten, während ein Band klebt: das Band dreht sich um, das Gemalte bleibt unverändert
+- [ ] „Band abziehen": das Bild sieht danach **exakt** genauso aus wie vorher
+- [ ] Das Band steht nicht im gespeicherten Bild: speichern, in die Galerie gehen, Vorschaubild und „In Fotos speichern" prüfen
+- [ ] Rückgängig direkt nach dem Aufkleben nimmt den **letzten Strich** zurück, nicht das Band (kleben ist kein Schritt)
+- [ ] **Zeitraffer** eines Bildes mit Band: der Film hört an denselben Kanten auf wie das Bild
+- [ ] Zwei Finger auf den Bildschirm, während ein Band aufgezogen wird: das Band fällt weg, statt irgendwo zu landen
+
+**Farben mischen (🧪)**
+
+- [ ] Farbpalette → „Mehr Farben": oben steht der Mischtopf
+- [ ] Ein leeres Schälchen antippen, dann **Blau**, dann **Gelb**: das Ergebnis ist **Grün** (nicht Grau)
+- [ ] Rot + Gelb = Orange, Rot + Blau = Lila, Rot + Weiß = Rosa
+- [ ] Das Ergebnis antippen: die Farbe ist gewählt, das Blatt schließt, und sie steht anschließend unter „Zuletzt benutzt"
+- [ ] Solange **kein** Schälchen scharf ist, tut ein Tipp auf eine Farbe genau das, was er immer getan hat (nehmen und schließen)
+- [ ] Der Besen leert den Topf wieder
+- [ ] Mit Screenreader: die Schälchen heißen „Farbe wählen", das Ergebnis wird mit Farbnamen angesagt
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt
