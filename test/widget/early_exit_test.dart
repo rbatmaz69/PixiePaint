@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pixiepaint/gallery/before_after_screen.dart';
 import 'package:pixiepaint/gallery/gallery_screen.dart';
 import 'package:pixiepaint/gallery/page_picker_screen.dart';
 import 'package:pixiepaint/gallery/slideshow_screen.dart';
@@ -72,5 +73,21 @@ void main() {
       dirPath: '${Directory.systemTemp.path}/pp_missing',
     );
     await openAndLeave(tester, SlideshowScreen(artworks: [artwork]));
+  });
+
+  testWidgets('before & after survives being left while it loads',
+      (tester) async {
+    // Its sweep controller is built *after* the disk read finishes, so a
+    // child who backs out first leaves a null field behind — which is the
+    // shape the rule asks for, and this is what holds it there.
+    final artwork = Artwork(
+      id: 'a',
+      pageId: 'cat',
+      width: 64,
+      height: 48,
+      updatedAt: DateTime(2026),
+      dirPath: '${Directory.systemTemp.path}/pp_missing',
+    );
+    await openAndLeave(tester, BeforeAfterScreen(artwork: artwork));
   });
 }

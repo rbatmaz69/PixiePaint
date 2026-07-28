@@ -327,6 +327,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get replayAction => 'Film anschauen';
 
   @override
+  String get beforeAfterAction => 'Vorher & Nachher';
+
+  @override
   String get replayAgain => 'Nochmal abspielen';
 
   @override

@@ -325,6 +325,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get replayAction => 'Filmi izle';
 
   @override
+  String get beforeAfterAction => 'Önce ve sonra';
+
+  @override
   String get replayAgain => 'Tekrar oynat';
 
   @override

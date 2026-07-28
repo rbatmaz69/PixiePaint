@@ -325,6 +325,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get replayAction => 'Voir le film';
 
   @override
+  String get beforeAfterAction => 'Avant / après';
+
+  @override
   String get replayAgain => 'Rejouer';
 
   @override

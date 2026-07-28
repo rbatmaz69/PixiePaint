@@ -27,6 +27,7 @@ import '../util/profiles.dart';
 import '../util/review.dart';
 import '../util/settings.dart';
 import 'page_picker_screen.dart';
+import 'before_after_screen.dart';
 import 'slideshow_screen.dart';
 import '../util/save_to_photos.dart';
 import '../util/sfx.dart';
@@ -183,7 +184,12 @@ class _GalleryScreenState extends State<GalleryScreen>
           );
         }
 
-        return Padding(
+        // Scrollable since v9.1. A bottom sheet is capped at a fraction of
+        // the screen, and this menu grew to seven entries — on a small phone
+        // (or at any text scale above the default) "throw it away" fell off
+        // the bottom edge, unreachable and silent about it. The same shape
+        // of bug the dialogs were fixed for in v8.7.
+        return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 4, 24, 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -202,6 +208,20 @@ class _GalleryScreenState extends State<GalleryScreen>
                   () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => ReplayScreen(artwork: artwork)),
+                  ),
+                ),
+              ],
+              // Only where there is a "before" to go back to: an outline or
+              // a photo. Free drawing started on blank paper.
+              if (hasBeforeAfter(artwork)) ...[
+                const SizedBox(height: PixieTokens.gapSmall),
+                entry(
+                  '👀',
+                  l10n.beforeAfterAction,
+                  PixieGradients.gallery,
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => BeforeAfterScreen(artwork: artwork)),
                   ),
                 ),
               ],

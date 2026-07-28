@@ -107,6 +107,38 @@ void main() {
     expect(find.textContaining('Teilen'), findsOneWidget);
   });
 
+  testWidgets('every action stays reachable on a small phone with big text',
+      (tester) async {
+    // The sheet is capped at a fraction of the screen, and this menu keeps
+    // growing — v9.1 added "before & after" and pushed the last entry off
+    // the bottom edge on a 640 dp phone. Off the edge means gone: nothing
+    // scrolled, nothing said so. The menu scrolls since then, and this is
+    // the test that keeps saying whether the way out is still there.
+    root = await setUpPixieStorage(tester);
+    addTearDown(() => tearDownPixieStorage(tester, root));
+    Settings.instance.deleteNeedsGate = false;
+    await makeArtwork(tester, id: 'a', name: 'Katze');
+
+    await tester.runAsync(() async {
+      await pumpPixie(tester, const GalleryScreen(),
+          size: const Size(360, 640), textScale: 1.6);
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    });
+    for (var i = 0; i < 6; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    await openSheet(tester, 'Katze');
+    expect(tester.takeException(), isNull, reason: 'nothing may overflow');
+
+    await tester.ensureVisible(find.text('Wegwerfen'));
+    await tester.pump();
+    await tester.tap(find.text('Wegwerfen'));
+    await settle(tester);
+
+    expect(find.text('Bild wegwerfen?'), findsOneWidget,
+        reason: 'the last entry of the menu has to be usable, not just present');
+  });
+
   testWidgets('saved pictures show up, an empty gallery says so',
       (tester) async {
     root = await setUpPixieStorage(tester);

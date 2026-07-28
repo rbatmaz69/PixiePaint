@@ -706,6 +706,12 @@ abstract class AppLocalizations {
   /// **'Film anschauen'**
   String get replayAction;
 
+  /// No description provided for @beforeAfterAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Vorher & Nachher'**
+  String get beforeAfterAction;
+
   /// No description provided for @replayAgain.
   ///
   /// In de, this message translates to:

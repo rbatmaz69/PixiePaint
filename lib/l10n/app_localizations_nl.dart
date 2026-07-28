@@ -326,6 +326,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get replayAction => 'Filmpje bekijken';
 
   @override
+  String get beforeAfterAction => 'Voor en na';
+
+  @override
   String get replayAgain => 'Nog eens afspelen';
 
   @override

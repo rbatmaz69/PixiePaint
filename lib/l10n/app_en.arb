@@ -106,6 +106,7 @@
   "continuePainting": "Keep painting",
   "slideshowTooltip": "Start slideshow",
   "replayAction": "Watch the movie",
+  "beforeAfterAction": "Before & after",
   "replayAgain": "Play again",
   "replaySpeed": "Speed",
   "renameAction": "Rename",
