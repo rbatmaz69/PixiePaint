@@ -64,6 +64,7 @@
   "toolFill": "Fill",
   "toolEraser": "Eraser",
   "toolEyedropper": "Color picker",
+  "toolWand": "Magic wand",
   "toolShapes": "Shapes",
   "toolText": "Letters",
   "textPickerTitle": "What should the picture say?",

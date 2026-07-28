@@ -441,6 +441,10 @@ class CanvasController extends ChangeNotifier {
       tapFill(pos);
       return;
     }
+    if (tool == ToolKind.wand) {
+      tapWand(pos);
+      return;
+    }
     if (tool == ToolKind.stamp) {
       _activePointer = e.pointer;
       _activeIsStylus = isStylus;
@@ -913,6 +917,53 @@ class CanvasController extends ChangeNotifier {
         // area already had this colour. Every other outcome in the app
         // answers; this one used to be silence, which reads as "the app is
         // broken" and invites tapping harder.
+        Sfx.instance.tick();
+        missedFill.value = null;
+        missedFill.value = pos;
+      }
+    } finally {
+      if (!_disposed) {
+        isFilling = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  // ------------------------------------------------------------- magic wand
+
+  /// Swaps one colour for the current one across the whole paint layer.
+  ///
+  /// Shares [isFilling] with the bucket on purpose: both hand the layer to an
+  /// isolate and must not be handed a second one until it comes back.
+  Future<void> tapWand(Offset pos) async {
+    if (isFilling || activeStroke != null) return;
+    isFilling = true;
+    notifyListeners();
+    try {
+      final c = color;
+      final newLayer = await applyWand(
+        layer: paintLayer,
+        pos: pos,
+        color: c,
+        width: canvasWidth,
+        height: canvasHeight,
+      );
+      if (_disposed) {
+        newLayer?.dispose();
+        return;
+      }
+      if (newLayer != null) {
+        Sfx.instance.pop();
+        Progress.instance.registerToolUsed(ToolKind.wand);
+        // A colour can sit anywhere on the paper, so the whole picture is
+        // the honest dirty rect — same reasoning as the flood fill.
+        _pushUndoAndReplace(newLayer, _wholeCanvas);
+        _recordOp(WandOp(x: pos.dx, y: pos.dy, color: c.toARGB32()));
+        lastFill.value = null;
+        lastFill.value = pos;
+      } else {
+        // Nothing there to change: bare paper, a line, or that colour
+        // already. Answered the same way a bucket answers it.
         Sfx.instance.tick();
         missedFill.value = null;
         missedFill.value = pos;

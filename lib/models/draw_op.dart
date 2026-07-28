@@ -64,6 +64,12 @@ sealed class DrawOp {
           color: json['c'] as int? ?? 0xFF000000,
           pattern: _patternByName(json['pt'] as String?),
         );
+      case 'w':
+        return WandOp(
+          x: (json['x'] as num?)?.toDouble() ?? 0,
+          y: (json['y'] as num?)?.toDouble() ?? 0,
+          color: json['c'] as int? ?? 0xFF000000,
+        );
       case 'c':
         return const ClearOp();
     }
@@ -241,6 +247,27 @@ class FillOp extends DrawOp {
         'y': _round1(y),
         'c': color,
         if (pattern != FillPattern.solid) 'pt': pattern.name,
+      };
+}
+
+/// One tap of the magic wand: every pixel that had the colour under [x]/[y]
+/// took [color] instead.
+///
+/// Only the tap is stored, never the list of pixels it hit — the replay runs
+/// the same recolour over the same layer and arrives at the same picture,
+/// exactly as [FillOp] re-runs the same flood fill.
+class WandOp extends DrawOp {
+  WandOp({required this.x, required this.y, required this.color});
+
+  final double x, y;
+  final int color;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        't': 'w',
+        'x': _round1(x),
+        'y': _round1(y),
+        'c': color,
       };
 }
 

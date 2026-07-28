@@ -199,6 +199,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get toolEyedropper => 'Renk seçici';
 
   @override
+  String get toolWand => 'Sihirli değnek';
+
+  @override
   String get toolShapes => 'Şekiller';
 
   @override

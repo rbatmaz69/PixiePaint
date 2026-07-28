@@ -57,6 +57,7 @@ class StrokeRenderer {
       case ToolKind.eyedropper:
       case ToolKind.shape:
       case ToolKind.text:
+      case ToolKind.wand:
         break; // not stroke-based
     }
   }

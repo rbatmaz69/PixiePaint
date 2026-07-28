@@ -35,6 +35,7 @@ Color toolAccent(ToolKind tool) => switch (tool) {
   ToolKind.eyedropper => PixiePalette.pine,
   ToolKind.shape => PixiePalette.periwinkle,
   ToolKind.text => PixiePalette.indigo,
+  ToolKind.wand => PixiePalette.sunshine,
 };
 
 /// Emoji per tool — carries the meaning for kids who can't read yet.
@@ -58,6 +59,7 @@ String toolEmoji(
   ToolKind.eyedropper => '💧',
   ToolKind.shape => shapeEmoji,
   ToolKind.text => '🔤',
+  ToolKind.wand => '🪄',
 };
 
 String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
@@ -76,6 +78,7 @@ String toolLabel(BuildContext context, ToolKind tool) => switch (tool) {
   ToolKind.eyedropper => context.l10n.toolEyedropper,
   ToolKind.shape => context.l10n.toolShapes,
   ToolKind.text => context.l10n.toolText,
+  ToolKind.wand => context.l10n.toolWand,
 };
 
 /// The shell every toolbar button that can be *picked* wears: a tooltip, a
@@ -391,6 +394,9 @@ class _ToolBarRailState extends State<ToolBarRail> {
             ToolKind.text,
             if (widget.showFill) ToolKind.fill,
             ToolKind.eyedropper,
+            // Next to the pipette: the two tools that work on colour that is
+            // already on the paper rather than on new paint.
+            ToolKind.wand,
             ToolKind.eraser,
           ];
     return [
@@ -564,7 +570,8 @@ class _ToolButton extends StatelessWidget {
     final showColorBadge =
         tool == ToolKind.brush ||
         tool == ToolKind.fill ||
-        tool == ToolKind.shape;
+        tool == ToolKind.shape ||
+        tool == ToolKind.wand;
 
     // The whole toolbar speaks emoji — the same language as the pickers
     // and the tool chip. Stamp/shape show their selected motif.

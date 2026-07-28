@@ -200,6 +200,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolEyedropper => 'Color picker';
 
   @override
+  String get toolWand => 'Magic wand';
+
+  @override
   String get toolShapes => 'Shapes';
 
   @override

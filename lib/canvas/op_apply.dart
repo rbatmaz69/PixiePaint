@@ -8,6 +8,7 @@ import '../models/tool.dart';
 import '../util/image_io.dart';
 import 'fill_pattern.dart';
 import 'flood_fill.dart' as ff;
+import 'magic_wand.dart' as wand;
 import 'shape_renderer.dart';
 import 'stroke.dart';
 import 'stroke_renderer.dart';
@@ -143,6 +144,39 @@ Future<ui.Image?> applyFill({
         // Without line art there is nothing to hide the dilation under.
         dilationPasses: barrierAlpha == null ? 0 : 3,
         pattern: pattern,
+      ));
+  if (result == null) return null;
+  return rgbaToImage(result, width, height);
+}
+
+/// Runs the magic wand in an isolate and returns the new layer, or null when
+/// there was nothing to recolour (bare paper, or already that colour).
+///
+/// Shares the shape of [applyFill] for the same reason: the replay has to
+/// recolour exactly what the child recoloured.
+Future<ui.Image?> applyWand({
+  required ui.Image? layer,
+  required Offset pos,
+  required Color color,
+  required int width,
+  required int height,
+}) async {
+  // No layer means nothing has been painted yet, and the wand only ever
+  // touches paint.
+  if (layer == null) return null;
+  final data = await layer.toByteData(format: ui.ImageByteFormat.rawRgba);
+  final rgba = data!.buffer.asUint8List();
+  final seedX = pos.dx.floor().clamp(0, width - 1);
+  final seedY = pos.dy.floor().clamp(0, height - 1);
+  final result = await Isolate.run(() => wand.magicRecolor(
+        rgba: rgba,
+        width: width,
+        height: height,
+        seedX: seedX,
+        seedY: seedY,
+        toR: (color.r * 255).round(),
+        toG: (color.g * 255).round(),
+        toB: (color.b * 255).round(),
       ));
   if (result == null) return null;
   return rgbaToImage(result, width, height);

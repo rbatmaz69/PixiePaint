@@ -123,6 +123,18 @@ void main() {
             layer?.dispose();
             layer = next;
           }
+        case WandOp():
+          final next = await applyWand(
+            layer: layer,
+            pos: Offset(op.x, op.y),
+            color: Color(op.color),
+            width: w,
+            height: h,
+          );
+          if (next != null) {
+            layer?.dispose();
+            layer = next;
+          }
         case ClearOp():
           layer?.dispose();
           layer = null;

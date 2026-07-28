@@ -201,6 +201,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get toolEyedropper => 'Pipette';
 
   @override
+  String get toolWand => 'Zauberstab';
+
+  @override
   String get toolShapes => 'Formen';
 
   @override

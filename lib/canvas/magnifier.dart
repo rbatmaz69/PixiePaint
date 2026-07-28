@@ -126,6 +126,7 @@ class MagnifierPainter extends CustomPainter {
       ToolKind.shape,
       ToolKind.fill,
       ToolKind.eyedropper,
+      ToolKind.wand,
     };
     if (drawn.contains(controller.tool)) return;
     final r = (controller.brushSize / 2 * kMagnifierZoom).clamp(4.0, radius * 0.8);

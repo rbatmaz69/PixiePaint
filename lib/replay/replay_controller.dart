@@ -90,6 +90,8 @@ class ReplayController extends ChangeNotifier {
           await _playText(op);
         case FillOp():
           await _playFill(op);
+        case WandOp():
+          await _playWand(op);
         case ClearOp():
           layer?.dispose();
           layer = null;
@@ -252,6 +254,27 @@ class ReplayController extends ChangeNotifier {
     );
     // Checked after the await, not before it: the whole fill (isolate round
     // trip plus decode) can outlive the screen.
+    if (_cancelled) {
+      newLayer?.dispose();
+      return;
+    }
+    if (newLayer != null) {
+      layer?.dispose();
+      layer = newLayer;
+      _tick();
+    }
+    await _delay(const Duration(milliseconds: 450));
+  }
+
+  Future<void> _playWand(WandOp op) async {
+    final newLayer = await applyWand(
+      layer: layer,
+      pos: ui.Offset(op.x, op.y),
+      color: Color(op.color),
+      width: width,
+      height: height,
+    );
+    // Same rule as the fill above: the screen can be gone by now.
     if (_cancelled) {
       newLayer?.dispose();
       return;

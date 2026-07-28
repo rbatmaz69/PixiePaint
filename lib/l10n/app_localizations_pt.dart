@@ -200,6 +200,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get toolEyedropper => 'Conta-gotas';
 
   @override
+  String get toolWand => 'Varinha mágica';
+
+  @override
   String get toolShapes => 'Formas';
 
   @override

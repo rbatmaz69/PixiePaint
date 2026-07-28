@@ -200,6 +200,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get toolEyedropper => 'Pipet';
 
   @override
+  String get toolWand => 'Toverstaf';
+
+  @override
   String get toolShapes => 'Vormen';
 
   @override

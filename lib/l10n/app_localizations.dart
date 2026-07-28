@@ -454,6 +454,12 @@ abstract class AppLocalizations {
   /// **'Pipette'**
   String get toolEyedropper;
 
+  /// No description provided for @toolWand.
+  ///
+  /// In de, this message translates to:
+  /// **'Zauberstab'**
+  String get toolWand;
+
   /// No description provided for @toolShapes.
   ///
   /// In de, this message translates to:

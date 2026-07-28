@@ -203,6 +203,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get toolEyedropper => 'Pipeta';
 
   @override
+  String get toolWand => 'Różdżka';
+
+  @override
   String get toolShapes => 'Kształty';
 
   @override

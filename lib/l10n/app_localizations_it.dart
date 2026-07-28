@@ -200,6 +200,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get toolEyedropper => 'Contagocce';
 
   @override
+  String get toolWand => 'Bacchetta magica';
+
+  @override
   String get toolShapes => 'Forme';
 
   @override
