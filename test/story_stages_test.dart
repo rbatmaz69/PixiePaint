@@ -23,7 +23,7 @@ void main() {
     if (dir.existsSync()) dir.deleteSync(recursive: true);
   });
 
-  Artwork artworkWith(List<DrawOp> ops) {
+  Artwork artworkWith(List<DrawOp> ops, {bool scratch = false}) {
     File('${dir.path}/ops.json').writeAsStringSync(encodeOps(ops));
     return Artwork(
       id: 'a1b2c3d4',
@@ -32,6 +32,7 @@ void main() {
       height: 96,
       updatedAt: DateTime(2026, 7, 28),
       dirPath: dir.path,
+      scratch: scratch,
     );
   }
 
@@ -89,6 +90,30 @@ void main() {
 
     expect(stages.length, 2);
     expect(stages.first, isNot(stages.last));
+  });
+
+  test('a scratch picture opens on the covered page, not on the answer',
+      () async {
+    // Its first op is the cover — how the picture arrived, not something the
+    // child did. A frame taken before it would be the bare colour sheet: the
+    // one page they never saw, printed above the riddle it answers.
+    final cover = FillOp(
+        x: 0, y: 0, color: 0xFF15151A, pattern: FillPattern.solid);
+    final scratched = await storyStages(
+      artworkWith([cover, strokeAt(30, 0xFF000000)], scratch: true),
+      count: 4,
+    );
+    final plain = await storyStages(
+      artworkWith([cover, strokeAt(30, 0xFF000000)]),
+      count: 4,
+    );
+
+    // The plain picture gets the empty page first; the scratch one does not,
+    // so it has one frame fewer and starts somewhere else entirely.
+    expect(scratched.length, lessThan(plain.length));
+    expect(scratched.first, isNot(plain.first));
+    expect(scratched.first, plain[1],
+        reason: 'it opens on the page as the child found it: covered');
   });
 
   test('a picture with no story at all still yields the picture', () async {

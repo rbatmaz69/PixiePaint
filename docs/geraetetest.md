@@ -335,7 +335,7 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 **Klebeband (🩹)**
 
 - [ ] Werkzeugleiste → 🩹: sieben Motive, dazu unten „Nur innen" / „Außen herum". Die Kacheln zeigen sofort, welche Seite abgedeckt wird
-- [ ] Ein Band aufziehen (dieselbe Bewegung wie beim Formen-Werkzeug): danach liegt **wieder der vorherige Stift** in der Hand
+- [ ] Ein Band aufziehen (dieselbe Bewegung wie beim Formen-Werkzeug): danach liegt **wieder der vorherige Stift** in der Hand — mit Glitzer angefangen heißt Glitzer danach, nicht Pinsel
 - [ ] Quer über das Band malen: der Strich hört an der Bandkante auf — schon **während** des Ziehens, nicht erst beim Loslassen
 - [ ] Dasselbe mit Sticker, Buchstaben, Form und Eimer: alle halten an derselben Kante
 - [ ] **Radierer bei „Außen herum":** alles wegwischen — was unter dem Band liegt, bleibt stehen. Das ist der eigentliche Test
@@ -367,6 +367,7 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Der Eintrag „Filmstreifen" fehlt bei alten Bildern ohne Op-Log (dieselben, die auch keinen Zeitraffer haben)
 - [ ] **Ein sehr vollgemaltes Bild:** der Filmstreifen rechnet spürbar (er malt das Bild sechsmal nach). Der Arbeits-Dialog muss die ganze Zeit stehen und die App danach normal weiterlaufen — wie lange es dauert, gehört notiert
 - [ ] Einstellungen → Für Eltern → **Sticker-Bogen drucken**: Elternfrage, dann ein A4-Bogen mit den eigenen Stickern in gestrichelten Kreisen
+- [ ] **Mit vielen eigenen Stickern (mehr als zwölf):** der Bogen geht auf einer zweiten Seite weiter, und **jeder** Sticker ist irgendwo drauf
 - [ ] Ohne eigene Sticker sagt der Knopf „Noch keine eigenen Sticker", statt still nichts zu tun
 - [ ] Alle vier Drucke ohne Drucker ausprobieren: „Als PDF speichern" im Systemdialog liefert eine Datei, die sich öffnen lässt
 
@@ -384,6 +385,7 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Bild verlassen und aus der Galerie wieder öffnen: Farben und Kratzer sind, wie sie waren
 - [ ] Sofort wieder verlassen, ohne zu kratzen: das Bild ist trotzdem da und **zugedeckt**, nicht offen
 - [ ] Zeitraffer eines Kratzbildes: der Film fängt damit an, die Seite zuzudecken, danach kommen die Kratzer
+- [ ] **Filmstreifen eines Kratzbildes:** Bild 1 ist die **zugedeckte** Seite, nicht das nackte Farbblatt
 - [ ] Vorher/Nachher wird für Kratzbilder **nicht** angeboten
 - [ ] Zwei Kratzbilder nacheinander haben verschiedene Farbverläufe
 

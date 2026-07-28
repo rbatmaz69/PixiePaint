@@ -255,7 +255,7 @@ Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Pl
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 727 Tests in 69 Dateien:
+Die Test-Suite umfasst 734 Tests in 70 Dateien:
 
 - `test/*.dart` — **pure Logik**: Flood Fill, Zauberstab-Umfärbung, Farbmischung, Klebeband-Geometrie, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport- und Lupen-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht. Dazu seit v8.0 `canvas_reach_test.dart` — die Frage, ob ein Kind die Knöpfe überhaupt *erreicht*: Rückgängig muss auf einem 360-dp-Telefon ohne Wischen auf dem Schirm stehen.

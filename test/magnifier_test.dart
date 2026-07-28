@@ -48,6 +48,17 @@ void main() {
     }
   });
 
+  test('a canvas too short for the lens does not throw', () {
+    // Cannot happen on a 4:3 picture. It is guarded anyway because the lens
+    // is drawn on every sample of every stroke, and a throw there takes down
+    // a paint pass instead of misplacing a bubble.
+    final centre = magnifierCenter(
+        pos: const Offset(1000, 40),
+        canvas: const Size(2048, 80),
+        radius: magnifierRadius(2048));
+    expect(centre.dy, closeTo(40, 1), reason: 'centred when it cannot fit');
+  });
+
   test('covers the same share of the paper on both canvas sizes', () {
     // The app draws at 2048 and at 1024 wide; a lens fixed in pixels would
     // be a porthole on one of them.

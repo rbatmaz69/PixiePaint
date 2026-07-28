@@ -67,11 +67,19 @@ Future<List<Uint8List>> storyStages(
       raster = await lineArtFromPng(await artwork.lineArtFile.readAsBytes());
     }
 
-    // The empty page is the first frame. "Before" is half of what makes a
-    // strip worth looking at — see the before/after wipe, same idea.
-    await snapshot();
+    // The page as the child found it is the first frame. "Before" is half of
+    // what makes a strip worth looking at — see the before/after wipe, same
+    // idea.
+    //
+    // For a scratch picture that is not the empty layer: the first op is the
+    // cover, which is how the picture *arrived* rather than something the
+    // child did. Photographing before it would open the strip on the bare
+    // colour sheet — the one page they never saw, and the answer to the
+    // riddle printed above the riddle.
+    final arrival = artwork.scratch && ops.isNotEmpty ? 1 : 0;
+    if (arrival == 0) await snapshot();
 
-    final cuts = _checkpoints(ops.length, count - 1);
+    final cuts = _checkpoints(ops.length, count - 1, from: arrival);
     for (var i = 0; i < ops.length; i++) {
       final next = await _apply(
         ops[i],
@@ -85,6 +93,7 @@ Future<List<Uint8List>> storyStages(
         layer?.dispose();
         layer = next.layer;
       }
+      if (i == arrival - 1) await snapshot();
       if (cuts.contains(i)) await snapshot();
     }
     // Whatever the arithmetic did, the last frame is the finished picture.
@@ -100,12 +109,16 @@ Future<List<Uint8List>> storyStages(
   }
 }
 
-/// Which op indices to photograph, spread over the whole story.
-Set<int> _checkpoints(int total, int wanted) {
-  if (total == 0 || wanted <= 0) return const {};
-  if (total <= wanted) return {for (var i = 0; i < total; i++) i};
+/// Which op indices to photograph, spread over the story from [from] on.
+///
+/// [from] skips the ops a picture arrived with rather than earned — today
+/// only the cover of a scratch picture.
+Set<int> _checkpoints(int total, int wanted, {int from = 0}) {
+  final span = total - from;
+  if (span <= 0 || wanted <= 0) return const {};
+  if (span <= wanted) return {for (var i = from; i < total; i++) i};
   return {
-    for (var k = 1; k <= wanted; k++) (total * k / wanted).round() - 1,
+    for (var k = 1; k <= wanted; k++) from + (span * k / wanted).round() - 1,
   };
 }
 

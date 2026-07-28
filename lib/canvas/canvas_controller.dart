@@ -706,6 +706,12 @@ class CanvasController extends ChangeNotifier {
 
   void selectTapeKind(ShapeKind kind) {
     tapeKind = kind;
+    // Remembered *here*, not in [selectTool]: picking a motif in the sheet is
+    // the only way into the tape tool, so that is the only place that knows
+    // what was in the child's hand before. Without this, sticking a piece of
+    // tape down handed back the brush however they had been painting — the
+    // glitter pen would silently become the brush.
+    if (tool != ToolKind.tape) _toolBeforeTape = tool;
     tool = ToolKind.tape;
     Sfx.instance.tick();
     notifyListeners();

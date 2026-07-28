@@ -63,10 +63,20 @@ Offset magnifierCenter({
   final below = pos.dy + lift;
   final dy = above - radius >= margin ? above : below;
   return Offset(
-    pos.dx.clamp(radius + margin, canvas.width - radius - margin),
-    dy.clamp(radius + margin, canvas.height - radius - margin),
+    _within(pos.dx, radius + margin, canvas.width - radius - margin),
+    _within(dy, radius + margin, canvas.height - radius - margin),
   );
 }
+
+/// [v] held between [low] and [high], and centred if the two have crossed.
+///
+/// `clamp` throws when the lower bound is above the upper one, and a throw
+/// here would take down a paint pass rather than misplace a bubble. It
+/// cannot happen on a 4:3 canvas — but the lens is drawn on every sample of
+/// every stroke, and that is the wrong place for an assumption about canvas
+/// shapes to be resting on.
+double _within(double v, double low, double high) =>
+    low > high ? (low + high) / 2 : v.clamp(low, high);
 
 class MagnifierPainter extends CustomPainter {
   MagnifierPainter(this.controller) : super(repaint: controller.repaint);

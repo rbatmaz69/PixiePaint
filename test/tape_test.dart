@@ -231,6 +231,18 @@ void main() {
       expect(c.tool, ToolKind.brush);
     });
 
+    test('the pen a child was using comes back, not the brush', () {
+      // The tape sheet is the only way into the tape tool, so it is the only
+      // place that knows what was in their hand. When it did not remember,
+      // sticking a piece of tape down quietly swapped the glitter pen for
+      // the brush.
+      c.selectTool(ToolKind.glitter);
+      c.selectTapeKind(ShapeKind.circle);
+      drag(const Offset(60, 60), const Offset(90, 60));
+
+      expect(c.tool, ToolKind.glitter);
+    });
+
     test('a stroke drawn under tape records it', () {
       c.selectTapeKind(ShapeKind.circle);
       drag(const Offset(60, 60), const Offset(90, 60));

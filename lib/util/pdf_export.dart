@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
@@ -172,46 +173,67 @@ pw.Widget _dashedColumn(double height) {
   );
 }
 
+/// Edge length of one sticker on paper, in points — about 5.6 cm, which is
+/// big enough for small scissors and small hands.
+const double _kStickerTile = 160;
+
+/// The cut-out sheet, as a document.
+///
+/// Its own function because it is the one export whose length depends on
+/// what a child happens to have: a [pw.MultiPage] runs on to a second sheet
+/// where a plain page would lay the extra stickers out *past* the paper
+/// edge, where they are simply not printed. Twenty-four stickers is the
+/// cap, and everything over about twelve was disappearing without a word.
+pw.Document stickerSheetDocument(List<Uint8List> stickerPngs) {
+  final doc = pw.Document();
+  if (stickerPngs.isEmpty) return doc;
+  doc.addPage(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(28),
+      build: (_) => [
+        pw.Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            for (final png in stickerPngs)
+              pw.SizedBox(
+                width: _kStickerTile,
+                height: _kStickerTile,
+                child: pw.Container(
+                  decoration: pw.BoxDecoration(
+                    shape: pw.BoxShape.circle,
+                    border: pw.Border.all(color: PdfColors.grey400),
+                  ),
+                  padding: const pw.EdgeInsets.all(6),
+                  child: pw.Image(pw.MemoryImage(png), fit: pw.BoxFit.contain),
+                ),
+              ),
+          ],
+        ),
+      ],
+    ),
+  );
+  return doc;
+}
+
 /// Prints the child's own stickers as a cut-out sheet.
 ///
 /// Custom stickers have only ever existed inside the app. On paper they
 /// become something to stick on a lunchbox — the same picture, out in the
 /// world, which is the whole reason a child photographs their toys into it.
 Future<void> printStickerSheet(List<File> stickers) async {
-  final images = <pw.MemoryImage>[];
+  final pngs = <Uint8List>[];
   for (final file in stickers) {
     try {
-      images.add(pw.MemoryImage(await file.readAsBytes()));
+      pngs.add(await file.readAsBytes());
     } catch (_) {
       // A sticker that cannot be read is left out; a broken sheet helps
       // nobody, and the rest of them are fine.
     }
   }
-  if (images.isEmpty) return;
-  final doc = pw.Document();
-  doc.addPage(
-    pw.Page(
-      pageFormat: PdfPageFormat.a4,
-      margin: const pw.EdgeInsets.all(28),
-      build: (_) => pw.GridView(
-        crossAxisCount: 3,
-        childAspectRatio: 1,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        children: [
-          for (final image in images)
-            pw.Container(
-              decoration: pw.BoxDecoration(
-                shape: pw.BoxShape.circle,
-                border: pw.Border.all(color: PdfColors.grey400),
-              ),
-              padding: const pw.EdgeInsets.all(6),
-              child: pw.Image(image, fit: pw.BoxFit.contain),
-            ),
-        ],
-      ),
-    ),
-  );
+  if (pngs.isEmpty) return;
+  final doc = stickerSheetDocument(pngs);
   await Printing.layoutPdf(
     name: 'pixiepaint_stickers',
     onLayout: (_) => doc.save(),
