@@ -297,6 +297,39 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 
 **Ehrlich dazu:** der Modus senkt die Helligkeit nicht dramatisch — die weißen Flächen bleiben. Falls er im Dunkeln zu hell wirkt, ist das kein Fehler, sondern die Entscheidung dahinter. Die Alternative wäre dunkles Papier, und dann stimmte das gespeicherte Bild nicht mehr mit dem überein, was beim Malen zu sehen war.
 
+## Genauer malen (neu in v9.1)
+
+**Lupe**
+
+- [ ] Einen Strich ziehen: über dem Finger hängt eine Blase, die das Papier darunter vergrößert zeigt — und sie zeigt den Strich **live**, nicht erst nach dem Loslassen
+- [ ] Am oberen Bildrand malen: die Blase klappt nach unten, statt unter die Fingerspitze zu rutschen
+- [ ] An den Seitenrändern malen: die Blase bleibt ganz auf dem Papier
+- [ ] Der Ring in der Mitte der Blase ist so breit wie der Pinsel — Größe ändern, wieder ansetzen: der Ring ändert sich mit
+- [ ] Bei Sticker, Formen und Buchstaben zeigt die Blase die Vorschau; **bei der Pipette bleibt sie weg** (die hat ihre eigene Lupe)
+- [ ] Einstellungen → Sicherheit → „Lupe beim Malen" aus: sie ist weg, alles andere malt weiter wie vorher
+- [ ] **Ein langer Strich mit Glitzer auf dem ältesten Gerät:** hier zahlt die Lupe ihren Preis (das Bild wird zweimal gemalt). Ruckelt es spürbar, gehört das notiert — dann ist der Standardwert des Schalters die Frage, nicht der Code
+
+**Zauberstab (🪄)**
+
+- [ ] Ein Bild mit mehreren Flächen in derselben Farbe füllen, dann eine andere Farbe wählen, den Stab nehmen und **eine** dieser Flächen antippen: alle wechseln
+- [ ] Ein anderes Rot in der Nähe bleibt stehen (die Toleranz ist eng)
+- [ ] Der Rand der umgefärbten Fläche zeigt **keinen Hof** in der alten Farbe — auch nicht am Rand eines weichen Pinselstrichs
+- [ ] Auf leeres Papier tippen: es passiert nichts außer dem kleinen „hier ist nichts"-Ring
+- [ ] Auf eine schwarze Kontur des Ausmalbilds tippen: die Linien bleiben schwarz
+- [ ] Ein Zauberstab-Tipp lässt sich in **einem** Schritt rückgängig machen
+- [ ] **Zeitraffer** eines Bildes mit Zauberstab-Tipp: der Film färbt an derselben Stelle um
+- [ ] Auf einem vollgemalten Bild auf dem ältesten Gerät: der Tipp braucht einen Moment, aber die App bleibt bedienbar
+
+**Vorher & Nachher (👀)**
+
+- [ ] Galerie → Bildmenü eines **Ausmalbilds**: der Eintrag ist da. Beim Öffnen fährt der Griff einmal von allein nach links und zurück
+- [ ] Den Griff ziehen: links die leere Vorlage, rechts das fertige Bild. Nichts von der Farbe des Kindes steht links vom Griff
+- [ ] Bei einem **frei gemalten** Bild fehlt der Eintrag (es gibt kein Vorher)
+- [ ] Bei einem **angemalten Foto** ist er da und zeigt das Foto ohne Farbe
+- [ ] Ganz nach rechts oder links geschoben verschwindet der Griff, damit er nicht wie ein Bildrand aussieht
+- [ ] Mit „Bewegung reduzieren": kein Vorführen, der Griff steht von Anfang an in der Mitte
+- [ ] **Bildmenü auf einem kleinen Telefon mit großer Systemschrift:** die Liste lässt sich scrollen und „Wegwerfen" ist erreichbar
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt

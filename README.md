@@ -38,7 +38,9 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - 20 Emoji-Sticker in 8 Paketen, davon mehrere freischaltbar, plus eigene Sticker aus eigenen Bildern — als Kreis, Herz oder Stern ausgeschnitten
 - Buchstaben: den eigenen Namen aufs Bild setzen (bis 12 Zeichen, in der Malfarbe)
 - Pipette: Farbe direkt vom Bild aufnehmen
+- **Zauberstab**: eine Farbe im ganzen Bild gegen die aktuelle tauschen — das Reparieren einer Fläche, die längst hinter zwanzig Strichen liegt
 - Stufenlose Pinselgröße (8–90), Radierer, Undo/Redo — **Rückgängig und Wiederholen stehen fest neben der Werkzeugleiste** und scrollen nie mit weg
+- **Lupe**: eine Blase über dem Finger zeigt vergrößert, was die Hand gerade verdeckt — mit einem Ring in Pinselbreite darin (abschaltbar)
 - Zwei-Finger-Zoom, Stift-Unterstützung mit Druckstärke, Handballen-Erkennung
 - Jedes angetippte Werkzeug hüpft an, die Farbplakette am Werkzeug bestätigt die Farbwahl vom anderen Ende des Bildschirms, und Rückgängig antwortet auf jeden angenommenen Tipp
 
@@ -57,6 +59,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Automatisches Speichern (alle 30 s und beim Verlassen)
 - **Weitermalen** — die Startseite bietet das zuletzt gemalte Bild des aktiven Kindes mit Vorschaubild an
 - Favoriten, Umbenennen, Filter
+- **Vorher & Nachher** — den Griff über ein fertiges Bild ziehen und sehen, wie die leere Vorlage aussah (Ausmalbilder und angemalte Fotos)
 - Diashow über alle Bilder — Punkte zeigen, das wievielte von wie vielen läuft, und verschwinden mit der Bedienung
 - Das angetippte Bild fliegt in die Leinwand, statt dass der Bildschirm einfach ausgetauscht wird — aus der Galerie, aus der Bildauswahl, von der Weitermalen-Karte und aus der Szenenauswahl
 - Teilen, Drucken (PDF) oder „In Fotos speichern" (alles hinter der Elternschranke) — mit sichtbarem Fortschritt und einer Meldung, wenn es schiefgeht
@@ -75,7 +78,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - Backup aller Bilder als ZIP — und Wiederherstellen daraus
 - Speicherplatz einsehen und alte Bilder gezielt aufräumen
 - Problembericht: was die App zuletzt an Fehlern mitbekommen hat — lesbar, teilbar, löschbar, und bis dahin nur auf dem Gerät
-- Linkshänder-Modus, „nur mit Stift malen", Töne, **Vibration** und Musik einzeln abschaltbar
+- Linkshänder-Modus, „nur mit Stift malen", **Lupe**, Töne, **Vibration** und Musik einzeln abschaltbar
 - **Abendmodus**: der Hintergrund wird dunkel, Papier und Bilder bleiben hell — wahlweise fest eingestellt oder dem Gerät folgend
 - Malzeit-Pause: nach 20, 30 oder 45 Minuten ein freundlicher Pausen-Vorhang (standardmäßig aus)
 - Keine Internetverbindung, keine Tracking-IDs, keine Datensammlung
@@ -246,9 +249,9 @@ Startet die echte App, malt ein Bild an und prüft, dass es hinterher auf der Pl
 
 Der Analyzer läuft über `flutter_lints` hinaus mit `strict-casts`, `strict-raw-types` und acht zusätzlichen Regeln (`analysis_options.yaml`). Die wichtigste ist **`unawaited_futures`**: Ein fallengelassener Future heißt hier im Zweifel, dass ein Speichervorgang nie abgewartet wurde. Absichtliche Fälle sind mit `unawaited(...)` markiert und damit lesbar.
 
-Die Test-Suite umfasst 551 Tests in 53 Dateien:
+Die Test-Suite umfasst 683 Tests in 63 Dateien:
 
-- `test/*.dart` — **pure Logik**: Flood Fill, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
+- `test/*.dart` — **pure Logik**: Flood Fill, Zauberstab-Umfärbung, Undo-Stack, Formen-Geometrie, Farb-Utils, Kantenerkennung, Belohnungs-Regeln, Wackel-Mathematik, Viewport- und Lupen-Berechnung, Persistenz (Artworks, Einstellungen, Profile, Fortschritt), Backup-Roundtrip inklusive Zip-Slip-Abwehr, Speicherberechnung, Fehlerlog (Deckel, Entprellung, Pfad-Redaktion)
 - `test/widget/*.dart` — **Widget-Tests** für Elternschranke, Werkzeugleiste, Einstellungen, Galerie, Profil-Verwaltung, Erststart, Problembericht und die Screenreader-Beschriftungen. Schwerpunkt sind die zerstörenden Wege: dass die Elternschranke im Löschpfad davorsteht und „Behalten" nichts löscht. Dazu seit v8.0 `canvas_reach_test.dart` — die Frage, ob ein Kind die Knöpfe überhaupt *erreicht*: Rückgängig muss auf einem 360-dp-Telefon ohne Wischen auf dem Schirm stehen.
 - `test/golden/renderers_test.dart` — **visuelle Regression** der 10 Stift-Charaktere, 5 Formen und 8 Füllmuster
 
@@ -376,6 +379,10 @@ Ein App-Wechsel kürzte die Historie auf einen Schritt. Der Grund war gut — im
 Und Handballen-Erkennung gab es nur für Stifte; mit dem Finger gewann der erste Kontakt, also die aufgestützte Hand. Zwei Regeln nach Kontaktfläche schließen das, beide fallen auf das alte Verhalten zurück, wo die Plattform nichts misst.
 
 **Nichts, was etwas tut, liegt im Bild** (seit v8.7): Zurück und Teilen schwebten im Hochformat über der oberen Bildkante — oben ins Bild malen hieß, den Bildschirm zu verlassen oder die Eltern-Rechenaufgabe zu öffnen. Der Grund saß tiefer: das Bild ist immer 4:3 und wird eingepasst, das weiße Papier war aber über die **ganze** Fläche gemalt. Aufrecht lag darum über und unter dem Bild ein Band, das wie Papier aussah, keines war, und in dem ein Tipp trotzdem malte — die Position wird an den Bildrand geheftet, es entsteht eine harte Linie. Das Blatt hat jetzt die Form des Bildes, das Band ist echter Rand, und das Papier wurde dabei um keinen Pixel kleiner: größer war es nie. Dieselbe Bewegung für den Dreh-Hinweis (ein antippbares Widget, das sechs Sekunden lang Striche schluckte) und für die Zwei-Maler-Knöpfe, die mittig oben im Bild **beider** Kinder standen und für das Gegenüber kopfüber — sie sitzen jetzt auf der Falz, die keinem der beiden gehört.
+
+**Ein Bild, ein Malbefehl** (seit v9.1): Die Lupe zeigt dasselbe wie die Leinwand, weil sie dieselbe Funktion aufruft — `paintCanvasPicture` ist aus `CanvasPainter.paint` herausgezogen und die einzige Stelle, an der die Ebenen-Reihenfolge steht. Eine zweite Kopie davon würde auseinanderlaufen, und zwar **still**: eine Lupe, die ein etwas älteres Bild zeigt, sieht immer noch aus wie eine Lupe. Sie ist zugleich die einzige Stelle der App, die das Bild pro Frame zweimal malt — Bilder und Display-Listen sind billig zu wiederholen, ein langer Glitzer-Strich nicht. Deshalb ist sie ein Schalter (an) und erscheint nur, solange ein Finger unten ist.
+
+**Der Zauberstab fasst nur an, was da ist** (seit v9.1): Er fragt „was ist diese Farbe" statt „was ist diese Fläche" und braucht deshalb keine Wände — er erreicht das ganze Bild. Genau darin liegt seine Gefahr, und zwei Regeln zäunen sie ein: Die Malebene ist überall durchsichtig, wo nichts gemalt wurde, und unter `kWandMinAlpha` greift der Stab nicht zu (ein Tipp auf den leeren Hintergrund kann also nicht das halbe Bild umfärben), und seine Toleranz ist enger als die des Eimers (24 statt 32) — wer ein rosa Blütenblatt antippt, erwartet nicht, dass der rote Hut mitgeht. Verglichen wird in **gerader** Farbe: der Puffer ist premultipliziert, ein weicher Strichrand ist dieselbe Farbe bei kleinerem Alpha *und* proportional kleineren Kanälen, roh verglichen bliebe er in der alten Farbe stehen und säße als Hof um jede reparierte Form. Das Alpha bleibt unangetastet, damit weiche Kanten weich bleiben.
 
 **Die Farbquelle** (seit v8.7): `pixie_palette.dart` nennt sich seit jeher **die eine** Farbquelle, und zweimal hat das aufgehört zu stimmen — `da6fbdf` hat einen Schwung ausgewanderter Werte eingesammelt, und bis v8.6 war der nächste nachgewachsen: fünf Werkzeug-Akzente, drei der zehn Kategorie-Tönungen, die fernen Enden aller fünf Bildschirm-Hintergründe und eine Kante. Vierzehn Werte, jeder unverändert umgezogen. Frei bleiben durften zwei, und sie sagen jetzt selbst warum: der Material-3-Seed, mit dem nie etwas gemalt, sondern nur abgeleitet wird (ihn auf `grape` zu ziehen würde jeden abgeleiteten Ton mitbewegen), und die Tinte der Zahlen-Chips, die *aufs Bild* gemalt wird — das ist Inhalt, wie die Malfarben, der Regenbogen-Stift und das Glitzern. **Inhaltsfarben wohnen nicht in der Palette**, und die Malfarben liegen seit v8.7 in `util/color_utils.dart` statt in einer Widget-Datei, damit die Leinwand ihre Startfarbe nicht abschreiben muss.
 
