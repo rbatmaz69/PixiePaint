@@ -39,6 +39,8 @@ Play verschärft seine Anforderungen jedes Jahr, und die konkreten Zahlen änder
 grep -r "targetSdkVersion" $(dirname $(dirname $(readlink -f $(which flutter))))/packages/flutter_tools/gradle/
 ```
 
+**Stand v9.5:** geerbt werden `minSdk 24`, `compileSdk 36` und `targetSdk 36` (Flutter 3.44.6). 36 ist das aktuelle Ziel-Level — es ist also nichts zu überschreiben, und der Block unten ist nur für den Tag, an dem Play weiterzieht.
+
 Ist der geerbte Wert niedriger als von Play gefordert, lässt er sich in `android/app/build.gradle.kts` überschreiben:
 
 ```kotlin
@@ -49,13 +51,17 @@ defaultConfig {
 
 Nach jeder Änderung auf einem echten Gerät gegentesten — höhere Ziel-Level verschärfen Berechtigungen und Hintergrund-Regeln.
 
-**b) 16-KB-Speicherseiten.** Neuere Android-Geräte nutzen 16-KB-Pages; native Bibliotheken müssen entsprechend ausgerichtet sein. PixiePaint selbst enthält keinen nativen Code, wohl aber einige Plugins. Nach dem Bau prüfen:
+**b) 16-KB-Speicherseiten.** Neuere Android-Geräte nutzen 16-KB-Pages; native Bibliotheken müssen entsprechend ausgerichtet sein. PixiePaint selbst enthält keinen nativen Code, wohl aber einige Plugins — die Antwort kann sich also mit jedem Abhängigkeits-Update ändern. Nach dem Bau:
 
 ```bash
-unzip -o build/app/outputs/bundle/release/app-release.aab -d /tmp/aab >/dev/null && find /tmp/aab -name "*.so" -exec sh -c 'echo "== $1"; objdump -p "$1" | grep -i "LOAD.*align" | head -2' _ {} \;
+python3 tool/check_so_alignment.py
 ```
 
-Ein `2**14` (= 16384) in der Ausrichtung ist gut. Bei Treffern mit `2**12` hilft in der Regel ein Update des betroffenen Plugins.
+Ohne Argument nimmt das Skript die zuletzt gebaute `.aab`; ein Pfad auf eine `.aab` oder `.apk` geht auch. Es nennt jede Bibliothek mit ihrer kleinsten LOAD-Ausrichtung und endet mit Exit-Code 1, sobald eine unter 16 KB liegt. Dann hilft in der Regel ein Update des Plugins, das sie mitbringt.
+
+> Warum ein eigenes Skript und nicht `objdump -p`: binutils ist auf einem frischen macOS nicht dabei, und auf der Entwicklungsmaschine dieses Projekts fehlt zusätzlich Xcode. Eine Prüfung, die nur läuft, wo zufällig eine Toolchain installiert ist, hört still auf zu laufen. Das Skript liest die ELF-Programm-Header selbst, mit nichts als der Standardbibliothek.
+
+**Stand v9.5:** alle neun Bibliotheken (`libapp`, `libflutter`, `libdartjni` × drei ABIs) liegen bei 16 KB oder mehr.
 
 **c) Flutter aktuell halten.** `flutter --version` und `flutter doctor -v` prüfen; ein veraltetes SDK ist die häufigste Ursache für beide Punkte oben.
 

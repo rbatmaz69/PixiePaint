@@ -352,7 +352,9 @@ docs/                      Release-Anleitungen (Play Store, App Store),
                            Gerätetest-Checkliste, Datenschutzerklärung
 
 tool/                      make_music.py — erzeugt die Musik-Loops
+                           make_sfx.py — erzeugt die Malgeräusche
                            make_store_graphics.py — Icon & Feature-Grafik
+                           check_so_alignment.py — 16-KB-Prüfung der .aab
 ```
 
 ## Architektur-Notizen
