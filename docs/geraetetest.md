@@ -396,6 +396,31 @@ Einstellungen → Spaß → „Aussehen". Drei Wahlmöglichkeiten; „Wie das Ge
 - [ ] Die ausgeteilte Farbe ist auf dem weißen Papier immer zu sehen
 - [ ] Bei einem Kind mit **einfachen Werkzeugen** bleibt der Pinsel, nur Bild und Farbe wechseln
 
+## Fast fertig! (neu in v9.5)
+
+Das Einzige an dieser Liste, das kein Test abdecken kann, ist die Frage, ob die Marken **auf den richtigen Flächen** sitzen — die Logik ist geprüft, die echten Ausmalbilder sind es nicht.
+
+- [ ] Ausmalbild öffnen, nichts malen, ✨ antippen: es funkelt auf mehreren leeren Flächen — und zwar **innerhalb** der Linien, nicht auf einer Linie und nicht daneben
+- [ ] Das Papier **um** das Motiv herum funkelt nicht (das ist Absicht: es weiß zu lassen ist erlaubt)
+- [ ] Nach drei Sekunden ist das Funkeln von selbst weg; das Bild ist unverändert
+- [ ] **Rückgängig ist danach nicht neu belegt** — der Hinweis ist kein Malschritt
+- [ ] Eine Fläche ausmalen, ✨ erneut: dort funkelt es nicht mehr
+- [ ] Alle Flächen ausmalen, ✨: „Alles bunt! 🎉" statt Funkeln
+- [ ] Hineinzoomen und ✨: die Marken sitzen weiter auf ihren Flächen, nicht daneben
+- [ ] Ein sehr feingliedriges Bild (viele kleine Flächen): höchstens acht Marken auf einmal, und keine in den Splittern zwischen zwei dicht laufenden Linien
+- [ ] Freies Malen, Foto, Szene, Kratzbild: der ✨-Knopf ist **gar nicht da**
+- [ ] Quer (Tablet): der Knopf sitzt in der linken Leiste zwischen den Aktionen und „Teilen"; im Linkshänder-Modus wechselt die Leiste wie gehabt die Seite
+- [ ] Mit „Bewegung reduzieren": die Marken sind da und **stehen still**, drei Sekunden lang
+- [ ] Screenreader: der Knopf heißt „Was fehlt noch?"
+
+**Die ehrliche Belohnung** (dafür ein Kinderprofil ohne Fortschritt nehmen)
+
+- [ ] Ein Ausmalbild öffnen, einen einzigen Strich malen, verlassen: der Sticker-Fortschritt „Bilder fertigstellen" geht **nicht** hoch
+- [ ] Dasselbe Bild wieder öffnen, größtenteils ausmalen, verlassen: jetzt geht er hoch
+- [ ] Frei malen, ein paar Striche, verlassen: zählt **sofort** — dort gibt es nichts zu messen
+- [ ] Ein Bild, das schon gezählt hat, erneut öffnen und speichern: der Zähler springt nicht zweimal
+- [ ] Nach dem ersten Ausmalen ist der App-Start noch genauso schnell (die Messung läuft im Hintergrund, nicht beim Öffnen)
+
 ## Barrierefreiheit (neu in v6.7)
 
 - [ ] **TalkBack (Android) bzw. VoiceOver (iOS) einschalten** und über die Startseite wischen — jede Kachel wird benannt

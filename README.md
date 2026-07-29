@@ -4,7 +4,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 [![CI](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml/badge.svg)](https://github.com/rbatmaz69/PixiePaint/actions/workflows/ci.yml)
 
-**Aktuelle Version:** 9.4.0+38 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
+**Aktuelle Version:** 9.5.0+39 · **Design-Sprache:** „Sticker-Buch" (bunte Sticker auf warmem Papier)
 
 ---
 
@@ -52,6 +52,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 - **Sticker-Welt** — 8 Szenen als Bühne zum Bekleben
 - **Kratzbild** — ein schwarzes Blatt über verborgenen Farben; der Radierer ist der Kratzstift, und ein falscher Strich ist hier nicht möglich
 - **Überraschung** — ein Würfel gibt Bild, Stift und Farbe auf einmal aus
+- **Fast fertig!** — der ✨-Knopf markiert für drei Sekunden die Flächen, in denen noch keine Farbe liegt; ist alles bunt, sagt er das
 - **Zu zweit malen** — zwei unabhängige Malflächen auf einem Tablet (ab 600 dp)
 - **Zeitraffer** — jeder Strich wird protokolliert und lässt sich als Film abspielen, mit Fortschrittsleiste und umschaltbarem Tempo
 - **Erststart** — eine kurze, jederzeit überspringbare Begrüßung, die direkt in die Bildauswahl führt; über die Einstellungen jederzeit wieder ansehbar
@@ -72,6 +73,7 @@ Ein liebevolles Malbuch für Kinder ab 3 Jahren — komplett offline, ohne Werbu
 
 **Belohnungen**
 - 13 Sticker freimalen: Bilder fertigstellen, Werkzeuge ausprobieren, nachspuren, Zahlenbilder lösen, Tagesaufgaben schaffen, ein Bild teilen
+- „Fertiggestellt" heißt seit v9.5 wirklich fertig: eine Seite mit Linien muss größtenteils Farbe tragen, statt nur einmal gespeichert worden zu sein
 - Konfetti in zwei Stärken: ein Nicken fürs Teilen, eine Party fürs fertige Bild
 - Gesperrte Sticker als wackelnde Mystery-Boxen mit kindgerechter Fortschrittsanzeige
 - Rein lokal — keine Käufe, keine Accounts
@@ -399,6 +401,10 @@ Und Handballen-Erkennung gab es nur für Stifte; mit dem Finger gewann der erste
 **Der Zeitraffer war eine Sackgasse** (seit v9.3): Das Op-Log liegt seit v6.3 neben jedem Bild und konnte genau eines — einmal abgespielt werden. `lib/util/story_stages.dart` macht daraus Bilder: dieselben Operationen, an einer Handvoll Haltepunkten fotografiert, erste Aufnahme die leere Seite, letzte das fertige Bild. Der Op-Durchlauf ist dort ein eigener und **nicht** mit `ReplayController` geteilt, weil der jeden Strich Punkt für Punkt *animiert* und dafür die Verzweigung je Op-Art ohnehin braucht; identisch sein muss, was ein Op *tut*, und das ist `op_apply`, das beide aufrufen. Die Zahl der Bilder ist eine Obergrenze, kein Versprechen — ein Strich kann nur zwei Aufnahmen ergeben, und ein Op, der nichts bewirkt hat (Füllung auf einer Linie), bekommt keine eigene.
 
 **Das Kratzbild verbiegt keine Ebene** (seit v9.4): Die Farben liegen im **Foto-Hintergrund**, an den der Radierer seit jeher nicht herankommt — das ist der ganze Trick —, die Decke ist eine gewöhnliche Malebene, und der Kratzstift ist der Radierer, der genau das tut, was er immer tut. Zwei Dinge mussten dafür geradegezogen werden. **Die Decke steht im Op-Log, aber nicht im Rückgängig-Stapel:** sie kommt über `loadOps` herein, als schlichte Füllung in `kScratchCover`, und gehört damit dazu, *wie das Bild angekommen ist*, statt zu dem, was das Kind getan hat — Rückgängig kann sie nicht abheben, und der Zeitraffer fängt trotzdem damit an, die Seite zuzudecken. Genau deshalb ist die Decke **eine glatte Farbe** und hat keine Wachs-Textur: eine Decke, die kein Op beschreiben kann, würde den Film mit einer Seite beginnen lassen, die es nie gab. Und **„alles wegwischen" gibt es dort nicht** — es würde die Decke abziehen und das ganze Farbblatt auf einmal zurückgeben.
+
+**„Fertig" war geschätzt, jetzt ist es gemessen** (seit v9.5): Bis dahin zählte jedes gespeicherte Bild als fertiggestelltes Bild — der Kommentar im Speicherpfad sagte das auch offen, und weil alle 30 Sekunden von selbst gespeichert wird, hieß „fertig" in Wahrheit „überhaupt angefasst". Ein Strich war so viel wert wie eine ausgemalte Seite. `regionCoverage` (`lib/canvas/coverage.dart`) beantwortet stattdessen in einem Durchlauf, welche umschlossenen Flächen noch leer sind und wie weit das Bild insgesamt ist; das erste treibt den ✨-Knopf, das zweite die Belohnung. Drei Festlegungen darin sind nicht offensichtlich. **Farbe ist `alpha >= kWandMinAlpha`**, dieselbe Konstante wie beim Zauberstab, weil es dieselbe Frage ist — eine zweite Schwelle für dasselbe läuft irgendwann still von der ersten weg (die Lupe stand in v9.1 vor genau diesem Problem und teilt sich deshalb `paintCanvasPicture` mit der Leinwand). **Das Papier um das Motiv zählt nicht mit**: die Fläche, die den Bildrand berührt, weiß zu lassen ist eine Entscheidung und kein unfertiges Bild — sonst funkelte das ganze Blatt und kein Bild wäre je fertig. Und **Flächen unter 40 Pixeln fallen raus**, weil der Rasterer zwischen dicht laufenden Linien Splitter stehen lässt, die kein Pinsel erreicht. Die Schwelle fürs ganze Bild ist mit 0,6 großzügig: sie soll „daran gearbeitet" von „aufgemacht und liegen gelassen" trennen, nicht ein dreijähriges Kind an einer erwachsenen Vorstellung von fertig messen. Alles ohne Linien — freies Malen, Fotos, Szenen, Kratzbild — behält die alte Regel, dort gibt es nichts zu messen. Schon vergebene Sticker bleiben ohnehin: die Menge der gezählten Bilder ist persistiert, die neue Regel wirkt nur nach vorn.
+
+Der Hinweis selbst **malt nichts**. Er liegt als Overlay im Leinwand-Raum, neben Fill- und Stempel-Burst, sitzt beim Zoomen also weiter auf seiner Fläche und räumt sich nach drei Sekunden selbst weg — sich zeigen zu lassen, wo eine Lücke ist, darf kein Rückgängig kosten. Bei „Bewegung reduzieren" bleiben die Marken **stehen**, statt zu verschwinden: weg fällt die Bewegung, nicht die Auskunft. Und der Scan läuft nur auf Tipp, weil er über zwei Millionen Pixel geht — ein Kind, das gerade malt, hat nicht darum gebeten, dass ihm jemand sagt, was fehlt.
 
 **Die Farbquelle** (seit v8.7): `pixie_palette.dart` nennt sich seit jeher **die eine** Farbquelle, und zweimal hat das aufgehört zu stimmen — `da6fbdf` hat einen Schwung ausgewanderter Werte eingesammelt, und bis v8.6 war der nächste nachgewachsen: fünf Werkzeug-Akzente, drei der zehn Kategorie-Tönungen, die fernen Enden aller fünf Bildschirm-Hintergründe und eine Kante. Vierzehn Werte, jeder unverändert umgezogen. Frei bleiben durften zwei, und sie sagen jetzt selbst warum: der Material-3-Seed, mit dem nie etwas gemalt, sondern nur abgeleitet wird (ihn auf `grape` zu ziehen würde jeden abgeleiteten Ton mitbewegen), und die Tinte der Zahlen-Chips, die *aufs Bild* gemalt wird — das ist Inhalt, wie die Malfarben, der Regenbogen-Stift und das Glitzern. **Inhaltsfarben wohnen nicht in der Palette**, und die Malfarben liegen seit v8.7 in `util/color_utils.dart` statt in einer Widget-Datei, damit die Leinwand ihre Startfarbe nicht abschreiben muss.
 
