@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Solo pincel, relleno, pegatinas y goma: para {name}",
   "favoritePageAction": "Dibujo favorito",
   "hapticsTitle": "Vibración",
-  "hapticsSubtitle": "Los botones responden con un pequeño toque"
+  "hapticsSubtitle": "Los botones responden con un pequeño toque",
+  "almostDone": "¿Qué falta todavía?",
+  "almostDoneAllPainted": "¡Todo pintado! 🎉"
 }

@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Juste pinceau, remplissage, autocollants et gomme – pour {name}",
   "favoritePageAction": "Dessin préféré",
   "hapticsTitle": "Vibration",
-  "hapticsSubtitle": "Les boutons répondent par une petite vibration"
+  "hapticsSubtitle": "Les boutons répondent par une petite vibration",
+  "almostDone": "Que manque-t-il ?",
+  "almostDoneAllPainted": "Tout est colorié ! 🎉"
 }

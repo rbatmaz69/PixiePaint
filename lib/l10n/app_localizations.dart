@@ -1953,6 +1953,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Die Knöpfe geben ein kleines Fühl-Signal'**
   String get hapticsSubtitle;
+
+  /// Canvas button: marks the areas that still have no paint
+  ///
+  /// In de, this message translates to:
+  /// **'Was fehlt noch?'**
+  String get almostDone;
+
+  /// Answer when every enclosed area already has paint
+  ///
+  /// In de, this message translates to:
+  /// **'Alles bunt! 🎉'**
+  String get almostDoneAllPainted;
 }
 
 class _AppLocalizationsDelegate

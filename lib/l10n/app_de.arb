@@ -39,9 +39,21 @@
   },
   "profileRemoveBody": "Was soll mit den Bildern von diesem Kind passieren?",
   "profileRemoveCount": "{n, plural, =0{Dieses Kind hat noch keine Bilder gemalt. Was soll passieren?} =1{Dieses Kind hat ein Bild gemalt. Was soll damit passieren?} other{Dieses Kind hat {n} Bilder gemalt. Was soll damit passieren?}}",
-  "@profileRemoveCount": {"placeholders": {"n": {"type": "int"}}},
+  "@profileRemoveCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "profileRemoveConfirmDelete": "{n, plural, =1{Dieses eine Bild wirklich löschen?} other{Diese {n} Bilder wirklich löschen?}}",
-  "@profileRemoveConfirmDelete": {"placeholders": {"n": {"type": "int"}}},
+  "@profileRemoveConfirmDelete": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "profileRemoveDeleteBody": "Sie sind dann für immer weg.",
   "profileRemoveKeepArt": "Bilder behalten",
   "profileRemoveDeleteArt": "Bilder auch löschen",
@@ -446,7 +458,13 @@
   "simpleToolsTitle": "Einfache Werkzeuge",
   "simpleToolsSubtitle": "Nur Pinsel, Füllen, Sticker und Radierer – für die Kleinsten",
   "simpleToolsForChild": "Nur Pinsel, Füllen, Sticker und Radierer – gilt für {name}",
-  "@simpleToolsForChild": {"placeholders": {"name": {"type": "String"}}},
+  "@simpleToolsForChild": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "@simpleToolsTitle": {
     "description": "Per-profile switch: cut the toolbar down to four tools"
   },
@@ -461,5 +479,13 @@
   "hapticsSubtitle": "Die Knöpfe geben ein kleines Fühl-Signal",
   "@hapticsTitle": {
     "description": "Settings switch: haptic feedback, independent of sound"
+  },
+  "almostDone": "Was fehlt noch?",
+  "@almostDone": {
+    "description": "Canvas button: marks the areas that still have no paint"
+  },
+  "almostDoneAllPainted": "Alles bunt! 🎉",
+  "@almostDoneAllPainted": {
+    "description": "Answer when every enclosed area already has paint"
   }
 }

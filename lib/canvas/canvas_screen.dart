@@ -3,6 +3,8 @@ import '../ui/celebrate.dart';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
@@ -47,9 +49,11 @@ import '../widgets/color_palette.dart';
 import '../widgets/parental_gate.dart';
 import '../widgets/shape_picker.dart' as shapes;
 import '../widgets/tool_bar.dart';
+import 'almost_done.dart';
 import 'canvas_controller.dart';
 import 'canvas_viewport.dart';
 import 'cbn_session.dart';
+import 'coverage.dart';
 import 'fill_pattern.dart';
 import 'painting_canvas.dart';
 import 'pause_curtain.dart';
@@ -174,6 +178,25 @@ class _CanvasScreenState extends State<CanvasScreen>
   /// for the next picture.
   late final bool _simpleTools = ProfileStore.instance.active.simpleTools;
 
+  /// Region map of the line art, labeled at most once per picture: the
+  /// outlines do not move, so the second ✨ tap costs only the pixel walk.
+  Uint16List? _regionOf;
+
+  /// The labeled regions, from whoever has them already. A color-by-number
+  /// page labeled the same raster when it opened, and that pass is seconds
+  /// of work on a 2048-pixel canvas — doing it twice for the same outlines
+  /// would be paying for it twice.
+  Uint16List? get _labeledRegions => _regionOf ?? _cbn?.regionOf;
+
+  /// A scan already running. Two of them would do the same expensive work
+  /// twice and race over [_coverage].
+  Future<CoverageReport?>? _scanning;
+
+  /// Line art to measure against — the coloring page's, or the one detected
+  /// in a photo. Free drawing, scenes and the scratch picture have none, and
+  /// there is nothing to be "finished" with there.
+  bool get _canMeasure => controller.barrierAlpha != null && !isScratch;
+
   @override
   void initState() {
     super.initState();
@@ -212,6 +235,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       cbnFilled: () => _cbnFilledForSave,
       scratch: isScratch,
       resumed: widget.resume != null,
+      isFinished: _isPictureFinished,
     );
     if (widget.surprise && !_simpleTools) _dealTool();
     // The scratching stick is the eraser. Nothing else has to change: the
@@ -624,6 +648,99 @@ class _CanvasScreenState extends State<CanvasScreen>
     }
   }
 
+  /// Measures how much of the picture carries paint.
+  ///
+  /// Two passes over the canvas, both off the UI thread. The region labeling
+  /// is kept: outlines never change, so only the pixel walk repeats.
+  /// Returns null when there is nothing to measure, and never throws — a
+  /// hint that cannot be given is not worth an error card.
+  Future<CoverageReport?> _scanCoverage() {
+    final running = _scanning;
+    if (running != null) return running;
+    final scan = _scanCoverageNow();
+    _scanning = scan;
+    return scan.whenComplete(() => _scanning = null);
+  }
+
+  Future<CoverageReport?> _scanCoverageNow() async {
+    final alpha = controller.barrierAlpha;
+    final layer = controller.paintLayer;
+    if (!_canMeasure || alpha == null || layer == null) return null;
+    final w = controller.canvasWidth;
+    final h = controller.canvasHeight;
+    // Locals only from here on: an `Isolate.run` closure that reaches for
+    // `this` would try to send the whole State across.
+    final data = await layer.toByteData(format: ui.ImageByteFormat.rawRgba);
+    if (data == null || !mounted) return null;
+    final rgba = data.buffer.asUint8List();
+    final cached = _labeledRegions;
+    final Uint16List regions;
+    if (cached != null) {
+      regions = cached;
+    } else {
+      regions = await Isolate.run(() => labelRegions(alpha, w, h));
+      if (!mounted) return null;
+      _regionOf = regions;
+    }
+    final report = await Isolate.run(() => regionCoverage(
+          regionOf: regions,
+          rgba: rgba,
+          width: w,
+          height: h,
+        ));
+    return mounted ? report : null;
+  }
+
+  /// Whether this picture counts as a finished painting for the rewards.
+  ///
+  /// Before v9.5 every saved picture did, which meant one stroke earned the
+  /// same tick as a page coloured to the edges. Now a page with outlines has
+  /// to be mostly filled in; everything without them — free drawing, photos,
+  /// scenes, the scratch picture — keeps the old rule, because there are no
+  /// areas there to measure and "finished" is the child's call alone.
+  Future<bool> _isPictureFinished() async {
+    if (!_canMeasure) return true;
+    final report = await _scanCoverage();
+    if (report == null || !report.hasRegions) return true;
+    return report.fraction >= kPictureFinished;
+  }
+
+  /// The ✨ button: mark what is still bare.
+  ///
+  /// Deliberately on demand. The scan walks two million pixels, and a child
+  /// who is painting has not asked to be told what is missing.
+  Future<void> _showAlmostDone() async {
+    if (_scanning != null) return;
+    final report = await _scanCoverage();
+    if (!mounted || report == null) return;
+    if (report.empty.isEmpty) {
+      Sfx.instance.tada();
+      _praise(context.l10n.almostDoneAllPainted);
+      return;
+    }
+    Sfx.instance.pop();
+    controller.hintSpots.value =
+        report.empty.map((e) => Offset(e.x, e.y)).toList(growable: false);
+    _hintTimer?.cancel();
+    _hintTimer = Timer(kHintDwell, () {
+      if (mounted) controller.hintSpots.value = const [];
+    });
+  }
+
+  Timer? _hintTimer;
+  String? _praiseText;
+  Timer? _praiseTimer;
+
+  /// A short spoken-out-loud answer over the paper. Used where the honest
+  /// reply to a tap is a sentence and not a change to the picture.
+  void _praise(String text) {
+    _praiseTimer?.cancel();
+    setState(() => _praiseText = text);
+    _praiseTimer = Timer(PixieMotion.dwellLong, () {
+      if (mounted) setState(() => _praiseText = null);
+    });
+  }
+
   Future<void> _celebrateReward(StickerReward reward) async {
     Sfx.instance.tada();
     // Confetti fires from inside the reveal (above its scrim).
@@ -641,6 +758,8 @@ class _CanvasScreenState extends State<CanvasScreen>
     _autoSave?.cancel();
     _pause?.cancel();
     _cbnHintTimer?.cancel();
+    _hintTimer?.cancel();
+    _praiseTimer?.cancel();
     controller.lastFill.removeListener(_onCbnFill);
     WidgetsBinding.instance.removeObserver(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -761,6 +880,7 @@ class _CanvasScreenState extends State<CanvasScreen>
       allowClear: !isScratch,
       onBack: _leave,
       onShare: _share,
+      onAlmostDone: _canMeasure ? _showAlmostDone : null,
     );
     final canvasArea = Expanded(child: _canvasArea(portrait: false));
     // Left-handed kids get the rail on the right, out of the drawing arm's
@@ -942,6 +1062,18 @@ class _CanvasScreenState extends State<CanvasScreen>
                     accent: PixiePalette.grape,
                   ),
                 ),
+                if (_canMeasure)
+                  Positioned(
+                    top: rowTop,
+                    left: leftHanded ? null : inset + 104,
+                    right: leftHanded ? inset + 104 : null,
+                    child: StickerCircleButton(
+                      icon: Icons.auto_awesome_rounded,
+                      tooltip: context.l10n.almostDone,
+                      onTap: _showAlmostDone,
+                      accent: PixiePalette.sunshine,
+                    ),
+                  ),
               ],
               Positioned(
                 top: rowTop,
@@ -984,6 +1116,28 @@ class _CanvasScreenState extends State<CanvasScreen>
                 right: 0,
                 child: Center(
                   child: IgnorePointer(child: _ToolChip(controller: controller)),
+                ),
+              ),
+              // "Everything is coloured in!" — the ✨ button's other answer.
+              // Sits low on the paper so it cannot collide with the tool
+              // chip above, and takes no pointers either.
+              Positioned(
+                bottom: area.height - paper.bottom + 16,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: IgnorePointer(
+                    child: AnimatedOpacity(
+                      opacity: _praiseText == null ? 0 : 1,
+                      duration: PixieMotion.select,
+                      child: StickerPill(
+                        child: Text(
+                          _praiseText ?? '',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Positioned.fromRect(
@@ -1188,6 +1342,7 @@ class _LeftRail extends StatelessWidget {
     required this.controller,
     required this.onBack,
     required this.onShare,
+    this.onAlmostDone,
     this.showFill = true,
     this.fillOnly = false,
     this.simple = false,
@@ -1197,6 +1352,9 @@ class _LeftRail extends StatelessWidget {
   final CanvasController controller;
   final VoidCallback onBack;
   final VoidCallback onShare;
+
+  /// The ✨ button, or null where there is nothing to measure.
+  final VoidCallback? onAlmostDone;
   final bool showFill;
   final bool fillOnly;
   final bool simple;
@@ -1238,6 +1396,19 @@ class _LeftRail extends StatelessWidget {
           ),
           // Outside the scrolling rail above — see [ToolActionCluster].
           ToolActionCluster(controller: controller, onBar: true),
+          if (onAlmostDone != null)
+            Tooltip(
+              message: context.l10n.almostDone,
+              child: Bouncy(
+                onTap: onAlmostDone!,
+                semanticLabel: context.l10n.almostDone,
+                child: Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 26,
+                  color: PixieTokens.quietInk,
+                ),
+              ),
+            ),
           Tooltip(
             message: context.l10n.shareForParents,
             child: Bouncy(

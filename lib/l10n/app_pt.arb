@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Só pincel, preenchimento, autocolantes e borracha – para {name}",
   "favoritePageAction": "Desenho preferido",
   "hapticsTitle": "Vibração",
-  "hapticsSubtitle": "Os botões respondem com uma pequena vibração"
+  "hapticsSubtitle": "Os botões respondem com uma pequena vibração",
+  "almostDone": "O que ainda falta?",
+  "almostDoneAllPainted": "Tudo pintado! 🎉"
 }

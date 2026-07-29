@@ -33,6 +33,7 @@ class ArtworkSaveSession {
     this.traceId,
     this.sceneId,
     this.scratch = false,
+    this.isFinished,
     bool resumed = false,
   })  : _everSaved = resumed,
         // A resumed artwork already has these on disk.
@@ -53,6 +54,14 @@ class ArtworkSaveSession {
   /// Read at save time, because a color-by-number page keeps filling
   /// regions while the session is alive.
   final List<int> Function() cbnFilled;
+
+  /// Whether the picture is far enough along to count as a finished painting
+  /// for the sticker rewards. Null means the old rule: saved at all counts.
+  ///
+  /// Asked here rather than decided here because the answer needs the
+  /// canvas pixels, and this class deliberately knows nothing about
+  /// `dart:ui`. Asked at most once per session — see [_saveNow].
+  final Future<bool> Function()? isFinished;
 
   bool _everSaved;
   bool _backgroundSaved;
@@ -141,10 +150,24 @@ class ArtworkSaveSession {
     if (lineArtPng != null) _lineArtSaved = true;
     _everSaved = true;
     if (controller.revision == revisionAtStart) controller.dirty = false;
-    // A real, saved, non-empty picture counts as "finished" for the sticker
-    // rewards (autosave makes this equivalent to having painted).
-    if (controller.paintLayer != null) {
-      Progress.instance.registerArtworkCompleted(artworkId);
-    }
+    await _maybeCountAsFinished();
+  }
+
+  /// Counts the picture towards the "finished paintings" rewards.
+  ///
+  /// Until v9.5 every successful save did this, and the comment here said so
+  /// plainly: autosave made "finished" mean "painted at all", so a single
+  /// stroke on a page earned the same tick as one coloured to the edges.
+  /// [isFinished] is what makes the number honest.
+  ///
+  /// Asked only while the answer can still change anything: once the id is
+  /// in, the measurement is skipped, so a resumed picture that already
+  /// counted never pays for the scan again.
+  Future<void> _maybeCountAsFinished() async {
+    if (controller.paintLayer == null) return;
+    if (Progress.instance.completedArtworkIds.contains(artworkId)) return;
+    final measure = isFinished;
+    if (measure != null && !await measure()) return;
+    Progress.instance.registerArtworkCompleted(artworkId);
   }
 }

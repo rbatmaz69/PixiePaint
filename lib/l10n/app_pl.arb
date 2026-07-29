@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Tylko pędzel, wypełnianie, naklejki i gumka – dotyczy: {name}",
   "favoritePageAction": "Ulubiony obrazek",
   "hapticsTitle": "Wibracje",
-  "hapticsSubtitle": "Przyciski odpowiadają lekkim drgnięciem"
+  "hapticsSubtitle": "Przyciski odpowiadają lekkim drgnięciem",
+  "almostDone": "Czego jeszcze brakuje?",
+  "almostDoneAllPainted": "Wszystko pokolorowane! 🎉"
 }

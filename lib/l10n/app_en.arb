@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Just brush, fill, stickers and eraser – applies to {name}",
   "favoritePageAction": "Favourite picture",
   "hapticsTitle": "Vibration",
-  "hapticsSubtitle": "Buttons answer with a little buzz"
+  "hapticsSubtitle": "Buttons answer with a little buzz",
+  "almostDone": "What's still missing?",
+  "almostDoneAllPainted": "All coloured in! 🎉"
 }

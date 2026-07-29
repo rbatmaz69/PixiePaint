@@ -45,6 +45,14 @@ class CanvasController extends ChangeNotifier {
   /// because the answer to a tap must never be nothing at all.
   final ValueNotifier<Offset?> missedFill = ValueNotifier<Offset?>(null);
 
+  /// Still-bare areas to mark after the ✨ button, in canvas coordinates.
+  ///
+  /// Like [lastFill] and [lastStamp] this is a channel to an overlay, not
+  /// drawing state: the screen measures, this carries the answer to
+  /// `AlmostDoneOverlay`, and nothing here ever touches the paint layer.
+  final ValueNotifier<List<Offset>> hintSpots =
+      ValueNotifier<List<Offset>>(const []);
+
   ui.Image? paintLayer;
   ui.Image? lineArt;
 
@@ -1171,6 +1179,7 @@ class CanvasController extends ChangeNotifier {
     lastFill.dispose();
     missedFill.dispose();
     lastStamp.dispose();
+    hintSpots.dispose();
     repaint.dispose();
     super.dispose();
   }

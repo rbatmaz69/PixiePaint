@@ -1087,4 +1087,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hapticsSubtitle => 'Os botões respondem com uma pequena vibração';
+
+  @override
+  String get almostDone => 'O que ainda falta?';
+
+  @override
+  String get almostDoneAllPainted => 'Tudo pintado! 🎉';
 }

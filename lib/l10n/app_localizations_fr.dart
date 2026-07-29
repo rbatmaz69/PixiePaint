@@ -1092,4 +1092,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get hapticsSubtitle =>
       'Les boutons répondent par une petite vibration';
+
+  @override
+  String get almostDone => 'Que manque-t-il ?';
+
+  @override
+  String get almostDoneAllPainted => 'Tout est colorié ! 🎉';
 }

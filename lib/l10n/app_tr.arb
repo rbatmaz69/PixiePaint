@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Sadece fırça, doldurma, çıkartma ve silgi – {name} için",
   "favoritePageAction": "En sevdiğim resim",
   "hapticsTitle": "Titreşim",
-  "hapticsSubtitle": "Düğmeler küçük bir titreşimle karşılık verir"
+  "hapticsSubtitle": "Düğmeler küçük bir titreşimle karşılık verir",
+  "almostDone": "Daha ne eksik?",
+  "almostDoneAllPainted": "Her yer boyandı! 🎉"
 }

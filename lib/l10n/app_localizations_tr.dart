@@ -1085,4 +1085,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get hapticsSubtitle => 'Düğmeler küçük bir titreşimle karşılık verir';
+
+  @override
+  String get almostDone => 'Daha ne eksik?';
+
+  @override
+  String get almostDoneAllPainted => 'Her yer boyandı! 🎉';
 }

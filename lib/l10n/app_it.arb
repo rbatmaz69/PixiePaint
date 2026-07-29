@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Solo pennello, riempimento, adesivi e gomma – per {name}",
   "favoritePageAction": "Disegno preferito",
   "hapticsTitle": "Vibrazione",
-  "hapticsSubtitle": "I pulsanti rispondono con un piccolo tocco"
+  "hapticsSubtitle": "I pulsanti rispondono con un piccolo tocco",
+  "almostDone": "Cosa manca ancora?",
+  "almostDoneAllPainted": "Tutto colorato! 🎉"
 }

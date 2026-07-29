@@ -50,6 +50,7 @@ void main() {
     String id = 'artwork-1',
     bool resumed = false,
     List<int> cbn = const [],
+    Future<bool> Function()? isFinished,
   }) =>
       ArtworkSaveSession(
         controller: controller,
@@ -60,6 +61,7 @@ void main() {
         hasPhotoLineArt: false,
         cbnFilled: () => cbn,
         resumed: resumed,
+        isFinished: isFinished,
       );
 
   /// One committed stroke, via the same pointer path the screen uses.
@@ -140,6 +142,56 @@ void main() {
     await session().save();
 
     expect(Progress.instance.completedArtworkIds, contains('artwork-1'));
+  });
+
+  test('without line art, saving still counts — nothing to measure', () async {
+    // Free drawing, photos, scenes and the scratch picture pass no
+    // predicate, and must keep behaving exactly as before v9.5.
+    paintSomething();
+    await session(isFinished: null).save();
+
+    expect(Progress.instance.completedArtworkIds, contains('artwork-1'));
+  });
+
+  test('a barely painted page does not count as a finished painting',
+      () async {
+    paintSomething();
+    await session(isFinished: () async => false).save();
+
+    expect(Progress.instance.completedArtworkIds, isEmpty,
+        reason: 'one stroke used to earn the same tick as a full page');
+    // The picture itself is saved regardless — the reward is the only thing
+    // being withheld, never the child's work.
+    expect(dirOf('artwork-1').existsSync(), isTrue);
+  });
+
+  test('the same picture counts once it is painted far enough', () async {
+    paintSomething();
+    var done = false;
+    final s = session(isFinished: () async => done);
+    await s.save();
+    expect(Progress.instance.completedArtworkIds, isEmpty);
+
+    done = true;
+    paintSomething(pointer: 2);
+    await s.save();
+
+    expect(Progress.instance.completedArtworkIds, contains('artwork-1'));
+  });
+
+  test('an already counted picture is not measured again', () async {
+    paintSomething();
+    var asked = 0;
+    final s = session(isFinished: () async {
+      asked++;
+      return true;
+    });
+    await s.save();
+    paintSomething(pointer: 2);
+    await s.save();
+
+    expect(asked, 1,
+        reason: 'the scan walks two million pixels — once is enough');
   });
 
   test('a resumed artwork saves without repainting first', () async {

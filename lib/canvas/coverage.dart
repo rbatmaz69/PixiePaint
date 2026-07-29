@@ -8,6 +8,15 @@ import 'magic_wand.dart' show kWandMinAlpha;
 /// not an unfinished one.
 const double kRegionPainted = 0.5;
 
+/// How much of a whole picture has to carry paint before it counts as a
+/// finished painting for the sticker rewards.
+///
+/// Forgiving on purpose. This number replaces "was saved once", and the job
+/// it has to do is tell a page a child worked on from a page they opened and
+/// left — not to hold a three-year-old to an adult's idea of finished. Two
+/// thirds of the areas coloured in clears it.
+const double kPictureFinished = 0.6;
+
 /// Regions smaller than this are ignored entirely. Where two lines run close
 /// together the rasterizer leaves slivers of a few pixels that no brush can
 /// reach — without this floor they would be "still empty" forever, and the

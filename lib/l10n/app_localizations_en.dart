@@ -1090,4 +1090,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hapticsSubtitle => 'Buttons answer with a little buzz';
+
+  @override
+  String get almostDone => 'What\'s still missing?';
+
+  @override
+  String get almostDoneAllPainted => 'All coloured in! 🎉';
 }

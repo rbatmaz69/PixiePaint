@@ -1090,4 +1090,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get hapticsSubtitle => 'I pulsanti rispondono con un piccolo tocco';
+
+  @override
+  String get almostDone => 'Cosa manca ancora?';
+
+  @override
+  String get almostDoneAllPainted => 'Tutto colorato! 🎉';
 }

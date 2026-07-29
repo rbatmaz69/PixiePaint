@@ -443,5 +443,7 @@
   "simpleToolsForChild": "Alleen kwast, vullen, stickers en gum – geldt voor {name}",
   "favoritePageAction": "Lievelingsplaat",
   "hapticsTitle": "Trillen",
-  "hapticsSubtitle": "De knoppen geven een klein trilsignaal"
+  "hapticsSubtitle": "De knoppen geven een klein trilsignaal",
+  "almostDone": "Wat mist er nog?",
+  "almostDoneAllPainted": "Alles ingekleurd! 🎉"
 }

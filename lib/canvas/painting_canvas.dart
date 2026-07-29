@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
+import 'almost_done.dart';
 import 'canvas_controller.dart';
 import 'canvas_painter.dart';
 import 'fill_burst.dart';
@@ -57,6 +58,11 @@ class PaintingCanvas extends StatelessWidget {
           Positioned.fill(
             child: IgnorePointer(
               child: StampBurstOverlay(controller: controller),
+            ),
+          ),
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AlmostDoneOverlay(controller: controller),
             ),
           ),
           // Topmost: the lens has to be over the paint, or it magnifies

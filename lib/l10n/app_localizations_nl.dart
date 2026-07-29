@@ -1092,4 +1092,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get hapticsSubtitle => 'De knoppen geven een klein trilsignaal';
+
+  @override
+  String get almostDone => 'Wat mist er nog?';
+
+  @override
+  String get almostDoneAllPainted => 'Alles ingekleurd! 🎉';
 }
